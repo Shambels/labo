@@ -1,0 +1,20 @@
+# Documents kept out of the index on purpose, reviewed by hand. Nothing is deleted from the corpus:
+# the inventory writes the reason in documents.excluded_reason.
+#
+# `path` is a file, or a folder when it ends with "/". The other exclusions are computed by the
+# inventory: "duplicate" (same content as another file) and "empty" (a text document with no text).
+
+[[rule]]
+path = "02_RH/Confidentiel/Entretiens annuels 2025 - synthese.xlsx"
+reason = "personal_data"
+note = "Named employees with their evaluation, proposed raise and manager comment. The salary grid next to it has no names: it stays."
+
+[[rule]]
+path = "00_Direction/Modeles/"
+reason = "template"
+note = "Blank templates of the CODIR minutes and the board convocation: placeholders, no information."
+
+[[rule]]
+path = "99_Archives/Divers/"
+reason = "noise"
+note = "Empty Word documents, a test workbook, a scanned canteen menu."

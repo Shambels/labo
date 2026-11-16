@@ -29,3 +29,18 @@ CREATE TABLE IF NOT EXISTS scores (
     reason         TEXT,                         -- the judge's explanation, if any
     PRIMARY KEY (experiment_id, question_id, metric)
 );
+
+-- The registry of the corpus: one row per file, written by etl/inventory.py (scripts/inventory.py).
+CREATE TABLE IF NOT EXISTS documents (
+    path             TEXT PRIMARY KEY,           -- relative to the corpus root
+    format           TEXT NOT NULL,              -- extension: docx, pdf, xlsx, jpg...
+    size_bytes       INTEGER NOT NULL,
+    sha256           TEXT NOT NULL,              -- of the bytes of the file
+    content_hash     TEXT NOT NULL,              -- of the normalized text (of the bytes when there is no text)
+    page_count       INTEGER,                    -- PDF pages, PPTX slides
+    has_text_layer   BOOLEAN,                    -- PDFs only: false for a scan
+    text_chars       INTEGER NOT NULL,           -- characters of text found by Docling
+    duplicate_of     TEXT REFERENCES documents(path) DEFERRABLE INITIALLY DEFERRED,
+    excluded_reason  TEXT,                       -- NULL: indexed. duplicate, empty, personal_data, template, noise
+    inventoried_at   TIMESTAMPTZ NOT NULL DEFAULT now()
+);
