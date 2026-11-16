@@ -140,3 +140,82 @@ Reproducibility. `latest` changes when a new image is published: a `docker compo
 
 It tells the uv build backend which package(s) under `src/` to build and install. By default it expects a package named after the project (`labo`, i.e. `src/labo/`), which we removed. As a list, it lets one project ship several packages: `text2sql_calorvia` will be added to it in phase B.
 </details>
+
+---
+
+## Step 1: inventory
+
+**1.** No two files of the corpus have the same SHA-256, yet `99_Archives/Doublons/Copie de Tarif 2026.xlsx` is a copy of `05_Commercial/Tarifs/Tarif 2026.xlsx`. What differs between their bytes?
+
+<details><summary>Answer</summary>
+
+An XLSX (like a DOCX or PPTX) is a **zip archive** of XML files. The sheets are identical, but `docProps/core.xml` stores the created/modified dates and author, and the zip headers store each member's timestamp. One different byte changes the whole SHA-256. PDFs do the same with their `CreationDate` and `/ID`. That is why we added `content_hash`, computed on the text.
+</details>
+
+**2.** What does `normalize_text` keep, and why does that make the DOCX and PDF of the telework policy v3 hash the same?
+
+<details><summary>Answer</summary>
+
+It applies NFKC normalization, lower-cases with `casefold()`, then removes everything that is not a letter or a digit (`re.sub(r"[\W_]+", "", text)`): spaces, line breaks, punctuation, underscores. The DOCX and the PDF differ in **layout** (line breaks, spacing, bullets as Docling renders them), not in their words and numbers. Once layout is gone, the two strings are equal.
+</details>
+
+**3.** What would go wrong if `describe()` hashed the normalized text even when it is empty?
+
+<details><summary>Answer</summary>
+
+Every image and every scan has empty text, so they would all share `sha256(b"")`: 54 images + 9 scans would form one big "duplicate" group, and all but one would be excluded. That's why the code falls back to the file's `sha256` when there's no text. A test of this would need real files, so it isn't covered by the unit tests: worth remembering.
+</details>
+
+**4.** Why is a scanned PDF not marked `empty`, while a DOCX with no text is?
+
+<details><summary>Answer</summary>
+
+`is_empty` requires `has_text_layer is not False`. A scan has no text layer (`False`), so its emptiness only means Docling couldn't read it without OCR: its content is in the image and the VLM will read it in step 7. A DOCX has no "image" side: no text means nothing to index. Images (`jpg`, `png`) aren't Docling formats at all, so they're never `empty` either.
+</details>
+
+**5.** In `apply_exclusions`, duplicates are grouped only among documents with no `excluded_reason` yet. Give a case where grouping *all* documents would be wrong.
+
+<details><summary>Answer</summary>
+
+If a blank template (excluded as `template`) had the same content as a file in the archives, grouping everything could pick the template as the kept copy (it's outside `99_Archives/`) and mark the archive file as its duplicate: both would end up excluded and the content lost. Grouping only the survivors guarantees that each group keeps exactly one indexed copy. `test_excluded_file_never_becomes_the_kept_copy` checks it.
+</details>
+
+**6.** Read `canonical_rank`. Which copy is kept for (a) the ERP grid in the CODIR annexes vs in `06_Achats`, (b) the telework v3 DOCX vs PDF, (c) a file vs its copy in `Doublons/`? Why does the key end with `document.path`?
+
+<details><summary>Answer</summary>
+
+The tuple compares element by element, and `False < True`:
+- (a) Neither is archived nor PDF; the `06_Achats` path is shorter, so it is kept.
+- (b) `format == "pdf"` is `True` for the PDF, so the DOCX wins.
+- (c) The `99_Archives/` copy has `True` as first element, so it loses.
+
+The final `document.path` breaks ties between paths of equal length, so the result never depends on the order the files were read: the inventory is **deterministic**.
+</details>
+
+**7.** Why is personal data excluded with a rule on one file rather than on the `02_RH/Confidentiel/` folder?
+
+<details><summary>Answer</summary>
+
+Because the folder holds two different things: `Entretiens annuels 2025 - synthese.xlsx` names employees with their evaluation and raise (personal data), while `Grille salariale 2026.xlsx` only gives salary ranges per job class (no person). The grid is legitimately useful (an eval question needs it). A folder rule would be simpler but would throw away valid information: the decision should follow the content, and the note in `exclusions.toml` records why.
+</details>
+
+**8.** `upsert_document.sql` uses `INSERT … ON CONFLICT (path) DO UPDATE`, and `save_documents` then runs `DELETE … WHERE path <> ALL(%s)`. What property do these two give the inventory?
+
+<details><summary>Answer</summary>
+
+**Idempotence**, and a registry that mirrors the corpus. Running the inventory twice gives the same table: the second run updates the existing rows instead of failing on the primary key or creating duplicates. The `DELETE` removes rows for files that have disappeared from the corpus, so the table never describes files that no longer exist.
+</details>
+
+**9.** In `convert.py`, why is the conversion written to a `.tmp` file and then renamed with `tmp.replace(target)`?
+
+<details><summary>Answer</summary>
+
+`convert_documents` skips any document whose JSON already exists. If the program crashed halfway through writing, a truncated JSON would exist and would be skipped forever, then fail to load later. Writing to a temporary file and renaming is **atomic** on the same filesystem: the target is either absent or complete, never half-written.
+</details>
+
+**10.** Why are conversions stored as `data/conversions/<relative path>.json` instead of `data/conversions/<file name>.json` as in hospital_rag?
+
+<details><summary>Answer</summary>
+
+Two files of the Calorvia corpus can have the same name in different folders (the statement warns about it, and the eval uses relative paths as ids for that reason). With file names only, the second conversion would overwrite the first. Mirroring the tree keeps one JSON per file, and the relative path stays the single id used everywhere (registry, payloads, eval).
+</details>

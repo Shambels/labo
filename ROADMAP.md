@@ -25,6 +25,9 @@ Companion file: `QUIZ.md` (one quiz per step, answers collapsed).
 | D6 | `enonces/` in Git (was O1) | Untracked (`git rm --cached`) and git-ignored. The hints notebook stays in `enonces/` rather than being copied to `notebooks/` | The repo is **public** and this is course material with (fake) personal data. It remains in the history of commit `a33c2a6` |
 | D7 | PostgreSQL port (was O2) | **5432** for the registry/experiments DB; Qdrant 6333 (pinned `v1.19.1`) | Leaves 1433/5433/5434 to phase B's sources |
 | D8 | Dependencies | Added step by step, when a step needs them (step 0: `psycopg`, `pydantic-settings`, `pytest`) | Each step's diff shows why a dependency exists |
+| D10 | Docling conversion moved from step 4 to step 1 | `etl/convert.py`, cached in `data/conversions/<relative path>.json` | Duplicates can only be found on content (see step 1); the cache is reused by step 4 |
+| D11 | What "duplicate" means | Same `content_hash` = SHA-256 of the text reduced to lower-case letters and digits. Kept copy: outside `99_Archives/`, then not a PDF, then shortest path | No two files of the corpus share their bytes; this catches all 7 copies, the DOCX/PDF pair included |
+| D12 | Personal data | Excluded **per file** in `exclusions.toml`, not per folder | `02_RH/Confidentiel/Grille salariale 2026.xlsx` has no names and is evidence for a question; only the annual reviews name people |
 | D9 | Porting strategy | Port each hospital_rag module **in the step that needs it** (step 0: config, db, logs; step 3: evaluation; step 4: ETL and RAG) | Nothing unused or untested sits in the repo |
 
 ### Open decisions (to settle with you when we reach them)
@@ -70,11 +73,14 @@ Companion file: `QUIZ.md` (one quiz per step, answers collapsed).
 - **Done when:** `uv sync`, `docker compose up -d` and `uv run pytest` pass; settle O1 and O2.
 - **Result:** 4 tests pass (3 on `git_state`, 1 integration test writing an experiment to PostgreSQL). The schema has `git_commit` / `git_dirty` directly in `CREATE TABLE` (fresh database, no `ALTER` needed). Notebook not moved (D6).
 
-### ⬜ Step 1. Inventory → `etl/inventory.py`
+### ✅ Step 1. Inventory → `etl/inventory.py`
 **Goal:** a registry: one row per file in a `documents` table.
 - Walk the corpus: relative path, format, size, SHA-256, page count, text layer (PDF: native vs scan, with PyMuPDF).
 - `excluded_reason`: exact duplicates (same hash, keep one), personal data (`02_RH/Confidentiel/`), blank templates (`Modeles/`), noise (`99_Archives/Divers/`). Nothing is deleted, only excluded in the registry.
 - **Concepts:** content hashing, idempotent ETL, a registry as the single source of truth for the index.
+- **Result:** 393 files, **379 to index**, 14 excluded: 7 duplicates (4 in `Doublons/`, the ERP grid and the 8D report in the CODIR annexes, the telework v3 PDF), 4 noise, 2 templates, 1 personal data. 9 scans (no text layer) found. 339 Docling conversions in 42 s on GPU, 0 failures.
+- **Surprise:** the statement says "exact duplicates (same hash)", but no two files share a SHA-256: DOCX/XLSX are zips that store their own dates (`docProps/core.xml`), and PDFs embed a creation date and an `/ID`. Hence `content_hash`.
+- **Eval check:** the eval set lists every copy of a duplicate as valid evidence, so keeping one copy loses nothing. Step 3 must still make sure the metrics don't count the kept copy as a miss when a question cites only the excluded one.
 
 ### ⬜ Step 2. Metadata → `etl/metadata.py`
 **Goal:** date, type, version/status, language, department, source type for every document.
@@ -186,3 +192,4 @@ Deliberately more open than phase A: the steps below are a skeleton we will refi
 |---|---|---|
 | 2026-11-16 | – | Statements read, roadmap and quiz files created |
 | 2026-11-16 | 0 | Branch `rag/step-00-setup`: `enonces/` untracked, package `rag_calorvia` (config, db, logs, git_state, sql), compose on 5432/6333, tests green |
+| 2026-11-16 | 1 | Branch `rag/step-01-inventory`: Docling conversion with cache, `documents` registry, `exclusions.toml`, 12 tests green |
