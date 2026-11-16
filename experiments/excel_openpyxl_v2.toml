@@ -1,0 +1,30 @@
+# experiments/excel_openpyxl_v2.toml — step 6a, second version of etl/excel.py (key/value lines kept, value counts in summaries). Same config as excel_openpyxl: the commit holds the difference
+name = "excel_openpyxl_v2"
+
+[chunking]
+max_tokens = 256
+context_line = true         # "[PV du CODIR du 13 octobre 2025 · PV_CODIR_2025-10-13 · 00_Direction/CODIR/2025]"
+excel = "openpyxl"           # the only change: rows, tables, notes and Excel formats instead of Docling's conversion
+
+[embedder]
+model = "bge-m3"
+query_instruction = ""
+
+[search]
+method = "hybrid"          # dense, sparse or hybrid
+fusion = "rrf"             # hybrid only: rrf or dbsf
+rrf_k = 60                 # rrf only
+candidates = 30
+top_k = 5
+
+[reranker]
+model = "bge-reranker"     # or "none"
+
+[generation]
+enabled = true              # false: retrieval only, for experiments the deterministic metrics measure
+model = "qwen3.8-27b"       # served name (llama-server -a)
+system_prompt = "prompts/multilingual.txt"  # the only change: rule 4 tells how to use Dutch and English extracts
+temperature = 0.0
+top_p = 1.0
+top_k = 40                  # sampling: candidate tokens at each step, not the number of chunks
+max_tokens = 512

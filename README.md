@@ -87,6 +87,7 @@ uv run python scripts/index.py experiments/baseline.toml          # chunks + Qdr
 uv run python scripts/run_experiment.py experiments/baseline.toml # dev set -> answers + scores in PostgreSQL
 uv run python scripts/run_experiment.py experiments/baseline.toml --retrieval-only  # no generator needed
 uv run python scripts/judge_experiment.py baseline                 # 31-question sample (judge on 8003 only)
+uv run python scripts/judge_experiment.py tools_tables --types excel_lookup excel_reasoning  # every dev question of these types
 uv run python scripts/report.py baseline no_context_line__retrieval  # per question type and per format
 uv run python scripts/ask.py "Quand le nouvel ERP démarre-t-il ?"   # one question, with its chunks
 ```

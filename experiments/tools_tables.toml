@@ -1,0 +1,33 @@
+# experiments/tools_tables.toml — step 6b: excel_openpyxl_v2 + SQL tools on the workbooks' tables (rag/tables.py). Tools and the prompt that explains them are one change: neither works without the other
+name = "tools_tables"
+
+[chunking]
+max_tokens = 256
+context_line = true         # "[PV du CODIR du 13 octobre 2025 · PV_CODIR_2025-10-13 · 00_Direction/CODIR/2025]"
+excel = "openpyxl"           # the only change: rows, tables, notes and Excel formats instead of Docling's conversion
+
+[embedder]
+model = "bge-m3"
+query_instruction = ""
+
+[search]
+method = "hybrid"          # dense, sparse or hybrid
+fusion = "rrf"             # hybrid only: rrf or dbsf
+rrf_k = 60                 # rrf only
+candidates = 30
+top_k = 5
+
+[reranker]
+model = "bge-reranker"     # or "none"
+
+[generation]
+enabled = true              # false: retrieval only, for experiments the deterministic metrics measure
+model = "qwen3.8-27b"       # served name (llama-server -a)
+system_prompt = "prompts/tools.txt"          # + rule 7: when and how to use the tools (rule 1 allows their results)
+temperature = 0.0
+top_p = 1.0
+top_k = 40                  # sampling: candidate tokens at each step, not the number of chunks
+max_tokens = 512
+
+[tools]
+tables = true                # find_tables, describe_table, run_sql on an in-memory SQLite of every indexed workbook table

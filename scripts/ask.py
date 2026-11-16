@@ -55,6 +55,9 @@ for rank, chunk in enumerate(result["chunks"], 1):
         lines = [" / ".join(body)[:160]]
     print("\n".join(f"      {line}" for line in lines))
 
+for call in result.get("tool_calls", []):
+    print(f"\ntool {call['tool']}({call['arguments']})\n  -> {call['result'][:300]}")
+
 timings = " · ".join(f"{name.removesuffix('_ms')} {ms:.0f} ms" for name, ms in result["timings"].items())
 tokens = "" if args.retrieve_only else f" · {result['prompt_tokens']} + {result['completion_tokens']} tokens"
 print(f"\n{timings}{tokens}")

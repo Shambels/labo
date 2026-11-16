@@ -1,4 +1,5 @@
 """Indexing: chunks -> dense (embedder) and sparse (BM25) vectors in Qdrant, one collection per index."""
+import hashlib
 import logging
 import time
 from functools import cache
@@ -23,6 +24,7 @@ PAYLOAD_INDEXES = {
     "status": models.PayloadSchemaType.KEYWORD,
     "language": models.PayloadSchemaType.KEYWORD,      # of the chunk; doc_language is the document's
     "source_type": models.PayloadSchemaType.KEYWORD,
+    "sheet": models.PayloadSchemaType.KEYWORD,         # workbooks read with openpyxl (step 6)
     "doc_date": models.PayloadSchemaType.DATETIME,
     "date_end": models.PayloadSchemaType.DATETIME,
 }
@@ -76,21 +78,45 @@ def collection_name(config):
         name += "__no-context-line"
     if config.get("sparse", {}).get("language") == "per_chunk":
         name += "__bm25-per-language"
+    if chunking.get("excel", "docling") == "openpyxl":
+        name += "__excel-openpyxl"
     return name
 
 
+def fingerprint(chunks):
+    """A hash of every chunk's document, index and text: changes whenever the chunking code changes its output."""
+    digest = hashlib.sha256()
+    for chunk in chunks:
+        digest.update(f"{chunk['document']}\x00{chunk['chunk_index']}\x00{chunk['text']}\x00".encode())
+    return digest.hexdigest()[:16]
+
+
+def stored_fingerprint(qdrant, name):
+    """The fingerprint written in the collection's points (None for a collection built before fingerprints)."""
+    points, _ = qdrant.scroll(name, limit=1, with_payload=["index_fingerprint"])
+    return points[0].payload.get("index_fingerprint") if points else None
+
+
 def index_corpus(config, force=False):
-    """Build the collection of this config if it doesn't exist (or is incomplete). Returns its name and stats."""
+    """Build the collection of this config if it doesn't exist or doesn't hold these exact chunks.
+
+    The collection name only says which options built it; a change in the chunking *code* (etl/excel.py fixed,
+    say) keeps the name. Each point carries the fingerprint of the whole chunk list, so stale chunks are detected
+    and rebuilt instead of being silently searched.
+    """
     qdrant = get_qdrant()
     name = collection_name(config)
-    chunks = chunk_corpus(config)  # a few seconds, and gives the expected number of points
+    chunks = chunk_corpus(config)  # a few seconds, and gives the expected points
+    current = fingerprint(chunks)
 
     if not force and qdrant.collection_exists(name):
+        stored = stored_fingerprint(qdrant, name)
         count = qdrant.count(name, exact=True).count
-        if count == len(chunks):
-            logger.info("%s already indexed (%d chunks)", name, count)
+        if stored == current and count == len(chunks):
+            logger.info("%s already indexed (%d chunks, fingerprint %s)", name, count, current)
             return {"collection": name, "chunks": count, "created": False, "seconds": 0.0}
-        logger.warning("%s has %d points instead of %d: rebuilding", name, count, len(chunks))
+        logger.warning("%s holds other chunks (%d points, fingerprint %s; expected %d, %s): rebuilding",
+                       name, count, stored, len(chunks), current)
 
     start = time.time()
     vectors = embed([chunk["text"] for chunk in chunks], config["embedder"]["model"])
@@ -113,7 +139,11 @@ def index_corpus(config, force=False):
         qdrant.upsert(
             name,
             points=[
-                models.PointStruct(id=i, vector={"dense": vectors[i], "sparse": bm25(chunks[i]["text"], sparse_language(chunks[i], config))}, payload=chunks[i])
+                models.PointStruct(
+                    id=i,
+                    vector={"dense": vectors[i], "sparse": bm25(chunks[i]["text"], sparse_language(chunks[i], config))},
+                    payload={**chunks[i], "index_fingerprint": current},
+                )
                 for i in range(batch_start, min(batch_start + UPSERT_BATCH, len(chunks)))
             ],
             wait=True,

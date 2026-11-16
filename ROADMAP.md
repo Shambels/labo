@@ -22,7 +22,7 @@ Companion file: `QUIZ.md` (one quiz per step, answers collapsed).
 | D3 | Language | English for docs, code and comments; LLM prompts in French | Questions and corpus are French |
 | D4 | One repo or two | One repo (`labo`), one uv project, two packages: `src/rag_calorvia/` then `src/text2sql_calorvia/`. Tags are prefixed: `rag/v0.1-inventaire`, `t2sql/v0.1-sources` | You asked for both exercises in this repo; the statement's tag names stay recognisable |
 | D5 | Where the corpus lives | Stays in `enonces/`; `data/calorvia` is a symlink to it (same path as the hints notebook) and `data/` holds everything generated (conversions, VLM cache) and is git-ignored | No copy of 21 MB; same paths as the course |
-| D6 | `enonces/` in Git (was O1) | Untracked (`git rm --cached`) and git-ignored. The hints notebook stays in `enonces/` rather than being copied to `notebooks/` | The repo is **public** and this is course material with (fake) personal data. It remains in the history of commit `a33c2a6` |
+| D6 | `enonces/` in Git (was O1) | Untracked (`git rm --cached`) and git-ignored. **The step 0 commit failed** (`git commit -- enonces .gitignore` re-added the files from the working tree); really untracked in step 6. The hints notebook stays in `enonces/` rather than being copied to `notebooks/` | The repo is **public** and this is course material with (fake) personal data. It remains in the history of commit `a33c2a6` |
 | D7 | PostgreSQL port (was O2) | **5432** for the registry/experiments DB; Qdrant 6333 (pinned `v1.19.1`) | Leaves 1433/5433/5434 to phase B's sources |
 | D8 | Dependencies | Added step by step, when a step needs them (step 0: `psycopg`, `pydantic-settings`, `pytest`) | Each step's diff shows why a dependency exists |
 | D10 | Docling conversion moved from step 4 to step 1 | `etl/convert.py`, cached in `data/conversions/<relative path>.json` | Duplicates can only be found on content (see step 1); the cache is reused by step 4 |
@@ -42,6 +42,10 @@ Companion file: `QUIZ.md` (one quiz per step, answers collapsed).
 | D24 | Clean runs only | `run_experiment` refuses a dirty tree (`--allow-dirty` for trials); reports pick the latest clean run | Two runs were stamped dirty by a `uv add` made while they started |
 | D25 | New reference after step 5 | `prompt_multilingual` (baseline + rule 4 on Dutch/English extracts). `bm25_per_language` and `translate_question` not kept | 5a and 5b bring nothing on the dev set (recall@5 0.779, 0.766 vs 0.783), 5b costs +2.2 s per question; 5c is neutral-to-better and free |
 | D26 | Never edit a config that has run | New options get defaults in code (`config.get(...)`); `baseline.toml` is frozen | `check_same_config` compares the stored config: an edited baseline couldn't run again under its name |
+| D27 | 6b tools | Generic SQL over every workbook table (SQLite in memory) rather than hand-written functions | Your choice: no rule per question, works for any workbook, previews phase B |
+| D28 | Collection freshness | A fingerprint of the chunk texts in every point's payload; mismatch → rebuild | The name only encodes options; a code change in the chunker kept the name |
+| D29 | New reference after step 6 | `tools_tables` (openpyxl reader + SQL tools + prompt rule 7) | Best correctness on the workbook questions (0.841 vs 0.795) and on the sample (0.687 vs 0.655); +0.4 s mean latency |
+| D30 | Judging a targeted change | Judge every dev question of the targeted types (`--types`), not only the 2-per-type sample | With 2 questions, one wording moves a type's mean by 0.4 |
 | D9 | Porting strategy | Port each hospital_rag module **in the step that needs it** (step 0: config, db, logs; step 3: evaluation; step 4: ETL and RAG) | Nothing unused or untested sits in the repo |
 
 ### Open decisions (to settle with you when we reach them)
@@ -168,13 +172,33 @@ Companion file: `QUIZ.md` (one quiz per step, answers collapsed).
 - **5c:** all 127 answers were already in French in the baseline (new metric `answer_in_french`, 1.000). The rule changes 29 answers (part is llama-server's non-determinism at temperature 0); one wrong refusal (Q117) becomes an honest partial answer. **Not judged yet:** to judge with the next judge pass (needs the Gemma swap).
 - **Fixed on the way:** `--retrieval-only` replaced the whole `[generation]` section, so translation couldn't find its model (run 20 failed).
 
-### ⬜ Step 6. Excel → `etl/excel.py`
+### ✅ Step 6. Excel → `etl/excel.py`
 - `openpyxl` with `data_only=True`, every sheet; find the tables (title, header, rows, notes).
 - One sentence per row with its context; values displayed as in Excel (percentages, dates); grouped rows with repeated header + a summary chunk for big tables.
 - Payload: file, sheet, row number, period, version.
 - `excel_reasoning`: RAG only vs a few polars/SQL functions the LLM picks (tool calling).
 - Measure: `excel_lookup`, `excel_reasoning`, `version_trap` (budget, price list).
 - **Tag `rag/v0.4-excel`.**
+- **Starting point:** the reference already answered most workbook questions (`excel_lookup` recall 1.0). What failed: units lost (Q137 "702" without k€), answers spread over many rows (Q158: the installer of the 3 missing units among 214 rows), percentages unreadable in Docling's text (`-0.0068`).
+- **6a `excel_openpyxl` → `_v2`** (`[chunking] excel = "openpyxl"`): per sheet, tables with their title and unit, values as Excel shows them (percentages, dates), notes kept; small tables (≤ 30 rows) as one sentence per row + the table in Markdown; big ones as Markdown groups with the header repeated + a summary with the counts of each categorical column. 1449 → 1919 chunks.
+  - First version: `excel_reasoning` recall 0.9 → 0.7. Two causes, found by checking that every workbook snippet of the eval still exists in some chunk: a key/value line (`Heures de formation à la sécurité | 620`) read as the header of an empty table and dropped; the 214-row list's rows out of the top 5 (Q158). v2 keeps key/value lines as text and adds value counts to summaries: recall back to the baseline (0.783, `excel_reasoning` 0.9).
+  - Answers: Q137 gets its unit (702 k€), Q043 names the approved budget; the draft price list now reaches the top 5 of Q089 (`version_trap` trap_hit 0.67 → 1.0), for step 8.
+- **6b `tools_tables`** (`[tools] tables = true` + prompt rule 7): every table of the indexed workbooks in an in-memory SQLite (raw values, a `catalog` with document, sheet, title, columns, date, status); tools `find_tables`, `describe_table`, `run_sql` (one SELECT, read-only by `PRAGMA query_only`, ≤ 50 rows, errors returned as text), at most 5 rounds.
+  - Used on 13/127 questions (3 of 5 `excel_reasoning`). Q158 answered (SQL `GROUP BY Installateur`); Q137 richer; Q127's wrong "Non" becomes a cautious partial; image questions still refused. +0.4 s mean latency, max 9.1 s.
+  - **SQLite trap found by a test:** an unknown double-quoted name is read as a string literal (`SELECT "Chiffre"` → the text 'Chiffre', no error). Turned off with `SQLITE_DBCONFIG_DQS_DML`.
+- **Index staleness fixed:** a collection was reused when its point count matched, even if the chunking *code* had changed. Each point now carries a fingerprint of all chunk texts; a mismatch rebuilds.
+- **Judge** (Gemma 4). On the 31-question sample, correctness: baseline 0.658, `prompt_multilingual` 0.655, `excel_openpyxl_v2` 0.648, `tools_tables` **0.687** (0.792 without image/scan questions). The sample's `excel_lookup` swung 0.85 → 0.45 on one answer (Q017: "six personnes" instead of "6 ETP"), so the workbook types were judged on **all** their dev questions (new `--types` option):
+
+  | correctness | Docling (23) | openpyxl reader (30) | reader + SQL tools (33) |
+  |---|---|---|---|
+  | `excel_lookup` (13) | 0.769 | 0.715 | 0.762 |
+  | `excel_reasoning` (5) | 0.840 | 0.840 | **0.980** |
+  | `version_trap` (4) | 0.825 | 0.825 | **0.925** |
+  | all 22 | 0.795 | 0.764 | **0.841** |
+
+  - **The tools are the gain** (Q158 0.5 → 0.9, Q069, Q137, Q043 → 1.0). **The reader alone is not better than Docling on correctness** (its one real loss: Q017's ETP read as people); its value is what it enables (raw values for SQL, units, readable percentages).
+  - **Untested:** Docling chunks + the tools (the store reads the workbooks itself). Worth a run if the reader's extra chunks ever cost elsewhere.
+  - **Unchanged and still wrong:** Q008 (outdated recall status), Q023 (the trap: 1.2 M€): step 8.
 
 ### ⬜ Step 7. Images and scans → `etl/vision.py`
 - Serve the VLM (O3); transcribe every image and every scanned PDF page **once**, cached, with timings.
@@ -254,3 +278,6 @@ Deliberately more open than phase A: the steps below are a skeleton we will refi
 | 2026-11-16 | 4 | Branch `rag/step-04-baseline`: generator switched to Qwen3.8-27B; pipeline ported; baseline recall@5 0.783 (context line +10 pts); judged by Gemma 4: correctness 0.762 on text questions; faithfulness judge errors found by hand |
 | 2026-11-16 | – | Merged, tagged `rag/v0.2-baseline`, pushed |
 | 2026-11-16 | 5 | Branch `rag/step-05-languages`: 5a/5b no gain (5b +2.2 s), 5c kept as new reference; reranker identified as the cross-language bottleneck |
+| 2026-11-16 | – | Merged, tagged `rag/v0.3-langues`, pushed |
+| 2026-11-16 | 6 | Incident: a corpus workbook (`Productierapport Gent 2026-02.xlsx`) was rewritten at 15:46 by something outside the session's code, its totals row emptied; restored from Git (hash = registry). Found because `enonces/` was still tracked: the step 0 untrack had failed; fixed |
+| 2026-11-16 | 6 | Branch `rag/step-06-excel`: openpyxl reader (v2 after two fixes), SQL tools on workbook tables (Q158 solved), index fingerprint; judged: tools +4.6 pts on the 22 workbook questions; `tools_tables` is the new reference |
