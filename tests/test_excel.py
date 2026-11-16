@@ -62,3 +62,27 @@ def test_big_tables_get_a_summary_and_groups_with_the_header():
     assert len(groups) == 4
     assert all(text.splitlines()[1].startswith("| Numéro | Statut |") for _, _, text in groups)
     assert groups[1][2].splitlines()[0].endswith("lignes 11 à 20")
+
+
+def test_a_key_value_line_is_text_not_an_empty_table(tmp_path):
+    wb = Workbook()
+    ws = wb.active
+    ws.append(["Formation", "Heures"])
+    ws.append(["Caristes", 160])
+    ws.append([])
+    ws.append(["Heures de formation à la sécurité", None, 620])
+    path = tmp_path / "plan.xlsx"
+    wb.save(path)
+    table, text = read_workbook(path)
+    assert table.rows == [["Caristes", "160"]]
+    assert text.lines == ["Heures de formation à la sécurité : 620"]
+
+
+def test_the_summary_counts_the_values_of_categorical_columns():
+    from rag_calorvia.etl.excel import summary_text
+    rows = [[f"AE12-{i}", "Réparée"] for i in range(40)] + [[f"AE12-{i}", "Introuvable"] for i in range(40, 43)]
+    table = Table("Unités", None, ["Numéro", "Statut"], rows, 2)
+    summary = summary_text(table)
+    assert "tableau de 43 lignes" in summary
+    assert "Statut : Réparée (40), Introuvable (3)." in summary
+    assert "Numéro :" not in summary  # 43 distinct values: not a category

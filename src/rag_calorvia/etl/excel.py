@@ -4,12 +4,14 @@ What Docling loses and this keeps: the sheet name, the title and unit of each ta
 région (k€)'), percentages as Excel shows them (-0,7 % rather than -0.00681316572305923), the header next to
 every value, and the notes under a table.
 """
+from collections import Counter
 from dataclasses import dataclass, field
 from datetime import date, datetime
 
 from openpyxl import load_workbook
 
 SMALL_TABLE_ROWS = 30  # up to this, one sentence per row as well; above, only grouped rows and a summary
+MAX_DISTINCT = 10      # a column with at most this many distinct values gets its counts in the summary
 
 
 @dataclass
@@ -77,7 +79,13 @@ def sheet_blocks(ws):
             table.rows.append([display_value(c) for c in row[:len(table.header)]])
     if pending:
         blocks.append(TextBlock(ws.title, pending))
-    return blocks
+    return [as_key_value(block) if isinstance(block, Table) and not block.rows else block for block in blocks]
+
+
+def as_key_value(table):
+    """A 'table' without data rows is a key/value line ('Heures de formation à la sécurité | 620'): text."""
+    line = " : ".join(value for value in table.header if value)
+    return TextBlock(table.sheet, [*([table.title] if table.title else []), line, *table.notes])
 
 
 def read_workbook(path):
@@ -124,10 +132,22 @@ def group_text(table, start, end):
     return f"{table_heading(table)}{span}\n{markdown_rows(table, table.rows[start:end])}{notes}"
 
 
+def value_counts(table):
+    """'Statut : Réparée (211), Introuvable (3)' for every column with few distinct values: what count questions
+    ask, and what no group of 20 rows out of 214 can show."""
+    parts = []
+    for i, header in enumerate(table.header):
+        counts = Counter(row[i] for row in table.rows if i < len(row) and row[i])
+        if header and 1 < len(counts) <= MAX_DISTINCT:
+            parts.append(f"{header} : " + ", ".join(f"{value} ({n})" for value, n in counts.most_common()))
+    return parts
+
+
 def summary_text(table):
     columns = ", ".join(h for h in table.header if h)
+    counts = "".join(f" {part}." for part in value_counts(table))
     notes = (" Notes : " + " ".join(table.notes)) if table.notes else ""
-    return f"{table_heading(table)} : tableau de {len(table.rows)} lignes. Colonnes : {columns}.{notes}"
+    return f"{table_heading(table)} : tableau de {len(table.rows)} lignes. Colonnes : {columns}.{counts}{notes}"
 
 
 def workbook_pieces(path, fits):
