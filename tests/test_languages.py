@@ -59,3 +59,12 @@ def test_status_filter_builds_a_must_not_condition():
     flt = status_filter({"search": {"exclude_status": ["draft", "archive"]}})
     [condition] = flt.must_not
     assert condition.key == "status" and condition.match.any == ["draft", "archive"]
+
+
+def test_chronological_context_order():
+    from rag_calorvia.rag.pipeline import context_order
+    chunks = [{"id": 1, "doc_date": "2026-02-09"}, {"id": 2, "doc_date": None}, {"id": 3, "doc_date": "2025-12-01"},
+              {"id": 4, "doc_date": "2026-02-09"}]
+    assert context_order(chunks, {"generation": {}}) == chunks  # default: the reranker's order
+    ordered = context_order(chunks, {"generation": {"order": "chronological"}})
+    assert [c["id"] for c in ordered] == [2, 3, 1, 4]  # undated first, then oldest; same date keeps rank order

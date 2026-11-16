@@ -48,11 +48,24 @@ def retrieve(question, config):
     return {"chunks": chunks, "versions": versions, "timings": timings}
 
 
+def context_order(chunks, config):
+    """The chunks as the LLM sees them. [generation] order = "chronological" (step 8): sorted by date, oldest first,
+    so the latest decision is the one closest to the question; undated chunks first (their date can't rank them).
+    Default "rank": the reranker's order. Python's sort is stable: chunks of the same date keep their rank order."""
+    if config["generation"].get("order", "rank") != "chronological":
+        return chunks
+    return sorted(chunks, key=lambda chunk: chunk.get("doc_date") or "")
+
+
 def answer(question, config):
-    """The full RAG: {answer, chunks, latency_ms, timings, prompt_tokens, completion_tokens, finish_reason}."""
+    """The full RAG: {answer, chunks, context, latency_ms, timings, prompt_tokens, completion_tokens, finish_reason}.
+
+    chunks: in the reranker's order (the retrieval metrics); context: in the order given to the LLM, the one its
+    citations [n] refer to."""
     result = retrieve(question, config)
+    context = context_order(result["chunks"], config)
 
     start = time.perf_counter()
-    generation = generate(question, result["chunks"], config)
+    generation = generate(question, context, config)
     result["timings"]["generate_ms"] = elapsed_ms(start)
-    return {**generation, **result, "latency_ms": sum(result["timings"].values())}
+    return {**generation, **result, "context": context, "latency_ms": sum(result["timings"].values())}
