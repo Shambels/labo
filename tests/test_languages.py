@@ -51,3 +51,11 @@ def test_the_fingerprint_changes_with_any_chunk_text():
     changed = [{**chunks[0], "text": "Heures de formation à la sécurité : 620"}]
     assert fingerprint(chunks) == fingerprint(same)
     assert fingerprint(chunks) != fingerprint(changed)
+
+
+def test_status_filter_builds_a_must_not_condition():
+    from rag_calorvia.rag.pipeline import status_filter
+    assert status_filter({"search": {}}) is None
+    flt = status_filter({"search": {"exclude_status": ["draft", "archive"]}})
+    [condition] = flt.must_not
+    assert condition.key == "status" and condition.match.any == ["draft", "archive"]

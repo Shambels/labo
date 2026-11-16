@@ -1,6 +1,8 @@
 """The RAG: question -> chunks -> answer. Scripts, evaluation and the UI call this module, never the steps directly."""
 import time
 
+from qdrant_client import models
+
 from rag_calorvia.rag.generate import generate
 from rag_calorvia.rag.rerank import rerank
 from rag_calorvia.rag.search import search
@@ -9,6 +11,18 @@ from rag_calorvia.rag.translate import translate_question
 
 def elapsed_ms(start):
     return (time.perf_counter() - start) * 1000
+
+
+def status_filter(config):
+    """[search] exclude_status (step 8): the registry statuses kept out of every search, e.g. ["draft", "archive"].
+
+    A draft minute or an archived price list stays in the index (and in the registry) but is never a candidate:
+    a must_not condition, applied inside each prefetch, so the 30 candidates are all eligible.
+    """
+    excluded = config["search"].get("exclude_status", [])
+    if not excluded:
+        return None
+    return models.Filter(must_not=[models.FieldCondition(key="status", match=models.MatchAny(any=excluded))])
 
 
 def retrieve(question, config):
@@ -22,7 +36,7 @@ def retrieve(question, config):
     translate_ms = elapsed_ms(start)
 
     start = time.perf_counter()
-    candidates = search(question, config, versions=versions)
+    candidates = search(question, config, query_filter=status_filter(config), versions=versions)
     search_ms = elapsed_ms(start)
 
     start = time.perf_counter()
