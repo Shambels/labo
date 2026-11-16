@@ -1,0 +1,38 @@
+# experiments/reference_date.toml — step 8.4: time_rules + the reference date of the question (LLM) filters the chunks (doc_date <= reference, or undated)
+name = "reference_date"
+
+[chunking]
+max_tokens = 256
+context_line = true         # "[PV du CODIR du 13 octobre 2025 · PV_CODIR_2025-10-13 · 00_Direction/CODIR/2025]"
+excel = "openpyxl"           # the only change: rows, tables, notes and Excel formats instead of Docling's conversion
+vision = true
+vision_max_tokens = 1024     # the only change: 45 of 65 images/pages were cut at 256 tokens, 1 at 1024 (Q056: a name and its manager in two chunks)
+
+[embedder]
+model = "bge-m3"
+query_instruction = ""
+
+[search]
+method = "hybrid"          # dense, sparse or hybrid
+fusion = "rrf"             # hybrid only: rrf or dbsf
+rrf_k = 60                 # rrf only
+candidates = 30
+exclude_status = ["draft", "archive"]   # the only change: Projets_PV, "projet v1", 99_Archives/ stay indexed but are never candidates
+reference_date = true        # the only change: "en décembre 2025" -> only chunks dated up to 2025-12-31
+top_k = 5
+
+[reranker]
+model = "bge-reranker"     # or "none"
+
+[generation]
+enabled = true              # false: retrieval only, for experiments the deterministic metrics measure
+model = "qwen3.8-27b"       # served name (llama-server -a)
+system_prompt = "prompts/versions.txt"       # the only change: tools.txt + rule 8 on time and versions
+order = "chronological"     # the only change: the extracts sorted by date, the latest closest to the question
+temperature = 0.0
+top_p = 1.0
+top_k = 40                  # sampling: candidate tokens at each step, not the number of chunks
+max_tokens = 512
+
+[tools]
+tables = true                # find_tables, describe_table, run_sql on an in-memory SQLite of every indexed workbook table

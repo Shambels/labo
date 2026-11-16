@@ -4,6 +4,7 @@ import time
 from qdrant_client import models
 
 from rag_calorvia.rag.generate import generate
+from rag_calorvia.rag.reference_date import date_condition, reference_date
 from rag_calorvia.rag.rerank import rerank
 from rag_calorvia.rag.search import search
 from rag_calorvia.rag.translate import translate_question
@@ -25,6 +26,16 @@ def status_filter(config):
     return models.Filter(must_not=[models.FieldCondition(key="status", match=models.MatchAny(any=excluded))])
 
 
+def question_filter(config, reference):
+    """The Qdrant filter of a question: the status exclusions and, when the question has a reference date,
+    only chunks dated on or before it (or undated). None when there is nothing to filter."""
+    status = status_filter(config)
+    if reference is None:
+        return status
+    must = [date_condition(reference)]
+    return models.Filter(must=must, must_not=status.must_not if status else None)
+
+
 def retrieve(question, config):
     """The top_k chunks for a question (translate, search, then rerank), with the time of each stage.
 
@@ -36,7 +47,11 @@ def retrieve(question, config):
     translate_ms = elapsed_ms(start)
 
     start = time.perf_counter()
-    candidates = search(question, config, query_filter=status_filter(config), versions=versions)
+    reference = reference_date(question, config)  # None when [search] reference_date is off
+    reference_ms = elapsed_ms(start)
+
+    start = time.perf_counter()
+    candidates = search(question, config, query_filter=question_filter(config, reference), versions=versions)
     search_ms = elapsed_ms(start)
 
     start = time.perf_counter()
@@ -45,7 +60,9 @@ def retrieve(question, config):
     timings = {"search_ms": search_ms, "rerank_ms": rerank_ms}
     if len(versions) > 1:
         timings = {"translate_ms": translate_ms, **timings}
-    return {"chunks": chunks, "versions": versions, "timings": timings}
+    if config["search"].get("reference_date", False):
+        timings = {"reference_ms": reference_ms, **timings}
+    return {"chunks": chunks, "versions": versions, "reference": reference, "timings": timings}
 
 
 def context_order(chunks, config):

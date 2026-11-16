@@ -68,3 +68,24 @@ def test_chronological_context_order():
     assert context_order(chunks, {"generation": {}}) == chunks  # default: the reranker's order
     ordered = context_order(chunks, {"generation": {"order": "chronological"}})
     assert [c["id"] for c in ordered] == [2, 3, 1, 4]  # undated first, then oldest; same date keeps rank order
+
+
+def test_parse_reference_date():
+    from datetime import date
+    from rag_calorvia.rag.reference_date import parse_reference
+    assert parse_reference('{"date": "2025-12-31"}') == date(2025, 12, 31)
+    assert parse_reference('{"date": null}') is None
+    assert parse_reference('{"date": "2026-02-30"}') is None   # not a real date
+    assert parse_reference("pas du JSON") is None
+
+
+def test_question_filter_combines_status_and_date():
+    from datetime import date
+    from rag_calorvia.rag.pipeline import question_filter
+    config = {"search": {"exclude_status": ["draft"]}}
+    assert question_filter({"search": {}}, None) is None
+    only_status = question_filter(config, None)
+    assert only_status.must_not and not only_status.must
+    both = question_filter(config, date(2025, 12, 31))
+    [date_part] = both.must
+    assert date_part.should[0].range.lte.date() == date(2025, 12, 31) and both.must_not

@@ -110,6 +110,8 @@ def run_experiment(config, allow_dirty=False):
                     if language is not None:  # too short to tell ("Je ne sais pas."): not counted
                         scores["answer_in_french"] = float(language == "fr")
                 scores |= {name: value for name, value in result["timings"].items()}  # search_ms, rerank_ms...
+                if config["search"].get("reference_date", False):  # 1 when the question got a date, and which
+                    scores["reference_date"] = (float(result["reference"] is not None), str(result["reference"]))
                 if len(result["versions"]) > 1:  # the translations as the reason: they explain a gain or a loss
                     scores["translations"] = (float(len(result["versions"]) - 1),
                                               " | ".join(f"{k}: {v}" for k, v in result["versions"].items()))
