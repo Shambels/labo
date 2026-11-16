@@ -80,6 +80,8 @@ def collection_name(config):
         name += "__bm25-per-language"
     if chunking.get("excel", "docling") == "openpyxl":
         name += "__excel-openpyxl"
+    if chunking.get("vision", False):
+        name += "__vision"
     return name
 
 

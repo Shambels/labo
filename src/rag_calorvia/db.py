@@ -149,3 +149,10 @@ def experiment_scores(conn, experiment_id):
     for question_id, metric, value in conn.execute(load_sql("experiment_scores"), (experiment_id,)):
         scores.setdefault(question_id, {})[metric] = value
     return scores
+
+
+def load_vision_documents(conn):
+    """Registry rows of the indexed images, scans and PDFs, as dicts, in path order."""
+    cursor = conn.execute(load_sql("load_vision_documents"))
+    columns = [c.name for c in cursor.description]
+    return [dict(zip(columns, row)) for row in cursor.fetchall()]

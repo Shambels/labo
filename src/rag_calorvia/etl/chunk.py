@@ -14,6 +14,7 @@ from rag_calorvia.config import settings
 from rag_calorvia.etl.convert import load_conversion
 from rag_calorvia.etl.excel import workbook_pieces
 from rag_calorvia.etl.metadata import detect_language
+from rag_calorvia.etl.vision import targets_of, transcription
 
 MONTHS_FR = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre",
              "novembre", "décembre"]
@@ -98,6 +99,52 @@ def chunk_workbook(document, config, line, budget, tokenizer):
     ]
 
 
+def uses_vision(config):
+    """[chunking] vision = true (step 7): images, scans and charts in PDFs are indexed from their transcriptions."""
+    return config["chunking"].get("vision", False)
+
+
+def split_text(text, budget, tokenizer):
+    """Consecutive paragraphs (then lines, for a long paragraph) grouped into pieces of at most `budget` tokens."""
+    units = []
+    for paragraph in text.split("\n\n"):
+        if count_tokens(paragraph, tokenizer) <= budget:
+            units.append(paragraph)
+        else:
+            units.extend(paragraph.splitlines())
+    pieces, current = [], ""
+    for unit in (u for u in units if u.strip()):
+        candidate = f"{current}\n\n{unit}" if current else unit
+        if current and count_tokens(candidate, tokenizer) > budget:
+            pieces.append(current)
+            candidate = unit
+        current = candidate
+    return pieces + ([current] if current else [])
+
+
+def vision_chunks(document, line, budget, tokenizer, start_index=0):
+    """Chunks from the cached transcriptions of a document's images (its own image, scanned pages, embedded charts).
+
+    The transcriptions must exist (scripts/transcribe.py): chunking never calls the VLM.
+    """
+    payload = document_payload(document)
+    chunks = []
+    for target in targets_of(document):
+        record = transcription(target, compute=False)
+        if record is None:
+            raise FileNotFoundError(f"no transcription for {target}: run scripts/transcribe.py with the VLM first")
+        label = {"image": "Image", "scan_page": f"Page {target.page + 1} (scan)",
+                 "embedded": f"Graphique de la page {(target.page or 0) + 1}"}[target.kind]
+        head = "\n".join(p for p in [line, label] if p)
+        reserve = count_tokens(label, tokenizer) + 1
+        for piece in split_text(record["text"], budget - reserve, tokenizer):
+            chunks.append({**payload, "chunk_index": start_index + len(chunks), "image_path": document["path"],
+                           "page": target.page, "piece": target.kind,
+                           "language": chunk_language(piece, document["language"]),
+                           "text": f"{head}\n{piece}"})
+    return chunks
+
+
 def chunk_document(document, config):
     """The chunks of one registry document: dicts with the payload fields, chunk_index and text.
 
@@ -110,6 +157,8 @@ def chunk_document(document, config):
     budget = config["chunking"]["max_tokens"] - reserved
     if reads_with_openpyxl(document, config):
         return chunk_workbook(document, config, line, budget, tokenizer)
+    if document["source_type"] in ("image", "scan"):  # only reached with [chunking] vision = true
+        return vision_chunks(document, line, budget, tokenizer)
     chunker = HybridChunker(tokenizer=HuggingFaceTokenizer(tokenizer=tokenizer, max_tokens=budget))
     converted = load_conversion(document["path"])
     payload = document_payload(document)
@@ -120,11 +169,15 @@ def chunk_document(document, config):
         body = "\n".join([*(chunk.meta.headings or []), chunk.text])
         chunks.append({**payload, "chunk_index": len(chunks), "language": chunk_language(body, document["language"]),
                        "text": "\n".join(p for p in [line, body] if p)})
+    if uses_vision(config) and document["format"] == "pdf":  # charts inside a text PDF
+        chunks += vision_chunks(document, line, budget, tokenizer, start_index=len(chunks))
     return chunks
 
 
 def chunk_corpus(config):
-    """The chunks of every indexed text document of the registry (excluded files, images and scans left out)."""
+    """The chunks of every indexed document of the registry: text documents, plus images and scans with vision."""
     with db.connect(read_only=True) as conn:
         documents = db.load_indexable_documents(conn)
+        if uses_vision(config):
+            documents += [d for d in db.load_vision_documents(conn) if d["source_type"] in ("image", "scan")]
     return [chunk for document in documents for chunk in chunk_document(document, config)]

@@ -15,6 +15,7 @@ class Settings(BaseSettings):
     embeddings_url: str = "http://localhost:8001/v1"
     rerank_url: str = "http://localhost:8002/rerank"
     vlm_url: str = "http://localhost:8003/v1"    # the VLM only runs during the ETL (step 7)...
+    vlm_model: str = "qwen3.5-9b"                # served name of the VLM (llama-server -a)
     judge_url: str = "http://localhost:8003/v1"  # ...so the judge can reuse its port afterwards
     judge_model: str = "gemma4-26b-a4b"          # served name (llama-server -a): not the generator's family
 
