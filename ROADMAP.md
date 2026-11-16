@@ -49,6 +49,7 @@ Companion file: `QUIZ.md` (one quiz per step, answers collapsed).
 | D31 | Purge `enonces/` from history (was O7) | `git filter-repo --path enonces --invert-paths`, force-push of `main` and the tags; experiment commits in PostgreSQL remapped with filter-repo's `commit-map`; short hashes in the docs rewritten | Your request. Every commit hash changed; GitHub may keep unreferenced old commits reachable by their hash for a while |
 | D32 | VLM (was O3) | Qwen3.5-9B Q4_K_XL + `mmproj-F16`, llama-server, port 8003, temperature 0 | Your choice; already on disk, 9B fits beside the embedder and reranker |
 | D33 | Scans: VLM or Docling OCR | VLM | Same evidence score (7/7), OCR 40 % faster, but the OCR garbled whole lines (including the L4 resolution); the VLM also reads images and handwriting |
+| D34 | New reference after step 7 | `vision_whole_images` (`tools_tables` + transcriptions, one image = one chunk up to 1024 tokens) | Image/scan correctness 0.035 → 0.825, sample 0.687 → 0.803 |
 | D9 | Porting strategy | Port each hospital_rag module **in the step that needs it** (step 0: config, db, logs; step 3: evaluation; step 4: ETL and RAG) | Nothing unused or untested sits in the repo |
 
 ### Open decisions (to settle with you when we reach them)
@@ -201,7 +202,7 @@ Companion file: `QUIZ.md` (one quiz per step, answers collapsed).
   - **Untested:** Docling chunks + the tools (the store reads the workbooks itself). Worth a run if the reader's extra chunks ever cost elsewhere.
   - **Unchanged and still wrong:** Q008 (outdated recall status), Q023 (the trap: 1.2 M€): step 8.
 
-### 🔄 Step 7. Images and scans → `etl/vision.py`
+### ✅ Step 7. Images and scans → `etl/vision.py`
 - Serve the VLM (O3); transcribe every image and every scanned PDF page **once**, cached, with timings.
 - Read the charts of the two PDFs that have them.
 - Image chunks: context line + transcription; payload has the image path and page.
@@ -218,9 +219,23 @@ Companion file: `QUIZ.md` (one quiz per step, answers collapsed).
 - **Ceiling with the transcriptions: 121/122** (was 101): only Q034 (the skipped link labels) stays unreachable.
 - **Retrieval** (`vision` = `tools_tables` + `[chunking] vision = true`, 2049 chunks): recall@5 **0.783 → 0.934**, hit@5 0.811 → 0.959; `image_only` 0 → 0.846, `scan_ocr` 0.167 → 1.0, `image_in_document` 0 → 1.0, `board_resolution` 0.833 → 1.0. trap_hit@5 0.412 → 0.471: the scanned minutes holding the corrected 1,2 M€ are now readable, hence retrievable (step 8).
   - Misses: Q034 (not transcribed); **Q056**: the org chart's transcription is longer than 256 tokens, split in two, and the two names the answer links (Céline Moreau, Thomas Lambert) land in different chunks. Idea: one image = one chunk.
+- **`vision_whole_images`** (`[chunking] vision_max_tokens = 1024`): at 256 tokens 45 of the 65 images/pages were cut in several chunks, at 1024 only 1 (largest chunk 940 tokens; embedder and reranker accept 2048). Retrieval: same recall@5 (0.934): Q056 found (and its trap, the September 2025 org chart: step 8), Q087 (a workbook value) pushed out by a long image chunk.
+- **Judge** (Gemma 4; every image/scan question, and the 31-question sample):
+
+  | correctness | `tools_tables` (no vision) | `vision` | `vision_whole_images` |
+  |---|---|---|---|
+  | 20 image/scan questions | 0.035 | 0.765 | **0.825** |
+  | sample (31) | 0.687 | 0.800 | **0.803** |
+  | `out_of_corpus` (2) | 1.00 | 1.00 | 1.00 |
+
+  Answers now right: Q059 (the serial number, wrong in step 4), Q084 (1120 °C), Q139 (the first ERP schedule), Q064 (the handwritten note), Q056 and Q147 (reporting lines, only with whole images). Still unanswerable: Q034.
+  - The `refusal` metric fell to 4/5 on `out_of_corpus`: Q116 got an honest partial answer ("depuis 2011… ne précisent pas avant"), which the judge scores correct. A metric that matches one sentence can't see that.
+- **Bonus done:** `rag/images.py` lists the images (and scanned pages) of the extracts an answer cites; `scripts/ask.py` prints them ("image to show: …"). The UI that displays them comes with step 9.
+- **Ops:** the session started and stopped the model servers itself (detached `setsid nohup`, logs in the scratchpad). One slip: a `pgrep -f` also matched its own shell, `kill` failed and a broken check printed "stopped"; caught by checking the processes and the GPU before going on.
 
 ### ⬜ Step 8. Time and versions
 The hardest part. Each idea measured on its own, then combined:
+0. **First, a date bug found in step 7:** `Cahier des charges ERP Atlas.docx` is dated 31/12/2026 (the end of GesPro's support, the first date in its text), and its context line says so. The content-date heuristic picks dates that are *about* something else; audit the content-dated documents before filtering on dates.
 1. Registry status → Qdrant `must_not` filter on drafts, duplicates, noise; `valid_from` / `valid_to` on old versions.
 2. Reference date extracted from the question by the LLM; the code applies `date <= reference`.
 3. Chunks sent to the LLM in chronological order, each with its date.
@@ -293,4 +308,4 @@ Deliberately more open than phase A: the steps below are a skeleton we will refi
 | 2026-11-16 | 6 | Merging the untrack commit into `main` **deleted `enonces/` from disk** (a merge applies removals of tracked files); restored with `git restore --source=<old commit> --worktree`, all 393 registry hashes verified. Then history purged (D31), backups (mirror + copy) kept in the scratchpad |
 | 2026-11-16 | 6 | Incident (your browsing, confirmed): a corpus workbook (`Productierapport Gent 2026-02.xlsx`) was rewritten at 15:46 by something outside the session's code, its totals row emptied; restored from Git (hash = registry). Found because `enonces/` was still tracked: the step 0 untrack had failed; fixed |
 | 2026-11-16 | 6 | Branch `rag/step-06-excel`: openpyxl reader (v2 after two fixes), SQL tools on workbook tables (Q158 solved), index fingerprint; judged: tools +4.6 pts on the 22 workbook questions; `tools_tables` is the new reference |
-| 2026-11-16 | 7 | Branch `rag/step-07-images`: 66 images/pages transcribed in ≈ 6 min, 10 checked by hand (0 wrong value, 9 omissions, 4 inventions), VLM vs OCR, recall@5 0.783 → 0.934 |
+| 2026-11-16 | 7 | Branch `rag/step-07-images`: 66 images/pages transcribed in ≈ 6 min, 10 checked by hand (0 wrong value, 9 omissions, 4 inventions), VLM vs OCR, recall@5 0.783 → 0.934; whole images; judged: image/scan correctness 0.035 → 0.825; `vision_whole_images` is the new reference |

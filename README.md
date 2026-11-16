@@ -96,7 +96,8 @@ uv run python scripts/run_experiment.py experiments/baseline.toml --retrieval-on
 uv run python scripts/judge_experiment.py baseline                 # 31-question sample (judge on 8003 only)
 uv run python scripts/judge_experiment.py tools_tables --types excel_lookup excel_reasoning  # every dev question of these types
 uv run python scripts/report.py baseline no_context_line__retrieval  # per question type and per format
-uv run python scripts/ask.py "Quand le nouvel ERP démarre-t-il ?"   # one question, with its chunks
+uv run python scripts/ask.py "Quand le nouvel ERP démarre-t-il ?"   # one question, its chunks, and the images it cites
+uv run python scripts/compare_ocr.py   # Docling OCR vs the VLM on the scanned PDFs (step 7)
 ```
 
 An experiment is a TOML file in `experiments/` that changes **one** key of `baseline.toml`. `run_experiment.py`

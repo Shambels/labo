@@ -723,3 +723,77 @@ That the gain comes from the **tools**, not from the reader's chunks; the reader
 
 Each experiment row in PostgreSQL stores its `git_commit`: after the rewrite, those hashes pointed to commits that no longer exist in the history. filter-repo writes `.git/filter-repo/commit-map` (old hash → new hash); every `git_commit` was replaced through it, then each one was checked with `git cat-file -e`. The tags were moved by filter-repo itself; the hashes quoted in the docs were rewritten with the same map. Then `main` and the tags had to be **force**-pushed, since the new history doesn't contain the old one.
 </details>
+
+---
+
+## Step 7: images and scans
+
+**1.** What does llama-server need to serve a vision model, and what is the `mmproj` file?
+
+<details><summary>Answer</summary>
+
+Two files: the language model (`Qwen3.5-9B-UD-Q4_K_XL.gguf`) and its **multimodal projector** (`mmproj-F16.gguf`, passed with `--mmproj`). The projector turns the image's patches (after the vision encoder) into vectors in the language model's embedding space: "image tokens" the LLM reads like text tokens. The image is sent in the chat message as a base64 `data:` URL, through the same OpenAI-compatible API.
+</details>
+
+**2.** Why is every transcription cached, and why does the cache key include the model and the prompt?
+
+<details><summary>Answer</summary>
+
+Transcribing costs 5 to 14 s per image and needs the VLM on the GPU; it's an ETL step, done **once**, after which chunking and experiments read the JSON files without any model. The key includes the model and the prompt because the transcription depends on both: changing either must produce new transcriptions instead of silently reusing ones made with the old prompt (the same staleness problem as the Qdrant fingerprint of step 6).
+</details>
+
+**3.** `transcription(target, compute=False)` returns `None` when nothing is cached, and `vision_chunks` then raises an error. Why not just call the VLM there?
+
+<details><summary>Answer</summary>
+
+Chunking runs inside every indexing and experiment; the VLM usually isn't even running then (the generator or the judge holds the GPU). A hidden VLM call would fail obscurely, or worse, succeed with a different model or prompt and change the index without anyone noticing. Separating "transcribe" (an explicit script, with the VLM up) from "chunk" (reads only) keeps each step predictable, and the error message says exactly what to run.
+</details>
+
+**4.** The hand check of 10 transcriptions found 0 wrong numbers but 9 omissions and 4 inventions. What does that tell you about how to use VLM output?
+
+<details><summary>Answer</summary>
+
+The VLM rarely **misreads** what it copies (even the blurry 1120 °C and handwriting), but it **skips** text that doesn't sit in an obvious block (labels along the lines of a diagram, a maker's name, a footnote) and can **add** plausible content (a "Description" column on a plan). So: a missing value is more likely than a wrong one (Q034 is unanswerable because 500 Mbit/s was never copied); the descriptions are less reliable than the transcriptions; and showing the image next to the answer (the bonus) lets the user check.
+</details>
+
+**5.** Docling's OCR and the VLM both found 7/7 evidence snippets on the scans. Why keep the VLM, which is slower?
+
+<details><summary>Answer</summary>
+
+The snippet score only checks a few short strings; a word-level comparison of one page showed the OCR garbling two whole lines, one of them the L4 investment resolution, exactly what board questions ask about. The VLM got every line, and it's one tool for scans *and* images (handwriting, charts, diagrams). A metric that only samples a few strings can hide quality differences: look at the text too.
+</details>
+
+**6.** With the 256-token budget, 45 of the 65 images or pages were split in several chunks. Why is that worse for an image than for a text document, and how did `vision_max_tokens = 1024` show it?
+
+<details><summary>Answer</summary>
+
+A text document has headings and paragraphs; a cut usually falls between ideas. An image's transcription is a single unit whose meaning is often in **relations** (a box under its manager in an org chart, a value next to its label in a table). Cutting it can separate the two halves of a fact: Q056's answer needs "Céline Moreau" and "Thomas Lambert" together, and they ended up in different chunks. With a 1024-token budget only 1 image is cut, and Q056 is answered (purchasing reports to Thomas Lambert).
+</details>
+
+**7.** `vision_whole_images` fixed Q056 but lost Q087 (a workbook value), and Q056 now also has a trap in its top 5. Explain both.
+
+<details><summary>Answer</summary>
+
+Longer chunks compete differently: a whole image chunk carries many words and can outrank a short workbook chunk (Q087's emissions value was pushed out of the top 5, probably by the "Emissions par scope" chart). The trap of Q056 is the **September 2025** org chart, where purchasing still reported to the CFO; whole, it is as complete and relevant as the April 2026 one. Retrieval found both versions; choosing the current one is a matter of dates (step 8), not of chunking.
+</details>
+
+**8.** The refusal rate on `out_of_corpus` dropped from 5/5 to 4/5 with the images indexed. Was it a hallucination?
+
+<details><summary>Answer</summary>
+
+No: Q116 ("quel ERP le bureau de Lille utilisait-il avant 2011 ?") was answered "the extracts say GesPro 7 since 2011, but don't say what Lille used before": an honest partial answer, as prompt rule 2 asks. The `refusal` metric only recognizes the exact sentence "Je ne sais pas", so it counts this as "not refused". Read the answers behind a metric before concluding; the judge's correctness on `out_of_corpus` measures the right thing.
+</details>
+
+**9.** The bonus `answer_images()` returns the images of the **cited** extracts only. Why not all the images in the top 5?
+
+<details><summary>Answer</summary>
+
+The top 5 often holds images the answer didn't use (the other org charts, a neighbouring chart). Showing them would mislead the reader about the source of a value. The citations ([2]) say which extracts the answer relies on; showing only their images lets the user check exactly what the VLM read for this answer. When the answer cites nothing, all the images are shown, as a fallback.
+</details>
+
+**10.** To stop the generator, `P=$(pgrep -f "llama-server .*Qwen3.8-27B.*--port 8000")` returned two PIDs and nothing was stopped, yet the script printed "generator stopped". What went wrong, and what is the safe way?
+
+<details><summary>Answer</summary>
+
+`pgrep -f` matches the full command line of every process, including the shell running the command, whose own command line contains the pattern. `kill` refused the two-line value, and the wait loop tested an invalid PID, so `kill -0` failed and the loop concluded "stopped". Safe way: list the processes, pick the exact PID, kill it, then verify both that the PID is gone and that the resource is freed (GPU memory, port). Never trust a success message whose check could fail for another reason.
+</details>
