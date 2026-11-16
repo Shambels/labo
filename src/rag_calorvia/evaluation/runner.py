@@ -101,6 +101,9 @@ def run_experiment(config, allow_dirty=False):
                 if generating:
                     scores |= answer_scores(result["answer"], result["chunks"], question)
                     scores["completion_tokens"] = float(result["completion_tokens"])
+                    if result.get("tool_calls"):  # what the LLM computed, to analyse a right or wrong answer
+                        scores["tool_calls"] = (float(len(result["tool_calls"])), "\n".join(
+                            f"{c['tool']}({c['arguments']}) -> {c['result']}" for c in result["tool_calls"]))
                     language = detect_language(result["answer"], min_words=3)
                     if language is not None:  # too short to tell ("Je ne sais pas."): not counted
                         scores["answer_in_french"] = float(language == "fr")

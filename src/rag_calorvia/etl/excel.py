@@ -22,6 +22,7 @@ class Table:
     rows: list[list[str]]                 # displayed values, aligned with the header
     first_row: int                        # Excel row number of the first data row
     notes: list[str] = field(default_factory=list)
+    values: list[list] = field(default_factory=list)  # raw cell values (numbers stay numbers), for the SQL tools
 
 
 @dataclass
@@ -47,6 +48,16 @@ def display_value(cell):
     if isinstance(value, float) and value.is_integer():
         return str(int(value))
     return str(value).strip()
+
+
+def raw_value(cell):
+    """The value to compute with: numbers as numbers, dates as ISO text (sortable), text stripped, None if empty."""
+    value = cell.value
+    if isinstance(value, (datetime, date)):
+        return value.date().isoformat() if isinstance(value, datetime) else value.isoformat()
+    if isinstance(value, str):
+        return value.strip() or None
+    return value
 
 
 def sheet_blocks(ws):
@@ -77,6 +88,7 @@ def sheet_blocks(ws):
             pending = []
         else:
             table.rows.append([display_value(c) for c in row[:len(table.header)]])
+            table.values.append([raw_value(c) for c in row[:len(table.header)]])
     if pending:
         blocks.append(TextBlock(ws.title, pending))
     return [as_key_value(block) if isinstance(block, Table) and not block.rows else block for block in blocks]
