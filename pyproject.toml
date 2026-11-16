@@ -9,10 +9,13 @@ authors = [
 requires-python = ">=3.12"
 dependencies = [
     "docling>=2.94",
+    "openai>=3.51.0",
     "psycopg[binary]>=3.3.9",
     "py3langid>=0.4.0",
     "pydantic-settings>=2.16.3",
     "pymupdf>=2.1",
+    "qdrant-client>=1.20.0",
+    "requests>=2.34.2",
 ]
 
 [build-system]
