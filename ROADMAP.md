@@ -53,6 +53,8 @@ Companion file: `QUIZ.md` (one quiz per step, answers collapsed).
 | D35 | Content dates | Skip dates announced as deadlines, starts or postponements | A specification dated by the end of its subject's support, a lease by its start: wrong for any date filter |
 | D36 | Reference-date filter | Not kept | The question's period ≠ the source's writing date; recall −3 pts, no trap gain |
 | D37 | New reference after step 8 | `time_rules` = `vision_whole_images` + status filter + chronological context + prompt rule 8 | Best on the 41 target questions (0.790) and on the types where traps matter; losses are leaner answers, not wrong ones |
+| D38 | Final configuration | **`status_filter`** = `vision_whole_images` + drafts and archives out of the search | Level with 47 on 77 judged questions (0.794 vs 0.806, within noise), trap rate 0.471 → 0.353; `chronological` and `time_rules` hurt the image questions |
+| D39 | Results export | `results/*.csv` without the eval questions and expected answers | The repository is public; the eval set is course material |
 | D9 | Porting strategy | Port each hospital_rag module **in the step that needs it** (step 0: config, db, logs; step 3: evaluation; step 4: ETL and RAG) | Nothing unused or untested sits in the repo |
 
 ### Open decisions (to settle with you when we reach them)
@@ -265,15 +267,19 @@ The hardest part. Each idea measured on its own, then combined:
   | all 41 | 0.785 | 0.768 | 0.780 | **0.790** |
 
   - **Within noise overall** (one verdict ≈ 0.02 on 41 questions), but consistent by type: the time rules help current decisions, action tracking and board resolutions; `decision_history` and `version_trap` lose because rule 8 makes answers **leaner** (Q043 drops the earlier budget versions, Q066 part of the October context, Q149 the year), not wrong.
-  - **Kept: `time_rules`** (status filter + chronological context + rule 8) as the new reference (D37).
+  - **Kept: `time_rules`** (status filter + chronological context + rule 8) as the new reference (D37). *Revised in step 9:* judged on the full sample and the image questions, `time_rules` lost 0.135 on images; the final choice is `status_filter` (D38).
   - **The real lesson of the step:** retrieval was already right, and the 27B already ignored most traps in its context (drafts, old budget versions). The remaining errors are Q023 (always states 1,2 M€ first, then the correction) and Q008 (the March closure of the recall isn't in the top 5: a retrieval problem).
 - **Not done (idea kept):** CODIR decisions and action tables in PostgreSQL for `action_tracking` (already 0.791 with recall 0.955: little left to win for its cost).
 
-### ⬜ Step 9. Final evaluation and delivery
+### ✅ Step 9. Final evaluation and delivery
 - Pick the best configuration (quality, latency, indexing cost); run it **once** on the 31 test questions.
 - Export results to `results/*.csv`; write `RAPPORT.md` (comparison table with commits, per-type and per-format results, trap rate, VLM time and error rate, what didn't help, three failures analysed) and the README.
 - A small chat UI (Streamlit) for the demo.
 - **Tag `rag/v1.0`.**
+- **Final choice reopened.** Step 8 had judged its runs only on the 41 decision/version questions. Judged on the same 77 questions (sample + every image/scan + every decision/version question): `vision_whole_images` 0.806, `status_filter` 0.794, `chronological` 0.788, `time_rules` 0.779; on the 20 image questions 0.825 / 0.820 / 0.765 / 0.690. Traced: the date order made the model read "la première cause" as *chronologically* first (Q107); rule 8 mixed two org charts (Q056) and produced a degenerate `[3]` (Q014). **Final: `status_filter`** (your choice; level with 47 within noise, and drafts/archives kept away from the model).
+- **Test set, once** (run 66, commit `4c90d97`, 31 questions): recall@5 0.850 (dev 0.939), MRR 0.651 (0.871), **correctness 0.823** (dev 0.784 on the sample, 0.794 on 77), faithfulness 0.879, answers in French 1.000, 2 refusals (the out_of_corpus one, and Q020). Answers as good as on dev: no tuning to the dev questions. Two of the five retrieval "misses" are right answers from other documents (Q095 from the sales quotes, Q125 by SQL).
+- **Delivered:** `RAPPORT.md` (comparison with commits, per type and format, traps before/after, VLM time and error rate, what didn't help, test vs dev, three failures analysed: Q020 chained question, Q060 top 5 crowded by one document, Q008 latest state of a thread), `results/` (experiments, per-type means, final answers **without** the eval set's questions and expected answers: the repo is public), `app/chat.py` (Streamlit: answer, extracts, cited images, SQL), README commands.
+- **Caught while writing the report:** four figures written from memory were wrong (a commit hash, two scores, a per-type value taken from another run); all checked against the database and corrected before committing.
 
 ---
 
@@ -335,3 +341,5 @@ Deliberately more open than phase A: the steps below are a skeleton we will refi
 | 2026-11-16 | 7 | Branch `rag/step-07-images`: 66 images/pages transcribed in ≈ 6 min, 10 checked by hand (0 wrong value, 9 omissions, 4 inventions), VLM vs OCR, recall@5 0.783 → 0.934; whole images; judged: image/scan correctness 0.035 → 0.825; `vision_whole_images` is the new reference |
 | 2026-11-16 | – | Merged, tagged `rag/v0.5-images`, pushed |
 | 2026-11-16 | 8 | Branch `rag/step-08-versions`: content dates fixed; status filter (trap rate 0.471 → 0.353); chronological context; time rules; reference-date filter measured and dropped; judged on 41 target questions: `time_rules` kept |
+| 2026-11-16 | – | Merged, tagged `rag/v0.6-versions`, pushed |
+| 2026-11-16 | 9 | Branch `rag/step-09-final`: final choice reopened and judged on 77 questions; `status_filter` evaluated once on the test set (correctness 0.823); results exported, report written, chat UI |

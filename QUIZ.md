@@ -871,3 +871,56 @@ The LLM only **extracts** a date from the question (a JSON `{"date": …}`, pars
 
 The overall difference is within noise (one verdict ≈ 0.02), so the decision rests on the per-type pattern and on the answers. Rule 8 ("mention the old value only to explain the change") made answers leaner: Q043 lost the earlier budget versions, Q066 part of the October context, Q149 the year. The judge penalizes missing details, but no answer became wrong. Meanwhile the rules help where traps matter most (current decisions, action tracking, board resolutions). Kept, with the trade-off written down; a rule tweak ("for a question about the past, give the full sequence") would be the next experiment.
 </details>
+
+---
+
+## Step 9: final evaluation and delivery
+
+**1.** Step 8 chose `time_rules` after judging the 41 decision/version questions. Step 9 judged it on the full sample and the image questions and dropped it. What was the methodological mistake?
+
+<details><summary>Answer</summary>
+
+Judging a change only on the questions it **targets** shows its benefit, never its side effects. Date ordering and a "latest wins" rule act on every answer, so they must be judged on every kind of question they can touch, and compared on the **same** question set. The image questions, which the 41 didn't include, lost 0.135. Rule: targeted judging (`--types`) to see if a change helps where intended, plus the broad sample (and any type it could plausibly hurt) before adopting it.
+</details>
+
+**2.** At one point the step 8 runs scored 0.770 on "the sample" and the reference 0.803. Why was that comparison meaningless?
+
+<details><summary>Answer</summary>
+
+The step 8 runs had been judged on only 10 of the 31 sample questions (those of the target types), the reference on all 31: two means over different question sets. Compared on the same 10, the gap was the known Q026/Q043 differences. Always compare means over the same questions (a join on question id), and print n next to every mean.
+</details>
+
+**3.** Why is the test set evaluated **once**, after the final choice, and not on the two finalists to pick the better one?
+
+<details><summary>Answer</summary>
+
+Choosing between configurations with the test set makes it part of the tuning: its score then overestimates performance on new questions, exactly what the held-out set exists to measure. The choice is made on dev (here between 47 and 56, judged on 77 questions); the test only reports how that choice generalizes.
+</details>
+
+**4.** On test, recall@5 is 0.850 (dev 0.939) but correctness 0.823 (dev 0.784). Is the system overfitted to the dev questions?
+
+<details><summary>Answer</summary>
+
+No sign of it: the statement's warning is "if the test scores are clearly lower". The answers are as good; only retrieval is lower, with 30 questions (≈ 3 points each), and two of the five misses are right answers built from documents the eval doesn't list (sales quotes, a SQL computation). Overfitting would show as answers that rely on tricks tuned to dev questions failing on new ones.
+</details>
+
+**5.** Q020 ("capacité nominale du chariot impliqué dans l'accident de Gand") is answered "Je ne sais pas". Why can't a single search find its answer, and what would?
+
+<details><summary>Answer</summary>
+
+It is a **chained** question: the incident report says which truck (nr. 9), and only then can the nameplate photo of truck nr. 9 be found. The question names neither, so no single query ranks the photo. A second hop is needed: decompose ("quel chariot ?", then "chariot nr. 9 capacité"), or link entities in the registry (truck → photo).
+</details>
+
+**6.** Why were the question and expected-answer texts removed from `results/final_answers.csv`?
+
+<details><summary>Answer</summary>
+
+They are the course's eval set, and the repository is public: the same reason `enonces/` was untracked and purged from the history. The ids and types are enough to join the results with `data/calorvia_eval.json` locally. The export must serve the report without republishing someone else's material.
+</details>
+
+**7.** While writing `RAPPORT.md`, four figures turned out wrong (a commit hash that doesn't exist, two scores, a per-type value from another run). What practice caught them?
+
+<details><summary>Answer</summary>
+
+Checking every number of the report against the database before committing, instead of trusting what was remembered or copied from an earlier table. A report is read as the truth about the experiments; one wrong figure undermines the rest. The commits, the scores and the n of each mean come from queries, not from memory.
+</details>
