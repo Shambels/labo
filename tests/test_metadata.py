@@ -51,7 +51,7 @@ def test_content_date_when_the_name_has_none():
     ("Séance du lundi 13 octobre 2025, Namur", date(2025, 10, 13)),
     ("Mise en production le 1er avril 2026", date(2026, 4, 1)),
     ("Actieplan veiligheid (stand van zaken 26 januari 2026)", date(2026, 1, 26)),
-    ("Term: three years from 1 February 2025.", date(2025, 2, 1)),
+    ("Agreement signed on 12 January 2025. Term: three years from 1 February 2025.", date(2025, 1, 12)),
     ("Publiée le 04/05/2026. Prise de fonction le 1er juin 2026.", date(2026, 5, 4)),  # the first one wins
 ])
 def test_content_dates_in_three_languages(text, expected):
@@ -112,3 +112,20 @@ def test_department_and_source_type():
     assert source_type("pdf", True) == "text"
     assert source_type("xlsx", None) == "table"
     assert source_type("png", None) == "image"
+
+
+@pytest.mark.parametrize("text, expected", [
+    ("Calorvia utilise GesPro 7 depuis 2011. Son éditeur arrête le support le 31 décembre 2026.", None),
+    ("La mise en production, d'abord prévue le 1er avril, est reportée au 1er juin 2026.", None),
+    ("Pendant l'hypercare (jusqu'au 30 juin 2026), une permanence est assurée.", None),
+    ("Article 2 : durée. Neuf ans à compter du 1er mai 2026.", None),
+    ("2. Term. Three years from 1 February 2025.", None),
+    ("5. Duur. Drie jaar vanaf 1 januari 2025.", None),
+    ("WI-GNT-03: inpakken van Ventis-units. Revisie A van 10/04/2025.", date(2025, 4, 10)),  # 'van' = 'of'
+    ("Actieplan (stand van zaken 26 januari 2026)", date(2026, 1, 26)),
+    ("Révision C du 15/01/2026. Valable jusqu'au 31/12/2026.", date(2026, 1, 15)),       # the first one is the document's
+    ("Prévue jusqu'au 30/06/2026. Mise à jour du 12/05/2026.", date(2026, 5, 12)),       # skip the deadline, keep scanning
+])
+def test_dates_about_something_else_are_skipped(text, expected):
+    found = content_date(text)
+    assert (found.start if found else None) == expected

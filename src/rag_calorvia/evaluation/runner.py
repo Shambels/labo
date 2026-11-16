@@ -18,7 +18,7 @@ from rag_calorvia.rag.pipeline import answer, retrieve
 
 logger = logging.getLogger(__name__)
 
-STORED_CHUNK_FIELDS = ["document", "chunk_index", "search_score", "rerank_score", "text"]
+STORED_CHUNK_FIELDS = ["document", "chunk_index", "doc_date", "search_score", "rerank_score", "text"]
 
 
 def stored_config(config):
@@ -90,7 +90,9 @@ def run_experiment(config, allow_dirty=False):
         try:
             for i, question in enumerate(questions, 1):
                 result = answer(question["question"], config) if generating else retrieve(question["question"], config)
-                chunks = [{field: chunk.get(field) for field in STORED_CHUNK_FIELDS} for chunk in result["chunks"]]
+                # Stored as the LLM saw them (citations [n] refer to this order); retrieval-only: the reranker's order
+                shown = result.get("context", result["chunks"])
+                chunks = [{field: chunk.get(field) for field in STORED_CHUNK_FIELDS} for chunk in shown]
                 latency_ms = result["latency_ms"] if generating else sum(result["timings"].values())
                 db.insert_answers(conn, experiment_id, [{
                     "question_id": question["id"], "chunks": chunks,
@@ -99,7 +101,7 @@ def run_experiment(config, allow_dirty=False):
                 scores = retrieval_scores(result["chunks"], question, top_k)
                 scores |= redundancy_scores(result["chunks"], top_k)
                 if generating:
-                    scores |= answer_scores(result["answer"], result["chunks"], question)
+                    scores |= answer_scores(result["answer"], result["context"], question)
                     scores["completion_tokens"] = float(result["completion_tokens"])
                     if result.get("tool_calls"):  # what the LLM computed, to analyse a right or wrong answer
                         scores["tool_calls"] = (float(len(result["tool_calls"])), "\n".join(
@@ -108,6 +110,8 @@ def run_experiment(config, allow_dirty=False):
                     if language is not None:  # too short to tell ("Je ne sais pas."): not counted
                         scores["answer_in_french"] = float(language == "fr")
                 scores |= {name: value for name, value in result["timings"].items()}  # search_ms, rerank_ms...
+                if config["search"].get("reference_date", False):  # 1 when the question got a date, and which
+                    scores["reference_date"] = (float(result["reference"] is not None), str(result["reference"]))
                 if len(result["versions"]) > 1:  # the translations as the reason: they explain a gain or a loss
                     scores["translations"] = (float(len(result["versions"]) - 1),
                                               " | ".join(f"{k}: {v}" for k, v in result["versions"].items()))

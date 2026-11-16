@@ -50,6 +50,9 @@ Companion file: `QUIZ.md` (one quiz per step, answers collapsed).
 | D32 | VLM (was O3) | Qwen3.5-9B Q4_K_XL + `mmproj-F16`, llama-server, port 8003, temperature 0 | Your choice; already on disk, 9B fits beside the embedder and reranker |
 | D33 | Scans: VLM or Docling OCR | VLM | Same evidence score (7/7), OCR 40 % faster, but the OCR garbled whole lines (including the L4 resolution); the VLM also reads images and handwriting |
 | D34 | New reference after step 7 | `vision_whole_images` (`tools_tables` + transcriptions, one image = one chunk up to 1024 tokens) | Image/scan correctness 0.035 → 0.825, sample 0.687 → 0.803 |
+| D35 | Content dates | Skip dates announced as deadlines, starts or postponements | A specification dated by the end of its subject's support, a lease by its start: wrong for any date filter |
+| D36 | Reference-date filter | Not kept | The question's period ≠ the source's writing date; recall −3 pts, no trap gain |
+| D37 | New reference after step 8 | `time_rules` = `vision_whole_images` + status filter + chronological context + prompt rule 8 | Best on the 41 target questions (0.790) and on the types where traps matter; losses are leaner answers, not wrong ones |
 | D9 | Porting strategy | Port each hospital_rag module **in the step that needs it** (step 0: config, db, logs; step 3: evaluation; step 4: ETL and RAG) | Nothing unused or untested sits in the repo |
 
 ### Open decisions (to settle with you when we reach them)
@@ -233,7 +236,7 @@ Companion file: `QUIZ.md` (one quiz per step, answers collapsed).
 - **Bonus done:** `rag/images.py` lists the images (and scanned pages) of the extracts an answer cites; `scripts/ask.py` prints them ("image to show: …"). The UI that displays them comes with step 9.
 - **Ops:** the session started and stopped the model servers itself (detached `setsid nohup`, logs in the scratchpad). One slip: a `pgrep -f` also matched its own shell, `kill` failed and a broken check printed "stopped"; caught by checking the processes and the GPU before going on.
 
-### ⬜ Step 8. Time and versions
+### ✅ Step 8. Time and versions
 The hardest part. Each idea measured on its own, then combined:
 0. **First, a date bug found in step 7:** `Cahier des charges ERP Atlas.docx` is dated 31/12/2026 (the end of GesPro's support, the first date in its text), and its context line says so. The content-date heuristic picks dates that are *about* something else; audit the content-dated documents before filtering on dates.
 1. Registry status → Qdrant `must_not` filter on drafts, duplicates, noise; `valid_from` / `valid_to` on old versions.
@@ -244,6 +247,27 @@ The hardest part. Each idea measured on its own, then combined:
 6. CODIR decisions and action-tracking tables extracted to PostgreSQL; `action_tracking` answered in SQL.
 - Measure: `decision_*`, `board_resolution`, `version_trap`, `action_tracking`, and **trap rate before/after**.
 - **Tag `rag/v0.6-versions`.**
+- **Starting point** (reference `vision_whole_images`, run 46/47): recall@5 is ≈ 1.0 on the target types; the problem is the traps: 9 of the 17 questions with traps have one in their top 5 (trap_hit@5 0.471). The 27B already ignores most of them in its answers (draft minutes, draft price list, old budget versions): the differences are in the wording, hence a judge pass on all 41 target questions.
+- **8.0 Content dates audited** (89 content-dated documents read): 7 dates were *about* something else (the end of GesPro's support for the ERP specification, a postponed go-live, "jusqu'au", "à compter du", "from", "vanaf"). `content_date` now skips a date preceded by such a cue and keeps scanning; first version wrongly skipped "stand **van** zaken" (Dutch "van" = "of"), caught by a test. Exactly those 7 documents changed; no metric moved (`dates_fixed`, run 53), but the dates are now safe to filter on.
+- **8.1 `status_filter`** (`[search] exclude_status = ["draft", "archive"]`, Qdrant `must_not` in every prefetch; 4 drafts, 5 archives): trap_hit@5 **0.471 → 0.353** (`board_resolution` 1.0 → 0.33, `version_trap` 1.0 → 0.67), recall@5 0.934 → 0.939 (freed places). One new trap: Q063's freed place went to the 17/11 CODIR (8 km/h, superseded in January by 6 km/h): an outdated *signed* document, not a status problem.
+- **8.2 `chronological`** (`[generation] order = "chronological"`: extracts sorted by date, oldest first; retrieval metrics keep the reranker's order, citations and stored chunks follow the LLM's order): Q081 now answers "680 k€, puis 725 k€" instead of "the extracts don't say".
+- **8.3 `time_rules`** (prompt rule 8: latest decision wins, a draft minute isn't authoritative, a correction prevails, give the decision's date, a question about a past date gets the state at that date): answers now date their decision (Q063 "décision D-26-01 du CODIR du 12 janvier 2026"). Q023 still starts with 1,2 M€ before the correction.
+- **8.4 `reference_date` — not kept.** The LLM extracts the period a question is about (31 of 127 questions got one) and the code keeps `doc_date ≤ reference` or undated: recall@5 0.939 → **0.910**, trap rate unchanged, +1 s per question. Why: **the date a question is about is not the date its source was written** — the May 2026 phishing test is in the report of 3 July (Q093), "fin mai" is answered by the 22 June CODIR (Q127), March absenteeism by a later report (Q112). Reports always come after their period; a filter on the document date removes them. And every `decision_history` question was already at recall 1.0.
+- **Judge** (Gemma 4, all 41 target questions, ≈ 50 min; 0 failed verdict):
+
+  | correctness | ref (47) | 8.1 status | 8.2 chronological | 8.3 time rules |
+  |---|---|---|---|---|
+  | `action_tracking` (11) | 0.736 | 0.727 | 0.755 | **0.791** |
+  | `board_resolution` (6) | 0.933 | 0.900 | **0.967** | 0.950 |
+  | `decision_current` (14) | 0.657 | 0.643 | 0.671 | **0.693** |
+  | `decision_history` (6) | **0.933** | 0.900 | 0.867 | 0.817 |
+  | `version_trap` (4) | **0.925** | **0.925** | 0.825 | 0.850 |
+  | all 41 | 0.785 | 0.768 | 0.780 | **0.790** |
+
+  - **Within noise overall** (one verdict ≈ 0.02 on 41 questions), but consistent by type: the time rules help current decisions, action tracking and board resolutions; `decision_history` and `version_trap` lose because rule 8 makes answers **leaner** (Q043 drops the earlier budget versions, Q066 part of the October context, Q149 the year), not wrong.
+  - **Kept: `time_rules`** (status filter + chronological context + rule 8) as the new reference (D37).
+  - **The real lesson of the step:** retrieval was already right, and the 27B already ignored most traps in its context (drafts, old budget versions). The remaining errors are Q023 (always states 1,2 M€ first, then the correction) and Q008 (the March closure of the recall isn't in the top 5: a retrieval problem).
+- **Not done (idea kept):** CODIR decisions and action tables in PostgreSQL for `action_tracking` (already 0.791 with recall 0.955: little left to win for its cost).
 
 ### ⬜ Step 9. Final evaluation and delivery
 - Pick the best configuration (quality, latency, indexing cost); run it **once** on the 31 test questions.
@@ -309,3 +333,5 @@ Deliberately more open than phase A: the steps below are a skeleton we will refi
 | 2026-11-16 | 6 | Incident (your browsing, confirmed): a corpus workbook (`Productierapport Gent 2026-02.xlsx`) was rewritten at 15:46 by something outside the session's code, its totals row emptied; restored from Git (hash = registry). Found because `enonces/` was still tracked: the step 0 untrack had failed; fixed |
 | 2026-11-16 | 6 | Branch `rag/step-06-excel`: openpyxl reader (v2 after two fixes), SQL tools on workbook tables (Q158 solved), index fingerprint; judged: tools +4.6 pts on the 22 workbook questions; `tools_tables` is the new reference |
 | 2026-11-16 | 7 | Branch `rag/step-07-images`: 66 images/pages transcribed in ≈ 6 min, 10 checked by hand (0 wrong value, 9 omissions, 4 inventions), VLM vs OCR, recall@5 0.783 → 0.934; whole images; judged: image/scan correctness 0.035 → 0.825; `vision_whole_images` is the new reference |
+| 2026-11-16 | – | Merged, tagged `rag/v0.5-images`, pushed |
+| 2026-11-16 | 8 | Branch `rag/step-08-versions`: content dates fixed; status filter (trap rate 0.471 → 0.353); chronological context; time rules; reference-date filter measured and dropped; judged on 41 target questions: `time_rules` kept |

@@ -166,23 +166,37 @@ def filename_date(name):
     return None
 
 
+# Words that make a date about something else than the document: a deadline, a start, a postponement.
+# "Son éditeur arrête le support le 31 décembre 2026" is not the date of the specification that says it.
+NOT_DOCUMENT_DATE = re.compile(
+    r"(jusqu|à partir|a partir|à compter|a compter|report|prévu|prevu|support le|échéance|until|from|"
+    r"vanaf|tot en met|\btot\b)[^.\n]{0,12}$", re.IGNORECASE)  # not 'van': "stand van zaken", "Revisie A van"
+CUE_WINDOW = 30  # characters before a date in which a cue is looked for
+
+
+def date_matches(head):
+    """Every date of a text in order of appearance: [(position, DocDate)], numeric and written forms."""
+    found = []
+    for m in re.finditer(r"(?<!\d)(\d{1,2})/(\d{1,2})/(20\d\d)(?!\d)", head):
+        found.append((m.start(), day(m[3], m[2], m[1], source="content")))
+    for m in re.finditer(rf"(?<!\d)(\d{{1,2}})(?:er)?\s+({MONTH_NAMES})\s+(20\d\d)(?!\d)", head, re.IGNORECASE):
+        found.append((m.start(), day(m[3], MONTHS[m[2].lower()], m[1], source="content")))
+    return sorted((position, d) for position, d in found if d)
+
+
 def content_date(text, first_line_only=False):
-    """The first date written at the top of a text: 13/10/2025, 13 octobre 2025, 1er avril 2026, 26 januari 2026.
+    """The first date written at the top of a text that is the document's own: 13/10/2025, 13 octobre 2025,
+    1er avril 2026, 26 januari 2026. A date announced as a deadline, a start or a postponement ("jusqu'au",
+    "à compter du", "reportée au", "from", "vanaf") is skipped: it is about something else.
 
     first_line_only: for workbooks, whose first line is the title and whose next lines are data (the first
     date of a list of serial numbers is a production date, not the date of the list).
     """
     head = text.split("\n", 1)[0] if first_line_only else text[:CONTENT_WINDOW]
-    numeric = re.search(r"(?<!\d)(\d{1,2})/(\d{1,2})/(20\d\d)(?!\d)", head)
-    written = re.search(rf"(?<!\d)(\d{{1,2}})(?:er)?\s+({MONTH_NAMES})\s+(20\d\d)(?!\d)", head, re.IGNORECASE)
-    candidates = []
-    if numeric:
-        candidates.append((numeric.start(), day(numeric[3], numeric[2], numeric[1], source="content")))
-    if written:
-        month = MONTHS[written[2].lower()]
-        candidates.append((written.start(), day(written[3], month, written[1], source="content")))
-    candidates = [(position, d) for position, d in candidates if d]
-    return min(candidates, key=lambda c: c[0])[1] if candidates else None  # the earliest in the text
+    for position, found in date_matches(head):
+        if not NOT_DOCUMENT_DATE.search(head[max(0, position - CUE_WINDOW):position]):
+            return found
+    return None
 
 
 def filename_year(name):
