@@ -131,11 +131,11 @@ def judge_experiment(experiment_id, judge_model=None, force=False):
 
         start = time.time()
         for i, question in enumerate(sample, 1):
-            metrics = [metric_name(m, judge_model) for m in metrics_for(question)]
+            chunks, generated = answers.get(question["id"], (None, None))
+            metrics = [metric_name(m, judge_model) for m in metrics_for(question, generated)]
             if all((question["id"], m) in done for m in metrics):
                 logger.info("[%d/%d] %s already judged", i, len(sample), question["id"])
                 continue
-            chunks, generated = answers.get(question["id"], (None, None))
             if generated is None:
                 logger.warning("[%d/%d] %s has no answer: skipped", i, len(sample), question["id"])
                 continue

@@ -60,3 +60,12 @@ def test_summarize_skips_questions_without_the_metric():
     assert summary["factual"]["base"] == (0.5, 2)
     assert "out_of_corpus" not in summary
     assert summary["all"]["base"] == (0.5, 2)
+
+
+def test_refusals_are_not_judged_on_faithfulness():
+    from rag_calorvia.evaluation.judge import METRIC_NAMES, metrics_for
+    question = {"type": "image_only"}
+    assert "faithfulness" not in metrics_for(question, "Je ne sais pas.")
+    assert "correctness" in metrics_for(question, "Je ne sais pas.")
+    assert metrics_for(question, "Le numéro est BRV-19-04417 [1].") == METRIC_NAMES
+    assert metrics_for({"type": "out_of_corpus"}, "Je ne sais pas.") == ["correctness"]

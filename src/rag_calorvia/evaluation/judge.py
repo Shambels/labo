@@ -20,6 +20,7 @@ from deepeval.models import LocalModel  # noqa: E402
 from deepeval.test_case import LLMTestCase, SingleTurnParams  # noqa: E402
 
 from rag_calorvia.config import settings  # noqa: E402
+from rag_calorvia.evaluation.metrics import is_refusal  # noqa: E402
 
 logger = logging.getLogger(__name__)
 
@@ -64,9 +65,17 @@ def make_metrics(judge):
     }
 
 
-def metrics_for(question):
-    """The metric names judged for a question."""
-    return REFUSAL_METRICS if question["type"] == "out_of_corpus" else METRIC_NAMES
+def metrics_for(question, answer=None):
+    """The metric names judged for a question (and its answer, when known).
+
+    A refusal makes no claim: faithfulness ("is every claim supported?") would score it 0 because "Je ne sais pas"
+    isn't in the chunks (Q014, Q034, Q144 in the baseline). Correctness still judges it: a wrong refusal is an error.
+    """
+    if question["type"] == "out_of_corpus":
+        return REFUSAL_METRICS
+    if answer is not None and is_refusal(answer):
+        return [name for name in METRIC_NAMES if name != "faithfulness"]
+    return METRIC_NAMES
 
 
 def metric_name(name, judge_model):
@@ -84,7 +93,7 @@ def judge_answer(question, answer, chunks, judge_model=None):
     )
     metrics = make_metrics(get_judge(judge_model))
     scores = {}
-    for name in metrics_for(question):
+    for name in metrics_for(question, answer):
         metric = metrics[name]
         try:
             metric.measure(test_case)
