@@ -1,17 +1,26 @@
 [project]
 name = "labo"
 version = "0.1.0"
-description = "Add your description here"
+description = "Two chatbots for the fictional company Calorvia: a RAG over documents, then a text-to-SQL agent"
 readme = "README.md"
 authors = [
     { name = "Shambels", email = "pinchetti.dev@gmail.com" }
 ]
 requires-python = ">=3.12"
-dependencies = []
-
-[project.scripts]
-labo = "labo:main"
+dependencies = [
+    "psycopg[binary]>=3.3.9",
+    "pydantic-settings>=2.16.3",
+]
 
 [build-system]
 requires = ["uv_build>=0.13.6,<0.14.0"]
 build-backend = "uv_build"
+
+[tool.uv.build-backend]
+# One project, one package per exercise: rag_calorvia now, text2sql_calorvia in phase B
+module-name = ["rag_calorvia"]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.2.0",
+]

@@ -5,9 +5,22 @@ build/
 dist/
 wheels/
 *.egg-info
+.pytest_cache/
 
 # Virtual environments
-.venv
+.venv/
 
-enonces/*
+# Secrets
 .env
+
+# Course material: statements, corpus, eval set, source databases (not ours to publish)
+enonces/
+
+# Data: corpus symlinks and everything generated (Docling conversions, VLM transcriptions, reports)
+data/
+qdrant_storage/
+
+# Tools
+.ipynb_checkpoints/
+.deepeval/
+*.log
