@@ -32,7 +32,7 @@ uv run pytest                # the database test is skipped if PostgreSQL isn't 
 ## Pipeline
 
 ```bash
-uv run python scripts/inventory.py   # Docling conversions (cached in data/conversions/) + the documents registry
+uv run python scripts/inventory.py   # Docling conversions (cached in data/conversions/) + the documents registry with metadata
 ```
 
 What is kept out of the index and why: `exclusions.toml` (reviewed by hand), plus the duplicates and empty
@@ -50,7 +50,8 @@ src/rag_calorvia/
 ├── logs.py
 ├── etl/
 │   ├── convert.py    # Docling: text documents -> DoclingDocument JSON, once
-│   └── inventory.py  # the registry: hashes, pages, text layer, exclusions
+│   ├── inventory.py  # the registry: hashes, pages, text layer, exclusions
+│   └── metadata.py   # type, date, version/status, language, source type from path, name and text
 └── sql/            # schema and queries (documents, experiments, answers, scores)
 scripts/            # command-line entry points
 exclusions.toml     # hand-reviewed exclusions, with their reason

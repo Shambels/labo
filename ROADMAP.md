@@ -28,6 +28,10 @@ Companion file: `QUIZ.md` (one quiz per step, answers collapsed).
 | D10 | Docling conversion moved from step 4 to step 1 | `etl/convert.py`, cached in `data/conversions/<relative path>.json` | Duplicates can only be found on content (see step 1); the cache is reused by step 4 |
 | D11 | What "duplicate" means | Same `content_hash` = SHA-256 of the text reduced to lower-case letters and digits. Kept copy: outside `99_Archives/`, then not a PDF, then shortest path | No two files of the corpus share their bytes; this catches all 7 copies, the DOCX/PDF pair included |
 | D12 | Personal data | Excluded **per file** in `exclusions.toml`, not per folder | `02_RH/Confidentiel/Grille salariale 2026.xlsx` has no names and is evidence for a question; only the annual reviews name people |
+| D13 | Registry schema changes | `DROP TABLE documents` and re-run the inventory, no migration | The registry is derived data: rebuilt from the corpus in seconds |
+| D14 | Dates | Three passes: precise file-name patterns (photo, day, month, quarter, range), then the first date in the first 600 characters of text (title line only for workbooks), then a bare year in the name. Every date keeps `date_end`, `date_precision`, `date_source` | The file name is the most reliable when precise; a year in a code (`NC-2025-047`) is the least |
+| D15 | Status | One `status` (template > copy > archive > draft > signed > approved, else NULL), plus every raw marker in `markers` (incl. `final_in_name`) | Step 8 filters on the status; the markers stay available to analyse the traps |
+| D16 | Unsure language | `NULL` (7 number-heavy workbooks), no default | Honest at document level; step 5 detects per chunk and picks the default there |
 | D9 | Porting strategy | Port each hospital_rag module **in the step that needs it** (step 0: config, db, logs; step 3: evaluation; step 4: ETL and RAG) | Nothing unused or untested sits in the repo |
 
 ### Open decisions (to settle with you when we reach them)
@@ -82,13 +86,16 @@ Companion file: `QUIZ.md` (one quiz per step, answers collapsed).
 - **Surprise:** the statement says "exact duplicates (same hash)", but no two files share a SHA-256: DOCX/XLSX are zips that store their own dates (`docProps/core.xml`), and PDFs embed a creation date and an `/ID`. Hence `content_hash`.
 - **Eval check:** the eval set lists every copy of a duplicate as valid evidence, so keeping one copy loses nothing. Step 3 must still make sure the metrics don't count the kept copy as a miss when a question cites only the excluded one.
 
-### ⬜ Step 2. Metadata → `etl/metadata.py`
+### ✅ Step 2. Metadata → `etl/metadata.py`
 **Goal:** date, type, version/status, language, department, source type for every document.
 - Several filename patterns (CODIR 2025 vs 2026, CA, COPIL, PBW, monthly reports, invoices, `IMG_YYYYMMDD` photos), then fall back on the content ("Séance du lundi 13 octobre 2025").
 - Version and status markers: `v1`, `v2`, `Projet PV`, `copie`, `Copie de`, `(1)`, `FINAL`, `Archives`, `Doublons`, `Modeles`.
 - Document-level language with `py3langid` (per chunk comes in step 5).
 - Unit tests on real file names.
 - **Tag `rag/v0.1-inventaire`.**
+- **Result:** 49 type rules (the last one a `workbook` fallback); on the 379 indexed documents, 1 untyped (`README.md`), 38 undated (product sheets, timeless policies, images whose date only the VLM can read). Dates: 219 from precise file names (160 days, 50 months, 2 quarters, 7 ranges), 10 from photo names, 89 from content, 23 from a bare year. Languages: 38 nl and 7 en documents, as in the statement; images and scans: unknown until step 7. 57 tests green.
+- **Bugs caught while reviewing the output:** `\b` doesn't separate `_` from `v2` (`PV_CODIR_…_v2` had no version); the 2026 board minutes are signed by their folder, not their name; the first date of a workbook is a data row (serial-number list dated by its first unit's production date); `projet` alone flagged the intranet page "Le projet Atlas" as a draft.
+- **Not done here, on purpose:** the context line goes into the chunks in step 4 (it uses `doc_label` + `doc_date`); families of versions (which v is the latest, `valid_from`/`valid_to`) are step 8.
 
 ### ⬜ Step 3. Evaluation adapted to Calorvia
 **Goal:** measure before building more.
@@ -193,3 +200,4 @@ Deliberately more open than phase A: the steps below are a skeleton we will refi
 | 2026-11-16 | – | Statements read, roadmap and quiz files created |
 | 2026-11-16 | 0 | Branch `rag/step-00-setup`: `enonces/` untracked, package `rag_calorvia` (config, db, logs, git_state, sql), compose on 5432/6333, tests green |
 | 2026-11-16 | 1 | Branch `rag/step-01-inventory`: Docling conversion with cache, `documents` registry, `exclusions.toml`, 12 tests green |
+| 2026-11-16 | 2 | Same branch: `etl/metadata.py`, 12 new columns in `documents`, 45 new tests |
