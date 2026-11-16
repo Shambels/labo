@@ -76,8 +76,8 @@ def test_traps_are_aligned_too():
 
 
 def test_evidence_status():
-    def text(path):
-        return "Tarif 2026 · Aéris 6 : 7 130 €"
+    def text(path):  # images have no text until they are transcribed
+        return "" if path.endswith(".png") else "Tarif 2026 · Aéris 6 : 7 130 €"
     assert evidence_status(ev("05_Commercial/Tarifs/Tarif 2026.xlsx", ["7130"]), REGISTRY, text) == "found"
     assert evidence_status(ev("05_Commercial/Tarifs/Tarif 2026.xlsx", ["9999"]), REGISTRY, text) == "not_in_text"
     assert evidence_status(ev("02_RH/Organigrammes/Organigramme direction 2026-04.png"), REGISTRY, text) == "needs_vision"
@@ -88,5 +88,11 @@ def test_evidence_status():
 def test_a_question_is_reachable_only_if_every_fact_is_found():
     question = q("Q001", evidence=[ev("05_Commercial/Tarifs/Tarif 2026.xlsx", ["7130"], fact=0),
                                    ev("02_RH/Organigrammes/Organigramme direction 2026-04.png", fact=1)])
-    reachable, statuses = question_coverage(question, REGISTRY, lambda path: "7 130")
+    reachable, statuses = question_coverage(question, REGISTRY, lambda path: "" if path.endswith(".png") else "7 130")
     assert not reachable and statuses == {"found": 1, "needs_vision": 1}
+
+
+def test_a_transcribed_image_is_checked_like_text():
+    image = ev("02_RH/Organigrammes/Organigramme direction 2026-04.png", ["Céline Moreau"])
+    assert evidence_status(image, REGISTRY, lambda path: "Achats : Céline Moreau") == "found"
+    assert evidence_status(image, REGISTRY, lambda path: "Achats : C. Moreau") == "not_in_text"

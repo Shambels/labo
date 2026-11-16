@@ -7,7 +7,7 @@ from pathlib import Path
 
 from docling.datamodel.accelerator_options import AcceleratorOptions
 from docling.datamodel.base_models import InputFormat
-from docling.datamodel.pipeline_options import PdfPipelineOptions
+from docling.datamodel.pipeline_options import PdfPipelineOptions, RapidOcrOptions
 from docling.document_converter import DocumentConverter, PdfFormatOption
 from docling_core.types.doc import DoclingDocument
 
@@ -32,15 +32,28 @@ def file_format(path):
     return Path(path).suffix.lower().lstrip(".")
 
 
-def get_converter():
-    """A converter that only uses the local Docling models, with OCR off.
+def ocr_options():
+    """RapidOCR (PP-OCR, ONNX) with the models already on disk: no download at run time."""
+    models = settings.docling_models_path / "RapidOcr"
+    return RapidOcrOptions(
+        backend="onnxruntime",
+        det_model_path=str(models / "PP-OCRv6_det_small.onnx"),
+        cls_model_path=str(models / "ch_ppocr_mobile_v2.0_cls_mobile.onnx"),
+        rec_model_path=str(models / "PP-OCRv6_rec_small.onnx"),
+        rec_keys_path=str(models / "ppocrv6_dict.txt"),
+    )
 
-    OCR off: native PDFs have a text layer, and scans are read by the VLM in step 7 (with Docling's
-    OCR as the comparison point). A scan converted here comes out empty, which the inventory records.
+
+def get_converter(ocr=False):
+    """A converter that only uses the local Docling models, with OCR off by default.
+
+    OCR off: native PDFs have a text layer, and scans are read by the VLM (step 7). ocr=True is the comparison
+    point the statement asks for (Docling's OCR vs the VLM on the scans); a scan converted without it is empty.
     """
     pdf_options = PdfPipelineOptions(
         artifacts_path=settings.docling_models_path,  # layout and table models: no download
-        do_ocr=False,
+        do_ocr=ocr,
+        **({"ocr_options": ocr_options()} if ocr else {}),  # the field refuses None: only set it with OCR on
         do_table_structure=True,
         accelerator_options=AcceleratorOptions(device=settings.docling_device),
     )

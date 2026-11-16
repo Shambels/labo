@@ -9,24 +9,35 @@ from functools import cache
 
 from rag_calorvia import db
 from rag_calorvia.etl.convert import load_conversion
+from rag_calorvia.etl.vision import targets_of, transcription
 from rag_calorvia.evaluation.coverage import evidence_status, question_coverage
 from rag_calorvia.evaluation.dataset import align_with_registry, load_questions
 
 
+VISION = {}  # path -> transcriptions joined, filled in main() with --vision
+
+
 @cache
 def document_text(path):
-    """The whole converted text of a document: Markdown keeps the tables, the plain export the rest."""
+    """The whole converted text of a document (Markdown keeps the tables, the plain export the rest), plus the
+    VLM transcriptions of its images with --vision."""
     converted = load_conversion(path)
-    return "" if converted is None else converted.export_to_markdown() + "\n" + converted.export_to_text()
+    text = "" if converted is None else converted.export_to_markdown() + "\n" + converted.export_to_text()
+    return (text + "\n" + VISION.get(path, "")).strip()
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--details", action="store_true", help="list the evidence items that are not found")
+    parser.add_argument("--vision", action="store_true", help="add the VLM transcriptions (scripts/transcribe.py)")
     args = parser.parse_args()
 
     with db.connect(read_only=True) as conn:
         registry = db.load_registry(conn)
+        if args.vision:
+            for document in db.load_vision_documents(conn):
+                records = [transcription(t, compute=False) for t in targets_of(document)]
+                VISION[document["path"]] = "\n".join(r["text"] for r in records if r)
     questions = align_with_registry(load_questions("dev"), registry)
 
     per_type = defaultdict(lambda: [0, 0, Counter()])  # reachable, total, statuses
