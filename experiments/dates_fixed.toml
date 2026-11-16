@@ -1,0 +1,35 @@
+# experiments/dates_fixed.toml — step 8.0: the same config as vision_whole_images, run after the content-date fix (7 documents re-dated): the commit holds the difference
+name = "dates_fixed"
+
+[chunking]
+max_tokens = 256
+context_line = true         # "[PV du CODIR du 13 octobre 2025 · PV_CODIR_2025-10-13 · 00_Direction/CODIR/2025]"
+excel = "openpyxl"           # the only change: rows, tables, notes and Excel formats instead of Docling's conversion
+vision = true
+vision_max_tokens = 1024     # the only change: 45 of 65 images/pages were cut at 256 tokens, 1 at 1024 (Q056: a name and its manager in two chunks)
+
+[embedder]
+model = "bge-m3"
+query_instruction = ""
+
+[search]
+method = "hybrid"          # dense, sparse or hybrid
+fusion = "rrf"             # hybrid only: rrf or dbsf
+rrf_k = 60                 # rrf only
+candidates = 30
+top_k = 5
+
+[reranker]
+model = "bge-reranker"     # or "none"
+
+[generation]
+enabled = true              # false: retrieval only, for experiments the deterministic metrics measure
+model = "qwen3.8-27b"       # served name (llama-server -a)
+system_prompt = "prompts/tools.txt"          # + rule 7: when and how to use the tools (rule 1 allows their results)
+temperature = 0.0
+top_p = 1.0
+top_k = 40                  # sampling: candidate tokens at each step, not the number of chunks
+max_tokens = 512
+
+[tools]
+tables = true                # find_tables, describe_table, run_sql on an in-memory SQLite of every indexed workbook table
