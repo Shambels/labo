@@ -405,3 +405,112 @@ The context line added to every chunk (`[PV du CODIR du 13 octobre 2025 · …]`
 
 The test's filler chunks (`texte 0 a b c`, `texte 1 a b c`…) share the shingle `a b c`: Jaccard 1/5 = 0.2 for each of their 3 pairs, so the mean became (1 + 3 × 0.2) / 10 = 0.16. In exercise 3 those chunks had different *scopes* (different notices), so their similarity was forced to 0. We removed the per-patient scope (every pair is compared now), and the test's assumptions had to change with it: the code was right, the fixture wasn't.
 </details>
+
+---
+
+## Step 4: baseline
+
+**1.** Write the context line of the chunks of `03_Production/Gent/Maandrapporten/Productierapport Gent 2026-02.xlsx`. Which fields of the registry does `context_line()` use?
+
+<details><summary>Answer</summary>
+
+`[Rapport de production de février 2026 · Productierapport Gent 2026-02 · 03_Production/Gent/Maandrapporten]`. It uses `doc_label`, the date fields (`doc_date`, `date_end`, `date_precision`, `date_source`, through `french_date()`), and the path (split into folder and file name without extension). A month-precision date becomes "de février 2026".
+</details>
+
+**2.** Removing the context line dropped recall@5 from 0.783 to 0.684, and `multilingual` from 0.93 to 0.43. Why does a *French* context line help find *Dutch* documents?
+
+<details><summary>Answer</summary>
+
+The French question shares almost no words with a Dutch chunk, so BM25 can't find it and only dense search helps. The context line adds French words to the Dutch chunk (`Rapport de production`, `Comité de sécurité`) and the folder (`03_Production/Gent/…`), which the question often names ("à Gand", "production"). The reranker also sees them. It's a cheap form of translation of the chunk's *topic*.
+</details>
+
+**3.** `meeting_detail` went from 1.000 to 0.550 without the context line. What kind of question is it, and why does it depend so much on the line?
+
+<details><summary>Answer</summary>
+
+Questions about one precise meeting ("Qui présidait le CODIR du 13 octobre 2025 ?", "Quel indicateur … lors de la séance du …"). Many minutes have nearly identical chunks (attendance, indicators, "Néant."); only the date distinguishes them. Without the context line, a chunk from the middle of a minute doesn't say which meeting it belongs to, so neither search nor the reranker can pick the right one.
+</details>
+
+**4.** Why does the context line keep the file name even though the label already says "PV du conseil d'administration du 18 novembre 2025"?
+
+<details><summary>Answer</summary>
+
+The file name carries status information the label doesn't: `Projet PV CA 2025-11-18` (a draft), `signé`, `v1`, `FINAL`, `Tarif 2026 - projet v1`. It gives the lexical search those words and lets the LLM see that a chunk comes from a draft. It's also the most precise identifier for documents with a generic label ("Classeur").
+</details>
+
+**5.** Why was the "drop repeated texts" idea (exercise 3's header removal made generic) abandoned before any experiment?
+
+<details><summary>Answer</summary>
+
+Looking at the data first: the texts repeated in 5+ documents weren't footers (Docling already leaves page headers and footers out of the chunks) but `Néant.`, the attendees of the Ghent safety committee (9 meetings), the sales-meeting participants, and **a row of the CODIR action table repeated across 5 minutes** while its status didn't change. Dropping them would delete exactly the evidence of `action_tracking` and `meeting_detail` questions. Repetition ≠ lack of information.
+</details>
+
+**6.** In `chunk_document()`, why is `reserved = count_tokens(line) + 1` subtracted from `max_tokens` before creating the `HybridChunker`?
+
+<details><summary>Answer</summary>
+
+`HybridChunker` makes chunks of at most N tokens (headings + text), but the context line is added **after** chunking. Without reserving its tokens (+1 for the newline), the final chunk would exceed `max_tokens` (256), and the embedder would see a different size than configured. It's also why the no-context-line index has fewer chunks (1359 vs 1449): with more room per chunk, documents are split less.
+</details>
+
+**7.** `collection_name()` builds `calorvia__bge-m3__256` or `calorvia__bge-m3__256__no-context-line`. What would go wrong if a new chunking option weren't added to the name?
+
+<details><summary>Answer</summary>
+
+Two configurations producing different chunks would share one collection. `index_corpus` would find a collection with the "right" name (and, if the chunk count happened to match, consider it complete) and the second experiment would silently search the first one's chunks: its scores would measure the wrong index.
+</details>
+
+**8.** In hybrid search, what do the two `Prefetch` and the `RrfQuery(k=60)` do?
+
+<details><summary>Answer</summary>
+
+Each prefetch runs one search independently: dense (cosine on bge-m3 vectors) and sparse (BM25), each returning `candidates` (30) points. RRF (Reciprocal Rank Fusion) then merges the two rankings: each chunk gets Σ 1/(k + rank) over the lists it appears in, and the result is sorted on that score. It only uses ranks, not raw scores, so it doesn't matter that cosine and BM25 scores are on different scales. k = 60 dampens the advantage of the very first ranks.
+</details>
+
+**9.** The reranker reorders the 30 candidates and keeps 5. What does a cross-encoder do that the embedder can't?
+
+<details><summary>Answer</summary>
+
+The embedder encodes the question and each chunk **separately** into vectors, then compares them: fast (chunk vectors are computed once, at indexing) but coarse. A cross-encoder reads the question and the chunk **together**, so attention links words of both, and outputs one relevance score. Much more precise, but it must run once per (question, chunk) pair at query time: that's why it only reranks a short candidate list.
+</details>
+
+**10.** `run_experiment()` now refuses to start on a dirty tree. What happened that made this guard worth adding, and why isn't it enough on its own?
+
+<details><summary>Answer</summary>
+
+Two reruns were launched right after a commit, and `uv add deepeval` modified `pyproject.toml` seconds later, before the runs started: they were stamped `git_dirty = true` and had to be redone. The guard checks the state **when a run starts**; it can't see files edited *while* the run executes (Python has already loaded the code, but the commit no longer describes everything around it). Hence the rule: don't touch the repository until every run of a batch has started.
+</details>
+
+**11.** `find_experiment.sql` now sorts with `ORDER BY git_dirty, started_at DESC`. What does that change for `scripts/report.py baseline`?
+
+<details><summary>Answer</summary>
+
+`false` sorts before `true`, so the most recent **clean** run of that name is returned, even if a dirty trial ran after it. A dirty run is only returned when no clean run of that name exists. The report shows reproducible results by default.
+</details>
+
+**12.** For the 2 `out_of_corpus` questions of the judge sample, only `correctness` is judged. Why not `contextual_recall` or `faithfulness`?
+
+<details><summary>Answer</summary>
+
+The expected answer is a refusal ("the corpus doesn't say"). `contextual_recall` asks whether the retrieved chunks contain what the expected answer needs: there's nothing to contain, so the score is meaningless. `faithfulness` checks that every claim of the answer is supported: "Je ne sais pas." has no claim. `correctness` (does the answer match the expected one, i.e. refuse?) is the one question that matters.
+</details>
+
+**13.** Why is the judge Gemma 4 rather than Qwen3.8-27B, which judged exercise 3?
+
+<details><summary>Answer</summary>
+
+Qwen3.8-27B is now the generator. A model judging its own outputs tends to prefer them (**self-preference bias**: its own phrasing and reasoning look right to it). A judge from another family (Google's Gemma vs Alibaba's Qwen) removes that bias. The cost: judge scores aren't directly comparable with exercise 3's.
+</details>
+
+**14.** Gemma gave faithfulness 0 to Q043's answer "280 k€ [4][5]". The answer was checked by hand and is right. What does this tell you about using an LLM judge, and what should you do with that metric?
+
+<details><summary>Answer</summary>
+
+An LLM judge is itself a model that makes mistakes: here it read the wrong chunk (the capex follow-up says "Budget = 280" but "Statut = En cours") and missed the cited ones. 4 of the 5 claim-based faithfulness penalties of the baseline were such errors. So: **check a sample of the judge's verdicts by hand before trusting a metric**; treat faithfulness as a noisy lower bound, compare experiments only on large differences, and give more weight to metrics that proved reliable (correctness here, and the deterministic recall/hit/trap_hit).
+</details>
+
+**15.** Why was "Je ne sais pas." scored 0 on faithfulness, and why is the fix to *skip* the metric rather than score it 1?
+
+<details><summary>Answer</summary>
+
+DeepEval's faithfulness extracts the claims of the answer and checks each against the context; the judge treated "Je ne sais pas" as an unsupported claim. A refusal makes **no** claim, so the question "is every claim supported?" doesn't apply: scoring it 1 would inflate the mean with answers that said nothing, scoring it 0 penalizes honesty. Skipping it keeps the mean about answers that make claims. Whether the refusal was *right* is measured elsewhere: correctness, and the `refusal` metric (right on `out_of_corpus`, wrong otherwise).
+</details>

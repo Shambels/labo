@@ -83,7 +83,17 @@ compares final answers); `-a` the name clients use as `model`.
 ```bash
 uv run python scripts/inventory.py   # Docling conversions (cached in data/conversions/) + the documents registry with metadata
 uv run python scripts/check_eval.py  # the ceiling: which dev questions the indexed text can answer at all
+uv run python scripts/index.py experiments/baseline.toml          # chunks + Qdrant collection (embedder)
+uv run python scripts/run_experiment.py experiments/baseline.toml # dev set -> answers + scores in PostgreSQL
+uv run python scripts/run_experiment.py experiments/baseline.toml --retrieval-only  # no generator needed
+uv run python scripts/judge_experiment.py baseline                 # 31-question sample (judge on 8003 only)
+uv run python scripts/report.py baseline no_context_line__retrieval  # per question type and per format
+uv run python scripts/ask.py "Quand le nouvel ERP démarre-t-il ?"   # one question, with its chunks
 ```
+
+An experiment is a TOML file in `experiments/` that changes **one** key of `baseline.toml`. `run_experiment.py`
+refuses uncommitted code (`--allow-dirty` for a trial run, kept out of reports): every reported run is stored
+with its commit.
 
 The eval set is split in code (`evaluation/dataset.py`): the 31 questions whose number is a multiple of 5 are the
 held-out test set, readable only with `allow_test=True`, for the final evaluation.
