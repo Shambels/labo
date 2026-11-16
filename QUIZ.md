@@ -76,6 +76,15 @@ Defence in depth: each layer has blind spots. `default_transaction_read_only` ca
 <details><summary>Answer</summary>
 
 `--cached` only removes them from the **index** (what the next commit contains); the files stay on disk. Once committed, the folder is gone from the new tree, and the `.gitignore` entry stops Git from offering it again. But every past commit (here `a33c2a6`) still contains it, so anyone can check out that commit on the public repo. Removing it for good means rewriting history (`git filter-repo`) and force-pushing: that is open decision O7.
+
+*Postscript (step 6):* in this repo the untrack actually **failed**, see the next question.
+</details>
+
+**1b.** The step 0 commit was `git rm -r --cached enonces` followed by `git commit -m "…" -- enonces .gitignore`. All 7706 files were still tracked afterwards. Why?
+
+<details><summary>Answer</summary>
+
+`git commit <paths>` (the `--only` mode) ignores what is staged for those paths and commits them **as they are in the working tree**. The files still existed on disk, so committing "enonces as in the working tree" put them back: the staged removal was thrown away, only `.gitignore` changed. The right sequence is `git rm -r --cached enonces` then a plain `git commit` (which commits the index). It went unnoticed because `git status` never lists unchanged tracked files; it surfaced in step 6 when a corpus file changed on disk and showed up as modified. Lesson: verify the effect (`git ls-files enonces | wc -l`), not just the command.
 </details>
 
 **2.** The old `.gitignore` already listed `enonces/*`, yet the files were tracked. Why?
@@ -594,4 +603,109 @@ No. Exercise 3 showed that llama-server isn't reproducible even at temperature 0
 <details><summary>Answer</summary>
 
 Each run stores its full config, and `check_same_config` refuses a new run under an existing name if the config differs. Adding `[sparse] language = "french"` to `baseline.toml` would make it differ from the stored one, so the baseline could no longer be rerun under its name, and the file would no longer describe what produced the stored results. New options get their default in code (`config.get("sparse", {}).get("language")`), so old configs keep their exact meaning.
+</details>
+
+---
+
+## Step 6: Excel files
+
+**1.** Why does `load_workbook(path, data_only=True)` matter, and what would you read without it for a cell `=SUM(B2:B6)`?
+
+<details><summary>Answer</summary>
+
+Without `data_only=True`, openpyxl returns the **formula** text (`=SUM(B2:B6)`). With it, it returns the value the spreadsheet application computed and saved with the file. Caveat from the notebook: a workbook produced by a script and never opened in Excel/LibreOffice may have no saved values: the cell reads `None`. (All the corpus workbooks have their values.)
+</details>
+
+**2.** A cell holds `-0.00681316572305923` with the number format `0.0%`. What does `display_value` return, and why do it rather than keep the raw value?
+
+<details><summary>Answer</summary>
+
+`-0,7 %`: the value × 100, with as many decimals as the format has after the point, a comma as decimal separator and a `%`. That is what a reader of the workbook sees, and how minutes and questions write it ("écart de -0,7 %"). The raw float matches neither the words of the question nor what the LLM should quote.
+</details>
+
+**3.** How does `sheet_blocks` decide what is a title, a header, a data row and a note?
+
+<details><summary>Answer</summary>
+
+Rows are grouped into blocks separated by empty rows. A row with **one** non-empty cell is a title (before a table; consecutive ones are joined: "Reporting mensuel · mars 2026 · Montants en k€") or a note (after a table's rows). The first row with **several** cells is the header; the following ones are data rows. One-cell lines that never meet a table become a `TextBlock` (a "Commentaires" sheet).
+</details>
+
+**4.** What went wrong with `Heures de formation à la sécurité | 620`, and how was it fixed?
+
+<details><summary>Answer</summary>
+
+The line has two cells, so the reader took it for the **header** of a new table; no data row followed, so the table had no rows and was skipped: the information was lost (Docling had at least kept it as text). Fix: a "table" without data rows is a key/value line, turned into text: `Heures de formation à la sécurité : 620`. Found by checking that every eval snippet of a workbook still appeared in some chunk of the new reader.
+</details>
+
+**5.** Small tables get one sentence per row *and* the table as Markdown; big tables get Markdown groups and a summary, no row sentences. Why the difference?
+
+<details><summary>Answer</summary>
+
+A row sentence (`onglet « Ventes par région » · … · Région : Flandre ; CA du mois : 4568`) is a precise retrieval target: the question's words sit next to the number. The whole table in one chunk lets the LLM compare rows. For a 214-row list, one sentence per row would make hundreds of near-identical chunks that crowd the top k; grouped rows with the header repeated keep each chunk readable, and a summary chunk describes the table as a whole.
+</details>
+
+**6.** What does the summary chunk of the 214-row recall list contain, and which kind of question does it serve that no group of 20 rows can?
+
+<details><summary>Answer</summary>
+
+The table's heading, its row count, its columns, and for each column with at most 10 distinct values the count per value: `Statut : Réparée (211), Introuvable (installateur en cessation d'activité) (3)`. It answers **count** questions ("combien d'unités…") on the whole table, which a chunk holding 20 of the 214 rows can't.
+</details>
+
+**7.** The excel reader was fixed, the config didn't change, and the chunk count changed by one. Why was that lucky, and what protects us now?
+
+<details><summary>Answer</summary>
+
+The collection name only depends on config options. `index_corpus` reused a collection when its point count matched the chunk count: the rebuild happened only because the fix added one chunk. A fix that kept the same count would have left the **old chunks** in Qdrant and the experiment would have measured stale data, silently. Now every point carries a **fingerprint** (a hash of every chunk's document, index and text); a different fingerprint triggers a rebuild.
+</details>
+
+**8.** In `rag/tables.py`, why are the tables built from **raw** values (`raw_value`) rather than the displayed ones?
+
+<details><summary>Answer</summary>
+
+SQL computes on types: `SUM`, `MAX`, `ORDER BY` need numbers. `"-0,7 %"` and `"4 568"` are text: they would sort alphabetically and couldn't be added. Raw values keep numbers as REAL (percentages as fractions, which the `run_sql` description tells the LLM) and dates as ISO text, which sorts chronologically.
+</details>
+
+**9.** SQLite returned `[]` with no error for `SELECT "Chiffre" FROM t001` when no column is named `Chiffre`. What happened, and why is it dangerous for an LLM tool?
+
+<details><summary>Answer</summary>
+
+For backwards compatibility, SQLite treats a double-quoted identifier that matches no column as a **string literal**: the query selected the constant `'Chiffre'` (on an empty table: no rows). If the LLM misspells a column, the query "works" and returns a wrong answer, with no error to correct. `conn.setconfig(sqlite3.SQLITE_DBCONFIG_DQS_DML, False)` turns that off: an unknown name becomes an error the LLM sees and can fix.
+</details>
+
+**10.** The store refuses writes in two ways. Which, and why both?
+
+<details><summary>Answer</summary>
+
+1. `run_sql` accepts only one statement starting with `SELECT` or `WITH` (no `;` inside).
+2. `PRAGMA query_only = ON` after loading: SQLite itself refuses any write on that connection.
+
+The regex check gives the LLM a clear error message; the pragma protects even if the check has a hole (a test calls `store.execute("DELETE …")` directly and expects SQLite to refuse). Defence in depth: the same principle as phase B's read-only layers.
+</details>
+
+**11.** The tool loop allows `MAX_TOOL_ROUNDS = 5`. What happens in the last round, and why not let the model call tools until it's done?
+
+<details><summary>Answer</summary>
+
+In the last round the request is sent with `tool_choice = "none"`: the model must answer with what it has. Without a cap, a model that keeps calling tools (a query that always errors, a loop between `find_tables` calls) would never return and would consume tokens and time. A bounded loop guarantees an answer and a bounded latency.
+</details>
+
+**12.** Why is `tools_tables` (tools + a new prompt rule) acceptable as *one* experiment, despite the "one change at a time" rule?
+
+<details><summary>Answer</summary>
+
+The two parts are inseparable: tools without the rule that allows their results (rule 1 said "only from the extracts") and says when to use them would be ignored or misused; the rule without tools refers to tools that don't exist. The unit of change is "the LLM can compute on the tables". What matters is that nothing else changes (same chunks, same retrieval), and that the roadmap says so.
+</details>
+
+**13.** On the 2-per-type sample, `excel_lookup` correctness fell from 0.85 to 0.45 with the new reader. On all 13 `excel_lookup` questions it fell from 0.769 to 0.715. Which number should drive the decision, and why?
+
+<details><summary>Answer</summary>
+
+The second. With 2 questions, one verdict moves the mean by 0.5 × (change of that verdict): Q017 alone ("six personnes" vs "6 ETP", 1.0 → 0.2) made the 0.85 → 0.45 drop. On 13 questions the same answer moves the mean by about 0.06. A change aimed at some question types must be judged on **all** their questions (`--types`); the sample is for broad comparisons. Even 13 questions is small: read the questions that changed, not only the mean.
+</details>
+
+**14.** The reader alone (0.764) scores below Docling (0.795) on the 22 workbook questions, the reader + tools above (0.841). What can you conclude about the reader, and what experiment is missing?
+
+<details><summary>Answer</summary>
+
+That the gain comes from the **tools**, not from the reader's chunks; the reader is a means (raw typed values for SQL, units, percentages), not a gain by itself on this dev set. The missing run: **Docling chunks + tools** (the SQL store reads the workbooks with openpyxl independently of the chunking). Only that run tells whether the reader's chunks add anything on top of the tools. An honest report states the gap instead of crediting the reader.
 </details>
