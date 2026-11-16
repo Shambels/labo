@@ -122,8 +122,12 @@ def run_experiment(config, allow_dirty=False):
     return experiment_id
 
 
-def judge_experiment(experiment_id, judge_model=None, force=False):
-    """Judge the stored answers of an experiment on the 31-question sample. Resumes where an interrupted pass stopped."""
+def judge_experiment(experiment_id, judge_model=None, force=False, types=None):
+    """Judge the stored answers of an experiment on the 31-question sample, or on every dev question of `types`.
+
+    The sample (2 per type) compares configurations broadly; a change aimed at a few types (Excel) is judged on all
+    their questions, where 2 per type would let one wording swing a mean by 0.4. Resumes an interrupted pass.
+    """
     from rag_calorvia.evaluation.judge import judge_answer, metric_name, metrics_for  # loads DeepEval
 
     with db.connect() as conn:
@@ -135,7 +139,8 @@ def judge_experiment(experiment_id, judge_model=None, force=False):
             raise ValueError(f"experiment {experiment_id} ({name}) is {status!r}, not 'done'")
         answers = db.load_answers(conn, experiment_id)
         done = set() if force else db.load_score_keys(conn, experiment_id)
-        sample = judge_sample(align_with_registry(load_questions("dev"), db.load_registry(conn)))
+        questions = align_with_registry(load_questions("dev"), db.load_registry(conn))
+        sample = [q for q in questions if q["type"] in types] if types else judge_sample(questions)
         if all(answers.get(q["id"], (None, None))[1] is None for q in sample):
             raise ValueError(f"experiment {experiment_id} ({name}) has no generated answers: nothing to judge")
 
