@@ -9,6 +9,7 @@ import time
 
 from rag_calorvia import db
 from rag_calorvia.etl.index import index_corpus
+from rag_calorvia.etl.metadata import detect_language
 from rag_calorvia.evaluation.dataset import align_with_registry, judge_sample, load_questions
 from rag_calorvia.evaluation.metrics import answer_scores, redundancy_scores, retrieval_scores
 from rag_calorvia.git_state import git_state
@@ -100,6 +101,9 @@ def run_experiment(config, allow_dirty=False):
                 if generating:
                     scores |= answer_scores(result["answer"], result["chunks"], question)
                     scores["completion_tokens"] = float(result["completion_tokens"])
+                    language = detect_language(result["answer"], min_words=3)
+                    if language is not None:  # too short to tell ("Je ne sais pas."): not counted
+                        scores["answer_in_french"] = float(language == "fr")
                 scores |= {name: value for name, value in result["timings"].items()}  # search_ms, rerank_ms...
                 if len(result["versions"]) > 1:  # the translations as the reason: they explain a gain or a loss
                     scores["translations"] = (float(len(result["versions"]) - 1),
