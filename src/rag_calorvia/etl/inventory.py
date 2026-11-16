@@ -7,6 +7,7 @@ Two fingerprints per file:
 """
 import hashlib
 import logging
+from datetime import date
 import re
 import tomllib
 import unicodedata
@@ -17,6 +18,7 @@ import pymupdf
 
 from rag_calorvia.config import settings
 from rag_calorvia.etl.convert import DOCLING_FORMATS, file_format, load_conversion
+from rag_calorvia.etl.metadata import extract_metadata
 
 logger = logging.getLogger(__name__)
 
@@ -35,6 +37,19 @@ class Document:
     text_chars: int = 0               # characters of text Docling found (0 for images and scans)
     duplicate_of: str | None = None
     excluded_reason: str | None = None
+    # Metadata (etl/metadata.py)
+    department: str | None = None
+    doc_type: str | None = None
+    doc_label: str | None = None      # French, for the context line of the chunks
+    doc_date: date | None = None
+    date_end: date | None = None
+    date_precision: str | None = None  # day, month, quarter, year, range
+    date_source: str | None = None     # filename, content, photo
+    version: str | None = None
+    status: str | None = None          # template, copy, archive, draft, signed, approved, or None
+    markers: list[str] | None = None
+    language: str | None = None        # of the whole document; per chunk in step 5
+    source_type: str | None = None     # text, table, image, scan
 
 
 def sha256_bytes(data):
@@ -70,6 +85,9 @@ def describe(relative_path):
             document.page_count = converted.num_pages()
     if fmt == "pdf":
         document.page_count, document.has_text_layer = pdf_facts(path)
+
+    for field, value in extract_metadata(relative_path, fmt, text, document.has_text_layer).items():
+        setattr(document, field, value)
 
     normalized = normalize_text(text)
     document.text_chars = len(text.strip())
