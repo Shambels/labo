@@ -23,6 +23,7 @@ PAYLOAD_INDEXES = {
     "status": models.PayloadSchemaType.KEYWORD,
     "language": models.PayloadSchemaType.KEYWORD,      # of the chunk; doc_language is the document's
     "source_type": models.PayloadSchemaType.KEYWORD,
+    "sheet": models.PayloadSchemaType.KEYWORD,         # workbooks read with openpyxl (step 6)
     "doc_date": models.PayloadSchemaType.DATETIME,
     "date_end": models.PayloadSchemaType.DATETIME,
 }
@@ -76,6 +77,8 @@ def collection_name(config):
         name += "__no-context-line"
     if config.get("sparse", {}).get("language") == "per_chunk":
         name += "__bm25-per-language"
+    if chunking.get("excel", "docling") == "openpyxl":
+        name += "__excel-openpyxl"
     return name
 
 

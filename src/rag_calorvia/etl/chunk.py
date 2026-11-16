@@ -12,6 +12,7 @@ from transformers import AutoTokenizer
 from rag_calorvia import db
 from rag_calorvia.config import settings
 from rag_calorvia.etl.convert import load_conversion
+from rag_calorvia.etl.excel import workbook_pieces
 from rag_calorvia.etl.metadata import detect_language
 
 MONTHS_FR = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre",
@@ -71,6 +72,32 @@ def chunk_language(body, document_language):
     return detect_language(body) or document_language or DEFAULT_LANGUAGE
 
 
+def document_payload(document):
+    """The registry fields every chunk of a document carries."""
+    return {"document": document["path"], "doc_language": document["language"]} | {
+        field: (value.isoformat() if hasattr(value, "isoformat") else value)  # dates as ISO strings for Qdrant
+        for field, value in ((f, document[f]) for f in PAYLOAD_FIELDS)
+    }
+
+
+def reads_with_openpyxl(document, config):
+    """[chunking] excel = "openpyxl" (step 6): workbooks are read by etl/excel.py instead of Docling."""
+    return document["format"] == "xlsx" and config["chunking"].get("excel", "docling") == "openpyxl"
+
+
+def chunk_workbook(document, config, line, budget, tokenizer):
+    """The chunks of a workbook read with openpyxl: rows, tables, summaries and text, each with its sheet and row."""
+    payload = document_payload(document)
+    pieces = workbook_pieces(settings.corpus_path / document["path"],
+                             fits=lambda text: count_tokens(text, tokenizer) <= budget)
+    return [
+        {**payload, "chunk_index": i, "sheet": piece["sheet"], "row": piece["row"], "piece": piece["kind"],
+         "language": chunk_language(piece["text"], document["language"]),
+         "text": "\n".join(p for p in [line, piece["text"]] if p)}
+        for i, piece in enumerate(pieces)
+    ]
+
+
 def chunk_document(document, config):
     """The chunks of one registry document: dicts with the payload fields, chunk_index and text.
 
@@ -78,16 +105,14 @@ def chunk_document(document, config):
     """
     tokenizer = get_tokenizer(config["embedder"]["model"])
     line = context_line(document) if config["chunking"]["context_line"] else None
-    # HybridChunker counts headings + text; the context line is added afterwards, so reserve its tokens
+    # The chunkers count headings + text; the context line is added afterwards, so reserve its tokens
     reserved = count_tokens(line, tokenizer) + 1 if line else 0  # +1: the newline
-    chunker = HybridChunker(
-        tokenizer=HuggingFaceTokenizer(tokenizer=tokenizer, max_tokens=config["chunking"]["max_tokens"] - reserved)
-    )
+    budget = config["chunking"]["max_tokens"] - reserved
+    if reads_with_openpyxl(document, config):
+        return chunk_workbook(document, config, line, budget, tokenizer)
+    chunker = HybridChunker(tokenizer=HuggingFaceTokenizer(tokenizer=tokenizer, max_tokens=budget))
     converted = load_conversion(document["path"])
-    payload = {"document": document["path"], "doc_language": document["language"]} | {
-        field: (value.isoformat() if hasattr(value, "isoformat") else value)  # dates as ISO strings for Qdrant
-        for field, value in ((f, document[f]) for f in PAYLOAD_FIELDS)
-    }
+    payload = document_payload(document)
     chunks = []
     for chunk in chunker.chunk(converted):
         if not chunk.text.strip():
