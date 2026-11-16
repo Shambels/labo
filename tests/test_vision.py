@@ -58,3 +58,22 @@ def test_vision_chunks_of_an_image(tmp_path, monkeypatch):
     [chunk] = vision_chunks(document, "[Organigramme · a]", 200, get_tokenizer("bge-m3"))
     assert chunk["text"] == "[Organigramme · a]\nImage\nAchats : Céline Moreau"
     assert chunk["image_path"] == "a.png" and chunk["page"] is None
+
+
+def test_answer_images_follow_the_citations():
+    from rag_calorvia.rag.images import answer_images
+    chunks = [{"text": "PV texte"},
+              {"image_path": "org.png", "page": None},
+              {"image_path": "scan.pdf", "page": 0},
+              {"image_path": "org.png", "page": None}]
+    assert answer_images("Céline Moreau [2][4].", chunks) == [("org.png", None)]       # only cited, no duplicates
+    assert answer_images("Rien de cité.", chunks) == [("org.png", None), ("scan.pdf", 0)]  # no citation: all images
+    assert answer_images("Texte seulement [1].", chunks) == []
+
+
+def test_collection_name_records_the_vision_budget():
+    from rag_calorvia.etl.index import collection_name
+    config = {"chunking": {"max_tokens": 256, "context_line": True, "vision": True}, "embedder": {"model": "bge-m3"}}
+    assert collection_name(config).endswith("__vision")
+    config["chunking"]["vision_max_tokens"] = 1024
+    assert collection_name(config).endswith("__vision-1024")

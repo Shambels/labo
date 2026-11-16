@@ -163,10 +163,13 @@ def chunk_document(document, config):
     # The chunkers count headings + text; the context line is added afterwards, so reserve its tokens
     reserved = count_tokens(line, tokenizer) + 1 if line else 0  # +1: the newline
     budget = config["chunking"]["max_tokens"] - reserved
+    # An image is one unit of meaning: an org chart cut in two separates a person from their manager (Q056).
+    # [chunking] vision_max_tokens gives transcriptions their own, larger budget; default: the same as text.
+    vision_budget = config["chunking"].get("vision_max_tokens", config["chunking"]["max_tokens"]) - reserved
     if reads_with_openpyxl(document, config):
         return chunk_workbook(document, config, line, budget, tokenizer)
     if document["source_type"] in ("image", "scan"):  # only reached with [chunking] vision = true
-        return vision_chunks(document, line, budget, tokenizer)
+        return vision_chunks(document, line, vision_budget, tokenizer)
     chunker = HybridChunker(tokenizer=HuggingFaceTokenizer(tokenizer=tokenizer, max_tokens=budget))
     converted = load_conversion(document["path"])
     payload = document_payload(document)
@@ -178,7 +181,7 @@ def chunk_document(document, config):
         chunks.append({**payload, "chunk_index": len(chunks), "language": chunk_language(body, document["language"]),
                        "text": "\n".join(p for p in [line, body] if p)})
     if uses_vision(config) and document["format"] == "pdf":  # charts inside a text PDF
-        chunks += vision_chunks(document, line, budget, tokenizer, start_index=len(chunks))
+        chunks += vision_chunks(document, line, vision_budget, tokenizer, start_index=len(chunks))
     return chunks
 
 

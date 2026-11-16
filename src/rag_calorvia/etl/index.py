@@ -82,6 +82,8 @@ def collection_name(config):
         name += "__excel-openpyxl"
     if chunking.get("vision", False):
         name += "__vision"
+        if chunking.get("vision_max_tokens", chunking["max_tokens"]) != chunking["max_tokens"]:
+            name += f"-{chunking['vision_max_tokens']}"
     return name
 
 
