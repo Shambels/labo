@@ -27,3 +27,18 @@ def test_sparse_language_and_collection_name_follow_the_config():
     assert sparse_language(chunk, per_chunk) == "nl"
     assert collection_name(CONFIG) == "calorvia__bge-m3__256"
     assert collection_name(per_chunk) == "calorvia__bge-m3__256__bm25-per-language"
+
+
+def test_parse_translations():
+    from rag_calorvia.rag.translate import parse_translations
+    content = '{"nl": "Wat is de maximumsnelheid in Gent?", "en": "What is the speed limit in Ghent?", "de": "x"}'
+    assert parse_translations(content, ["nl", "en"]) == {
+        "nl": "Wat is de maximumsnelheid in Gent?", "en": "What is the speed limit in Ghent?"}  # 'de' not asked
+    assert parse_translations("not json", ["nl"]) == {}
+    assert parse_translations('["nl"]', ["nl"]) == {}
+    assert parse_translations('{"nl": ""}', ["nl"]) == {}
+
+
+def test_no_translation_without_the_option():
+    from rag_calorvia.rag.translate import translate_question
+    assert translate_question("Quand ?", {"search": {}}) == {"fr": "Quand ?"}  # no LLM call

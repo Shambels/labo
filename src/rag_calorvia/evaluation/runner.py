@@ -101,6 +101,9 @@ def run_experiment(config, allow_dirty=False):
                     scores |= answer_scores(result["answer"], result["chunks"], question)
                     scores["completion_tokens"] = float(result["completion_tokens"])
                 scores |= {name: value for name, value in result["timings"].items()}  # search_ms, rerank_ms...
+                if len(result["versions"]) > 1:  # the translations as the reason: they explain a gain or a loss
+                    scores["translations"] = (float(len(result["versions"]) - 1),
+                                              " | ".join(f"{k}: {v}" for k, v in result["versions"].items()))
                 db.insert_scores(conn, experiment_id, score_rows(question, scores))
                 logger.info("[%d/%d] %s %s %.0f ms", i, len(questions), question["id"],
                             f"recall@5={scores['recall@5']:.2f}" if "recall@5" in scores else "", latency_ms)
