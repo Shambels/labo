@@ -1,0 +1,29 @@
+# experiments/no_context_line.toml — baseline without the context line (statement, section 2: measure its effect)
+name = "no_context_line"
+
+[chunking]
+max_tokens = 256
+context_line = false        # the only change: no context line at the top of the chunks
+
+[embedder]
+model = "bge-m3"
+query_instruction = ""
+
+[search]
+method = "hybrid"          # dense, sparse or hybrid
+fusion = "rrf"             # hybrid only: rrf or dbsf
+rrf_k = 60                 # rrf only
+candidates = 30
+top_k = 5
+
+[reranker]
+model = "bge-reranker"     # or "none"
+
+[generation]
+enabled = true              # false: retrieval only, for experiments the deterministic metrics measure
+model = "qwen3.8-27b"       # served name (llama-server -a)
+system_prompt = "prompts/baseline.txt"
+temperature = 0.0
+top_p = 1.0
+top_k = 40                  # sampling: candidate tokens at each step, not the number of chunks
+max_tokens = 512

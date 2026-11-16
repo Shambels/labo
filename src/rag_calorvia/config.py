@@ -16,7 +16,7 @@ class Settings(BaseSettings):
     rerank_url: str = "http://localhost:8002/rerank"
     vlm_url: str = "http://localhost:8003/v1"    # the VLM only runs during the ETL (step 7)...
     judge_url: str = "http://localhost:8003/v1"  # ...so the judge can reuse its port afterwards
-    judge_model: str = "qwen3.8-27b"             # served name (llama-server -a)
+    judge_model: str = "gemma4-26b-a4b"          # served name (llama-server -a): not the generator's family
 
     # Relative to the repo root: scripts are run from there (uv run python scripts/...)
     corpus_path: Path = Path("data/calorvia")                 # symlink to the corpus in enonces/

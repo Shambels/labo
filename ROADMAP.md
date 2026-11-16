@@ -35,6 +35,11 @@ Companion file: `QUIZ.md` (one quiz per step, answers collapsed).
 | D17 | Judge sample | 2 questions per type of the dev set, `out_of_corpus` **included**: 31 questions | The statement's count (31); exercise 3 excluded `out_of_corpus` (26) |
 | D18 | Eval paths vs registry | `align_with_registry()` at load time: apostrophes → underscores, excluded duplicates → kept copy, identical items merged. The metrics stay unchanged | The eval set has 2 paths with `'` where the corpus has `_`; questions citing only a dropped copy would be false misses |
 | D19 | `trap_hit` | Per question with traps, `trap_hit@k` = 1 if a trap is in the top k (statement's definition, same document + every snippet) | Lower is better; averaged over the 17 dev questions that have traps |
+| D20 | Generator | **Qwen3.8-27B** (Q4_K_XL, llama-server, `--reasoning off`) instead of Qwen3.5-9B | Your choice. Slower per token than the 9B; fits with the embedder and reranker (21.7 / 24 GB) |
+| D21 | Judge (was O8) | **Gemma 4 26B-A4B** (Q4_K_XL, llama-server, port 8003) | Another family than the generator: no self-preference. Judge scores not comparable with exercise 3's |
+| D22 | Baseline = exercise 3's best, transposed | 256 tokens, no overlap, context line, hybrid RRF k=60, 30 candidates, bge-reranker, top 5, `prompts/baseline.txt` (combined_v2 without the patient rule). No question decomposition (its gate was hospital-specific) | The statement: "la meilleure configuration de l'exercice 3 et la ligne de contexte" |
+| D23 | No boilerplate removal | Exercise 3's header removal not transposed | Texts repeated in 5+ documents are action-table rows and attendance lists (evidence), not footers; Docling already drops page headers/footers |
+| D24 | Clean runs only | `run_experiment` refuses a dirty tree (`--allow-dirty` for trials); reports pick the latest clean run | Two runs were stamped dirty by a `uv add` made while they started |
 | D9 | Porting strategy | Port each hospital_rag module **in the step that needs it** (step 0: config, db, logs; step 3: evaluation; step 4: ETL and RAG) | Nothing unused or untested sits in the repo |
 
 ### Open decisions (to settle with you when we reach them)
@@ -60,10 +65,10 @@ Companion file: `QUIZ.md` (one quiz per step, answers collapsed).
 
 | Port | Service | Model |
 |---|---|---|
-| 8000 | LLM (llama-server) | `qwen3.5-9b` (exercise 3's generator) |
+| 8000 | LLM (llama-server) | `qwen3.8-27b` (Q4; your choice, replacing exercise 3's `qwen3.5-9b`) |
 | 8001 | Embedder (vLLM) | `bge-m3` |
 | 8002 | Reranker (vLLM) | `bge-reranker-v2-m3` |
-| 8003 | VLM (llama-server `--mmproj`), then judge | see O3; the judge runs alone, as in exercise 3 |
+| 8003 | VLM (llama-server `--mmproj`), then judge | VLM: see O3; judge: `gemma4-26b-a4b` (D21) |
 | 5432 | PostgreSQL (registry, experiments) | Docker |
 | 6333 | Qdrant | Docker |
 
@@ -111,7 +116,7 @@ Companion file: `QUIZ.md` (one quiz per step, answers collapsed).
 - **Data bug found:** the eval set cites `Test d'etancheite Aeris.pdf` and `Rayonnages de l'entrepôt de Herstal.docx`; the corpus writes `_` for `'` in file names. Without alignment, 2 `factual` questions were unreachable.
 - **Number normalization:** no effect yet (101/122 with or without), as our text is still Docling's. It matters from step 6.
 
-### ⬜ Step 4. Baseline
+### ✅ Step 4. Baseline
 **Goal:** the reference everything else is compared to.
 - Docling conversion of the text documents only (DOCX, native PDF, HTML, PPTX, MD, CSV, XLSX as Docling sees them), with a cache in `data/conversions/`.
 - Chunks with a **context line** ("[PV du CODIR du 13 octobre 2025 · 00_Direction/CODIR/2025]"), metadata in the payload, payload indexes on filterable fields.
@@ -119,6 +124,27 @@ Companion file: `QUIZ.md` (one quiz per step, answers collapsed).
 - Experiments: `baseline`, and `baseline` without the context line.
 - Expected: `image_only`, `scan_ocr`, `image_in_document` fail.
 - **Tag `rag/v0.2-baseline`.**
+- **Result, retrieval** (127 dev questions, commit `24f7201`, runs 13–14):
+
+  | | recall@5 | hit@5 | MRR@5 | trap_hit@5 |
+  |---|---|---|---|---|
+  | `baseline` | **0.783** | 0.811 | 0.709 | 0.353 (6/17) |
+  | `no_context_line` | 0.684 | 0.713 | 0.582 | 0.412 (7/17) |
+
+  The context line is worth +10 recall points; biggest effects: `meeting_detail` 1.00 vs 0.55, `multilingual` 0.93 vs 0.43, `excel_reasoning` 0.90 vs 0.40. On the 101 questions reachable from text, recall@5 = **0.941**: retrieval is close to the ceiling; the misses are mostly decision threads (Q008, Q081, Q133: current state of a changing decision), i.e. step 8.
+- **Result, generation** (run 15, Qwen3.8-27B): 6 min for 127 questions, 2.6 s per answer, 36 tokens on average. Refusals: `out_of_corpus` 5/5; 2 wrong refusals (Q093, Q117); 3 image questions answered from neighbouring text (Q059 gives the machine's ID as its serial number: wrong; Q114, Q139: partial).
+- **Q093 analysed:** the right chunk is in the context (recall 1.0), but Docling serialized the report's 2-column table with its first data row as header: `Incidents, Taux de clic : 4 % … = Aucun incident majeur`. The label "Simulation d'hameçonnage (mai)" is lost. A table-serialization problem → idea for a later experiment (Markdown tables).
+- **Judge** (Gemma 4, 31-question sample, 9 min, 0 failed verdicts):
+
+  | | correctness | faithfulness | answer relevancy | contextual precision | contextual recall |
+  |---|---|---|---|---|---|
+  | all 31 | 0.658 | 0.856 (26) | 0.995 | 0.865 | 0.759 |
+  | without the 5 image/scan questions | **0.762** (26) | 0.844 | 0.994 | 0.962 | 0.875 |
+
+  - **Correctness is credible.** Real errors: Q008 (outdated recall status), **Q023 falls into the trap** (1.2 M€, corrected in the next minute), Q024 (the Dutch contract's cost is in the context, the answer says it isn't). Most 0.7 scores are right but terse answers (the prompt asks 1–3 sentences; the judge wants every detail).
+  - **Faithfulness is not.** Checked by hand: 4 of the 5 claim-based penalties are judge errors (Q004, Q026, Q043, Q052: the claim is in the cited chunk), the 5th a nitpick (Q001). Read it as a lower bound; don't conclude from small differences.
+  - **Measurement fix:** a refusal is no longer judged on faithfulness (it makes no claim; Gemma scored "Je ne sais pas" 0). The 3 rows already stored (Q014, Q034, Q144) were deleted from run 15.
+- **For step 9's report, three failures already analysed:** Q093 (table serialization, conversion), Q023 (trap, versions → step 8), Q024 (Dutch passage, generation → step 5).
 
 ### ⬜ Step 5. Languages
 - Language per chunk in the payload; BM25 stemmer chosen by language.
@@ -210,3 +236,4 @@ Deliberately more open than phase A: the steps below are a skeleton we will refi
 | 2026-11-16 | 2 | Same branch: `etl/metadata.py`, 12 new columns in `documents`, 45 new tests |
 | 2026-11-16 | – | Merged steps 1–2 into `main`, tagged `rag/v0.1-inventaire`, pushed |
 | 2026-11-16 | 3 | Branch `rag/step-03-eval`: dataset split and alignment, metrics with `trap_hit`, ceiling 101/122, 91 tests green |
+| 2026-11-16 | 4 | Branch `rag/step-04-baseline`: generator switched to Qwen3.8-27B; pipeline ported; baseline recall@5 0.783 (context line +10 pts); judged by Gemma 4: correctness 0.762 on text questions; faithfulness judge errors found by hand |

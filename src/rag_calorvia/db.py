@@ -74,7 +74,7 @@ def load_experiment(conn, experiment_id):
 
 
 def find_experiment(conn, name):
-    """Id of the most recent finished run of an experiment name, or None."""
+    """Id of the most recent finished run of an experiment name (a clean one if any), or None."""
     row = conn.execute(load_sql("find_experiment"), (name,)).fetchone()
     return row[0] if row else None
 
@@ -134,3 +134,18 @@ def load_registry(conn):
         path: {"format": fmt, "source_type": source, "excluded_reason": reason, "duplicate_of": duplicate_of}
         for path, fmt, source, reason, duplicate_of in rows
     }
+
+
+def load_indexable_documents(conn):
+    """The registry rows of the documents to chunk, as dicts (column -> value), in path order."""
+    cursor = conn.execute(load_sql("load_indexable_documents"))
+    columns = [c.name for c in cursor.description]
+    return [dict(zip(columns, row)) for row in cursor.fetchall()]
+
+
+def experiment_scores(conn, experiment_id):
+    """{question_id: {metric: value}} of one experiment."""
+    scores = {}
+    for question_id, metric, value in conn.execute(load_sql("experiment_scores"), (experiment_id,)):
+        scores.setdefault(question_id, {})[metric] = value
+    return scores
