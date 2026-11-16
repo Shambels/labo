@@ -32,6 +32,9 @@ Companion file: `QUIZ.md` (one quiz per step, answers collapsed).
 | D14 | Dates | Three passes: precise file-name patterns (photo, day, month, quarter, range), then the first date in the first 600 characters of text (title line only for workbooks), then a bare year in the name. Every date keeps `date_end`, `date_precision`, `date_source` | The file name is the most reliable when precise; a year in a code (`NC-2025-047`) is the least |
 | D15 | Status | One `status` (template > copy > archive > draft > signed > approved, else NULL), plus every raw marker in `markers` (incl. `final_in_name`) | Step 8 filters on the status; the markers stay available to analyse the traps |
 | D16 | Unsure language | `NULL` (7 number-heavy workbooks), no default | Honest at document level; step 5 detects per chunk and picks the default there |
+| D17 | Judge sample | 2 questions per type of the dev set, `out_of_corpus` **included**: 31 questions | The statement's count (31); exercise 3 excluded `out_of_corpus` (26) |
+| D18 | Eval paths vs registry | `align_with_registry()` at load time: apostrophes → underscores, excluded duplicates → kept copy, identical items merged. The metrics stay unchanged | The eval set has 2 paths with `'` where the corpus has `_`; questions citing only a dropped copy would be false misses |
+| D19 | `trap_hit` | Per question with traps, `trap_hit@k` = 1 if a trap is in the top k (statement's definition, same document + every snippet) | Lower is better; averaged over the 17 dev questions that have traps |
 | D9 | Porting strategy | Port each hospital_rag module **in the step that needs it** (step 0: config, db, logs; step 3: evaluation; step 4: ETL and RAG) | Nothing unused or untested sits in the repo |
 
 ### Open decisions (to settle with you when we reach them)
@@ -97,12 +100,16 @@ Companion file: `QUIZ.md` (one quiz per step, answers collapsed).
 - **Bugs caught while reviewing the output:** `\b` doesn't separate `_` from `v2` (`PV_CODIR_…_v2` had no version); the 2026 board minutes are signed by their folder, not their name; the first date of a workbook is a data row (serial-number list dated by its first unit's production date); `projet` alone flagged the intranet page "Le projet Atlas" as a draft.
 - **Not done here, on purpose:** the context line goes into the chunks in step 4 (it uses `doc_label` + `doc_date`); families of versions (which v is the latest, `valid_from`/`valid_to`) are step 8.
 
-### ⬜ Step 3. Evaluation adapted to Calorvia
+### ✅ Step 3. Evaluation adapted to Calorvia
 **Goal:** measure before building more.
 - Load `calorvia_eval.json`; dev (127) / test (31) split, enforced in code.
 - `document` is now a relative path; `normalize()` gains `normalize_numbers()`.
 - New metric `trap_hit@k`; results **per question type** and per document format; refusals on `out_of_corpus`.
 - Judge sample: 2 questions per type from the dev set.
+- **Result:** `evaluation/dataset.py`, `metrics.py`, `coverage.py`, `scripts/check_eval.py`; 91 tests green. The runner, the DeepEval judge and the per-type / per-format report move to step 4: they need the search pipeline and a generated answer.
+- **The ceiling (dev set):** **101 of 122** questions with evidence can be answered from the text we index. The 21 others: `image_only` 0/13, `scan_ocr` 1/6, `image_in_document` 0/1 (a chart value in the RSE PDF), and one question each in `board_resolution` and `multi_doc` (a scanned board minute, a scanned customer letter). Every non-visual evidence snippet is found in Docling's text.
+- **Data bug found:** the eval set cites `Test d'etancheite Aeris.pdf` and `Rayonnages de l'entrepôt de Herstal.docx`; the corpus writes `_` for `'` in file names. Without alignment, 2 `factual` questions were unreachable.
+- **Number normalization:** no effect yet (101/122 with or without), as our text is still Docling's. It matters from step 6.
 
 ### ⬜ Step 4. Baseline
 **Goal:** the reference everything else is compared to.
@@ -201,3 +208,5 @@ Deliberately more open than phase A: the steps below are a skeleton we will refi
 | 2026-11-16 | 0 | Branch `rag/step-00-setup`: `enonces/` untracked, package `rag_calorvia` (config, db, logs, git_state, sql), compose on 5432/6333, tests green |
 | 2026-11-16 | 1 | Branch `rag/step-01-inventory`: Docling conversion with cache, `documents` registry, `exclusions.toml`, 12 tests green |
 | 2026-11-16 | 2 | Same branch: `etl/metadata.py`, 12 new columns in `documents`, 45 new tests |
+| 2026-11-16 | – | Merged steps 1–2 into `main`, tagged `rag/v0.1-inventaire`, pushed |
+| 2026-11-16 | 3 | Branch `rag/step-03-eval`: dataset split and alignment, metrics with `trap_hit`, ceiling 101/122, 91 tests green |

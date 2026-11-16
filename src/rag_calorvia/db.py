@@ -125,3 +125,12 @@ def save_documents(conn, rows):
 def inventory_summary(conn):
     """Rows of (format, files, indexed, duplicate, other_excluded, scans), biggest formats first."""
     return conn.execute(load_sql("inventory_summary")).fetchall()
+
+
+def load_registry(conn):
+    """{path: {format, source_type, excluded_reason, duplicate_of}} of every file of the corpus."""
+    rows = conn.execute(load_sql("load_registry")).fetchall()
+    return {
+        path: {"format": fmt, "source_type": source, "excluded_reason": reason, "duplicate_of": duplicate_of}
+        for path, fmt, source, reason, duplicate_of in rows
+    }

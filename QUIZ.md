@@ -316,3 +316,92 @@ Lazy loading: importing `metadata.py` (e.g. in the unit tests, which never call 
 
 Acceptable because the registry is **derived data**: `scripts/inventory.py` rebuilds it entirely from the corpus in seconds, so nothing is lost. It would not be acceptable for data that can't be recreated, like the `experiments`, `answers` and `scores` tables (runs take time, and old runs reflect old code). Those need a migration (`ALTER TABLE … ADD COLUMN IF NOT EXISTS …`) that keeps existing rows.
 </details>
+
+---
+
+## Step 3: evaluation adapted to Calorvia
+
+**1.** `load_questions("test")` raises `PermissionError` unless `allow_test=True`. Why enforce this in code rather than just remembering not to look?
+
+<details><summary>Answer</summary>
+
+Because a single accidental look ruins the test set for good: once you've seen scores (or answers) on the 31 held-out questions, every later choice is influenced by them, and the final test score no longer estimates performance on unseen questions. A rule in code makes the mistake impossible by default and makes the exception visible (`allow_test=True` in a diff is easy to spot in review).
+</details>
+
+**2.** In `metrics.py`, what do `hit@k`, `mrr@k`, `recall@k` and `ndcg@k` each answer? Which one cares about grade-1 evidence?
+
+<details><summary>Answer</summary>
+
+- `hit@k`: is there at least one grade-2 chunk (one that contains the answer) in the top k?
+- `mrr@k`: 1 / rank of the first grade-2 chunk: is the best chunk near the top?
+- `recall@k`: share of the needed **facts** (distinct `fact` numbers of grade-2 items) found in the top k. Interchangeable sources of one fact count once.
+- `ndcg@k`: overall ranking quality with graded gains (grade / log2(rank + 1)), divided by the ideal ranking.
+
+Only nDCG gives credit to grade-1 ("useful context") items.
+</details>
+
+**3.** Why must `judge_chunk` check the chunk's document and not only that the snippets are in its text? Use a Calorvia example.
+
+<details><summary>Answer</summary>
+
+Because the same words appear in documents that don't prove the answer. A CODIR minute of February 2026 says "Pour rappel, la mise en production avait été fixée au 1er avril": the snippet "1er avril" is in it, but that minute isn't the evidence for "the go-live was set to April 1st in December"; and a newsletter repeating a decision isn't the decision. Requiring the document keeps the ground truth tied to the source the eval designers checked.
+</details>
+
+**4.** What does `trap_hit@k` measure, and why does `test_trap_needs_its_document` matter?
+
+<details><summary>Answer</summary>
+
+For a question with `traps`, `trap_hit@k = 1` when a chunk of the top k comes from a trap document **and** contains all its snippets: a wrong or outdated answer reached the LLM's context. Averaged over the questions with traps, lower is better. The test shows that the *new* minute recalling the old value ("Pour rappel… 1er avril") isn't counted as a trap: only the outdated document itself is. Otherwise we'd penalize retrieving the right document.
+</details>
+
+**5.** `normalize_numbers("4 568")` gives `"4568"` and `"41,5"` gives `"41.5"`. Why apply it to **both** the chunk and the snippet? And why did it change nothing on the ceiling yet?
+
+<details><summary>Answer</summary>
+
+The comparison is `normalize(snippet) in normalize(chunk_text)`: if only one side were normalized, `4568` (snippet) would never be found in `4 568` (chunk), or the reverse. Normalizing both sides makes the comparison independent of the number rendering. It changed nothing yet because the snippets were written from Docling's rendering and our text **is** Docling's. It will matter in step 6, when our own Excel reader displays numbers as Excel does (`4 568`, `41,5 %`).
+</details>
+
+**6.** In the regex `(?<=\d)[   ](?=\d{3}\b)`, what are ` ` and ` `, and why does `du 13 au 28 novembre` stay unchanged?
+
+<details><summary>Answer</summary>
+
+` ` is a no-break space and ` ` a narrow no-break space: Word and Excel use them as French thousands separators. The space is removed only when it has a digit before it (lookbehind) and **exactly three digits then a word boundary** after it (lookahead). In "13 au 28" the space follows "13" but is followed by "au", not three digits, so nothing changes.
+</details>
+
+**7.** `align_with_registry` rewrites the eval's paths before scoring. What two problems does it fix, and why fix the questions rather than the metrics?
+
+<details><summary>Answer</summary>
+
+1. **File-name convention:** the corpus writes `_` for `'` (`Test d_etancheite Aeris.pdf`), the eval set kept the apostrophe: 2 evidence paths pointed to files that don't exist.
+2. **Duplicates:** we index one copy of each duplicate group; evidence citing the excluded copy is redirected to the kept one (identical text, so the snippet check still holds). Items that become identical are merged, otherwise nDCG's ideal ranking would count the same item twice.
+
+Fixing the data once, at load time, keeps `metrics.py` simple and identical to exercise 3's (well-tested) logic: every metric automatically benefits, and the fix is visible in one place.
+</details>
+
+**8.** What is the "ceiling" computed by `scripts/check_eval.py`, and why is it worth computing before building any search?
+
+<details><summary>Answer</summary>
+
+For each dev question, whether every needed fact has an evidence item whose snippets are all present in the **whole** converted text of its document: the best any chunking and search could do with the text we have. It separates problems: a question unreachable here fails because of conversion or missing vision, never because of search. On the dev set: 101/122 reachable; all the unreachable ones need vision (images, scans, a chart inside a PDF). It also caught a data bug (the apostrophes) that would otherwise have looked like a retrieval failure.
+</details>
+
+**9.** The judge sample takes "the first 2 ids of each type", sorted. Why not a random sample?
+
+<details><summary>Answer</summary>
+
+Every experiment must be judged on **the same questions**, otherwise differences between experiments mix the effect of the change with the effect of different questions. A fixed rule (sorted ids, first two per type) is deterministic and reproducible without storing a seed. Covering every type (31 questions) ensures each kind of difficulty is represented, even rare ones like `image_in_document`.
+</details>
+
+**10.** Why does `chunk_body` strip the first line only if it starts with `[` and ends with `]`, and what would happen to the redundancy metric without it?
+
+<details><summary>Answer</summary>
+
+The context line added to every chunk (`[PV du CODIR du 13 octobre 2025 · …]`) is shared by all chunks of a document. Without stripping it, two unrelated chunks of the same minute would share its shingles and look partly redundant. Checking both brackets avoids stripping a real first line that merely starts with `[` (a citation like `[1] …`).
+</details>
+
+**11.** A test failed with `0.16 == 0.1` after porting the redundancy test from exercise 3. What was wrong, and what does it tell you about the change in `redundancy_scores`?
+
+<details><summary>Answer</summary>
+
+The test's filler chunks (`texte 0 a b c`, `texte 1 a b c`…) share the shingle `a b c`: Jaccard 1/5 = 0.2 for each of their 3 pairs, so the mean became (1 + 3 × 0.2) / 10 = 0.16. In exercise 3 those chunks had different *scopes* (different notices), so their similarity was forced to 0. We removed the per-patient scope (every pair is compared now), and the test's assumptions had to change with it: the code was right, the fixture wasn't.
+</details>
