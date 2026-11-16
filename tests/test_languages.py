@@ -42,3 +42,12 @@ def test_parse_translations():
 def test_no_translation_without_the_option():
     from rag_calorvia.rag.translate import translate_question
     assert translate_question("Quand ?", {"search": {}}) == {"fr": "Quand ?"}  # no LLM call
+
+
+def test_the_fingerprint_changes_with_any_chunk_text():
+    from rag_calorvia.etl.index import fingerprint
+    chunks = [{"document": "a.xlsx", "chunk_index": 0, "text": "Heures : 620"}]
+    same = [dict(chunks[0])]
+    changed = [{**chunks[0], "text": "Heures de formation à la sécurité : 620"}]
+    assert fingerprint(chunks) == fingerprint(same)
+    assert fingerprint(chunks) != fingerprint(changed)
