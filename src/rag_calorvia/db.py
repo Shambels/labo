@@ -74,7 +74,7 @@ def load_experiment(conn, experiment_id):
 
 
 def find_experiment(conn, name):
-    """Id of the most recent finished run of an experiment name, or None."""
+    """Id of the most recent finished run of an experiment name (a clean one if any), or None."""
     row = conn.execute(load_sql("find_experiment"), (name,)).fetchone()
     return row[0] if row else None
 

@@ -50,10 +50,12 @@ export MODELS_PATH=~/models
 # Generator (8000): Qwen3.8-27B, Q4 (~17.5 GB of weights; with the two vLLM servers, ~21.7 GB of the 24 GB)
 ~/llama.cpp/build/bin/llama-server -m $MODELS_PATH/qwen3.8-27b/llama/Qwen3.8-27B-UD-Q4_K_XL.gguf \
   -a qwen3.8-27b --port 8000 -ngl 99 -c 16384 -np 1 -fa on --reasoning off
-```
 
-The judge (8003) is not decided yet (ROADMAP, open decision O8): the generator is the model exercise 3 used as
-judge, and a second 27B model doesn't fit next to it.
+# Judge (8003): Gemma 4 26B-A4B, Q4 (~17 GB). Another family than the generator: a model grading its own answers
+# is lenient. Stop the generator first: they don't fit together
+~/llama.cpp/build/bin/llama-server -m $MODELS_PATH/gemma4-26b-a4b/llama/gemma-4-26B-A4B-it-UD-Q4_K_XL.gguf \
+  -a gemma4-26b-a4b --port 8003 -ngl 99 -c 16384 -np 1 -fa on --reasoning off
+```
 
 Check that a server is ready (it answers with its served name):
 

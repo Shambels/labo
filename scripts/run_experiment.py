@@ -12,6 +12,8 @@ from rag_calorvia.logs import setup_logging
 
 parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
 parser.add_argument("configs", nargs="+", help="experiment TOML files")
+parser.add_argument("--allow-dirty", action="store_true",
+                    help="run on uncommitted code (a trial: such runs stay out of the report)")
 parser.add_argument("--retrieval-only", action="store_true",
                     help="no generation; the run is named <name>__retrieval so it never mixes with full runs")
 args = parser.parse_args()
@@ -23,4 +25,4 @@ for path in args.configs:
     if args.retrieval_only:
         config["generation"] = {"enabled": False}
         config["name"] += "__retrieval"
-    print(f"{path}: experiment {run_experiment(config)}")
+    print(f"{path}: experiment {run_experiment(config, allow_dirty=args.allow_dirty)}")
