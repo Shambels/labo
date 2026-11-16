@@ -75,7 +75,7 @@ Defence in depth: each layer has blind spots. `default_transaction_read_only` ca
 
 <details><summary>Answer</summary>
 
-`--cached` only removes them from the **index** (what the next commit contains); the files stay on disk. Once committed, the folder is gone from the new tree, and the `.gitignore` entry stops Git from offering it again. But every past commit (here `a33c2a6`) still contains it, so anyone can check out that commit on the public repo. Removing it for good means rewriting history (`git filter-repo`) and force-pushing: that is open decision O7.
+`--cached` only removes them from the **index** (what the next commit contains); the files stay on disk. Once committed, the folder is gone from the new tree, and the `.gitignore` entry stops Git from offering it again. But every past commit (here `ad75e6c`) still contains it, so anyone can check out that commit on the public repo. Removing it for good means rewriting history (`git filter-repo`) and force-pushing: that is open decision O7.
 
 *Postscript (step 6):* in this repo the untrack actually **failed**, see the next question.
 </details>
@@ -708,4 +708,18 @@ The second. With 2 questions, one verdict moves the mean by 0.5 × (change of th
 <details><summary>Answer</summary>
 
 That the gain comes from the **tools**, not from the reader's chunks; the reader is a means (raw typed values for SQL, units, percentages), not a gain by itself on this dev set. The missing run: **Docling chunks + tools** (the SQL store reads the workbooks with openpyxl independently of the chunking). Only that run tells whether the reader's chunks add anything on top of the tools. An honest report states the gap instead of crediting the reader.
+</details>
+
+**15.** After `git rm -r --cached enonces` on a branch and a commit there, the files were still on disk. Merging that branch into `main` deleted them. Why the difference?
+
+<details><summary>Answer</summary>
+
+`git rm --cached` only changes the index: the files stay on disk as untracked (and ignored). But the resulting commit **records a deletion**. On `main`, where those files were still tracked, merging applies that deletion like any other change: Git removes tracked files that the merged commit deletes, from the index *and* the working tree. Untracking files that must stay on disk on several branches means: untrack on one branch, then after merging, check the disk (or restore with `git restore --source=<an older commit> --worktree -- path`, which writes the files without tracking them again).
+</details>
+
+**16.** `git filter-repo` rewrote every commit to remove `enonces/`. What else had to be updated so that experiments stay reproducible, and how?
+
+<details><summary>Answer</summary>
+
+Each experiment row in PostgreSQL stores its `git_commit`: after the rewrite, those hashes pointed to commits that no longer exist in the history. filter-repo writes `.git/filter-repo/commit-map` (old hash → new hash); every `git_commit` was replaced through it, then each one was checked with `git cat-file -e`. The tags were moved by filter-repo itself; the hashes quoted in the docs were rewritten with the same map. Then `main` and the tags had to be **force**-pushed, since the new history doesn't contain the old one.
 </details>

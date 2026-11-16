@@ -22,7 +22,7 @@ Companion file: `QUIZ.md` (one quiz per step, answers collapsed).
 | D3 | Language | English for docs, code and comments; LLM prompts in French | Questions and corpus are French |
 | D4 | One repo or two | One repo (`labo`), one uv project, two packages: `src/rag_calorvia/` then `src/text2sql_calorvia/`. Tags are prefixed: `rag/v0.1-inventaire`, `t2sql/v0.1-sources` | You asked for both exercises in this repo; the statement's tag names stay recognisable |
 | D5 | Where the corpus lives | Stays in `enonces/`; `data/calorvia` is a symlink to it (same path as the hints notebook) and `data/` holds everything generated (conversions, VLM cache) and is git-ignored | No copy of 21 MB; same paths as the course |
-| D6 | `enonces/` in Git (was O1) | Untracked (`git rm --cached`) and git-ignored. **The step 0 commit failed** (`git commit -- enonces .gitignore` re-added the files from the working tree); really untracked in step 6. The hints notebook stays in `enonces/` rather than being copied to `notebooks/` | The repo is **public** and this is course material with (fake) personal data. It remains in the history of commit `a33c2a6` |
+| D6 | `enonces/` in Git (was O1) | Untracked (`git rm --cached`) and git-ignored. **The step 0 commit failed** (`git commit -- enonces .gitignore` re-added the files from the working tree); really untracked in step 6. The hints notebook stays in `enonces/` rather than being copied to `notebooks/` | The repo is **public** and this is course material with (fake) personal data. It remains in the history of commit `ad75e6c` |
 | D7 | PostgreSQL port (was O2) | **5432** for the registry/experiments DB; Qdrant 6333 (pinned `v1.19.1`) | Leaves 1433/5433/5434 to phase B's sources |
 | D8 | Dependencies | Added step by step, when a step needs them (step 0: `psycopg`, `pydantic-settings`, `pytest`) | Each step's diff shows why a dependency exists |
 | D10 | Docling conversion moved from step 4 to step 1 | `etl/convert.py`, cached in `data/conversions/<relative path>.json` | Duplicates can only be found on content (see step 1); the cache is reused by step 4 |
@@ -46,13 +46,13 @@ Companion file: `QUIZ.md` (one quiz per step, answers collapsed).
 | D28 | Collection freshness | A fingerprint of the chunk texts in every point's payload; mismatch → rebuild | The name only encodes options; a code change in the chunker kept the name |
 | D29 | New reference after step 6 | `tools_tables` (openpyxl reader + SQL tools + prompt rule 7) | Best correctness on the workbook questions (0.841 vs 0.795) and on the sample (0.687 vs 0.655); +0.4 s mean latency |
 | D30 | Judging a targeted change | Judge every dev question of the targeted types (`--types`), not only the 2-per-type sample | With 2 questions, one wording moves a type's mean by 0.4 |
+| D31 | Purge `enonces/` from history (was O7) | `git filter-repo --path enonces --invert-paths`, force-push of `main` and the tags; experiment commits in PostgreSQL remapped with filter-repo's `commit-map`; short hashes in the docs rewritten | Your request. Every commit hash changed; GitHub may keep unreferenced old commits reachable by their hash for a while |
 | D9 | Porting strategy | Port each hospital_rag module **in the step that needs it** (step 0: config, db, logs; step 3: evaluation; step 4: ETL and RAG) | Nothing unused or untested sits in the repo |
 
 ### Open decisions (to settle with you when we reach them)
 
 | # | Question | When |
 |---|---|---|
-| O7 | Purge `enonces/` from the public history (`git filter-repo` + force push)? Destructive, rewrites `main`. | Whenever you want |
 | O3 | Which VLM: candidates in `~/models` are `qwen3.5-9b` (if its `mmproj` is there), `gemma4-12b`, `glm-ocr`, `paddleocr-vl-1.6`. | Step 7 |
 | O4 | Agent framework for phase B: LangGraph (Python, testable) or n8n (visual, already installed). | Step 13 |
 | O5 | Payroll privacy rule: may the agent show a named person's salary? | Step 11 |
@@ -130,7 +130,7 @@ Companion file: `QUIZ.md` (one quiz per step, answers collapsed).
 - Experiments: `baseline`, and `baseline` without the context line.
 - Expected: `image_only`, `scan_ocr`, `image_in_document` fail.
 - **Tag `rag/v0.2-baseline`.**
-- **Result, retrieval** (127 dev questions, commit `24f7201`, runs 13–14):
+- **Result, retrieval** (127 dev questions, commit `ff76258`, runs 13–14):
 
   | | recall@5 | hit@5 | MRR@5 | trap_hit@5 |
   |---|---|---|---|---|
@@ -279,5 +279,6 @@ Deliberately more open than phase A: the steps below are a skeleton we will refi
 | 2026-11-16 | – | Merged, tagged `rag/v0.2-baseline`, pushed |
 | 2026-11-16 | 5 | Branch `rag/step-05-languages`: 5a/5b no gain (5b +2.2 s), 5c kept as new reference; reranker identified as the cross-language bottleneck |
 | 2026-11-16 | – | Merged, tagged `rag/v0.3-langues`, pushed |
-| 2026-11-16 | 6 | Incident: a corpus workbook (`Productierapport Gent 2026-02.xlsx`) was rewritten at 15:46 by something outside the session's code, its totals row emptied; restored from Git (hash = registry). Found because `enonces/` was still tracked: the step 0 untrack had failed; fixed |
+| 2026-11-16 | 6 | Merging the untrack commit into `main` **deleted `enonces/` from disk** (a merge applies removals of tracked files); restored with `git restore --source=<old commit> --worktree`, all 393 registry hashes verified. Then history purged (D31), backups (mirror + copy) kept in the scratchpad |
+| 2026-11-16 | 6 | Incident (your browsing, confirmed): a corpus workbook (`Productierapport Gent 2026-02.xlsx`) was rewritten at 15:46 by something outside the session's code, its totals row emptied; restored from Git (hash = registry). Found because `enonces/` was still tracked: the step 0 untrack had failed; fixed |
 | 2026-11-16 | 6 | Branch `rag/step-06-excel`: openpyxl reader (v2 after two fixes), SQL tools on workbook tables (Q158 solved), index fingerprint; judged: tools +4.6 pts on the 22 workbook questions; `tools_tables` is the new reference |
