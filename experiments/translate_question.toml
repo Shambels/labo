@@ -1,0 +1,33 @@
+# experiments/translate_question.toml — step 5b: bm25_per_language + the question translated to Dutch and English
+name = "translate_question"
+
+[chunking]
+max_tokens = 256
+context_line = true         # "[PV du CODIR du 13 octobre 2025 · PV_CODIR_2025-10-13 · 00_Direction/CODIR/2025]"
+
+[embedder]
+model = "bge-m3"
+query_instruction = ""
+
+[search]
+method = "hybrid"          # dense, sparse or hybrid
+fusion = "rrf"             # hybrid only: rrf or dbsf
+rrf_k = 60                 # rrf only
+candidates = 30
+translate = ["nl", "en"]     # the only change from bm25_per_language: 3 versions x (dense + BM25), fused by RRF
+top_k = 5
+
+[reranker]
+model = "bge-reranker"     # or "none"
+
+[generation]
+enabled = true              # false: retrieval only, for experiments the deterministic metrics measure
+model = "qwen3.8-27b"       # served name (llama-server -a)
+system_prompt = "prompts/baseline.txt"
+temperature = 0.0
+top_p = 1.0
+top_k = 40                  # sampling: candidate tokens at each step, not the number of chunks
+max_tokens = 512
+
+[sparse]
+language = "per_chunk"         # the only change: "french" (default) for every chunk in the baseline

@@ -12,13 +12,16 @@ from transformers import AutoTokenizer
 from rag_calorvia import db
 from rag_calorvia.config import settings
 from rag_calorvia.etl.convert import load_conversion
+from rag_calorvia.etl.metadata import detect_language
 
 MONTHS_FR = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre",
              "novembre", "décembre"]
 
 # The payload of every chunk: the registry fields the searches may filter on, and what the LLM and the eval need
 PAYLOAD_FIELDS = ["department", "doc_type", "doc_label", "doc_date", "date_end", "date_precision", "date_source",
-                  "version", "status", "language", "source_type", "format"]
+                  "version", "status", "source_type", "format"]
+
+DEFAULT_LANGUAGE = "fr"  # most of the corpus; used when neither the chunk nor its document has a reliable language
 
 
 @cache
@@ -61,6 +64,13 @@ def context_line(document):
     return f"[{document['doc_label']}{french_date(document)} · {stem} · {folder}]"
 
 
+def chunk_language(body, document_language):
+    """The language of a chunk: detected on its own text (not the context line, which is always French), else its
+    document's, else French. A French minute quoting a Dutch report has Dutch chunks; a short chunk ('Néant.')
+    is too short to detect and inherits its document's language."""
+    return detect_language(body) or document_language or DEFAULT_LANGUAGE
+
+
 def chunk_document(document, config):
     """The chunks of one registry document: dicts with the payload fields, chunk_index and text.
 
@@ -74,16 +84,18 @@ def chunk_document(document, config):
         tokenizer=HuggingFaceTokenizer(tokenizer=tokenizer, max_tokens=config["chunking"]["max_tokens"] - reserved)
     )
     converted = load_conversion(document["path"])
-    payload = {"document": document["path"]} | {
+    payload = {"document": document["path"], "doc_language": document["language"]} | {
         field: (value.isoformat() if hasattr(value, "isoformat") else value)  # dates as ISO strings for Qdrant
         for field, value in ((f, document[f]) for f in PAYLOAD_FIELDS)
     }
-    return [
-        {**payload, "chunk_index": i,
-         "text": "\n".join(p for p in [line, *(chunk.meta.headings or []), chunk.text] if p)}
-        for i, chunk in enumerate(chunker.chunk(converted))
-        if chunk.text.strip()
-    ]
+    chunks = []
+    for chunk in chunker.chunk(converted):
+        if not chunk.text.strip():
+            continue
+        body = "\n".join([*(chunk.meta.headings or []), chunk.text])
+        chunks.append({**payload, "chunk_index": len(chunks), "language": chunk_language(body, document["language"]),
+                       "text": "\n".join(p for p in [line, body] if p)})
+    return chunks
 
 
 def chunk_corpus(config):

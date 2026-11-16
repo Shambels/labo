@@ -514,3 +514,84 @@ An LLM judge is itself a model that makes mistakes: here it read the wrong chunk
 
 DeepEval's faithfulness extracts the claims of the answer and checks each against the context; the judge treated "Je ne sais pas" as an unsupported claim. A refusal makes **no** claim, so the question "is every claim supported?" doesn't apply: scoring it 1 would inflate the mean with answers that said nothing, scoring it 0 penalizes honesty. Skipping it keeps the mean about answers that make claims. Whether the refusal was *right* is measured elsewhere: correctness, and the `refusal` metric (right on `out_of_corpus`, wrong otherwise).
 </details>
+
+---
+
+## Step 5: languages
+
+**1.** The notebook says the detected language must choose the stemmer but must **never** be used as a search filter. Why?
+
+<details><summary>Answer</summary>
+
+The questions are always in French, but their answer may be in a Dutch or English document (the `multilingual` questions). A filter `language = fr` would remove exactly those documents from the search. Language is a property of the text, used to process it correctly (stemming, stopwords) and to analyse results, not a criterion of relevance.
+</details>
+
+**2.** What does a stemmer do, and why does a Dutch chunk stemmed with the French stemmer index worse?
+
+<details><summary>Answer</summary>
+
+A stemmer reduces words to a common root so that inflected forms match (`entrepôts` and `entrepôt` → same token). It applies rules of one language. The French rules don't know Dutch suffixes (`magazijnen`/`magazijn`, `heftrucks`/`heftruck` stay distinct) and the French stopword list doesn't remove Dutch function words (`de`, `het`, `van`), which then count as terms and distort BM25's IDF. With `[sparse] language = "per_chunk"`, each chunk is tokenized with its own language's rules.
+</details>
+
+**3.** 5a (per-language stemmer) changed nothing. Why could it not help *alone*?
+
+<details><summary>Answer</summary>
+
+BM25 compares the **query's** tokens with the chunk's. The query is French, stemmed as French: whatever happens to the Dutch chunk's tokens, they still share almost no word with the French question. A correct Dutch stemming only pays off when a **Dutch query** meets Dutch chunks, which is what 5b adds.
+</details>
+
+**4.** In 5b, how many searches does Qdrant run for one question, and how are they combined?
+
+<details><summary>Answer</summary>
+
+Six prefetches: for each version of the question (fr, nl, en), one dense search (its own embedding) and one BM25 search (with the stemmer of its language), each returning 30 candidates. One `RrfQuery` fuses the six rankings: each chunk scores Σ 1/(60 + rank) over the lists it appears in, so a chunk found by several versions rises. Then the reranker keeps 5.
+</details>
+
+**5.** On Q024, the translation brought the contract's price chunk from outside the candidates to rank 4, yet recall didn't improve. What happened, and what does it tell you about where the bottleneck is?
+
+<details><summary>Answer</summary>
+
+The reranker scored the 30 candidates against the **French** question, and the Dutch price chunk ("18 400 euro excl. btw per jaar") ended up 11th, out of the top 5. Translation fixed the candidate stage; the cross-encoder, comparing French and Dutch text, is the bottleneck for cross-language passages. A fix to try: rerank each chunk against the version of the question in the chunk's language (one reranker call per language).
+</details>
+
+**6.** `translate_question` falls back to `{"fr": question}` on malformed JSON. Why is that the right failure mode?
+
+<details><summary>Answer</summary>
+
+Translation is an **addition**: the original question must always be searched. If an LLM glitch (invalid JSON, a missing key) could stop the search, an optional improvement would become a new way to fail. Degrading to the baseline search (and logging a warning) keeps the worst case equal to the baseline.
+</details>
+
+**7.** The translation turned "chariots élévateurs" into "reachstackers" while the Ghent documents say "heftrucks". Why is this a typical problem, and what could reduce it?
+
+<details><summary>Answer</summary>
+
+A general-purpose LLM translates a word in isolation, without knowing the company's vocabulary; "chariot élévateur" has several Dutch equivalents depending on the machine. Ideas: give the translation prompt a short glossary of the corpus's terms (heftruck, magazijn, comité PBW…), extracted from the Dutch documents; or translate the **chunks** at indexing time instead of the questions (the notebook's other idea), so the vocabulary comes from the documents themselves.
+</details>
+
+**8.** Why did `--retrieval-only` crash on 5b, and why is "change only what you mean to change" the fix?
+
+<details><summary>Answer</summary>
+
+The script replaced the whole `[generation]` section with `{"enabled": False}`, which also removed `model`. Question translation, a retrieval step, needs the LLM's served name from that section: `KeyError: 'model'`. Setting only `config["generation"]["enabled"] = False` turns generation off and keeps everything else. Overwriting a whole structure to change one field silently deletes the other fields.
+</details>
+
+**9.** 98 of 127 answers are identical between `baseline` and `prompt_multilingual`. Can you attribute all 29 differences to the new prompt rule?
+
+<details><summary>Answer</summary>
+
+No. Exercise 3 showed that llama-server isn't reproducible even at temperature 0 (batching and floating-point order change the logits slightly), so part of the differences would appear between two runs of the same config. To attribute a change to the prompt, look at metrics on many questions, ideally against the spread of repeated baseline runs, and at answers that change *in the direction the rule predicts* (Q117: a refusal becoming an honest partial answer).
+</details>
+
+**10.** Why does the new `answer_in_french` metric skip answers whose language can't be detected, instead of counting them as French?
+
+<details><summary>Answer</summary>
+
+`detect_language` returns `None` when it can't tell: fewer than 3 words (an answer like "6,3 % [1]." or "BRV-19-04417."), or a probability under 0.9 (numbers and codes carry no language). Such an answer isn't evidence of French or of another language: counting it as French would inflate the metric, counting it as non-French would penalize short exact answers. A metric should average only the cases it can measure, and report n. (Refusals like "Je ne sais pas." have 4 words and are detected as French: they count.)
+</details>
+
+**11.** Why must `baseline.toml` never be edited, even to add a new option with its default value?
+
+<details><summary>Answer</summary>
+
+Each run stores its full config, and `check_same_config` refuses a new run under an existing name if the config differs. Adding `[sparse] language = "french"` to `baseline.toml` would make it differ from the stored one, so the baseline could no longer be rerun under its name, and the file would no longer describe what produced the stored results. New options get their default in code (`config.get("sparse", {}).get("language")`), so old configs keep their exact meaning.
+</details>
