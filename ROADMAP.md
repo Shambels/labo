@@ -1,0 +1,188 @@
+# Roadmap: Calorvia chatbots
+
+Two chatbots for the fictional company **Calorvia SA**, built one after the other in this repo:
+
+| Phase | Source of knowledge | Statement |
+|---|---|---|
+| **A. RAG** | 393 documents from a shared drive (DOCX, PDF, scans, XLSX, images, HTML, PPTX…) in French, Dutch and English | `enonces/calorvia_rag/laboratoire_calorvia_enonce.md` |
+| **B. Text-to-SQL** | 3 relational databases: the old ERP (SQL Server), accounting and payroll (PostgreSQL) | `enonces/calorvia_t2sql/projet_text2sql_enonce.md` |
+
+Companion file: `QUIZ.md` (one quiz per step, answers collapsed).
+
+**Status legend:** ✅ done · 🔄 in progress · ⬜ to do
+
+---
+
+## Decisions
+
+| # | Decision | Choice | Why |
+|---|---|---|---|
+| D1 | Starting point for the RAG | Port `~/projects/hospital_rag` (exercise 3) into `src/rag_calorvia/` and adapt it | The statement asks for it; lets the steps focus on what is new (Excel, images, languages, versions) |
+| D2 | Quiz format | Answers inline, inside collapsed `<details>` blocks | Your choice |
+| D3 | Language | English for docs, code and comments; LLM prompts in French | Questions and corpus are French |
+| D4 | One repo or two | One repo (`labo`), one uv project, two packages: `src/rag_calorvia/` then `src/text2sql_calorvia/`. Tags are prefixed: `rag/v0.1-inventaire`, `t2sql/v0.1-sources` | You asked for both exercises in this repo; the statement's tag names stay recognisable |
+| D5 | Where the corpus lives | Stays in `enonces/`; `data/calorvia` is a symlink to it (same path as the hints notebook) and `data/` holds everything generated (conversions, VLM cache) and is git-ignored | No copy of 21 MB; same paths as the course |
+| D6 | `enonces/` in Git (was O1) | Untracked (`git rm --cached`) and git-ignored. The hints notebook stays in `enonces/` rather than being copied to `notebooks/` | The repo is **public** and this is course material with (fake) personal data. It remains in the history of commit `a33c2a6` |
+| D7 | PostgreSQL port (was O2) | **5432** for the registry/experiments DB; Qdrant 6333 (pinned `v1.19.1`) | Leaves 1433/5433/5434 to phase B's sources |
+| D8 | Dependencies | Added step by step, when a step needs them (step 0: `psycopg`, `pydantic-settings`, `pytest`) | Each step's diff shows why a dependency exists |
+| D9 | Porting strategy | Port each hospital_rag module **in the step that needs it** (step 0: config, db, logs; step 3: evaluation; step 4: ETL and RAG) | Nothing unused or untested sits in the repo |
+
+### Open decisions (to settle with you when we reach them)
+
+| # | Question | When |
+|---|---|---|
+| O7 | Purge `enonces/` from the public history (`git filter-repo` + force push)? Destructive, rewrites `main`. | Whenever you want |
+| O3 | Which VLM: candidates in `~/models` are `qwen3.5-9b` (if its `mmproj` is there), `gemma4-12b`, `glm-ocr`, `paddleocr-vl-1.6`. | Step 7 |
+| O4 | Agent framework for phase B: LangGraph (Python, testable) or n8n (visual, already installed). | Step 13 |
+| O5 | Payroll privacy rule: may the agent show a named person's salary? | Step 11 |
+| O6 | How to feed SQL Server to auto-ontology: Trino, a copy into PostgreSQL/DuckDB, or a hand-written YAML description. | Step 12 |
+
+---
+
+## Working conventions
+
+- **One step = one branch** (`rag/step-03-eval`), small commits in English imperative mood, merged into `main` when the step is measured.
+- **A baseline first, then one change at a time.** Every experiment is a TOML file in `experiments/`, every run is stored in PostgreSQL **with its git commit** (`git_dirty = false` for anything that goes in the report).
+- **Dev/test split:** the 31 questions whose number is a multiple of 5 are the held-out test set. We never look at them before step 9. The eval set measures, it never builds: no expected answer in a prompt, no rule written for one question.
+- At the end of each step: update this roadmap (status, notes, results) and add the step's quiz to `QUIZ.md`.
+
+### Services (one 24 GB GPU)
+
+| Port | Service | Model |
+|---|---|---|
+| 8000 | LLM (llama-server) | `qwen3.5-9b` (exercise 3's generator) |
+| 8001 | Embedder (vLLM) | `bge-m3` |
+| 8002 | Reranker (vLLM) | `bge-reranker-v2-m3` |
+| 8003 | VLM (llama-server `--mmproj`), then judge | see O3; the judge runs alone, as in exercise 3 |
+| 5432 | PostgreSQL (registry, experiments) | Docker |
+| 6333 | Qdrant | Docker |
+
+---
+
+## Phase A: the RAG
+
+### ✅ Step 0. Project setup
+**Goal:** a repo that runs the exercise 3 machinery against an empty Calorvia index.
+- `pyproject.toml`: dependencies of hospital_rag + `openpyxl`, `py3langid`, `pillow`; dev group with `pytest`.
+- `docker-compose.yaml` (PostgreSQL + Qdrant), `.env.example`, `.gitignore` (`data/`, `.env`, `qdrant_storage/`, `*.log`, `.ipynb_checkpoints/`).
+- Port `config.py`, `db.py`, `logs.py`; `data/calorvia` symlink; the hints notebook moved to `notebooks/`.
+- `git_state()` and the `git_commit`, `git_dirty` columns on the `experiments` table.
+- **Done when:** `uv sync`, `docker compose up -d` and `uv run pytest` pass; settle O1 and O2.
+- **Result:** 4 tests pass (3 on `git_state`, 1 integration test writing an experiment to PostgreSQL). The schema has `git_commit` / `git_dirty` directly in `CREATE TABLE` (fresh database, no `ALTER` needed). Notebook not moved (D6).
+
+### ⬜ Step 1. Inventory → `etl/inventory.py`
+**Goal:** a registry: one row per file in a `documents` table.
+- Walk the corpus: relative path, format, size, SHA-256, page count, text layer (PDF: native vs scan, with PyMuPDF).
+- `excluded_reason`: exact duplicates (same hash, keep one), personal data (`02_RH/Confidentiel/`), blank templates (`Modeles/`), noise (`99_Archives/Divers/`). Nothing is deleted, only excluded in the registry.
+- **Concepts:** content hashing, idempotent ETL, a registry as the single source of truth for the index.
+
+### ⬜ Step 2. Metadata → `etl/metadata.py`
+**Goal:** date, type, version/status, language, department, source type for every document.
+- Several filename patterns (CODIR 2025 vs 2026, CA, COPIL, PBW, monthly reports, invoices, `IMG_YYYYMMDD` photos), then fall back on the content ("Séance du lundi 13 octobre 2025").
+- Version and status markers: `v1`, `v2`, `Projet PV`, `copie`, `Copie de`, `(1)`, `FINAL`, `Archives`, `Doublons`, `Modeles`.
+- Document-level language with `py3langid` (per chunk comes in step 5).
+- Unit tests on real file names.
+- **Tag `rag/v0.1-inventaire`.**
+
+### ⬜ Step 3. Evaluation adapted to Calorvia
+**Goal:** measure before building more.
+- Load `calorvia_eval.json`; dev (127) / test (31) split, enforced in code.
+- `document` is now a relative path; `normalize()` gains `normalize_numbers()`.
+- New metric `trap_hit@k`; results **per question type** and per document format; refusals on `out_of_corpus`.
+- Judge sample: 2 questions per type from the dev set.
+
+### ⬜ Step 4. Baseline
+**Goal:** the reference everything else is compared to.
+- Docling conversion of the text documents only (DOCX, native PDF, HTML, PPTX, MD, CSV, XLSX as Docling sees them), with a cache in `data/conversions/`.
+- Chunks with a **context line** ("[PV du CODIR du 13 octobre 2025 · 00_Direction/CODIR/2025]"), metadata in the payload, payload indexes on filterable fields.
+- Exercise 3's best configuration (hybrid + RRF, 30 candidates, bge-reranker, 5 chunks, `combined_v2` prompt, header/boilerplate removal).
+- Experiments: `baseline`, and `baseline` without the context line.
+- Expected: `image_only`, `scan_ocr`, `image_in_document` fail.
+- **Tag `rag/v0.2-baseline`.**
+
+### ⬜ Step 5. Languages
+- Language per chunk in the payload; BM25 stemmer chosen by language.
+- Experiment: translate the question to Dutch and English, search each, fuse with RRF.
+- System prompt: always answer in French.
+- Measure: `multilingual`, all other types, latency.
+- **Tag `rag/v0.3-langues`.**
+
+### ⬜ Step 6. Excel → `etl/excel.py`
+- `openpyxl` with `data_only=True`, every sheet; find the tables (title, header, rows, notes).
+- One sentence per row with its context; values displayed as in Excel (percentages, dates); grouped rows with repeated header + a summary chunk for big tables.
+- Payload: file, sheet, row number, period, version.
+- `excel_reasoning`: RAG only vs a few polars/SQL functions the LLM picks (tool calling).
+- Measure: `excel_lookup`, `excel_reasoning`, `version_trap` (budget, price list).
+- **Tag `rag/v0.4-excel`.**
+
+### ⬜ Step 7. Images and scans → `etl/vision.py`
+- Serve the VLM (O3); transcribe every image and every scanned PDF page **once**, cached, with timings.
+- Read the charts of the two PDFs that have them.
+- Image chunks: context line + transcription; payload has the image path and page.
+- Check 10 transcriptions by hand; compare VLM vs Docling OCR on `scan_ocr` (quality, time).
+- Bonus: show the source image under the answer.
+- **Tag `rag/v0.5-images`.**
+
+### ⬜ Step 8. Time and versions
+The hardest part. Each idea measured on its own, then combined:
+1. Registry status → Qdrant `must_not` filter on drafts, duplicates, noise; `valid_from` / `valid_to` on old versions.
+2. Reference date extracted from the question by the LLM; the code applies `date <= reference`.
+3. Chunks sent to the LLM in chronological order, each with its date.
+4. Prompt rules (latest decision wins, a draft is not authoritative, a corrected minute beats the one it corrects).
+5. More candidates for decision-thread questions.
+6. CODIR decisions and action-tracking tables extracted to PostgreSQL; `action_tracking` answered in SQL.
+- Measure: `decision_*`, `board_resolution`, `version_trap`, `action_tracking`, and **trap rate before/after**.
+- **Tag `rag/v0.6-versions`.**
+
+### ⬜ Step 9. Final evaluation and delivery
+- Pick the best configuration (quality, latency, indexing cost); run it **once** on the 31 test questions.
+- Export results to `results/*.csv`; write `RAPPORT.md` (comparison table with commits, per-type and per-format results, trap rate, VLM time and error rate, what didn't help, three failures analysed) and the README.
+- A small chat UI (Streamlit) for the demo.
+- **Tag `rag/v1.0`.**
+
+---
+
+## Phase B: the text-to-SQL agent
+
+Deliberately more open than phase A: the steps below are a skeleton we will refine when we get there.
+
+### ⬜ Step 10. Sources
+- Restore the three databases with `enonces/calorvia_t2sql/sources_calorvia/docker/` (ports 1433, 5433, 5434); connect with the read-only `agent_ro` account; explore; run the 12 starter questions by hand in SQL.
+- **Tag `t2sql/v0.1-sources`.**
+
+### ⬜ Step 11. The MCP server (FastMCP)
+- Tools: `list_sources`, `list_tables`, `get_table_card`, `find_values`, `validate_sql` (sqlglot, `tsql` / `postgres`), `execute_sql`.
+- Read-only in layers: DB account, sqlglot validation, read-only transaction rolled back + timeout + row limit, logging of every query. Tests proving a write is refused even when validation is bypassed.
+- Payroll privacy rule (O5).
+- **Tag `t2sql/v0.2-mcp`.**
+
+### ⬜ Step 12. The ontology (NVIDIA auto-ontology)
+- Run it with local models only (structured output, rerank API format), on non-conflicting ports, KumoRFM off.
+- SQL Server support (O6): compare at least two options.
+- Certify the key terms (revenue, EBITDA, customer, headcount…) with before/after examples; YAML export + note.
+- **Tag `t2sql/v0.3-ontologie`.**
+
+### ⬜ Step 13. The agent and the OpenAI-compatible endpoint
+- Agent (O4) using the ontology and the MCP server: pick sources, write dialect-correct SQL, self-correct with a bounded retry, cross-source reconciliation in Python, show its queries, refuse or ask when ambiguous.
+- `GET /v1/models`, `POST /v1/chat/completions` (streaming if possible).
+- **Tag `t2sql/v0.4-agent`.**
+
+### ⬜ Step 14. Evaluation
+- ≥ 40 questions: simple per source, cross-source, ambiguous, impossible, malicious; expected answer and reference SQL.
+- Metrics: accuracy with a tolerance on amounts, valid-SQL rate, execution errors, behaviour on impossible/malicious questions, latency. Experiments logged with git commit; at least *with* vs *without* ontology.
+
+### ⬜ Step 15. Bonuses
+- Chart tool (image served by the app, Markdown link).
+- Memory: conversations in PostgreSQL, follow-up questions, learned preferences.
+
+### ⬜ Step 16. Delivery
+- `RAPPORT.md`, README, `results/`. **Tag `t2sql/v1.0`.**
+
+---
+
+## Progress log
+
+| Date | Step | What happened |
+|---|---|---|
+| 2026-11-16 | – | Statements read, roadmap and quiz files created |
+| 2026-11-16 | 0 | Branch `rag/step-00-setup`: `enonces/` untracked, package `rag_calorvia` (config, db, logs, git_state, sql), compose on 5432/6333, tests green |
