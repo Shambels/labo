@@ -1,0 +1,27 @@
+# PostgreSQL (document registry, experiments) and Qdrant (vector index) for the Calorvia RAG.
+# Credentials come from .env. Phase B's source databases have their own compose file (ports 1433, 5433, 5434).
+services:
+  postgres:
+    image: postgres:17
+    container_name: calorvia-postgres
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - 5432:5432
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+  qdrant:
+    image: qdrant/qdrant:v1.19.1   # pinned: the payload/filter API we rely on must not change under us
+    container_name: calorvia-qdrant
+    environment:
+      QDRANT__SERVICE__API_KEY: ${QDRANT_API_KEY}
+    ports:
+      - 6333:6333
+    volumes:
+      - qdrant_data:/qdrant/storage
+
+volumes:
+  pg_data:
+  qdrant_data:
