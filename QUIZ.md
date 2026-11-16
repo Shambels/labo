@@ -797,3 +797,77 @@ The top 5 often holds images the answer didn't use (the other org charts, a neig
 
 `pgrep -f` matches the full command line of every process, including the shell running the command, whose own command line contains the pattern. `kill` refused the two-line value, and the wait loop tested an invalid PID, so `kill -0` failed and the loop concluded "stopped". Safe way: list the processes, pick the exact PID, kill it, then verify both that the PID is gone and that the resource is freed (GPU memory, port). Never trust a success message whose check could fail for another reason.
 </details>
+
+---
+
+## Step 8: time and versions
+
+**1.** Recall@5 was already ≈ 1.0 on the decision questions. Why is step 8 still needed, and what does `trap_hit@5` measure that recall doesn't?
+
+<details><summary>Answer</summary>
+
+Recall says the **right** passage is in the top 5; it says nothing about **wrong** passages next to it. On a changing decision, the top 5 also holds the old value (an earlier minute, a draft, an old version), and the LLM must pick. `trap_hit@5` counts the questions whose top 5 contains a passage listed as a trap (outdated, draft, corrected later): 9 of 17 at the start of the step.
+</details>
+
+**2.** The ERP specification was dated 31/12/2026. Where did that date come from, and what rule fixed it without breaking the other 82 content dates?
+
+<details><summary>Answer</summary>
+
+`content_date` took the first date in the text: "Son éditeur arrête le support le 31 décembre 2026", the end of GesPro's support, not the date of the document. The fix: skip a date whose preceding 30 characters contain a cue that the date is a deadline, a start or a postponement ("jusqu'", "à compter", "report", "prévu", "support le", "from", "vanaf", "tot"), and keep scanning. The audit (all 89 content-dated documents read with their context) and a diff of the registry before/after showed exactly 7 documents changed.
+</details>
+
+**3.** The first version of the cue list contained Dutch "van". What broke, and what is the general lesson about cue words?
+
+<details><summary>Answer</summary>
+
+"van" means "of": it appears in "stand van zaken" (status as of) and "Revisie A van 10/04/2025", both genuine document dates, which were then skipped. Cue words must be specific to the meaning you want ("vanaf" = from, "tot" = until), not frequent function words, and each one deserves a test with a real phrase that must *not* trigger it.
+</details>
+
+**4.** Why exclude drafts and archives with a Qdrant `must_not` filter rather than removing them from the index or filtering after the search?
+
+<details><summary>Answer</summary>
+
+Removing them would lose them for good (the registry decides, the index keeps everything: a later question might need a draft, e.g. to explain an error). Filtering **after** the search would leave fewer than 5 eligible chunks whenever drafts took places among the 30 candidates. A `must_not` inside every prefetch means all 30 candidates are already eligible, and the freed places go to other documents: recall even rose (0.934 → 0.939).
+</details>
+
+**5.** After the status filter, Q063 got a **new** trap. Which, and why can't a status filter catch it?
+
+<details><summary>Answer</summary>
+
+The freed place went to the CODIR minute of 17 November 2025 ("vitesse limitée à 8 km/h"), superseded in January 2026 by 6 km/h. That minute is signed and final: its *status* is fine, its *content* is outdated. Only time-aware handling can deal with it: order by date, a prompt rule that the latest decision wins, or a structured view of decisions.
+</details>
+
+**6.** With `order = "chronological"`, why do the retrieval metrics still use the reranker's order, while the stored chunks and the citation checks use the chronological one?
+
+<details><summary>Answer</summary>
+
+Retrieval metrics (MRR, nDCG, hit@k) measure the **ranking**: changing the order given to the LLM must not change them, or the experiment would mix a retrieval effect into a generation change. Citations [n] refer to the numbering the LLM saw: checking `[2]` against the reranker's second chunk would be checking the wrong passage. So the pipeline returns both `chunks` (ranked) and `context` (as shown).
+</details>
+
+**7.** The reference-date filter (8.4) lowered recall from 0.939 to 0.910. Explain with Q093 why filtering on the document date is wrong for "what happened in May 2026?".
+
+<details><summary>Answer</summary>
+
+The May 2026 phishing simulation is reported in the quarterly cybersecurity report **dated 3 July 2026**: the source of an event is written after it. The filter `doc_date ≤ 31 May 2026` removed the only document holding the answer. A document's date says when it was written, not which period it covers. A correct version would need the period each document covers (`date_end` of a report, the meeting date of a minute that reports on earlier facts…) and would still fail on summaries written later.
+</details>
+
+**8.** The reference-date experiment is "not kept". Why record it in the report anyway?
+
+<details><summary>Answer</summary>
+
+Because the statement asks for "ce qui n'a rien changé, ou a dégradé les résultats", and because a negative result with its cause is knowledge: the next person who thinks of filtering by date learns why it fails here (event date ≠ document date) and what it would take to make it work. A report that only lists gains hides how much was tried and makes the gains look more certain than they are.
+</details>
+
+**9.** In 8.4, who decides what: the LLM or the code? Why split it that way?
+
+<details><summary>Answer</summary>
+
+The LLM only **extracts** a date from the question (a JSON `{"date": …}`, parsed and validated: an impossible date becomes `None`). The **code** decides what to do with it: build the Qdrant condition, keep undated chunks, combine with the status filter. The LLM is good at reading "en décembre 2025"; the code is predictable, testable and auditable. A malformed answer degrades to "no filter", never to a wrong filter. (Statement, exercise 3: "le LLM extrait, le code décide".)
+</details>
+
+**10.** On the 41 target questions, `time_rules` scores 0.790 against 0.785 for the reference, but loses on `decision_history` (0.933 → 0.817). Should it be kept? What did reading the answers show?
+
+<details><summary>Answer</summary>
+
+The overall difference is within noise (one verdict ≈ 0.02), so the decision rests on the per-type pattern and on the answers. Rule 8 ("mention the old value only to explain the change") made answers leaner: Q043 lost the earlier budget versions, Q066 part of the October context, Q149 the year. The judge penalizes missing details, but no answer became wrong. Meanwhile the rules help where traps matter most (current decisions, action tracking, board resolutions). Kept, with the trade-off written down; a rule tweak ("for a question about the past, give the full sequence") would be the next experiment.
+</details>
