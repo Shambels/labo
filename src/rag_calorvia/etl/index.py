@@ -21,7 +21,7 @@ PAYLOAD_INDEXES = {
     "department": models.PayloadSchemaType.KEYWORD,
     "doc_type": models.PayloadSchemaType.KEYWORD,
     "status": models.PayloadSchemaType.KEYWORD,
-    "language": models.PayloadSchemaType.KEYWORD,
+    "language": models.PayloadSchemaType.KEYWORD,      # of the chunk; doc_language is the document's
     "source_type": models.PayloadSchemaType.KEYWORD,
     "doc_date": models.PayloadSchemaType.DATETIME,
     "date_end": models.PayloadSchemaType.DATETIME,
@@ -47,23 +47,35 @@ def embed(texts, model):
     return vectors
 
 
-def bm25(text):
-    """Sparse BM25 vector, computed by the Qdrant server. Chunks and questions must use the same options.
+# Snowball stemmers of Qdrant's BM25, by language code
+STEMMERS = {"fr": "french", "nl": "dutch", "en": "english", "de": "german"}
 
-    French stemming for every chunk for now: the Dutch and English ones get their own stemmer in step 5.
+
+def bm25(text, language="fr"):
+    """Sparse BM25 vector, computed by the Qdrant server: tokens, stopwords and stemming of `language`.
+
+    A Dutch text stemmed as French keeps 'magazijnen' and 'magazijn' apart, and its stopwords ('de', 'het', 'van')
+    count as words. A chunk and the query that should find it must use the same language's stemmer.
     """
-    return models.Document(text=text, model="qdrant/bm25", options={"language": "french"})
+    return models.Document(text=text, model="qdrant/bm25", options={"language": STEMMERS.get(language, "french")})
+
+
+def sparse_language(chunk, config):
+    """The stemmer language of a chunk: French for all (baseline), or the chunk's own ([sparse] language = "per_chunk")."""
+    return chunk["language"] if config.get("sparse", {}).get("language") == "per_chunk" else "fr"
 
 
 def collection_name(config):
-    """One collection per index: only [chunking] and the embedder change the stored vectors.
+    """One collection per index: only [chunking], [sparse] and the embedder change the stored points.
 
-    Any new [chunking] option that changes the chunks must be added here, or two indexes would share a name.
+    Any new option that changes the chunks or their vectors must be added here, or two indexes would share a name.
     """
     chunking = config["chunking"]
     name = f"calorvia__{config['embedder']['model']}__{chunking['max_tokens']}"
     if not chunking["context_line"]:
         name += "__no-context-line"
+    if config.get("sparse", {}).get("language") == "per_chunk":
+        name += "__bm25-per-language"
     return name
 
 
@@ -101,7 +113,7 @@ def index_corpus(config, force=False):
         qdrant.upsert(
             name,
             points=[
-                models.PointStruct(id=i, vector={"dense": vectors[i], "sparse": bm25(chunks[i]["text"])}, payload=chunks[i])
+                models.PointStruct(id=i, vector={"dense": vectors[i], "sparse": bm25(chunks[i]["text"], sparse_language(chunks[i], config))}, payload=chunks[i])
                 for i in range(batch_start, min(batch_start + UPSERT_BATCH, len(chunks)))
             ],
             wait=True,
