@@ -8,8 +8,11 @@ authors = [
 ]
 requires-python = ">=3.12"
 dependencies = [
+    "docling>=2.94",
     "psycopg[binary]>=3.3.9",
+    "py3langid>=0.4.0",
     "pydantic-settings>=2.16.3",
+    "pymupdf>=2.1",
 ]
 
 [build-system]

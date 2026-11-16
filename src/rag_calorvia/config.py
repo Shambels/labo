@@ -25,6 +25,7 @@ class Settings(BaseSettings):
     vision_path: Path = Path("data/vision")                   # VLM transcription cache (step 7)
     reports_path: Path = Path("data/reports")
     models_path: Path  # holds embedder/{name}, reranker/{name} and docling/
+    docling_device: str = "cuda"  # where Docling runs its PDF layout and table models: cuda or cpu
 
     @property
     def docling_models_path(self):

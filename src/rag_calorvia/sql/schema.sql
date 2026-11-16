@@ -29,3 +29,31 @@ CREATE TABLE IF NOT EXISTS scores (
     reason         TEXT,                         -- the judge's explanation, if any
     PRIMARY KEY (experiment_id, question_id, metric)
 );
+
+-- The registry of the corpus: one row per file, written by etl/inventory.py (scripts/inventory.py).
+CREATE TABLE IF NOT EXISTS documents (
+    path             TEXT PRIMARY KEY,           -- relative to the corpus root
+    format           TEXT NOT NULL,              -- extension: docx, pdf, xlsx, jpg...
+    size_bytes       INTEGER NOT NULL,
+    sha256           TEXT NOT NULL,              -- of the bytes of the file
+    content_hash     TEXT NOT NULL,              -- of the normalized text (of the bytes when there is no text)
+    page_count       INTEGER,                    -- PDF pages, PPTX slides
+    has_text_layer   BOOLEAN,                    -- PDFs only: false for a scan
+    text_chars       INTEGER NOT NULL,           -- characters of text found by Docling
+    duplicate_of     TEXT REFERENCES documents(path) DEFERRABLE INITIALLY DEFERRED,
+    excluded_reason  TEXT,                       -- NULL: indexed. duplicate, empty, personal_data, template, noise
+    -- Metadata, from the path, the file name and the text (etl/metadata.py)
+    department       TEXT NOT NULL,              -- first folder without its number: Finance, Production...
+    doc_type         TEXT NOT NULL,              -- codir_minutes, board_minutes, invoice... 'other' if unknown
+    doc_label        TEXT NOT NULL,              -- French label of the type, for the context line
+    doc_date         DATE,                       -- first day the document is about
+    date_end         DATE,                       -- last day: = doc_date for a day, end of month for a month
+    date_precision   TEXT,                       -- day, month, quarter, year, range
+    date_source      TEXT,                       -- filename, content, photo
+    version          TEXT,                       -- v1, v2, rev C
+    status           TEXT,                       -- template, copy, archive, draft, signed, approved; NULL: nothing said
+    markers          TEXT[] NOT NULL,            -- every version/status marker found in the path
+    language         TEXT,                       -- fr, nl, en; NULL without text (images, scans) or unsure
+    source_type      TEXT NOT NULL,              -- text, table, image, scan
+    inventoried_at   TIMESTAMPTZ NOT NULL DEFAULT now()
+);

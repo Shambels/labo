@@ -29,6 +29,15 @@ ln -sfn ../enonces/calorvia_rag/calorvia_dataset/corpus/calorvia_eval.json data/
 uv run pytest                # the database test is skipped if PostgreSQL isn't up
 ```
 
+## Pipeline
+
+```bash
+uv run python scripts/inventory.py   # Docling conversions (cached in data/conversions/) + the documents registry with metadata
+```
+
+What is kept out of the index and why: `exclusions.toml` (reviewed by hand), plus the duplicates and empty
+files the inventory finds itself. Query the registry with `SELECT * FROM documents WHERE excluded_reason IS NOT NULL`.
+
 Everything runs **from the repository root**: the paths in `config.py` are relative to it.
 
 ## Layout
@@ -39,6 +48,12 @@ src/rag_calorvia/
 ├── db.py           # the only module that runs SQL; queries in sql/
 ├── git_state.py    # commit + dirty flag stored with every experiment
 ├── logs.py
-└── sql/            # schema and queries (experiments, answers, scores)
+├── etl/
+│   ├── convert.py    # Docling: text documents -> DoclingDocument JSON, once
+│   ├── inventory.py  # the registry: hashes, pages, text layer, exclusions
+│   └── metadata.py   # type, date, version/status, language, source type from path, name and text
+└── sql/            # schema and queries (documents, experiments, answers, scores)
+scripts/            # command-line entry points
+exclusions.toml     # hand-reviewed exclusions, with their reason
 tests/
 ```

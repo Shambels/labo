@@ -112,3 +112,16 @@ def list_experiments(conn):
 def list_scores(conn):
     """Every score: rows of (experiment_id, question_id, question_type, metric, value)."""
     return conn.execute(load_sql("report_scores")).fetchall()
+
+
+def save_documents(conn, rows):
+    """Write the inventory: upsert every row, then drop the rows of files no longer in the corpus."""
+    with conn.cursor() as cur:
+        cur.executemany(load_sql("upsert_document"), rows)
+        cur.execute(load_sql("delete_missing_documents"), ([row["path"] for row in rows],))
+    conn.commit()
+
+
+def inventory_summary(conn):
+    """Rows of (format, files, indexed, duplicate, other_excluded, scans), biggest formats first."""
+    return conn.execute(load_sql("inventory_summary")).fetchall()
