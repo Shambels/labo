@@ -40,6 +40,8 @@ Companion file: `QUIZ.md` (one quiz per step, answers collapsed).
 | D22 | Baseline = exercise 3's best, transposed | 256 tokens, no overlap, context line, hybrid RRF k=60, 30 candidates, bge-reranker, top 5, `prompts/baseline.txt` (combined_v2 without the patient rule). No question decomposition (its gate was hospital-specific) | The statement: "la meilleure configuration de l'exercice 3 et la ligne de contexte" |
 | D23 | No boilerplate removal | Exercise 3's header removal not transposed | Texts repeated in 5+ documents are action-table rows and attendance lists (evidence), not footers; Docling already drops page headers/footers |
 | D24 | Clean runs only | `run_experiment` refuses a dirty tree (`--allow-dirty` for trials); reports pick the latest clean run | Two runs were stamped dirty by a `uv add` made while they started |
+| D25 | New reference after step 5 | `prompt_multilingual` (baseline + rule 4 on Dutch/English extracts). `bm25_per_language` and `translate_question` not kept | 5a and 5b bring nothing on the dev set (recall@5 0.779, 0.766 vs 0.783), 5b costs +2.2 s per question; 5c is neutral-to-better and free |
+| D26 | Never edit a config that has run | New options get defaults in code (`config.get(...)`); `baseline.toml` is frozen | `check_same_config` compares the stored config: an edited baseline couldn't run again under its name |
 | D9 | Porting strategy | Port each hospital_rag module **in the step that needs it** (step 0: config, db, logs; step 3: evaluation; step 4: ETL and RAG) | Nothing unused or untested sits in the repo |
 
 ### Open decisions (to settle with you when we reach them)
@@ -141,17 +143,30 @@ Companion file: `QUIZ.md` (one quiz per step, answers collapsed).
   | all 31 | 0.658 | 0.856 (26) | 0.995 | 0.865 | 0.759 |
   | without the 5 image/scan questions | **0.762** (26) | 0.844 | 0.994 | 0.962 | 0.875 |
 
-  - **Correctness is credible.** Real errors: Q008 (outdated recall status), **Q023 falls into the trap** (1.2 M€, corrected in the next minute), Q024 (the Dutch contract's cost is in the context, the answer says it isn't). Most 0.7 scores are right but terse answers (the prompt asks 1–3 sentences; the judge wants every detail).
+  - **Correctness is credible.** Real errors: Q008 (outdated recall status), **Q023 falls into the trap** (1.2 M€, corrected in the next minute), Q024 (the answer says the Dutch contract's cost isn't in the extracts; *corrected in step 5*: it was right, the price chunk wasn't retrieved, so the judge erred again). Most 0.7 scores are right but terse answers (the prompt asks 1–3 sentences; the judge wants every detail).
   - **Faithfulness is not.** Checked by hand: 4 of the 5 claim-based penalties are judge errors (Q004, Q026, Q043, Q052: the claim is in the cited chunk), the 5th a nitpick (Q001). Read it as a lower bound; don't conclude from small differences.
   - **Measurement fix:** a refusal is no longer judged on faithfulness (it makes no claim; Gemma scored "Je ne sais pas" 0). The 3 rows already stored (Q014, Q034, Q144) were deleted from run 15.
-- **For step 9's report, three failures already analysed:** Q093 (table serialization, conversion), Q023 (trap, versions → step 8), Q024 (Dutch passage, generation → step 5).
+- **For step 9's report, three failures already analysed:** Q093 (table serialization, conversion), Q023 (trap, versions → step 8), Q024 (Dutch price chunk out of the top 5: the French-question reranker, see step 5).
 
-### ⬜ Step 5. Languages
+### ✅ Step 5. Languages
 - Language per chunk in the payload; BM25 stemmer chosen by language.
 - Experiment: translate the question to Dutch and English, search each, fuse with RRF.
 - System prompt: always answer in French.
 - Measure: `multilingual`, all other types, latency.
 - **Tag `rag/v0.3-langues`.**
+- **Result** (127 dev questions, retrieval-only for 5a/5b, generation for 5c):
+
+  | Experiment | Change | recall@5 | `multilingual` recall@5 | latency |
+  |---|---|---|---|---|
+  | baseline | – | 0.783 | 0.929 | 2.8 s |
+  | 5a `bm25_per_language` | language per chunk, BM25 stemmer per language | 0.779 | 0.929 | = |
+  | 5b `translate_question` | 5a + question in nl/en, 6 searches fused by RRF | 0.766 | 0.929 | **+2.2 s** |
+  | 5c `prompt_multilingual` | baseline + prompt rule for nl/en extracts | (= baseline) | (= baseline) | +0.06 s |
+
+- **Why 5a and 5b don't help here:** the baseline already finds the Dutch documents through dense search and the French context line (6 of 7 `multilingual` questions have recall 1.0). Per-chunk language equals document language for every chunk of this corpus (no mixed documents). 5a alone can't help: the query is French.
+- **The interesting finding (Q024):** translation works *at the candidate stage*: the Dutch query brings the contract's price chunk from outside the 30 candidates to rank 4. Then the reranker, scoring it against the **French** question, puts it 11th, out of the top 5. Also, the LLM translated "chariots élévateurs" as "reachstackers" instead of "heftrucks": domain vocabulary needs context. Idea for later: rerank each chunk against the version of the question in its language.
+- **5c:** all 127 answers were already in French in the baseline (new metric `answer_in_french`, 1.000). The rule changes 29 answers (part is llama-server's non-determinism at temperature 0); one wrong refusal (Q117) becomes an honest partial answer. **Not judged yet:** to judge with the next judge pass (needs the Gemma swap).
+- **Fixed on the way:** `--retrieval-only` replaced the whole `[generation]` section, so translation couldn't find its model (run 20 failed).
 
 ### ⬜ Step 6. Excel → `etl/excel.py`
 - `openpyxl` with `data_only=True`, every sheet; find the tables (title, header, rows, notes).
@@ -237,3 +252,5 @@ Deliberately more open than phase A: the steps below are a skeleton we will refi
 | 2026-11-16 | – | Merged steps 1–2 into `main`, tagged `rag/v0.1-inventaire`, pushed |
 | 2026-11-16 | 3 | Branch `rag/step-03-eval`: dataset split and alignment, metrics with `trap_hit`, ceiling 101/122, 91 tests green |
 | 2026-11-16 | 4 | Branch `rag/step-04-baseline`: generator switched to Qwen3.8-27B; pipeline ported; baseline recall@5 0.783 (context line +10 pts); judged by Gemma 4: correctness 0.762 on text questions; faithfulness judge errors found by hand |
+| 2026-11-16 | – | Merged, tagged `rag/v0.2-baseline`, pushed |
+| 2026-11-16 | 5 | Branch `rag/step-05-languages`: 5a/5b no gain (5b +2.2 s), 5c kept as new reference; reranker identified as the cross-language bottleneck |
