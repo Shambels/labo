@@ -35,12 +35,14 @@ Companion file: `QUIZ.md` (one quiz per step, answers collapsed).
 | D17 | Judge sample | 2 questions per type of the dev set, `out_of_corpus` **included**: 31 questions | The statement's count (31); exercise 3 excluded `out_of_corpus` (26) |
 | D18 | Eval paths vs registry | `align_with_registry()` at load time: apostrophes → underscores, excluded duplicates → kept copy, identical items merged. The metrics stay unchanged | The eval set has 2 paths with `'` where the corpus has `_`; questions citing only a dropped copy would be false misses |
 | D19 | `trap_hit` | Per question with traps, `trap_hit@k` = 1 if a trap is in the top k (statement's definition, same document + every snippet) | Lower is better; averaged over the 17 dev questions that have traps |
+| D20 | Generator | **Qwen3.8-27B** (Q4_K_XL, llama-server, `--reasoning off`) instead of Qwen3.5-9B | Your choice. Slower per token than the 9B; fits with the embedder and reranker (21.7 / 24 GB) |
 | D9 | Porting strategy | Port each hospital_rag module **in the step that needs it** (step 0: config, db, logs; step 3: evaluation; step 4: ETL and RAG) | Nothing unused or untested sits in the repo |
 
 ### Open decisions (to settle with you when we reach them)
 
 | # | Question | When |
 |---|---|---|
+| O8 | The judge: exercise 3 judged with Qwen3.8-27B, now the generator. Same model = self-preference bias; options: another model family as judge (e.g. Gemma 4), or keep it and state the bias | End of step 4 |
 | O7 | Purge `enonces/` from the public history (`git filter-repo` + force push)? Destructive, rewrites `main`. | Whenever you want |
 | O3 | Which VLM: candidates in `~/models` are `qwen3.5-9b` (if its `mmproj` is there), `gemma4-12b`, `glm-ocr`, `paddleocr-vl-1.6`. | Step 7 |
 | O4 | Agent framework for phase B: LangGraph (Python, testable) or n8n (visual, already installed). | Step 13 |
@@ -60,10 +62,10 @@ Companion file: `QUIZ.md` (one quiz per step, answers collapsed).
 
 | Port | Service | Model |
 |---|---|---|
-| 8000 | LLM (llama-server) | `qwen3.5-9b` (exercise 3's generator) |
+| 8000 | LLM (llama-server) | `qwen3.8-27b` (Q4; your choice, replacing exercise 3's `qwen3.5-9b`) |
 | 8001 | Embedder (vLLM) | `bge-m3` |
 | 8002 | Reranker (vLLM) | `bge-reranker-v2-m3` |
-| 8003 | VLM (llama-server `--mmproj`), then judge | see O3; the judge runs alone, as in exercise 3 |
+| 8003 | VLM (llama-server `--mmproj`), then judge | see O3 and O8 |
 | 5432 | PostgreSQL (registry, experiments) | Docker |
 | 6333 | Qdrant | Docker |
 

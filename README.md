@@ -29,6 +29,53 @@ ln -sfn ../enonces/calorvia_rag/calorvia_dataset/corpus/calorvia_eval.json data/
 uv run pytest                # the database test is skipped if PostgreSQL isn't up
 ```
 
+## Model servers
+
+One terminal per server, from any directory. Start the two vLLM servers **first**: vLLM reserves a fixed share of
+the GPU at start-up, llama-server only takes what it needs. Loading takes 30 s to 2 min.
+
+```bash
+export MODELS_PATH=~/models
+
+# Embedder (8001): bge-m3. The served name must be the folder name: the chunker loads the tokenizer from it
+~/vllm_server/.venv/bin/vllm serve $MODELS_PATH/embedder/bge-m3 \
+  --runner pooling --served-model-name bge-m3 --port 8001 \
+  --dtype float16 --max-model-len 2048 --gpu-memory-utilization 0.10 --enforce-eager
+
+# Reranker (8002): bge-reranker-v2-m3
+~/vllm_server/.venv/bin/vllm serve $MODELS_PATH/reranker/bge-reranker-v2-m3 \
+  --runner pooling --served-model-name bge-reranker --port 8002 \
+  --dtype float16 --max-model-len 2048 --gpu-memory-utilization 0.10 --enforce-eager
+
+# Generator (8000): Qwen3.8-27B, Q4 (~17.5 GB of weights; with the two vLLM servers, ~21.7 GB of the 24 GB)
+~/llama.cpp/build/bin/llama-server -m $MODELS_PATH/qwen3.8-27b/llama/Qwen3.8-27B-UD-Q4_K_XL.gguf \
+  -a qwen3.8-27b --port 8000 -ngl 99 -c 16384 -np 1 -fa on --reasoning off
+```
+
+The judge (8003) is not decided yet (ROADMAP, open decision O8): the generator is the model exercise 3 used as
+judge, and a second 27B model doesn't fit next to it.
+
+Check that a server is ready (it answers with its served name):
+
+```bash
+for port in 8000 8001 8002 8003; do
+  printf "%s: " $port; curl -s -m 2 localhost:$port/v1/models | grep -o '"id":"[^"]*"' || echo "down"
+done
+```
+
+| What you run | Needs |
+|---|---|
+| `inventory.py`, `check_eval.py` | nothing (PostgreSQL only) |
+| indexing, retrieval-only experiments | embedder, reranker |
+| experiments with generation | embedder, reranker, generator |
+| judging | judge only (it reads the stored answers) |
+
+The flags: `--runner pooling` serves an embedding/scoring model instead of a text generator;
+`--gpu-memory-utilization 0.10` caps vLLM's reservation at 10 % of the GPU each; `--enforce-eager` skips CUDA graph
+capture (faster start, less memory); `-ngl 99` puts every layer on the GPU; `-c 16384` is the context size;
+`-np 1` one request slot; `-fa on` flash attention; `--reasoning off` no thinking tokens (faster, and the eval
+compares final answers); `-a` the name clients use as `model`.
+
 ## Pipeline
 
 ```bash
