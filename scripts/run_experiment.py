@@ -23,6 +23,6 @@ for path in args.configs:
     with open(path, "rb") as f:
         config = tomllib.load(f)
     if args.retrieval_only:
-        config["generation"] = {"enabled": False}
+        config["generation"]["enabled"] = False  # the model stays known: question translation uses it
         config["name"] += "__retrieval"
     print(f"{path}: experiment {run_experiment(config, allow_dirty=args.allow_dirty)}")
