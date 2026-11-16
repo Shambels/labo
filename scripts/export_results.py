@@ -4,7 +4,10 @@
 
 results/experiments.csv      every run: id, name, commit, dirty, status, duration, the options that matter
 results/summary_by_type.csv  the mean of every metric per run and question type, with n
-results/final_answers.csv    the final configuration on dev and test: question, answer, expected, scores
+results/final_answers.csv    the final configuration on dev and test: question id and type, answer, scores
+
+The question and expected-answer texts are left out on purpose: they are the course's eval set, and this repository
+is public. Join them back locally from data/calorvia_eval.json by question id.
 """
 import argparse
 import csv
@@ -61,10 +64,10 @@ def main():
             answers, scores = db.load_answers(conn, experiment_id), db.experiment_scores(conn, experiment_id)
             for q in load_questions(split, allow_test=split == "test"):
                 answer = (answers.get(q["id"]) or (None, None))[1]
-                rows.append([split, experiment_id, q["id"], q["type"], q["question"], q["answer"], answer,
+                rows.append([split, experiment_id, q["id"], q["type"], answer,
                              *[scores.get(q["id"], {}).get(m) for m in FINAL_METRICS]])
         write(RESULTS / "final_answers.csv",
-              ["split", "experiment_id", "question_id", "type", "question", "expected", "answer", *FINAL_METRICS], rows)
+              ["split", "experiment_id", "question_id", "type", "answer", *FINAL_METRICS], rows)
 
 
 if __name__ == "__main__":
