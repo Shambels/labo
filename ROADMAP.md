@@ -47,13 +47,14 @@ Companion file: `QUIZ.md` (one quiz per step, answers collapsed).
 | D29 | New reference after step 6 | `tools_tables` (openpyxl reader + SQL tools + prompt rule 7) | Best correctness on the workbook questions (0.841 vs 0.795) and on the sample (0.687 vs 0.655); +0.4 s mean latency |
 | D30 | Judging a targeted change | Judge every dev question of the targeted types (`--types`), not only the 2-per-type sample | With 2 questions, one wording moves a type's mean by 0.4 |
 | D31 | Purge `enonces/` from history (was O7) | `git filter-repo --path enonces --invert-paths`, force-push of `main` and the tags; experiment commits in PostgreSQL remapped with filter-repo's `commit-map`; short hashes in the docs rewritten | Your request. Every commit hash changed; GitHub may keep unreferenced old commits reachable by their hash for a while |
+| D32 | VLM (was O3) | Qwen3.5-9B Q4_K_XL + `mmproj-F16`, llama-server, port 8003, temperature 0 | Your choice; already on disk, 9B fits beside the embedder and reranker |
+| D33 | Scans: VLM or Docling OCR | VLM | Same evidence score (7/7), OCR 40 % faster, but the OCR garbled whole lines (including the L4 resolution); the VLM also reads images and handwriting |
 | D9 | Porting strategy | Port each hospital_rag module **in the step that needs it** (step 0: config, db, logs; step 3: evaluation; step 4: ETL and RAG) | Nothing unused or untested sits in the repo |
 
 ### Open decisions (to settle with you when we reach them)
 
 | # | Question | When |
 |---|---|---|
-| O3 | Which VLM: candidates in `~/models` are `qwen3.5-9b` (if its `mmproj` is there), `gemma4-12b`, `glm-ocr`, `paddleocr-vl-1.6`. | Step 7 |
 | O4 | Agent framework for phase B: LangGraph (Python, testable) or n8n (visual, already installed). | Step 13 |
 | O5 | Payroll privacy rule: may the agent show a named person's salary? | Step 11 |
 | O6 | How to feed SQL Server to auto-ontology: Trino, a copy into PostgreSQL/DuckDB, or a hand-written YAML description. | Step 12 |
@@ -200,13 +201,23 @@ Companion file: `QUIZ.md` (one quiz per step, answers collapsed).
   - **Untested:** Docling chunks + the tools (the store reads the workbooks itself). Worth a run if the reader's extra chunks ever cost elsewhere.
   - **Unchanged and still wrong:** Q008 (outdated recall status), Q023 (the trap: 1.2 M€): step 8.
 
-### ⬜ Step 7. Images and scans → `etl/vision.py`
+### 🔄 Step 7. Images and scans → `etl/vision.py`
 - Serve the VLM (O3); transcribe every image and every scanned PDF page **once**, cached, with timings.
 - Read the charts of the two PDFs that have them.
 - Image chunks: context line + transcription; payload has the image path and page.
 - Check 10 transcriptions by hand; compare VLM vs Docling OCR on `scan_ocr` (quality, time).
 - Bonus: show the source image under the answer.
 - **Tag `rag/v0.5-images`.**
+- **Transcription** (Qwen3.5-9B Q4 + its `mmproj`, llama-server on 8003, notebook prompt: copy every visible text, then a « Description »): 66 targets = 54 images + 9 pages of the 8 indexed scans + 3 charts embedded in the 2 PDFs that have them. **≈ 6 min in total** (5.3 s per image on average, 11–14 s per scanned page), 0 cut. Cached in `data/vision/` (key = path, page, model, prompt).
+- **10 transcriptions checked by hand** against the images (network diagram, SWOT whiteboard, Pareto chart, Herstal plan, RSE chart, org chart, nameplate, invoice, delivery note with handwriting, Gantt): ≈ 75 numbers and 40 names compared.
+  - **0 wrong number, 0 wrong name**; 1 accent typo ("Aérís"). The blurry "1120 °C", the IBAN, both handwritten notes and the date half-hidden by the go-live line are right.
+  - **9 omissions:** the 6 labels drawn along the links of the network diagram (bandwidths: Q034's answer), the nameplate's maker and subtitle, the SWOT footnote (only in the description).
+  - **4 inventions:** a "Description" column added to the Herstal plan's zones.
+  - The *descriptions* are less reliable than the transcriptions (a delivery note called an invoice, a signature placed on the wrong side).
+- **VLM vs Docling OCR (RapidOCR PP-OCRv6, CPU) on the 8 scans:** both find the 7 dev evidence items (7/7); OCR 46 s vs VLM 77 s. But word by word on the 18/11 board minute, the OCR garbled two lines (the attendance list, and **the L4 resolution itself**: "lleon l e d ent s e ion"); the VLM got every line. VLM kept: one tool for scans and images, better text.
+- **Ceiling with the transcriptions: 121/122** (was 101): only Q034 (the skipped link labels) stays unreachable.
+- **Retrieval** (`vision` = `tools_tables` + `[chunking] vision = true`, 2049 chunks): recall@5 **0.783 → 0.934**, hit@5 0.811 → 0.959; `image_only` 0 → 0.846, `scan_ocr` 0.167 → 1.0, `image_in_document` 0 → 1.0, `board_resolution` 0.833 → 1.0. trap_hit@5 0.412 → 0.471: the scanned minutes holding the corrected 1,2 M€ are now readable, hence retrievable (step 8).
+  - Misses: Q034 (not transcribed); **Q056**: the org chart's transcription is longer than 256 tokens, split in two, and the two names the answer links (Céline Moreau, Thomas Lambert) land in different chunks. Idea: one image = one chunk.
 
 ### ⬜ Step 8. Time and versions
 The hardest part. Each idea measured on its own, then combined:
@@ -282,3 +293,4 @@ Deliberately more open than phase A: the steps below are a skeleton we will refi
 | 2026-11-16 | 6 | Merging the untrack commit into `main` **deleted `enonces/` from disk** (a merge applies removals of tracked files); restored with `git restore --source=<old commit> --worktree`, all 393 registry hashes verified. Then history purged (D31), backups (mirror + copy) kept in the scratchpad |
 | 2026-11-16 | 6 | Incident (your browsing, confirmed): a corpus workbook (`Productierapport Gent 2026-02.xlsx`) was rewritten at 15:46 by something outside the session's code, its totals row emptied; restored from Git (hash = registry). Found because `enonces/` was still tracked: the step 0 untrack had failed; fixed |
 | 2026-11-16 | 6 | Branch `rag/step-06-excel`: openpyxl reader (v2 after two fixes), SQL tools on workbook tables (Q158 solved), index fingerprint; judged: tools +4.6 pts on the 22 workbook questions; `tools_tables` is the new reference |
+| 2026-11-16 | 7 | Branch `rag/step-07-images`: 66 images/pages transcribed in ≈ 6 min, 10 checked by hand (0 wrong value, 9 omissions, 4 inventions), VLM vs OCR, recall@5 0.783 → 0.934 |
