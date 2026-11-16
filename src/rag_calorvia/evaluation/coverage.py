@@ -20,9 +20,10 @@ def evidence_status(evidence, registry, document_text):
         return "missing"
     if entry["excluded_reason"] is not None:
         return "excluded"
-    if entry["source_type"] in ("image", "scan"):
-        return "needs_vision"
-    pseudo_chunk = {"document": evidence["document"], "text": document_text(evidence["document"])}
+    text = document_text(evidence["document"])
+    if entry["source_type"] in ("image", "scan") and not text:
+        return "needs_vision"  # no transcription given for it
+    pseudo_chunk = {"document": evidence["document"], "text": text}
     return "found" if contains_all(pseudo_chunk, evidence["document"], evidence["snippets"]) else "not_in_text"
 
 

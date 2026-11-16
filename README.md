@@ -51,6 +51,12 @@ export MODELS_PATH=~/models
 ~/llama.cpp/build/bin/llama-server -m $MODELS_PATH/qwen3.8-27b/llama/Qwen3.8-27B-UD-Q4_K_XL.gguf \
   -a qwen3.8-27b --port 8000 -ngl 99 -c 16384 -np 1 -fa on --reasoning off
 
+# VLM (8003): Qwen3.5-9B with its vision projector (mmproj), for scripts/transcribe.py only (step 7).
+# It shares port 8003 with the judge: one or the other
+~/llama.cpp/build/bin/llama-server -m $MODELS_PATH/qwen3.5-9b/llama/Qwen3.5-9B-UD-Q4_K_XL.gguf \
+  --mmproj $MODELS_PATH/qwen3.5-9b/llama/mmproj-F16.gguf \
+  -a qwen3.5-9b --port 8003 -ngl 99 -c 16384 -np 1 -fa on --reasoning off
+
 # Judge (8003): Gemma 4 26B-A4B, Q4 (~17 GB). Another family than the generator: a model grading its own answers
 # is lenient. Stop the generator first: they don't fit together
 ~/llama.cpp/build/bin/llama-server -m $MODELS_PATH/gemma4-26b-a4b/llama/gemma-4-26B-A4B-it-UD-Q4_K_XL.gguf \
@@ -83,13 +89,15 @@ compares final answers); `-a` the name clients use as `model`.
 ```bash
 uv run python scripts/inventory.py   # Docling conversions (cached in data/conversions/) + the documents registry with metadata
 uv run python scripts/check_eval.py  # the ceiling: which dev questions the indexed text can answer at all
+uv run python scripts/transcribe.py  # images, scanned pages, charts in PDFs -> data/vision/ (VLM on 8003, once)
 uv run python scripts/index.py experiments/baseline.toml          # chunks + Qdrant collection (embedder)
 uv run python scripts/run_experiment.py experiments/baseline.toml # dev set -> answers + scores in PostgreSQL
 uv run python scripts/run_experiment.py experiments/baseline.toml --retrieval-only  # no generator needed
 uv run python scripts/judge_experiment.py baseline                 # 31-question sample (judge on 8003 only)
 uv run python scripts/judge_experiment.py tools_tables --types excel_lookup excel_reasoning  # every dev question of these types
 uv run python scripts/report.py baseline no_context_line__retrieval  # per question type and per format
-uv run python scripts/ask.py "Quand le nouvel ERP démarre-t-il ?"   # one question, with its chunks
+uv run python scripts/ask.py "Quand le nouvel ERP démarre-t-il ?"   # one question, its chunks, and the images it cites
+uv run python scripts/compare_ocr.py   # Docling OCR vs the VLM on the scanned PDFs (step 7)
 ```
 
 An experiment is a TOML file in `experiments/` that changes **one** key of `baseline.toml`. `run_experiment.py`

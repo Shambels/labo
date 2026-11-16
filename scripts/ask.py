@@ -55,6 +55,11 @@ for rank, chunk in enumerate(result["chunks"], 1):
         lines = [" / ".join(body)[:160]]
     print("\n".join(f"      {line}" for line in lines))
 
+if not args.retrieve_only:
+    from rag_calorvia.rag.images import answer_images
+    for path, page in answer_images(result["answer"], result["chunks"]):
+        print(f"\nimage to show: {path}" + (f", page {page + 1}" if page is not None else ""))
+
 for call in result.get("tool_calls", []):
     print(f"\ntool {call['tool']}({call['arguments']})\n  -> {call['result'][:300]}")
 
