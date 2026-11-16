@@ -1,6 +1,6 @@
 """Export the results from PostgreSQL to results/ (CSV files, committed): the trace the report relies on.
 
-    uv run python scripts/export_results.py --final time_rules
+    uv run python scripts/export_results.py --final status_filter
 
 results/experiments.csv      every run: id, name, commit, dirty, status, duration, the options that matter
 results/summary_by_type.csv  the mean of every metric per run and question type, with n

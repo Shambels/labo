@@ -3,7 +3,7 @@
 Needs the embedder, the reranker and (unless [generation] enabled = false) the generator.
 Usage: uv run python scripts/run_experiment.py experiments/baseline.toml [experiments/other.toml ...]
        uv run python scripts/run_experiment.py experiments/baseline.toml --retrieval-only
-       uv run python scripts/run_experiment.py experiments/time_rules.toml --test   # final evaluation, once
+       uv run python scripts/run_experiment.py experiments/status_filter.toml --test   # final evaluation, once
 """
 import argparse
 import tomllib

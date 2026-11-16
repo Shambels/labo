@@ -2,7 +2,7 @@
 
     uv run streamlit run app/chat.py          # needs the embedder, the reranker and the generator
 
-The configuration is the final one (experiments/time_rules.toml); another can be chosen in the sidebar.
+The configuration is the final one (experiments/status_filter.toml); another can be chosen in the sidebar.
 """
 import tomllib
 from pathlib import Path
@@ -15,7 +15,7 @@ from rag_calorvia.rag.pipeline import answer
 st.set_page_config(page_title="Assistant Calorvia", page_icon="💬", layout="wide")
 
 configs = sorted(Path("experiments").glob("*.toml"))
-default = next((i for i, p in enumerate(configs) if p.stem == "time_rules"), 0)
+default = next((i for i, p in enumerate(configs) if p.stem == "status_filter"), 0)
 config_path = st.sidebar.selectbox("Configuration", configs, index=default, format_func=lambda p: p.stem)
 with open(config_path, "rb") as f:
     config = tomllib.load(f)
