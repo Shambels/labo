@@ -122,6 +122,15 @@ def split_text(text, budget, tokenizer):
     return pieces + ([current] if current else [])
 
 
+def target_label(target):
+    """The line naming what a transcription is: 'Image', 'Page 2 (scan)', 'Graphique de la page 1'."""
+    if target.kind == "image":
+        return "Image"
+    if target.kind == "scan_page":
+        return f"Page {target.page + 1} (scan)"
+    return f"Graphique de la page {target.page + 1}"
+
+
 def vision_chunks(document, line, budget, tokenizer, start_index=0):
     """Chunks from the cached transcriptions of a document's images (its own image, scanned pages, embedded charts).
 
@@ -133,8 +142,7 @@ def vision_chunks(document, line, budget, tokenizer, start_index=0):
         record = transcription(target, compute=False)
         if record is None:
             raise FileNotFoundError(f"no transcription for {target}: run scripts/transcribe.py with the VLM first")
-        label = {"image": "Image", "scan_page": f"Page {target.page + 1} (scan)",
-                 "embedded": f"Graphique de la page {(target.page or 0) + 1}"}[target.kind]
+        label = target_label(target)
         head = "\n".join(p for p in [line, label] if p)
         reserve = count_tokens(label, tokenizer) + 1
         for piece in split_text(record["text"], budget - reserve, tokenizer):

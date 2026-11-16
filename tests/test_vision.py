@@ -39,3 +39,22 @@ def test_missing_transcription_is_an_error(tmp_path, monkeypatch):
                                      "date_source", "version", "status"]}}
     with pytest.raises(FileNotFoundError, match="transcribe.py"):
         vision_chunks(document, "[Image]", 200, get_tokenizer("bge-m3"))
+
+
+def test_labels_of_the_three_kinds_of_targets():
+    from rag_calorvia.etl.chunk import target_label
+    assert target_label(Target("a.png", "image")) == "Image"
+    assert target_label(Target("s.pdf", "scan_page", page=1)) == "Page 2 (scan)"
+    assert target_label(Target("r.pdf", "embedded", page=0, index=0)) == "Graphique de la page 1"
+
+
+def test_vision_chunks_of_an_image(tmp_path, monkeypatch):
+    monkeypatch.setattr(settings, "vision_path", tmp_path)
+    monkeypatch.setattr(settings, "vlm_model", "m")
+    cache_path(Target("a.png", "image"), "m", TRANSCRIBE_PROMPT).write_text(json.dumps({"text": "Achats : Céline Moreau"}))
+    document = {"path": "a.png", "source_type": "image", "format": "png", "language": "fr", "doc_date": None,
+                **{f: None for f in ["department", "doc_type", "doc_label", "date_end", "date_precision",
+                                     "date_source", "version", "status"]}}
+    [chunk] = vision_chunks(document, "[Organigramme · a]", 200, get_tokenizer("bge-m3"))
+    assert chunk["text"] == "[Organigramme · a]\nImage\nAchats : Céline Moreau"
+    assert chunk["image_path"] == "a.png" and chunk["page"] is None
