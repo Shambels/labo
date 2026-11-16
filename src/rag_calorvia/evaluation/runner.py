@@ -67,6 +67,16 @@ def score_rows(question, scores):
     return rows
 
 
+def split_of(config):
+    """The question set of a run: "dev" (default, every tuning run) or "test" (the held-out set, once, at the end)."""
+    return config.get("evaluation", {}).get("split", "dev")
+
+
+def eval_questions(conn, split):
+    """The questions of a split, aligned with the registry. Only the final evaluation reads the test set."""
+    return align_with_registry(load_questions(split, allow_test=split == "test"), db.load_registry(conn))
+
+
 def run_experiment(config, allow_dirty=False):
     """Every dev question through the RAG: answers, retrieval scores, refusals. Returns the experiment id.
 
@@ -81,7 +91,7 @@ def run_experiment(config, allow_dirty=False):
 
     with db.connect() as conn:
         db.create_tables(conn)
-        questions = align_with_registry(load_questions("dev"), db.load_registry(conn))
+        questions = eval_questions(conn, split_of(config))
         check_same_config(conn, config["name"], stored_config(config))
         experiment_id = db.start_experiment(conn, config["name"], stored_config(config))
         logger.info("experiment %d: %s (%d questions, generation %s)",
@@ -138,13 +148,17 @@ def judge_experiment(experiment_id, judge_model=None, force=False, types=None):
         row = db.load_experiment(conn, experiment_id)
         if row is None:
             raise ValueError(f"no experiment {experiment_id}")
-        _, name, _, status = row
+        _, name, stored, status = row
         if status != "done":
             raise ValueError(f"experiment {experiment_id} ({name}) is {status!r}, not 'done'")
         answers = db.load_answers(conn, experiment_id)
         done = set() if force else db.load_score_keys(conn, experiment_id)
-        questions = align_with_registry(load_questions("dev"), db.load_registry(conn))
-        sample = [q for q in questions if q["type"] in types] if types else judge_sample(questions)
+        split = split_of(stored)
+        questions = eval_questions(conn, split)
+        if split == "test":  # the final evaluation: every held-out question is judged, no sample
+            sample = questions
+        else:
+            sample = [q for q in questions if q["type"] in types] if types else judge_sample(questions)
         if all(answers.get(q["id"], (None, None))[1] is None for q in sample):
             raise ValueError(f"experiment {experiment_id} ({name}) has no generated answers: nothing to judge")
 
