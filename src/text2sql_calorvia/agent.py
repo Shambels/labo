@@ -16,6 +16,8 @@
   invented a figure without calling a single tool.
 - **wrap_up**: the retry bound. Past `max_tool_calls` calls or `max_sql_errors` failed queries, the pending calls are
   answered "not run" and the model must answer without tools, with what it has or "je ne sais pas".
+- **local tools** (step 15): `make_chart` draws a result as a PNG served by the endpoint, added under the answer by
+  finish; `remember` / `forget` keep what the user asks to retain (memory.py), shown in the next prompts as data.
 - **finish**: appends every executed query (source, SQL as run, rows) to the answer. Transparency is done by code,
   not asked of the model: the CFO sees exactly what ran, also when the model forgets to say it.
 """
@@ -32,7 +34,7 @@ from langgraph.graph import END, START, StateGraph
 from langgraph.graph.message import add_messages
 from mcp.client import Client
 
-from text2sql_calorvia import ontology
+from text2sql_calorvia import charts, memory, ontology
 from text2sql_calorvia.config import settings
 from text2sql_calorvia.reconcile import KEY_TYPES, reconcile
 
@@ -60,6 +62,36 @@ RECONCILE_TOOL = {"type": "function", "function": {
         "tolerance": {"type": "number", "description": "écart toléré (défaut 0.01)"}}}}}
 
 
+CHART_TOOL = {"type": "function", "function": {
+    "name": "make_chart",
+    "description": ("Dessine un graphique (barres, courbe ou secteurs) à partir d'un résultat déjà exécuté (q1, q2...). "
+                    "Le graphique est ajouté automatiquement à votre réponse. À utiliser quand l'utilisateur demande un "
+                    "graphique, ou pour une série (par mois, par site) de plus de quelques valeurs."),
+    "parameters": {"type": "object", "required": ["result", "kind", "x", "y", "title"], "properties": {
+        "result": {"type": "string", "description": "identifiant du résultat (q1, q2...)"},
+        "kind": {"type": "string", "enum": list(charts.KINDS)},
+        "x": {"type": "string", "description": "colonne des étiquettes (mois, site...)"},
+        "y": {"type": "array", "items": {"type": "string"}, "description": "colonne(s) de valeurs numériques"},
+        "title": {"type": "string", "description": "titre, avec l'unité et la période"}}}}}
+
+REMEMBER_TOOL = {"type": "function", "function": {
+    "name": "remember",
+    "description": ("Retient pour les conversations suivantes une préférence, une définition corrigée ou une requête "
+                    "validée. Seulement quand l'utilisateur le demande explicitement (« retiens », « à l'avenir », "
+                    "« toujours », « cette requête est la bonne »)."),
+    "parameters": {"type": "object", "required": ["kind", "content"], "properties": {
+        "kind": {"type": "string", "enum": list(memory.KINDS)},
+        "content": {"type": "string", "description": "ce qu'il faut retenir, en une ou deux phrases (pour une requête "
+                                                     "validée : la question et le SQL)"}}}}}
+
+FORGET_TOOL = {"type": "function", "function": {
+    "name": "forget",
+    "description": "Oublie un élément retenu, quand l'utilisateur le demande. id : le numéro entre crochets.",
+    "parameters": {"type": "object", "required": ["id"], "properties": {"id": {"type": "integer"}}}}}
+
+LOCAL_TOOLS = {"reconcile", "make_chart", "remember", "forget"}
+
+
 class AgentState(TypedDict, total=False):
     messages: Annotated[list[AnyMessage], add_messages]
     question: str
@@ -71,13 +103,16 @@ class AgentState(TypedDict, total=False):
     history_len: int             # messages given by the client (system prompt included): the grounding corpus
     grounding_retry: bool
     unverified: list[str]
+    charts: list[dict]           # {id, title} drawn for this answer (step 15)
+    user: str                    # whose memory (step 15)
+    conversation_id: str | None
     answer: str
 
 
-def system_prompt(sources: list[dict], use_ontology: bool = True) -> str:
+def system_prompt(sources: list[dict], use_ontology: bool = True, memories: str = "") -> str:
     section = (ONTOLOGY_PROMPT.read_text(encoding="utf-8").format(tables=ontology.table_index(), metrics=ontology.glossary())
                if use_ontology else "")
-    return PROMPT.read_text(encoding="utf-8").format(ontology=section,
+    return PROMPT.read_text(encoding="utf-8").format(ontology=section, memory=memories,
         sources="\n".join(f"- {s['source']} ({s['engine']}, dialecte {s['dialect']}) : {s['description']}"
                           for s in sources),
         data_until=settings.data_until,
@@ -155,6 +190,10 @@ def fit(messages: list[AnyMessage]) -> list[AnyMessage]:
 NUMBER = re.compile(r"\d{1,3}(?:[ \u00a0\u202f.]\d{3})+(?:,\d+)?|\d+(?:[.,]\d+)?")
 OWN_FOOTER = re.compile(r"\n*-{3,}\s*\n\*\*Comment ce résultat a été obtenu.*", re.S)
 HISTORY_NOTE = re.compile(r"\s*\[Requêtes exécutées pour cette réponse :.*?\]", re.S)
+# A unit after a number scales it: "13 599,6 k€" is 13 599 600 € (a remembered preference, step 15)
+SCALE = re.compile(r"\s?(k€|K€|M€|Md€|millions?\b|milliers?\b|milliards?\b)")
+SCALES = {"k€": 1e3, "K€": 1e3, "millier": 1e3, "milliers": 1e3, "M€": 1e6, "million": 1e6, "millions": 1e6,
+          "Md€": 1e9, "milliard": 1e9, "milliards": 1e9}
 
 
 def own_text(content: str | None) -> str:
@@ -162,14 +201,19 @@ def own_text(content: str | None) -> str:
     return HISTORY_NOTE.sub("", OWN_FOOTER.sub("", content or "")).strip()
 
 
-def numbers(text: str) -> list[tuple[str, float]]:
-    """Numbers as written and their value: '13 599 646,63' (French), '13599646.63' (JSON), '1.234.567'."""
+def numbers(text: str, scaled: bool = False) -> list[tuple[str, float]]:
+    """Numbers as written and their value: '13 599 646,63' (French), '13599646.63' (JSON), '1.234.567'.
+    scaled: a unit after the number multiplies it ('13 599,6 k€' -> 13 599 600, '1,2 M€' -> 1 200 000)."""
     found = []
-    for token in NUMBER.findall(text):
+    for match in NUMBER.finditer(text):
+        token = match.group()
         t = re.sub(r"[ \u00a0\u202f]", "", token)
         if re.fullmatch(r"\d{1,3}(?:\.\d{3})+(?:,\d+)?", t):   # dots as thousands separators
             t = t.replace(".", "")
-        found.append((token, float(t.replace(",", "."))))
+        value = float(t.replace(",", "."))
+        if scaled and (unit := SCALE.match(text, match.end())):
+            value *= SCALES[unit.group(1)]
+        found.append((token, value))
     return found
 
 
@@ -185,7 +229,7 @@ def ungrounded(answer: str, corpus: str, minimum: float = 1000, max_pairs_of: in
 
     def is_known(v):
         return any(abs(v - k) <= max(0.01, 0.005 * k) for k in known)
-    return [token for token, v in numbers(answer) if abs(v) >= minimum and not is_known(abs(v))]
+    return [token for token, v in numbers(answer, scaled=True) if abs(v) >= minimum and not is_known(abs(v))]
 
 
 def previous_answer(text: str) -> str:
@@ -201,8 +245,9 @@ def previous_answer(text: str) -> str:
 class Agent:
     """One graph, one MCP client per question. `mcp_target` is a URL, or the server object in tests."""
 
-    def __init__(self, mcp_target: Any = None, llm: Any = None, use_ontology: bool = True):
+    def __init__(self, mcp_target: Any = None, llm: Any = None, use_ontology: bool = True, use_memory: bool = True):
         self.mcp_target = mcp_target or settings.mcp_url
+        self.use_memory = use_memory       # off: no remember/forget tools, no memories in the prompt (evaluation)
         self.use_ontology = use_ontology   # off: no ontology in the prompt nor in the cards (step 14's comparison)
         self.llm = llm or ChatOpenAI(model=settings.llm_model, base_url=settings.llm_url, api_key="local",
                                      temperature=0, timeout=300)
@@ -217,17 +262,17 @@ class Agent:
     async def _tools(self, state: AgentState, config) -> dict:
         client: Client = config["configurable"]["client"]
         results, steps = dict(state.get("results", {})), list(state.get("steps", []))
-        sql_errors, messages = state.get("sql_errors", 0), []
+        sql_errors, messages, drawn = state.get("sql_errors", 0), [], list(state.get("charts", []))
         calls = state["messages"][-1].tool_calls
         for call in calls:
             name, args = call["name"], dict(call["args"])
             step = {"tool": name, "args": dict(args)}   # what the model asked, before the agent adds its own fields
-            if name == "reconcile":
+            if name in LOCAL_TOOLS:
                 try:
-                    left, right = results[args["left"]], results[args["right"]]
-                    output = reconcile(left, right, args["left_key"], args["right_key"], args.get("key_type", "exact"),
-                                       args.get("compare"), args.get("tolerance", 0.01))
+                    output = self._local_tool(name, args, state, results, drawn)
                     step["ok"] = True
+                    if name in ("make_chart", "remember"):
+                        step["result"] = output
                 except KeyError as e:
                     output = {"error": f"Résultat inconnu : {e}. Résultats disponibles : {', '.join(results) or 'aucun'}."}
                     step["ok"] = False
@@ -264,7 +309,26 @@ class Agent:
             steps.append(step)
             messages.append(ToolMessage(as_tool_text(output), tool_call_id=call["id"], name=name))
         return {"messages": messages, "results": results, "steps": steps, "sql_errors": sql_errors,
-                "tool_calls": state.get("tool_calls", 0) + len(calls)}
+                "tool_calls": state.get("tool_calls", 0) + len(calls), "charts": drawn}
+
+    def _local_tool(self, name: str, args: dict, state: AgentState, results: dict, drawn: list) -> dict:
+        """The tools that run in the agent: they read the state (results by id) or the memory tables."""
+        if name == "reconcile":
+            return reconcile(results[args["left"]], results[args["right"]], args["left_key"], args["right_key"],
+                             args.get("key_type", "exact"), args.get("compare"), args.get("tolerance", 0.01))
+        if name == "make_chart":
+            y = args.get("y") or []
+            chart = charts.make_chart(results[args["result"]], args.get("kind", "bar"), args.get("x", ""),
+                                      [y] if isinstance(y, str) else y, args.get("title", ""))
+            drawn.append({"id": chart["id"], "title": chart["title"]})
+            return {"chart": chart["id"], "note": "Graphique créé ; il sera ajouté sous votre réponse, ne mettez pas de lien."}
+        if not self.use_memory:
+            raise ValueError("Mémoire désactivée.")
+        if name == "remember":
+            return memory.remember(state["user"], args.get("kind", ""), args.get("content", ""), state.get("conversation_id"))
+        if not memory.forget(state["user"], int(args.get("id", 0))):
+            raise ValueError(f"Aucun élément retenu n°{args.get('id')} (voir la liste entre crochets).")
+        return {"forgotten": int(args["id"])}
 
     async def _wrap_up(self, state: AgentState, config) -> dict:
         pending = [ToolMessage("Non exécuté : limite d'appels atteinte.", tool_call_id=c["id"], name=c["name"])
@@ -308,7 +372,8 @@ class Agent:
                     "que je n'ai pas obtenu des données. Pouvez-vous reformuler la question ?")
         elif missing:
             text += f"\n\n⚠️ Nombre(s) non retrouvé(s) dans les résultats des requêtes, à vérifier : {', '.join(missing)}"
-        return {"answer": text + footer(steps, state["session_id"])}
+        images = "".join(f"\n\n![{c['title']}]({charts.chart_url(c['id'])})" for c in state.get("charts", []))
+        return {"answer": text + images + footer(steps, state["session_id"])}
 
     # --- graph ------------------------------------------------------------------------------------------------------
     def _route(self, state: AgentState) -> str:
@@ -336,30 +401,38 @@ class Agent:
         return g.compile()
 
     # --- running ----------------------------------------------------------------------------------------------------
-    async def stream(self, messages: list[dict], session_id: str | None = None):
-        """Run the graph on an OpenAI-style conversation; yields (node, state update) as each node finishes."""
+    async def stream(self, messages: list[dict], session_id: str | None = None, user: str = "default",
+                     conversation_id: str | None = None):
+        """Run the graph on an OpenAI-style conversation; yields (node, state update) as each node finishes.
+        `user` selects the memory; `conversation_id` records where a memory was learned."""
         question = next(m["content"] for m in reversed(messages) if m["role"] == "user")
         session_id = session_id or uuid.uuid4().hex
         async with Client(self.mcp_target) as client:
             mcp_tools = (await client.list_tools()).tools
-            tools = [tool_schema(t) for t in mcp_tools] + [RECONCILE_TOOL]
+            tools = [tool_schema(t) for t in mcp_tools] + [RECONCILE_TOOL, CHART_TOOL]
+            remembered = ""
+            if self.use_memory:
+                tools += [REMEMBER_TOOL, FORGET_TOOL]
+                remembered = memory.prompt_section(memory.memories(user))
             sources = structured(await client.call_tool("list_sources", {}))
-            history = [SystemMessage(system_prompt(sources, self.use_ontology))] + [
+            history = [SystemMessage(system_prompt(sources, self.use_ontology, remembered))] + [
                 HumanMessage(m["content"]) if m["role"] == "user" else AIMessage(previous_answer(m["content"]))
                 for m in messages if m["role"] in ("user", "assistant")]
             state = {"messages": history, "question": question, "session_id": session_id,
                      "results": {}, "steps": [], "tool_calls": 0, "sql_errors": 0,
-                     "history_len": len(history), "grounding_retry": False, "unverified": []}
+                     "history_len": len(history), "grounding_retry": False, "unverified": [],
+                     "charts": [], "user": user, "conversation_id": conversation_id}
             config = {"configurable": {"client": client, "tools": tools},
                       "recursion_limit": 4 * settings.max_tool_calls + 10}
             async for update in self.graph.astream(state, config, stream_mode="updates"):
                 for node, change in update.items():
                     yield node, change
 
-    async def ask(self, messages: list[dict], session_id: str | None = None) -> dict:
+    async def ask(self, messages: list[dict], session_id: str | None = None, user: str = "default",
+                  conversation_id: str | None = None) -> dict:
         """Run to the end; returns {"answer", "steps", "results"} (results: every row of q1, q2...)."""
         steps, answer, results = [], "", {}
-        async for node, change in self.stream(messages, session_id):
+        async for node, change in self.stream(messages, session_id, user, conversation_id):
             if node == "tools":
                 steps, results = change["steps"], change["results"]
             if node == "finish":
@@ -378,6 +451,10 @@ def footer(steps: list[dict], session_id: str) -> str:
         elif s["tool"] == "get_sales_commission" and s.get("ok"):
             lines.append(f"Commission (paie, outil get_sales_commission) : matricule {s['args'].get('staff_number')}, "
                          f"mois {s['args'].get('month')}")
+        elif s["tool"] == "remember" and s.get("ok"):
+            lines.append(f"Retenu pour la suite [{s['result']['id']}] ({s['result']['kind']}) : {s['result']['content']}")
+        elif s["tool"] == "forget" and s.get("ok"):
+            lines.append(f"Oublié : élément [{s['args'].get('id')}]")
         elif s["tool"] == "reconcile" and s.get("ok"):
             a = s["args"]
             lines.append(f"Rapprochement en Python : {a['left']}.{a['left_key']} ↔ {a['right']}.{a['right_key']} "

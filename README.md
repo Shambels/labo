@@ -182,6 +182,18 @@ steps arrive first in a collapsed `<details>` block (Open WebUI shows it as a fo
 (`openai/qwen3.8-27b`, 32k context, tool calling) is the agent's model; the auto-ontology containers are not needed.
 Graph, budgets and the grounding check: `src/text2sql_calorvia/agent.py`; prompt: `prompts/agent.txt`.
 
+## Phase B: charts and memory (step 15)
+
+- **Charts:** ask for a chart ("fais-moi un graphique du CA par mois"); the agent draws the query result with
+  matplotlib, the endpoint serves it from `/charts/<id>.png`, and the answer carries it as a Markdown image (Open WebUI
+  displays it). Set `AGENT_PUBLIC_URL` if the client reaches the endpoint by another address than localhost:9000.
+- **Conversations** are saved in PostgreSQL (`t2sql_conversations`, `t2sql_messages`) and read back with
+  `GET /v1/conversations?user=<user>` and `GET /v1/conversations/<id>`. A client may name the conversation with an
+  `X-Conversation-Id` header; otherwise the id hidden at the end of each answer is found again in the history.
+- **Memory:** "retiens : toujours en milliers d'euros", "cette requête est la bonne, retiens-la", "oublie le [3]".
+  Kept per user (`user` field of the request, or Open WebUI's `X-OpenWebUI-User-Id` header) in `t2sql_memory`, shown in
+  the next prompts as data that never lifts a rule. Evaluations run with memory off.
+
 ## Phase B: evaluating the agent
 
 ```bash
@@ -229,6 +241,8 @@ src/text2sql_calorvia/
 ├── reconcile.py    # cross-source matching in Python on a normalized key (VAT, staff number, name)
 ├── agent.py        # the LangGraph agent: agent -> tools -> ... -> check -> finish, budgets, grounding check
 ├── api.py          # the OpenAI-compatible endpoint (FastAPI): /v1/models, /v1/chat/completions, streaming
+├── charts.py       # step 15: query results drawn as PNG charts (matplotlib)
+├── memory.py       # step 15: conversations and learned memory in PostgreSQL
 ├── evaluation.py   # step 14: the question set, scoring in code, the behaviour judge and its rules
 └── sql/            # catalog queries per engine, starter/ queries, log/ (query log table)
 docs/sources/       # generated schemas + NOTES.md (exploration, read-only findings, traps)

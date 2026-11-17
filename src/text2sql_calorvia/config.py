@@ -40,6 +40,10 @@ class Settings(BaseSettings):
     rows_to_model: int = 50           # rows of a result the model sees; the rest stays in the agent's state
     context_tokens: int = 26_000      # past this (estimated), the oldest tool answers are shortened (32k context)
     data_until: str = "2026-05-31"    # the sources stop here: "this month", "this year" are read from this date
+    # Bonuses (step 15): charts served by the endpoint, conversations and learned memory in PostgreSQL
+    agent_public_url: str = "http://localhost:9000"   # how a client reaches the endpoint (chart links)
+    charts_dir: Path = Path("data/charts")
+    max_memories: int = 30            # memories put in the prompt, newest first
 
     # The course PostgreSQL (5432): every query of the agent is logged there
     postgres_url: str

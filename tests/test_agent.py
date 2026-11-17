@@ -213,3 +213,11 @@ def test_the_same_query_twice_is_not_run_again(sources):
     assert [s.get("stage") for s in result["steps"]] == [None, "repeat"]
     assert "Requête identique à q1" in llm.calls[2][-1].content
     assert result["answer"].count("**q") == 1
+
+
+def test_a_figure_in_thousands_is_grounded_by_the_figure_in_euros():
+    # Step 15: a remembered preference ("en milliers d'euros") must not force a second query to pass the check
+    corpus = '{"rows": [[13599646.63]]}'
+    assert ungrounded("**13 599,6 k€** en mars, soit 13,6 millions", corpus) == []
+    assert ungrounded("**13 724,1 k€** en mars", corpus) == ["13 724,1"]
+    assert ungrounded("13 599 646,63 k€", corpus) == ["13 599 646,63"]   # a unit can also make a figure wrong
