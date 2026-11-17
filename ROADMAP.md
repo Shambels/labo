@@ -404,3 +404,4 @@ Deliberately more open than phase A: the steps below are a skeleton we will refi
 | 2026-11-17 | 12 | Branch `t2sql/step-12-ontology`: O6 compared (copy 41 FKs vs Trino 0), auto-ontology on local models with five patches, 51 terms generated, 27 certified + 8 metrics; starter questions 0 → 4 → 8/12; scrubbed Ossie export |
 | 2026-11-17 | – | Step 12 merged, tagged `t2sql/v0.3-ontologie`, pushed. O4 settled: LangGraph (D50) |
 | 2026-11-17 | 13 | Branch `t2sql/step-13-agent`: LangGraph agent over the MCP server, reconcile in Python, grounding check after an invented follow-up figure, OpenAI endpoint on 9000 with streamed steps; starter questions 11/12; 30 new tests |
+| 2026-11-17 | – | Step 13 merged, tagged `t2sql/v0.4-agent`, pushed |
