@@ -1,0 +1,6 @@
+# experiments/t2sql/offer_readings.toml — step 14 fix 3: when a word covers several indicators, name the one used and
+# the other readings (A03/A05 answered one reading silently); on top of yes_no_first
+name = "offer_readings"
+
+[agent]
+use_ontology = true   # the only change: the ambiguity rule of prompts/agent.txt, written without the dev questions' words
