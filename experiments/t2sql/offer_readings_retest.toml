@@ -1,0 +1,6 @@
+# experiments/t2sql/offer_readings_retest.toml — step 16: second run of step 14's offer_readings rule (run 9, 31/33
+# after re-scoring), now on top of bonus_tools (run 10, 29/33). Decides the final configuration
+name = "offer_readings_retest"
+
+[agent]
+use_ontology = true   # the only change from bonus_tools: run 9's ambiguity sentence in prompts/agent.txt
