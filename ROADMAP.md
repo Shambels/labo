@@ -75,6 +75,7 @@ Companion file: `QUIZ.md` (one quiz per step, answers collapsed).
 | D57 | The evaluation set in the repo | **Committed in full** (`evaluation/t2sql_questions.yaml`: questions, reference SQL, expected answers); the 12 starter questions stay read from the presentation (D42) | Your choice; the set is ours, not course material |
 | D58 | Dev / test | **33 dev, 18 test** (one in three per category, never a starter question); test run once, in step 16 | Your choice; the starter questions built the ontology, so they are training questions |
 | D59 | Scoring | Correctness by code: every expected number and date in the **prose** (0.5 % on amounts, counts exact), expected names, the first *oui/non* for yes/no questions, forbidden patterns (salary, national number, IBAN). Behaviour by the agent's model as judge, backed by two rules; answers **re-scored**, not re-asked, when the scorer changes (scorer commit kept apart) | The first scorer gave 33/33: a wrong conclusion passed on its numbers (X05), and the judge took a stated definition for an offered alternative. After the fixes, 30 behaviour answers read by hand: judge alone 28/30, with the rules 30/30 |
+| D60 | Fixes kept after step 14 | `no_repeat` (identical query not run twice), `pay_elements` certified (28 terms), `COUNT(*)` allowed on partly hidden tables (MCP validation), `yes_no_first` (prompt). **Rejected:** `offer_readings` | Each fixes a failure seen in a trace (8 identical queries; the wrong account; a validation bug; "Non, pas d'écart" when equal). `offer_readings` left its two target questions failing: the model does not see "le résultat" as ambiguous, and a prompt sentence does not change that |
 | D9 | Porting strategy | Port each hospital_rag module **in the step that needs it** (step 0: config, db, logs; step 3: evaluation; step 4: ETL and RAG) | Nothing unused or untested sits in the repo |
 
 ### Open decisions (to settle with you when we reach them)
@@ -382,7 +383,20 @@ Deliberately more open than phase A: the steps below are a skeleton we will refi
 
 - **Reading:** the accuracy gap (1–2 questions) is at the noise level; what the ontology changes reliably is **confidently wrong answers (4 → 1)** and effort (−30 % tool calls). Its stable wins are definitions: S06 (EBITDA margin over accounts 70, 9,4 % — without it 9,32 % over all of class 7), P03 (sickness = MAL **and** MAL_MUT). S02 (Distrinergie as a customer) went right once, and once the agent asked instead of answering: not stable. No leak in 66 answers; no query failed in a database (every failure was refused by validation first).
 - **Stable failures, for step 15/16 experiments:** A03 (answers "le résultat" with the net result, no alternative offered); X03 ("**Non**, il n'y a pas d'écart" when the two figures are equal: the conclusion contradicts the question); X05 (compares payroll with the meal-voucher account 623200 instead of 623100, 14 queries, 156 s).
-- **Tests: 29 new** (332 in all): the set's reference queries, scoring, verdict rules, the agent's switch and failure stage.
+- **Fixing the stable failures, one change per run** (each on top of the previous one kept; dev, 33 questions):
+
+  | run | change | right | confidently wrong | time | what the trace shows |
+  |---|---|---:|---:|---:|---|
+  | 2, 4 | baseline (with ontology) | 30, 29 | 1, 1 | 12.9, 14.6 min | – |
+  | 5 | `no_repeat`: an identical query is not run again, counts as a failure | 30 | 2 | 13.8 min | X05 had sent one query 8 times until the budget ran out; now it changes approach (still the wrong account) |
+  | 6 | certify `pay_elements`: `gl_account` links payroll to accounting | 27 | 3 | 10.9 min | **X05 right** (52 s instead of 156–172 s); P01 exposes a **validation bug**; S02, S03, A05 change path |
+  | 7 | `COUNT(*)` no longer refused on `employees` (MCP server) | 28 | 3 | 10.5 min | **P01 right** (1 query, 17 s); S02, S03, A05 give the **same answers as run 6** |
+  | 8 | `yes_no_first`: a closed question starts with Oui/Non answering it as asked | 29 | 2 | 10.5 min | **X03 right** ("Oui", instead of "Non, il n'y a pas d'écart") |
+  | 9 | `offer_readings`: name the other readings of a word covering several indicators | 30 | 1 | 11.3 min | **rejected**: A03 and A05 still answer one reading silently; the +1 comes from S02/S03 changing path, and S09 drops its dates |
+
+- **What these runs teach:** at temperature 0 the agent is nearly deterministic for a given prompt (runs 6 and 7: same answers to 0.2 s on the unchanged questions), but **any change to the prompt reshuffles the borderline questions** (S02, S03, S09, A05: whether a date is quoted, whether another reading is offered). On 33 questions a ±2 change in the total says nothing; a question that flips *for the reason the change targeted*, seen in its trace, does. So a change is kept for its mechanism, not for its total. Final configuration: run 8 (D60). Time per question fell by about 20 % (fewer loops, a shorter path for X05).
+- **Still failing:** A03, A05 (an ambiguous word answered with one reading, never flagged; a structural fix would mark in the ontology which business words map to several certified metrics); S02 (reading of "acheté", varies with the path); S03/S09 (a date in the result left out of the prose).
+- **Tests: 32 new** (335 in all): the set's reference queries, scoring, verdict rules, the agent's switch and failure stage.
 
 ### ⬜ Step 15. Bonuses
 - Chart tool (image served by the app, Markdown link).
@@ -425,3 +439,4 @@ Deliberately more open than phase A: the steps below are a skeleton we will refi
 | 2026-11-17 | 13 | Branch `t2sql/step-13-agent`: LangGraph agent over the MCP server, reconcile in Python, grounding check after an invented follow-up figure, OpenAI endpoint on 9000 with streamed steps; starter questions 11/12; 30 new tests |
 | 2026-11-17 | – | Step 13 merged, tagged `t2sql/v0.4-agent`, pushed |
 | 2026-11-17 | 14 | Branch `t2sql/step-14-eval`: 51-question set (33 dev, 18 test), scoring in code + judge with rules, experiments in PostgreSQL; first scores 33/33 found too lenient by hand and re-scored; with ontology 30 and 29/33 vs 28/33 without, confidently wrong 1 vs 4 |
+| 2026-11-17 | 14 | Fixes, one change per run (5–9): repeated-query guard, `pay_elements` certified, `COUNT(*)` validation bug fixed in the MCP server, yes/no-first rule kept; offer-readings rule rejected (its targets still failed). Ontology re-exported (28 terms) |

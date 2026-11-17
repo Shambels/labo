@@ -1213,3 +1213,31 @@ A model judging its own outputs may share its blind spots, and a small judge is 
 
 A wrong figure stated as fact gets used: in a board deck, a budget, a decision. A "je ne sais pas" or a question back costs a minute. It is counted as a question that expected an answer, was *not* answered correctly, and where the agent did present an answer (judged *answer* or *assume*, not *unknown* or *clarify*). Without the ontology there were 4 (S02, S06, P03, X03), with it 1 (X03).
 </details>
+
+**7.** In run 5 the agent sent the same query 8 times in a row. Why can't the budget of 4 failed queries stop that, and what does the `no_repeat` guard change?
+
+<details><summary>Answer</summary>
+
+The query *succeeded* every time, so it never counted as a failure; only the overall budget of 24 tool calls ended it, after 156 s. The guard compares each new query with the ones already run for this question (same source, same text up to spacing, `;` and the row limit). A repeat is not sent to the database: the model gets "identical to qN, the result won't change; use it or change approach", and it counts as a failure, so a loop reaches the 4-failure limit quickly. In the next run the agent changed approach after one blocked repeat.
+</details>
+
+**8.** Run 6 fixed X05 but the total fell from 30 to 27. Run 7 then gave the same answers as run 6 for the questions that fell, to within 0.2 s. What does that tell you about reading totals?
+
+<details><summary>Answer</summary>
+
+At temperature 0 the agent is nearly deterministic for a given prompt, so those answers were not random noise. But adding one line to the prompt (the new certified term in the table index) changes the context of *every* question, and borderline questions take another path: here, whether a date is quoted (S03) or another reading is offered (A05). On 33 questions, a ±2 change in the total can come from that alone. A change is judged by its mechanism: did the targeted question flip, for the targeted reason, visible in its trace? Did anything break for a reason linked to the change?
+</details>
+
+**9.** P01 failed in run 6 with four queries refused: "SELECT * refusé sur employees". The query was `SELECT exit_reason, COUNT(*) FROM employees …`. Where was the bug, and why did earlier runs hide it?
+
+<details><summary>Answer</summary>
+
+In the MCP server's validation, not in the agent. The rule that refuses `SELECT *` on a table with hidden personal columns looked for *any* `*` in the tree, and sqlglot represents `COUNT(*)` as a `Count` around a `Star`. `COUNT(*)` reads no column, so it is now allowed, while `SELECT *` and `e.*` are still refused (tested). Earlier runs showed "1 refused" on P01: the agent had worked around it with `COUNT(employee_id)`, so the answer was right and the bug invisible in the score. An evaluation finds bugs in the whole system, not only in the model, as long as the traces are read.
+</details>
+
+**10.** `offer_readings` scored 30/33, the best total of the series, and was still rejected. Why?
+
+<details><summary>Answer</summary>
+
+Its targets, A03 ("le résultat de mars") and A05 ("combien nous coûte le personnel"), still answered one reading without naming any other. The model doesn't see these words as ambiguous, and a sentence in the prompt doesn't change that judgement. The +1 came from S02 and S03 changing path (and S09 got worse). Keeping a rule with no demonstrated effect makes the prompt longer, and every later change harder to read. A structural fix would mark in the ontology which business words map to several certified metrics, so code can flag the ambiguity.
+</details>
