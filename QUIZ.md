@@ -984,3 +984,63 @@ On 31/12/2025, the appropriation entry `OD-2025-00041` debits 693000 ("bénéfic
 
 The repo is public, and the questions and answers are the course's material (D39, D42). Reading them at run time keeps them out of Git. The unit tests of the checker (`tests/test_starter.py`) use synthetic answers, so they run anywhere, even without the course files.
 </details>
+
+---
+
+## Step 11: the MCP server
+
+**1.** `WITH d AS (DELETE FROM budget RETURNING *) SELECT * FROM d` parses as an `exp.Select`. What does that tell you about how to write the "read only" check?
+
+<details><summary>Answer</summary>
+
+Checking the type of the top statement isn't enough: PostgreSQL allows data-modifying statements inside a CTE, and the outer query is still a SELECT. `_check_read_only` searches the **whole tree** for any write node (`tree.find(exp.Delete)`…). The same goes for `SELECT … INTO` and `FOR UPDATE`, which are clauses of a SELECT.
+</details>
+
+**2.** The validator could have returned `tree.limit(201).sql(dialect)`, sqlglot's regenerated query with a limit. Why does the server run the model's own text instead (D45), and how is the limit added then?
+
+<details><summary>Answer</summary>
+
+Regeneration isn't a faithful copy: sqlglot turned `ROUND(AVG(x), 2)` into `ROUND(CAST(AVG(x) AS DECIMAL), 2)` and `DATE '…'` into `CAST(…)`. That's equivalent here, but not guaranteed to be, and the CFO must be able to read the exact query that produced a number. The limit is added without touching the text: on PostgreSQL, `LIMIT n+1` appended (valid after any top-level query); on SQL Server, `SET ROWCOUNT n+1` in the execution session. The extra row tells whether the result was truncated.
+</details>
+
+**3.** Why does the payroll rule refuse `MAX(gross_amount)` even over 600 people, but accept `AVG(gross_amount)` over 5?
+
+<details><summary>Answer</summary>
+
+The maximum (or minimum) of a group is not a summary: it **is** one person's salary, the highest paid's. An average or a sum over 5 people mixes 5 amounts, and no single one can be read back without further information. The group size protects SUM and AVG; nothing protects MIN and MAX.
+</details>
+
+**4.** How does the server know that `SELECT AVG(gross_amount) FROM payslips WHERE employee_id = 'M10405'` covers only one person, when the query itself is a valid aggregate?
+
+<details><summary>Answer</summary>
+
+`privacy.group_size_query` rewrites it with the same FROM, JOINs, WHERE, GROUP BY and HAVING, but with `COUNT(DISTINCT p.employee_id)` as the only column, and takes the MIN over the groups. That query runs first; if the smallest group has fewer than 5 people, the real query never runs. The check is on the data, at run time: syntax alone can't see that a filter isolates one person.
+</details>
+
+**5.** `test_no_log_no_query` replaces `run_unvalidated` with a function that fails the test if called, then breaks the log database URL. What property does it prove, and why write the log row *before* the query?
+
+<details><summary>Answer</summary>
+
+It proves traceability is a precondition: if the log can't be written, the query doesn't run (the test fails if execution is even attempted). Writing the row first (status `running`) also means a query that crashes the process, or never returns, still leaves a trace. A log written only after success misses exactly the queries you most want to investigate.
+</details>
+
+**6.** In `test_postgres_transaction_stays_read_only_even_if_the_query_tries_to_change_it`, the query starts with `SET default_transaction_read_only = off; SET TRANSACTION READ WRITE`. Why doesn't that work here, when step 10 showed the default can be turned off?
+
+<details><summary>Answer</summary>
+
+Step 10 turned off the session *default*, which only applies to transactions that start afterwards. Here the execution layer has already opened the transaction as `READ ONLY` and run `SET LOCAL statement_timeout` in it, and PostgreSQL refuses `SET TRANSACTION READ WRITE` after the transaction's first query. The model's text runs inside a transaction whose mode it can no longer change. And even if it could, the grants (layer 1) would still refuse the write.
+</details>
+
+**7.** Why is the commission a separate tool instead of an exception in the general payroll rule (for example "allow `payslip_lines.amount` when `element_code = 'COMMISSION'`")?
+
+<details><summary>Answer</summary>
+
+An exception inside the SQL rule would have to be proven safe for every query that matches it: joins, filters, OR conditions… A narrow tool is easy to reason about. It takes a staff number and a month, checks the person is a salesperson in the ERP, reads one element, and is logged under its own name. The general rule stays simple and strict, and the exception's exact scope is in one function with fixed SQL.
+</details>
+
+**8.** `find_values` loads every distinct text value in memory instead of running `WHERE col LIKE '%x%'` in the database. Name two things this makes possible on these sources.
+
+<details><summary>Answer</summary>
+
+(1) Matching that the databases can't do the same way on both engines: without accents (`Aeris` → "Aéris"; SQL Server's collation is accent-sensitive, and PostgreSQL has no `unaccent` extension here), and without punctuation (the ERP's VAT `BE0236099757` → accounting's `BE 0236.099.757`). (2) Typo tolerance (`Distrinergy` → "Distrinergie SA", with difflib). It costs 1.5–2.6 s per source once, then a search takes milliseconds. Salary columns are numeric, so they are never indexed.
+</details>
