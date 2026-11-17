@@ -333,14 +333,14 @@ class Agent:
                     yield node, change
 
     async def ask(self, messages: list[dict], session_id: str | None = None) -> dict:
-        """Run to the end; returns {"answer", "steps"}."""
-        steps, answer = [], ""
+        """Run to the end; returns {"answer", "steps", "results"} (results: every row of q1, q2...)."""
+        steps, answer, results = [], "", {}
         async for node, change in self.stream(messages, session_id):
             if node == "tools":
-                steps = change["steps"]
+                steps, results = change["steps"], change["results"]
             if node == "finish":
                 answer = change["answer"]
-        return {"answer": answer, "steps": steps}
+        return {"answer": answer, "steps": steps, "results": results}
 
 
 def footer(steps: list[dict], session_id: str) -> str:
