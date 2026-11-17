@@ -1665,10 +1665,13 @@ ontology:
     multiplicity: ManyToOne
     verbalizes:
     - '{Nomenclature} has {ArticleArticleProduit}'
-- concept: PayrollElement
+- concept: PayElementLMentDePaie
   type: EntityType
-  description: A specific component of an employee's compensation, detailing its classification, tax implications, and financial
-    posting.
+  description: 'Les éléments d''une fiche de paie (salaire mensuel ou horaire, primes, commission, indemnité de télétravail,
+    chèques-repas, ONSS, précompte...). gl_account est le compte comptable où l''élément est comptabilisé : c''est le lien
+    entre la paie et la comptabilité (payslip_lines.element_code -> pay_elements.gl_account -> compta.ligne_ecriture.numero_compte).
+    Plusieurs éléments partagent un même compte : comparer un élément à la comptabilité suppose que son compte ne contienne
+    que lui, sinon comparer le total de tous les éléments du compte.'
   identify_by:
   - element_code
   relationships:
@@ -1679,7 +1682,7 @@ ontology:
     - concept: Boolean
     multiplicity: ManyToOne
     verbalizes:
-    - '{PayrollElement} has onss subject {Boolean}'
+    - '{PayElementLMentDePaie} has onss subject {Boolean}'
   - name: gl_account
     description: The General Ledger account code, such as '620300', used for posting the financial transaction associated
       with this specific payroll compensation component.
@@ -1687,7 +1690,7 @@ ontology:
     - concept: String
     multiplicity: ManyToOne
     verbalizes:
-    - '{PayrollElement} has gl account {String}'
+    - '{PayElementLMentDePaie} has gl account {String}'
   - name: element_type
     description: The classification of the payroll element indicating whether it is a gain, net gain, retention, or informational
       item within compensation.
@@ -1695,7 +1698,7 @@ ontology:
     - concept: String
     multiplicity: ManyToOne
     verbalizes:
-    - '{PayrollElement} has element type {String}'
+    - '{PayElementLMentDePaie} has element type {String}'
   - name: label
     description: The human-readable French description detailing the specific nature of the payroll element, such as 'Salaire
       mensuel', for employee comprehension.
@@ -1703,7 +1706,7 @@ ontology:
     - concept: String
     multiplicity: ManyToOne
     verbalizes:
-    - '{PayrollElement} has label {String}'
+    - '{PayElementLMentDePaie} has label {String}'
   - name: element_code
     description: The unique alphanumeric identifier for a payroll component, such as base salary, which is referenced by payslip
       lines to link specific compensation items.
@@ -1711,7 +1714,7 @@ ontology:
     - concept: String
     multiplicity: OneToOne
     verbalizes:
-    - '{PayrollElement} is identified by element code {String}'
+    - '{PayElementLMentDePaie} is identified by element code {String}'
   - name: taxable
     description: A boolean flag indicating whether the specific payroll component is subject to personal income tax calculation
       during the payroll processing cycle.
@@ -1719,7 +1722,7 @@ ontology:
     - concept: Boolean
     multiplicity: ManyToOne
     verbalizes:
-    - '{PayrollElement} has taxable {Boolean}'
+    - '{PayElementLMentDePaie} has taxable {Boolean}'
 - concept: PayrollRunCalculDePaie
   type: EntityType
   description: 'Calculs de paie : MENSUEL pour le mois de period_month, ou CORRECTION (une correction de février 2026 a été
@@ -1898,12 +1901,12 @@ ontology:
     multiplicity: ManyToOne
     verbalizes:
     - '{PayslipLineLigneDeFicheDePaie} has line id {Integer}'
-  - name: payroll_element
+  - name: pay_element_l_ment_de_paie
     roles:
-    - concept: PayrollElement
+    - concept: PayElementLMentDePaie
     multiplicity: ManyToOne
     verbalizes:
-    - '{PayslipLineLigneDeFicheDePaie} has {PayrollElement}'
+    - '{PayslipLineLigneDeFicheDePaie} has {PayElementLMentDePaie}'
   - name: payslip
     roles:
     - concept: Payslip

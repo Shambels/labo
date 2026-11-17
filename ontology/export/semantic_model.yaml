@@ -1962,10 +1962,16 @@ datasets:
     custom_extensions:
     - vendor_name: NVIDIA_AUTO_ONTOLOGY
       data: '{"entity": "key_column"}'
-- name: payroll_element
+- name: pay_element_élément_de_paie
   source: paie.public.pay_elements
-  description: A specific component of an employee's compensation, detailing its classification, tax implications, and financial
-    posting.
+  description: 'Les éléments d''une fiche de paie (salaire mensuel ou horaire, primes, commission, indemnité de télétravail,
+    chèques-repas, ONSS, précompte...). gl_account est le compte comptable où l''élément est comptabilisé : c''est le lien
+    entre la paie et la comptabilité (payslip_lines.element_code -> pay_elements.gl_account -> compta.ligne_ecriture.numero_compte).
+    Plusieurs éléments partagent un même compte : comparer un élément à la comptabilité suppose que son compte ne contienne
+    que lui, sinon comparer le total de tous les éléments du compte.'
+  ai_context:
+    synonyms:
+    - Pay Element (élément de paie)
   unique_keys:
   - - element_code
   fields:
@@ -5215,20 +5221,23 @@ custom_extensions:
     payslip lines to link specific compensation items.", "id": "85db7bf3-2176-4599-ae33-13ac7605d4a7", "name": "Element Code"},
     {"column_id": "b3451a4e-7022-4b8b-91f1-d425cdc08d19", "description": "A boolean flag indicating whether the specific payroll
     component is subject to personal income tax calculation during the payroll processing cycle.", "id": "a238b276-e59c-49ab-b217-fe6c9472d45b",
-    "name": "Taxable"}], "description": "A specific component of an employee''s compensation, detailing its classification,
-    tax implications, and financial posting.", "id": "ab3aa680-833a-4a1d-92f9-a7d93feaabb5", "name": "Payroll Element", "represents":
-    ["9c9d6003-458f-4314-9182-95c0b3ea522d"]}, {"columns_attributes": [{"column_id": "78e65714-8caf-42c1-989a-f21e7208e0fe",
-    "description": "Categorizes the payroll execution as either a regular monthly run or a correction.", "id": "3f59f87f-9180-4a83-8a12-4cbb19edd64f",
-    "name": "Run Type"}, {"column_id": "8de816f8-d75f-4647-8ef8-d944366c0cab", "description": "Indicates the current state
-    of the payroll run, such as closed, to track its completion status.", "id": "57246e96-4d0f-4a7f-8284-5801e21ce261", "name":
-    "Status"}, {"column_id": "b6cd17ff-942a-4ce3-aaec-639f575fa06b", "description": "Provides a textual label, such as monthly
-    payroll for a specific month, to identify the run.", "id": "609c674b-2d53-4883-a953-c9b89505297c", "name": "Description"},
-    {"column_id": "4dd1be05-9a25-4473-b97b-6f9a91bcbbbc", "description": "Indicates the specific calendar month, in YYYY-MM-DD
-    format, for which the payroll calculations are performed.", "id": "70f270e6-9b9b-4d86-9750-838ca91e71e4", "name": "Period
-    Month"}, {"column_id": "a055dbaf-f3c5-469d-b322-604cb76b8cb8", "description": "Specifies the date, in YYYY-MM-DD format,
-    when the payroll processing activity was actually performed.", "id": "a8219a49-a96e-43db-931c-a7888ad16284", "name": "Run
-    Date"}, {"column_id": "8d32ea72-114a-46fd-9508-e934a5f336a5", "description": "Serves as the unique sequential identifier
-    for a specific payroll execution, linking it to its generated employee payslips.", "id": "e55017ef-523e-4989-a4cc-c2f05fcee9ca",
+    "name": "Taxable"}], "description": "Les éléments d''une fiche de paie (salaire mensuel ou horaire, primes, commission,
+    indemnité de télétravail, chèques-repas, ONSS, précompte...). gl_account est le compte comptable où l''élément est comptabilisé
+    : c''est le lien entre la paie et la comptabilité (payslip_lines.element_code -> pay_elements.gl_account -> compta.ligne_ecriture.numero_compte).
+    Plusieurs éléments partagent un même compte : comparer un élément à la comptabilité suppose que son compte ne contienne
+    que lui, sinon comparer le total de tous les éléments du compte.", "id": "ab3aa680-833a-4a1d-92f9-a7d93feaabb5", "name":
+    "Pay Element (élément de paie)", "represents": ["9c9d6003-458f-4314-9182-95c0b3ea522d"]}, {"columns_attributes": [{"column_id":
+    "78e65714-8caf-42c1-989a-f21e7208e0fe", "description": "Categorizes the payroll execution as either a regular monthly
+    run or a correction.", "id": "3f59f87f-9180-4a83-8a12-4cbb19edd64f", "name": "Run Type"}, {"column_id": "8de816f8-d75f-4647-8ef8-d944366c0cab",
+    "description": "Indicates the current state of the payroll run, such as closed, to track its completion status.", "id":
+    "57246e96-4d0f-4a7f-8284-5801e21ce261", "name": "Status"}, {"column_id": "b6cd17ff-942a-4ce3-aaec-639f575fa06b", "description":
+    "Provides a textual label, such as monthly payroll for a specific month, to identify the run.", "id": "609c674b-2d53-4883-a953-c9b89505297c",
+    "name": "Description"}, {"column_id": "4dd1be05-9a25-4473-b97b-6f9a91bcbbbc", "description": "Indicates the specific calendar
+    month, in YYYY-MM-DD format, for which the payroll calculations are performed.", "id": "70f270e6-9b9b-4d86-9750-838ca91e71e4",
+    "name": "Period Month"}, {"column_id": "a055dbaf-f3c5-469d-b322-604cb76b8cb8", "description": "Specifies the date, in
+    YYYY-MM-DD format, when the payroll processing activity was actually performed.", "id": "a8219a49-a96e-43db-931c-a7888ad16284",
+    "name": "Run Date"}, {"column_id": "8d32ea72-114a-46fd-9508-e934a5f336a5", "description": "Serves as the unique sequential
+    identifier for a specific payroll execution, linking it to its generated employee payslips.", "id": "e55017ef-523e-4989-a4cc-c2f05fcee9ca",
     "name": "Run ID"}, {"column_id": "3dcd9617-bd87-4494-ab34-6ca8f4747999", "description": "Defines the scheduled date, in
     YYYY-MM-DD format, when calculated wages are paid to employees.", "id": "f2b0df5f-1a4b-42a1-91f2-b9418002c650", "name":
     "Payment Date"}], "description": "Calculs de paie : MENSUEL pour le mois de period_month, ou CORRECTION (une correction
@@ -5670,9 +5679,9 @@ relationships:
   - cost_center_code
   to_columns:
   - cost_center_code
-- name: payslip_line_ligne_de_fiche_de_paie_element_code_to_payroll_element
+- name: payslip_line_ligne_de_fiche_de_paie_element_code_to_pay_element_élément_de_paie
   from: payslip_line_ligne_de_fiche_de_paie
-  to: payroll_element
+  to: pay_element_élément_de_paie
   from_columns:
   - element_code
   to_columns:
