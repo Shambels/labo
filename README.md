@@ -4,8 +4,9 @@ Two chatbots for **Calorvia SA**, a fictional Belgian heat-pump manufacturer:
 
 1. **`rag_calorvia`**: a RAG over 393 documents from the company's shared drive. Done: final configuration
    `experiments/status_filter.toml`, results and analysis in `RAPPORT.md`, exports in `results/`.
-2. **`text2sql_calorvia`**: a text-to-SQL agent over three business databases (phase B, in progress:
-   sources restored and explored, see `docs/sources/`).
+2. **`text2sql_calorvia`**: a text-to-SQL agent over three business databases (phase B). Done: LangGraph agent
+   behind an OpenAI-compatible endpoint, read-only MCP server, certified ontology; results and analysis in
+   `RAPPORT_T2SQL.md`, exports in `results/t2sql/`. To run it: [Phase B in five steps](#phase-b-in-five-steps).
 
 `ROADMAP.md` tracks the steps and decisions; `QUIZ.md` holds a quiz per step.
 
@@ -116,6 +117,39 @@ What is kept out of the index and why: `exclusions.toml` (reviewed by hand), plu
 files the inventory finds itself. Query the registry with `SELECT * FROM documents WHERE excluded_reason IS NOT NULL`.
 
 Everything runs **from the repository root**: the paths in `config.py` are relative to it.
+
+## Phase B in five steps
+
+From a fresh clone, with the course material copied into `enonces/` and `.env` filled in (see `.env.example`):
+
+```bash
+uv sync
+# 1. The course PostgreSQL (query log, evaluation runs, conversations, memory) and the three sources
+docker compose up -d postgres
+docker compose -f enonces/calorvia_t2sql/sources_calorvia/docker/docker-compose.yml --env-file .env up -d
+docker logs -f calorvia-erp-restore      # wait for "GESPRO restored." (under a minute)
+
+# 2. The model: Qwen3.8-27B with a 32k context and tool calling (the only model phase B needs)
+~/llama.cpp/build/bin/llama-server -m $MODELS_PATH/qwen3.8-27b/llama/Qwen3.8-27B-UD-Q4_K_XL.gguf \
+  -a openai/qwen3.8-27b --port 8000 -ngl 99 -c 32768 -np 1 -fa on --reasoning off \
+  --cache-type-k q8_0 --cache-type-v q8_0
+
+# 3. The MCP server (the only process with database connections), then the agent's endpoint
+uv run python -m text2sql_calorvia.mcp_server    # http://127.0.0.1:9001/mcp
+uv run python -m text2sql_calorvia.api           # http://127.0.0.1:9000/v1, model "calorvia-agent"
+
+# 4. Ask a question
+curl -s http://127.0.0.1:9000/v1/chat/completions -H 'Content-Type: application/json' \
+  -d '{"model": "calorvia-agent", "messages": [{"role": "user", "content": "Quel est le CA net facturé de mars 2026 ?"}]}' \
+  | python3 -c 'import json, sys; print(json.load(sys.stdin)["choices"][0]["message"]["content"])'
+
+# 5. Check it: the tests (read-only access proven on each database), then the evaluation
+uv run pytest
+uv run python scripts/run_t2sql_eval.py experiments/t2sql/final.toml             # 33 dev questions, ~11 min
+```
+
+In Open WebUI, add `http://127.0.0.1:9000/v1` as an OpenAI connection: the steps unfold live in a fold-out, charts
+show as images, and the queries that ran are listed under every answer.
 
 ## Phase B: the source databases
 
