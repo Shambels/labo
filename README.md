@@ -182,6 +182,19 @@ steps arrive first in a collapsed `<details>` block (Open WebUI shows it as a fo
 (`openai/qwen3.8-27b`, 32k context, tool calling) is the agent's model; the auto-ontology containers are not needed.
 Graph, budgets and the grounding check: `src/text2sql_calorvia/agent.py`; prompt: `prompts/agent.txt`.
 
+## Phase B: evaluating the agent
+
+```bash
+uv run python scripts/run_t2sql_eval.py experiments/t2sql/with_ontology.toml      # the 33 dev questions, stored with the commit
+uv run python scripts/run_t2sql_eval.py experiments/t2sql/without_ontology.toml
+uv run python scripts/run_t2sql_eval.py --rescore 2 3                             # re-score stored answers (scorer changed)
+uv run python scripts/t2sql_report.py 2 3                                         # per category: right, confidently wrong, SQL, time
+```
+
+The set is `evaluation/t2sql_questions.yaml` (51 questions; the 18 test questions are run once, with `--test`, at the end).
+Numbers, names, yes/no conclusions and leaks are checked by code (`src/text2sql_calorvia/evaluation.py`); behaviour
+(answered, offered another reading, asked, said it doesn't know, refused) by the LLM judge backed by two rules.
+
 ## Layout
 
 ```text
@@ -216,8 +229,10 @@ src/text2sql_calorvia/
 ├── reconcile.py    # cross-source matching in Python on a normalized key (VAT, staff number, name)
 ├── agent.py        # the LangGraph agent: agent -> tools -> ... -> check -> finish, budgets, grounding check
 ├── api.py          # the OpenAI-compatible endpoint (FastAPI): /v1/models, /v1/chat/completions, streaming
+├── evaluation.py   # step 14: the question set, scoring in code, the behaviour judge and its rules
 └── sql/            # catalog queries per engine, starter/ queries, log/ (query log table)
 docs/sources/       # generated schemas + NOTES.md (exploration, read-only findings, traps)
+evaluation/         # t2sql_questions.yaml: the agent's evaluation set (51 questions, reference SQL)
 ontology/           # auto-ontology: NOTE.md, certification.yaml, export/ (Ossie YAML), patches/, compose files
 scripts/            # command-line entry points
 exclusions.toml     # hand-reviewed exclusions, with their reason

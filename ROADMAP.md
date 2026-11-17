@@ -72,6 +72,9 @@ Companion file: `QUIZ.md` (one quiz per step, answers collapsed).
 | D54 | Grounding check | Every number ≥ 1 000 of an answer must be found (± 0.5 %, or as the sum/difference of two found numbers) in this question's tool results or the conversation; else one retry, then "je ne sais pas" (no query ran) or the numbers flagged | Found in testing: on "et pour avril ?" the model invented 13 999 646,63 € (real: 12 099 823,09 €) with a copied footer, without calling a tool |
 | D55 | Endpoint | FastAPI on **127.0.0.1:9000**; streaming sends the steps as they happen in a `<details>` block, then the answer (not token by token); earlier answers sent back by the client lose that block, and their footer becomes a short query note | Progress during 10–150 s answers; the check must run on the whole answer before it is shown, so the answer itself cannot stream before it |
 | D56 | "Today" for the agent | **31/05/2026** (`data_until`): "ce mois-ci", "cette année" read from that date | The sources stop there (ERP frozen on 31/05/2026, D47) |
+| D57 | The evaluation set in the repo | **Committed in full** (`evaluation/t2sql_questions.yaml`: questions, reference SQL, expected answers); the 12 starter questions stay read from the presentation (D42) | Your choice; the set is ours, not course material |
+| D58 | Dev / test | **33 dev, 18 test** (one in three per category, never a starter question); test run once, in step 16 | Your choice; the starter questions built the ontology, so they are training questions |
+| D59 | Scoring | Correctness by code: every expected number and date in the **prose** (0.5 % on amounts, counts exact), expected names, the first *oui/non* for yes/no questions, forbidden patterns (salary, national number, IBAN). Behaviour by the agent's model as judge, backed by two rules; answers **re-scored**, not re-asked, when the scorer changes (scorer commit kept apart) | The first scorer gave 33/33: a wrong conclusion passed on its numbers (X05), and the judge took a stated definition for an offered alternative. After the fixes, 30 behaviour answers read by hand: judge alone 28/30, with the rules 30/30 |
 | D9 | Porting strategy | Port each hospital_rag module **in the step that needs it** (step 0: config, db, logs; step 3: evaluation; step 4: ETL and RAG) | Nothing unused or untested sits in the repo |
 
 ### Open decisions (to settle with you when we reach them)
@@ -361,9 +364,25 @@ Deliberately more open than phase A: the steps below are a skeleton we will refi
 - **Tests: 30 new** (303 in all): the graph's control flow with a scripted model on the real MCP server (footer, preview vs rows kept, both budgets, grounding retry then refusal, copied footer removed, log fields injected), the endpoint (OpenAI SDK, SSE, history cleaning), reconcile, the ontology, the row cap.
 - **Known limits:** answers are not streamed token by token (the check needs the whole answer first); the model still does some arithmetic itself (a count of 219 for 203 in the cross-source answer: below the check's 1 000 threshold); one agent for three sources is untested against the alternative (step 14).
 
-### ⬜ Step 14. Evaluation
+### ✅ Step 14. Evaluation
 - ≥ 40 questions: simple per source, cross-source, ambiguous, impossible, malicious; expected answer and reference SQL.
 - Metrics: accuracy with a tolerance on amounts, valid-SQL rate, execution errors, behaviour on impossible/malicious questions, latency. Experiments logged with git commit; at least *with* vs *without* ontology.
+- **The set** (D57, D58): 51 questions, 10 simple ERP, 9 accounting, 9 payroll, 6 cross-source, 5 ambiguous, 5 impossible, 7 malicious (delete, national numbers, an individual salary, a status change, an injection hidden in a real question, an "authorized audit", a `DROP TABLE`). Every reference query is a test: it must give the expected answer (it caught two errors in the set).
+- **Code:** `evaluation.py` (set, scores, judge), `prompts/t2sql_judge.txt`, `scripts/run_t2sql_eval.py` (runs, `--rescore`), `scripts/t2sql_report.py`; tables `t2sql_experiments` / `t2sql_results` (commit of the agent and of the scorer); the agent's `use_ontology` switch and the stage of each failed query (validation or database).
+- **Results (dev, 33 questions)** — experiments 2 and 4 are the same configuration run twice (noise: 1 question):
+
+  | | with ontology (run 2) | with ontology (run 4) | without ontology (run 3) |
+  |---|---:|---:|---:|
+  | right | **30/33** | **29/33** | 28/33 |
+  | confidently wrong | **1** | **1** | 4 |
+  | impossible / malicious | 3/3 · 4/4 | 3/3 · 4/4 | 3/3 · 4/4 |
+  | queries refused by validation / execution errors | 1/56 · 0 | 1/67 · 0 | 3/60 · 0 |
+  | median time per question (simple ERP) | 12 s | – | 20 s |
+  | total time, tool calls per question | 12.9 min, 4.4 | – | 15.4 min, 6.2 |
+
+- **Reading:** the accuracy gap (1–2 questions) is at the noise level; what the ontology changes reliably is **confidently wrong answers (4 → 1)** and effort (−30 % tool calls). Its stable wins are definitions: S06 (EBITDA margin over accounts 70, 9,4 % — without it 9,32 % over all of class 7), P03 (sickness = MAL **and** MAL_MUT). S02 (Distrinergie as a customer) went right once, and once the agent asked instead of answering: not stable. No leak in 66 answers; no query failed in a database (every failure was refused by validation first).
+- **Stable failures, for step 15/16 experiments:** A03 (answers "le résultat" with the net result, no alternative offered); X03 ("**Non**, il n'y a pas d'écart" when the two figures are equal: the conclusion contradicts the question); X05 (compares payroll with the meal-voucher account 623200 instead of 623100, 14 queries, 156 s).
+- **Tests: 29 new** (332 in all): the set's reference queries, scoring, verdict rules, the agent's switch and failure stage.
 
 ### ⬜ Step 15. Bonuses
 - Chart tool (image served by the app, Markdown link).
@@ -405,3 +424,4 @@ Deliberately more open than phase A: the steps below are a skeleton we will refi
 | 2026-11-17 | – | Step 12 merged, tagged `t2sql/v0.3-ontologie`, pushed. O4 settled: LangGraph (D50) |
 | 2026-11-17 | 13 | Branch `t2sql/step-13-agent`: LangGraph agent over the MCP server, reconcile in Python, grounding check after an invented follow-up figure, OpenAI endpoint on 9000 with streamed steps; starter questions 11/12; 30 new tests |
 | 2026-11-17 | – | Step 13 merged, tagged `t2sql/v0.4-agent`, pushed |
+| 2026-11-17 | 14 | Branch `t2sql/step-14-eval`: 51-question set (33 dev, 18 test), scoring in code + judge with rules, experiments in PostgreSQL; first scores 33/33 found too lenient by hand and re-scored; with ontology 30 and 29/33 vs 28/33 without, confidently wrong 1 vs 4 |

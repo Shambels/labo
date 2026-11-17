@@ -1169,3 +1169,47 @@ The OpenAI format has a single `content` stream. Sending the steps (cards read, 
 
 LangGraph's `add_messages` reducer gives a message an id when it's first added, and the object keeps it. When a message with an existing id is added again, the reducer *replaces* the message instead of appending. Returning the same object meant the same id, so the conversation never got longer and the loop never reached its limits. The fake LLM now returns a copy without an id each time. The agent itself isn't affected: the real LLM returns a new message on every call.
 </details>
+
+## Step 14: evaluation
+
+**1.** The 12 starter questions are all in the dev split, never in the test split. Why?
+
+<details><summary>Answer</summary>
+
+The ontology was certified *from* them in step 12 (every trap they showed became a definition), and the agent was tuned while watching them in step 13. A score on them is a training score: it says the knowledge we wrote down is used, not that the agent generalizes. The test questions must be ones nothing was built from, and the test split is run once, at the end.
+</details>
+
+**2.** Before any agent run, a test runs every reference query and checks that it gives the expected answer. What does that protect against, and what did it catch?
+
+<details><summary>Answer</summary>
+
+The expected answers are written by hand, so a typo or a misread result would turn a right answer into a "miss" and every later comparison would measure our mistake. The test caught two problems in the set: P01's expected "15 departures" is the sum of a grouped result, so no single row held it (a second reference query now gives the total), and X05's expected text contained the account number 623100, which the scorer read as a number the answer had to contain.
+</details>
+
+**3.** The first scores were 33/33 with the ontology. Name two scoring flaws the hand check found, and what each one let through.
+
+<details><summary>Answer</summary>
+
+(1) A yes/no question was scored only on its numbers: X05's answer said "Non, les montants ne correspondent pas", comparing payroll with the wrong account (623200 instead of 623100), but it contained 1 660 €, so it passed. Now the first *oui/non* the reader meets must be the expected one. (2) The behaviour judge labelled "définition retenue : …" as *assume* (answering one reading and offering another), so an ambiguous question answered without any alternative would have counted as handled. Scores are only as good as the scorer, which is why the first results get read by hand before anyone believes them.
+</details>
+
+**4.** Why is a stored answer *re-scored* instead of asking the agent again when the scoring code changes, and why do experiments keep two commits?
+
+<details><summary>Answer</summary>
+
+Asking again would change two things at once: the scorer, and the answers (the model varies from run to run even at temperature 0, here by about two questions). Re-scoring the same answers isolates the scorer's effect. The experiment keeps the agent's commit (what produced the answers) and the scorer's commit (what judged them), so a result can be reproduced from both.
+</details>
+
+**5.** The judge is the agent's own model. What are the risks, and what limits them here?
+
+<details><summary>Answer</summary>
+
+A model judging its own outputs may share its blind spots, and a small judge is noisy. The judge here only classifies *behaviour* (answered, offered another reading, asked, said it doesn't know, refused), never correctness: numbers, names, yes/no and leaks are checked by code. For the two behaviours it got wrong in the hand check, rules back it up (an offer of another reading; "je ne peux pas répondre…"). All 30 behaviour answers of the first two runs were read by hand: the judge alone agreed on 28, with the rules on 30.
+</details>
+
+**6.** "Confidently wrong" is reported apart from accuracy. Why does the statement care more about it, and how is it counted?
+
+<details><summary>Answer</summary>
+
+A wrong figure stated as fact gets used: in a board deck, a budget, a decision. A "je ne sais pas" or a question back costs a minute. It is counted as a question that expected an answer, was *not* answered correctly, and where the agent did present an answer (judged *answer* or *assume*, not *unknown* or *clarify*). Without the ontology there were 4 (S02, S06, P03, X03), with it 1 (X03).
+</details>
