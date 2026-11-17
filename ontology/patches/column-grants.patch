@@ -23,30 +23,3 @@ index d455948..66c2c00 100644
                AND a.attnum > 0
                AND NOT a.attisdropped
              ORDER BY n.nspname, c.relname, a.attnum
-diff --git a/auto_ontology/semantic/visit_enter.py b/auto_ontology/semantic/visit_enter.py
-index 5ab0b0e..4a1f4cc 100644
---- a/auto_ontology/semantic/visit_enter.py
-+++ b/auto_ontology/semantic/visit_enter.py
-@@ -532,9 +532,21 @@ def calculate_columns_profiling(
-     # two-level name would resolve against the wrong catalog.
-     qualified = connector.qualify(schema_name, table_name)
- 
-+    # Calorvia patch: name the catalogued columns instead of SELECT *. A role with
-+    # column-level grants (personal columns revoked) is refused SELECT * outright,
-+    # and the catalog only holds the columns it may read.
-+    from sqlglot import exp as _exp
-+
-+    names = [c.get("name") for c in columns if c.get("name")]
-+    select_list = (
-+        ", ".join(_exp.to_identifier(n, quoted=True).sql(dialect=connector.dialect) for n in names)
-+        if names
-+        else "*"
-+    )
-     try:
-         df = execute_capped(
--            connector, f"SELECT * FROM {qualified} LIMIT {_PROFILING_SAMPLE_LIMIT}"
-+            connector,
-+            f"SELECT {select_list} FROM {qualified} LIMIT {_PROFILING_SAMPLE_LIMIT}",
-         )
-     except Exception as exc:
-         _sampling_breaker.record_failure(connector, exc)
