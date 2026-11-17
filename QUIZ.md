@@ -924,3 +924,63 @@ They are the course's eval set, and the repository is public: the same reason `e
 
 Checking every number of the report against the database before committing, instead of trusting what was remembered or copied from an earlier table. A report is read as the truth about the experiments; one wrong figure undermines the rest. The commits, the scores and the n of each mean come from queries, not from memory.
 </details>
+
+---
+
+## Step 10: the three sources
+
+**1.** `test_postgres_refuses_writes_even_without_the_read_only_default` first runs `SET default_transaction_read_only = off`, then a `DELETE`. Why test it that way rather than just sending the `DELETE`?
+
+<details><summary>Answer</summary>
+
+A plain `DELETE` is refused by the read-only default *and* by the grants, so the test can't tell which layer stopped it. The default is a session setting that any user can turn off in one statement, and an injected or mistaken query could do just that. Turning it off first leaves only the grants in play, so the test proves the layer that can't be bypassed from inside the session.
+</details>
+
+**2.** `agent_ro` can run `SELECT TOP 1 * INTO #tmp FROM PAR_CODE` on SQL Server, but not `SELECT … INTO dbo.X`. Why the difference, and why must step 11 refuse both?
+
+<details><summary>Answer</summary>
+
+`dbo.X` would be a table in GESPRO, which needs `CREATE TABLE`, and `db_datareader` doesn't have it. `#tmp` lives in tempdb, which is open to every login. It can't damage the business data, but it is still a write: it uses server resources, and it means the "read-only" account can do something besides read. Defence in depth means the validation layer refuses every `SELECT INTO` rather than relying on where the table would end up.
+</details>
+
+**3.** Why does `columns_postgres.sql` read `pg_attribute` with `has_column_privilege` instead of `information_schema.columns`?
+
+<details><summary>Answer</summary>
+
+`information_schema.columns` only lists the columns the current user has some privilege on, so `national_number`, `iban` and `street_address` would silently disappear. Reading `pg_attribute` lists every column and flags the unreadable ones. The schema stays complete, and step 11's table card can show only the readable columns on purpose, with the model told why (no `SELECT *` on `employees`).
+</details>
+
+**4.** For question 2, the invoice lines give 1,230 units and the credit-note lines 270. Why is the answer 1,230 and not 960?
+
+<details><summary>Answer</summary>
+
+The 270 units are on a single credit note with reason `REGUL_TARIF`, which `PAR_CODE` describes as a price adjustment "sans retour de marchandise": it repeats quantities to compute a price difference, but no goods came back. Only `RETOUR` credit notes reduce the quantities. The column names can't tell you this, but the code list can, which is why the ontology and the table cards must carry code labels.
+</details>
+
+**5.** In accounting, classes 6 and 7 of 2025 add up to exactly 0. What happened, and what does it imply for an agent computing "le résultat net de 2025"?
+
+<details><summary>Answer</summary>
+
+On 31/12/2025, the appropriation entry `OD-2025-00041` debits 693000 ("bénéfice à reporter", class 6) and credits 140000 (equity) for the profit of 5,412,000 €, which balances the income statement to zero. The net result is classes 6–7 *without* 693000. An agent that applies the textbook formula (products − charges) will confidently answer 0, so the definition belongs in the certified ontology.
+</details>
+
+**6.** ERP revenue for May 2026 is 11,299,581.08 € and accounting revenue 10,947,075.29 €. What explains the gap, and how should the agent present it?
+
+<details><summary>Answer</summary>
+
+23 May invoices are still `EMISE` in the ERP (issued, not yet transferred to accounting). They total 352,505.79 €, exactly the gap. The agent should give both figures with their source and definition (invoiced vs booked) and explain the difference instead of picking one. This is also why "le chiffre d'affaires de mai" is ambiguous and deserves a clarifying question.
+</details>
+
+**7.** Question 12 links the ERP and payroll. Name the two things that must be normalized or interpreted to get 731.38 € from 731,384.61 €.
+
+<details><summary>Answer</summary>
+
+(1) The key: the ERP stores the staff number as `10405`, payroll as `M10405`, so the two must be normalized before matching (in Python, since no SQL join crosses the engines). (2) The unit: `payslip_lines.rate` is `0.1000`, a **percentage** (0.1 %), not a fraction. 731,384.61 × 0.1 / 100 = 731.38. A third detail is the period: the March monthly run pays commission on February's sales, and there's also a February correction run paid in March.
+</details>
+
+**8.** Why does `scripts/run_starter.py` read the expected answers from `enonces/` at run time instead of from a fixture in `tests/`?
+
+<details><summary>Answer</summary>
+
+The repo is public, and the questions and answers are the course's material (D39, D42). Reading them at run time keeps them out of Git. The unit tests of the checker (`tests/test_starter.py`) use synthetic answers, so they run anywhere, even without the course files.
+</details>

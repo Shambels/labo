@@ -4,7 +4,8 @@ Two chatbots for **Calorvia SA**, a fictional Belgian heat-pump manufacturer:
 
 1. **`rag_calorvia`**: a RAG over 393 documents from the company's shared drive. Done: final configuration
    `experiments/status_filter.toml`, results and analysis in `RAPPORT.md`, exports in `results/`.
-2. **`text2sql_calorvia`**: a text-to-SQL agent over three business databases (phase B, not started).
+2. **`text2sql_calorvia`**: a text-to-SQL agent over three business databases (phase B, in progress:
+   sources restored and explored, see `docs/sources/`).
 
 `ROADMAP.md` tracks the steps and decisions; `QUIZ.md` holds a quiz per step.
 
@@ -116,6 +117,21 @@ files the inventory finds itself. Query the registry with `SELECT * FROM documen
 
 Everything runs **from the repository root**: the paths in `config.py` are relative to it.
 
+## Phase B: the source databases
+
+```bash
+# ERP (SQL Server) on 14330, accounting on 5433, payroll on 5434; passwords from .env (see .env.example)
+docker compose -f enonces/calorvia_t2sql/sources_calorvia/docker/docker-compose.yml --env-file .env up -d
+docker logs -f calorvia-erp-restore      # ends with "GESPRO restored." (under a minute)
+
+uv run python scripts/explore_sources.py # schemas -> docs/sources/{erp,compta,paie}.md (no data values)
+uv run python scripts/run_starter.py -v  # the 12 starter questions, by hand-written SQL, checked against the presentation
+uv run pytest tests/test_sources.py      # agent_ro is read-only, tested on each database
+```
+
+The application connects only as `agent_ro` (`text2sql_calorvia/sources.py`); the admin passwords in `.env` are
+for the restore. To start again from scratch: the same `docker compose` command with `down -v`, then `up -d`.
+
 ## Layout
 
 ```text
@@ -133,6 +149,13 @@ src/rag_calorvia/
 │   ├── metrics.py    # hit, MRR, recall, nDCG, trap_hit, redundancy, refusals, citations
 │   └── coverage.py   # the ceiling: evidence findable in the converted text
 └── sql/            # schema and queries (documents, experiments, answers, scores)
+src/text2sql_calorvia/
+├── config.py       # settings from .env (agent_ro password, ports)
+├── sources.py      # the three sources; the only module that connects to them, always as agent_ro
+├── catalog.py      # tables, columns (readable or not), keys, row counts, from the database catalog
+├── starter.py      # the 12 starter questions: expected answers read from the course material, checked
+└── sql/            # catalog queries per engine, starter/ queries per question and source
+docs/sources/       # generated schemas + NOTES.md (exploration, read-only findings, traps)
 scripts/            # command-line entry points
 exclusions.toml     # hand-reviewed exclusions, with their reason
 tests/

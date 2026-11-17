@@ -55,6 +55,9 @@ Companion file: `QUIZ.md` (one quiz per step, answers collapsed).
 | D37 | New reference after step 8 | `time_rules` = `vision_whole_images` + status filter + chronological context + prompt rule 8 | Best on the 41 target questions (0.790) and on the types where traps matter; losses are leaner answers, not wrong ones |
 | D38 | Final configuration | **`status_filter`** = `vision_whole_images` + drafts and archives out of the search | Level with 47 on 77 judged questions (0.794 vs 0.806, within noise), trap rate 0.471 → 0.353; `chronological` and `time_rules` hurt the image questions |
 | D39 | Results export | `results/*.csv` without the eval questions and expected answers | The repository is public; the eval set is course material |
+| D40 | Phase B's repository | **This repo** (public), not a separate private `text2sql-calorvia` as the statement asks | Your choice. The course material stays out of Git (`enonces/` ignored): SQL scripts, payslip PDFs and the presentation's expected answers are never committed; generated schemas hold no data values |
+| D41 | Running the sources | The course's compose file as is, from `enonces/`, with `--env-file .env` (our one `.env`); ERP on **14330** as that file publishes it (the guide says 1433) | No copy of course files in the repo; one place for passwords |
+| D42 | Starter questions | Our SQL in `sql/starter/`; the questions and expected answers read at run time from the presentation | Same rule as D39: the repo is public |
 | D9 | Porting strategy | Port each hospital_rag module **in the step that needs it** (step 0: config, db, logs; step 3: evaluation; step 4: ETL and RAG) | Nothing unused or untested sits in the repo |
 
 ### Open decisions (to settle with you when we reach them)
@@ -83,6 +86,8 @@ Companion file: `QUIZ.md` (one quiz per step, answers collapsed).
 | 8002 | Reranker (vLLM) | `bge-reranker-v2-m3` |
 | 8003 | VLM (llama-server `--mmproj`), then judge | VLM: see O3; judge: `gemma4-26b-a4b` (D21) |
 | 5432 | PostgreSQL (registry, experiments) | Docker |
+| 14330 | Source: ERP GesPro (SQL Server 2022) | Docker, course compose (D41) |
+| 5433, 5434 | Sources: accounting, payroll (PostgreSQL 16) | Docker, course compose (D41) |
 | 6333 | Qdrant | Docker |
 
 ---
@@ -287,9 +292,13 @@ The hardest part. Each idea measured on its own, then combined:
 
 Deliberately more open than phase A: the steps below are a skeleton we will refine when we get there.
 
-### ⬜ Step 10. Sources
-- Restore the three databases with `enonces/calorvia_t2sql/sources_calorvia/docker/` (ports 1433, 5433, 5434); connect with the read-only `agent_ro` account; explore; run the 12 starter questions by hand in SQL.
+### ✅ Step 10. Sources
+- Restore the three databases with `enonces/calorvia_t2sql/sources_calorvia/docker/` (ports 14330, 5433, 5434); connect with the read-only `agent_ro` account; explore; run the 12 starter questions by hand in SQL.
 - **Tag `t2sql/v0.1-sources`.**
+- **Restore:** under a minute for the three; counts as in the guide (10 185 invoices, 20 562 entries, 7 298 payslips). 23 / 14 / 14 tables, 139 308 / 101 045 / 217 612 rows, as the presentation says.
+- **Code:** package `text2sql_calorvia`: `sources.py` (the only module that connects, always as `agent_ro`; `pymssql` and `psycopg`), `catalog.py` (tables, columns with a *readable* flag, keys, row counts from the catalog), schemas generated into `docs/sources/*.md` (no data values), exploration notes in `docs/sources/NOTES.md`.
+- **12/12 starter questions** answered by hand-written SQL (`sql/starter/`, one file per question and source), checked by `scripts/run_starter.py` against the presentation's numbers and dates; 23–85 ms each. Traps each needs (the ontology's raw material): credit notes stored positive; a `REGUL_TARIF` credit note listing 270 units but returning none (Q2); a return visible only in stock movements (Q3); a duplicate supplier "NE PAS UTILISER" (Q4); the year-end appropriation entry that zeroes classes 6–7 (Q5); EBITDA as a definition over account ranges (Q6); contract rows per period (Q8); 23 ERP invoices not yet transferred to accounting, exactly the May gap (Q11); staff number `10405` vs `M10405` and a rate stored as a percentage (Q12).
+- **Layer 1 tested** (`tests/test_sources.py`, 22 tests, statements sent without any validation): writes, DDL, `SELECT INTO` a real table, `xp_cmdshell`, `COPY` to a file are refused on all three; the PostgreSQL grants still refuse writes after `SET default_transaction_read_only = off`; the 3 personal columns are unreadable (so `SELECT *` on `employees` fails). **Gaps found:** temp tables are allowed (SQL Server `SELECT … INTO #tmp`; PostgreSQL once the default is off), and SQL Server has no server-side timeout. Both for step 11's validation and execution layers.
 
 ### ⬜ Step 11. The MCP server (FastMCP)
 - Tools: `list_sources`, `list_tables`, `get_table_card`, `find_values`, `validate_sql` (sqlglot, `tsql` / `postgres`), `execute_sql`.
@@ -343,3 +352,5 @@ Deliberately more open than phase A: the steps below are a skeleton we will refi
 | 2026-11-16 | 8 | Branch `rag/step-08-versions`: content dates fixed; status filter (trap rate 0.471 → 0.353); chronological context; time rules; reference-date filter measured and dropped; judged on 41 target questions: `time_rules` kept |
 | 2026-11-16 | – | Merged, tagged `rag/v0.6-versions`, pushed |
 | 2026-11-16 | 9 | Branch `rag/step-09-final`: final choice reopened and judged on 77 questions; `status_filter` evaluated once on the test set (correctness 0.823); results exported, report written, chat UI |
+| 2026-11-17 | – | Merged, tagged `rag/v1.0`, pushed. Phase A done |
+| 2026-11-17 | 10 | Branch `t2sql/step-10-sources`: the three sources restored (ERP on 14330), `text2sql_calorvia` package, schemas and notes in `docs/sources/`, 12/12 starter questions in SQL, `agent_ro` tested read-only on each database (temp tables and SQL Server's missing timeout left for step 11) |
