@@ -17,6 +17,7 @@ parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.R
 parser.add_argument("experiments", nargs="+", help="experiment names")
 parser.add_argument("--metrics", nargs="+", default=DEFAULT_METRICS)
 parser.add_argument("--by", choices=["type", "format", "both"], default="both")
+parser.add_argument("--test", action="store_true", help="runs of the held-out test set (names ending in __test)")
 args = parser.parse_args()
 
 with db.connect(read_only=True) as conn:
@@ -27,7 +28,7 @@ with db.connect(read_only=True) as conn:
         if experiment_id is None:
             raise SystemExit(f"no finished run named {name!r}")
         scores[name] = db.experiment_scores(conn, experiment_id)
-questions = align_with_registry(load_questions("dev"), registry)
+questions = align_with_registry(load_questions("test" if args.test else "dev", allow_test=args.test), registry)
 
 for by in (["type", "format"] if args.by == "both" else [args.by]):
     for metric in args.metrics:

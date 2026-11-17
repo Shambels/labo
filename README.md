@@ -2,7 +2,8 @@
 
 Two chatbots for **Calorvia SA**, a fictional Belgian heat-pump manufacturer:
 
-1. **`rag_calorvia`**: a RAG over 393 documents from the company's shared drive (in progress).
+1. **`rag_calorvia`**: a RAG over 393 documents from the company's shared drive. Done: final configuration
+   `experiments/status_filter.toml`, results and analysis in `RAPPORT.md`, exports in `results/`.
 2. **`text2sql_calorvia`**: a text-to-SQL agent over three business databases (phase B, not started).
 
 `ROADMAP.md` tracks the steps and decisions; `QUIZ.md` holds a quiz per step.
@@ -98,6 +99,9 @@ uv run python scripts/judge_experiment.py tools_tables --types excel_lookup exce
 uv run python scripts/report.py baseline no_context_line__retrieval  # per question type and per format
 uv run python scripts/ask.py "Quand le nouvel ERP démarre-t-il ?"   # one question, its chunks, and the images it cites
 uv run python scripts/compare_ocr.py   # Docling OCR vs the VLM on the scanned PDFs (step 7)
+uv run python scripts/run_experiment.py experiments/status_filter.toml --test  # the final config, once, on the 31 held-out questions
+uv run python scripts/export_results.py --final status_filter                  # results/*.csv
+uv run streamlit run app/chat.py      # chat with the final configuration: answer, extracts, cited images, SQL
 ```
 
 An experiment is a TOML file in `experiments/` that changes **one** key of `baseline.toml`. `run_experiment.py`

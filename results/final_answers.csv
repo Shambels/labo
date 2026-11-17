@@ -1,0 +1,159 @@
+split,experiment_id,question_id,type,answer,recall@5,hit@5,mrr@5,trap_hit@5,refusal,correctness,faithfulness
+dev,56,Q001,factual,"Les horaires de l'équipe de nuit de Gand sont de 22 h 00 à 6 h 00, du lundi au jeudi [1].",1.0,1.0,1.0,,0.0,0.7,1.0
+dev,56,Q002,decision_history,"En avril et en mai 2026, la direction financière était dirigée par Sarah Vandamme, nommée directrice financière ad interim à partir du 1er avril 2026 [2][3][4][5].",1.0,1.0,1.0,,0.0,1.0,1.0
+dev,56,Q003,multilingual,"Calorvia a annoncé un chiffre d'affaires de 148,2 millions d'euros et un EBITDA de 12,1 millions d'euros (soit 8,1 % du chiffre d'affaires) pour l'année 2025 [1].",1.0,1.0,1.0,,0.0,1.0,1.0
+dev,56,Q004,meeting_detail,"Le taux d'absentéisme présenté au CODIR du 12 janvier 2026 était de 6,3 % [1].",1.0,1.0,1.0,,0.0,0.8,0.0
+dev,56,Q006,action_tracking,186 personnes ont suivi la campagne de sensibilisation à l'hameçonnage [1][2].,1.0,1.0,1.0,,0.0,0.7,1.0
+dev,56,Q007,out_of_corpus,Je ne sais pas.,,,,,1.0,1.0,
+dev,56,Q008,decision_current,"Le rappel préventif concerne 214 pompes à chaleur Aéris 12 produites entre le 3 et le 21 novembre 2025 (numéros de série AE12-25-4501 à AE12-25-4714), dont la vanne quatre voies présente un défaut de brasage identifié sur le lot V-2544 du fournisseur Valtek [1][2][5]. La campagne a été décidée par le CODIR le 8 décembre 2025 et les installateurs ont été contactés le 11 décembre 2025 pour remplacer la vanne chez le client final, aux frais de Calorvia [1][2]. Une provision de 180 000 € a été constituée pour couvrir cette opération [5].",0.0,0.0,0.0,0.0,0.0,0.2,0.6
+dev,56,Q009,meeting_detail,Les prises de commandes présentées au CODIR du 13 octobre 2025 s'élevaient à 3 099 k€ [1].,1.0,1.0,1.0,,0.0,1.0,0.0
+dev,56,Q011,factual,"Pour toute manipulation de tôles à Seneffe, le port de gants anti-coupure de niveau F et de lunettes de protection est obligatoire [1][2][3].",1.0,1.0,1.0,,0.0,1.0,1.0
+dev,56,Q012,out_of_corpus,Je ne sais pas.,,,,,1.0,1.0,
+dev,56,Q013,factual,"En cas de retard imputable à l'intégrateur, une pénalité de 0,5 % du prix par semaine de retard est due, plafonnée à 10 % du prix [1].",1.0,1.0,1.0,,0.0,,
+dev,56,Q014,image_only,L'arrêt de la ligne L3 est prévu pour 2 jours afin de réaliser le raccordement [1].,1.0,1.0,1.0,,0.0,0.8,0.0
+dev,56,Q016,multi_doc,"La Région wallonne a accordé une aide à l'investissement de 375 000 €, ce qui représente 30 % de l'investissement [1].",1.0,1.0,1.0,,0.0,0.9,1.0
+dev,56,Q017,excel_lookup,"Fin mai 2026, l'entrepôt de Herstal employait six personnes [1][2][3][4].",1.0,1.0,1.0,,0.0,0.5,1.0
+dev,56,Q018,action_tracking,"Le plan de bascule de l'ERP (projet Atlas) devait être préparé par Kevin Mertens (KM), avec une échéance fixée au 15/05/2026 [1][2]. Il a été validé lors du CODIR du 11 mai 2026, où l'action A-26-012 est passée au statut « Clôturée. Plan de bascule validé. » [1].",1.0,1.0,1.0,,0.0,1.0,1.0
+dev,56,Q019,meeting_detail,"Le taux de rebut Seneffe présenté au CODIR du 8 décembre 2025 était de 2,6 % [1].",1.0,1.0,1.0,,0.0,,
+dev,56,Q021,factual,"Le test d'étanchéité des Aéris se fait sous une pression d'azote de 42 bar, avec une attente de 15 minutes [1].",1.0,1.0,1.0,,0.0,,
+dev,56,Q022,excel_lookup,Le plan de formation 2026 prévoit 160 heures et un budget de 9600 € pour le recyclage des caristes (Conduite de chariots élévateurs) [1][4].,1.0,1.0,1.0,,0.0,0.7,1.0
+dev,56,Q023,board_resolution,"Le conseil d'administration a approuvé un investissement de 1,2 M€ pour la phase 1 de la ligne L4 lors de la réunion du 18 novembre 2025 [5]. Le procès-verbal du 16 décembre 2025 précise que l'enveloppe approuvée est de 1 250 000 € [1].",1.0,1.0,1.0,1.0,0.0,1.0,0.5
+dev,56,Q024,multilingual,"Les extraits ne mentionnent aucun montant pour le contrat de maintenance des chariots élévateurs de Gand, mais le délai d'intervention en cas de panne est de 8 heures ouvrées [2].",0.5,1.0,0.5,,0.0,0.4,1.0
+dev,56,Q026,board_resolution,"Le conseil a approuvé un bail commercial de 9 ans pour un entrepôt de 4200 m² à Herstal, résiliable à l'expiration de chaque triennat, pour un loyer de 23,50 € par m² et par an, soit 98 700 € par an, indexé [1]. Le bail prend effet le 1er mai 2026 et la preneuse peut y mettre fin à l'expiration de chaque triennat moyennant un préavis de six mois notifié par lettre recommandée [3]. Le loyer annuel de 98 700 € hors charges est payable par mois et d'avance, et est indexé chaque année à la date anniversaire selon l'indice santé [4].",1.0,1.0,1.0,0.0,0.0,0.7,1.0
+dev,56,Q027,board_resolution,Le conseil d'administration a nommé Isabelle Gérard directrice financière lors de sa réunion du 19 mai 2026 [2]. Elle prend ses fonctions à partir du 15 juin 2026 [1][2].,1.0,1.0,1.0,0.0,0.0,1.0,0.5
+dev,56,Q028,factual,"La révision C du mode opératoire MO-SEN-07 a ajouté un contrôle visuel à 100 % des brasures de la vanne, suite au rappel de l'Aéris 12 (non-conformité NC-2025-047), ainsi qu'un essai destructif (coupe) sur une vanne tous les 50 brasages [1].",1.0,1.0,1.0,,0.0,,
+dev,56,Q029,decision_current,L'échéance de la MFA pour les terminaux partagés des ateliers a été reportée au 15 mars 2026 [1][2].,1.0,1.0,1.0,,0.0,0.7,1.0
+dev,56,Q031,multi_doc,"Six personnes travaillent à Herstal, dont 2 transférées de Gand et 4 recrutées [1].",1.0,1.0,1.0,,0.0,1.0,1.0
+dev,56,Q032,factual,"L'Aéris Pro 16 utilise le fluide frigorigène R290 (propane), avec une charge de 1,3 kg [1][2][3].",1.0,1.0,1.0,,0.0,,
+dev,56,Q033,meeting_detail,"Thomas Lambert, directeur des opérations (COO), était excusé au CODIR du 4 mai 2026 [1].",1.0,1.0,1.0,,0.0,,
+dev,56,Q034,image_only,Je ne sais pas.,0.0,0.0,0.0,,1.0,0.0,
+dev,56,Q036,image_only,Le SWOT du séminaire CODIR cite comme faiblesse la dépendance à Kompra pour les compresseurs [1].,1.0,1.0,1.0,,0.0,1.0,0.0
+dev,56,Q037,action_tracking,"Le CODIR extraordinaire du 14 janvier 2026 a lancé trois actions : déployer la MFA sur tous les comptes (responsable Kevin Mertens), formaliser la procédure de changement de coordonnées bancaires (responsable Laurent Dewit) et organiser la campagne de sensibilisation à l'hameçonnage (responsable Kevin Mertens) [1].",1.0,1.0,1.0,,0.0,0.8,1.0
+dev,56,Q038,scan_ocr,L'IBAN figurant sur la facture TM-2026-0042 de Tôlerie Mosane est BE47 0689 4412 7380 [1].,1.0,1.0,1.0,,0.0,0.9,0.0
+dev,56,Q039,action_tracking,"L'échéance de la configuration des limiteurs de vitesse à 8 km/h était le 28/11/2025 [1][2][3], et elle a été réalisée le 21 novembre [3][4].",1.0,1.0,1.0,,0.0,0.9,1.0
+dev,56,Q041,image_only,"L'entrepôt de Herstal compte 8 allées de rayonnages, de A à H [1].",1.0,1.0,1.0,,0.0,0.7,1.0
+dev,56,Q042,scan_ocr,"Il manquait 1 palette à la livraison de Kompra du 3 mars 2026, sur les 8 prévues [1][2].",1.0,1.0,1.0,,0.0,0.7,1.0
+dev,56,Q043,version_trap,Le budget approuvé par le CA le 16 décembre 2025 pour la maintenance lourde et le renouvellement d'outillages est de 280 k€ [1]. Les versions antérieures du budget (3 octobre et 12 novembre 2025) prévoyaient 300 k€ [2][3].,1.0,1.0,1.0,1.0,0.0,1.0,1.0
+dev,56,Q044,factual,L'entrepôt de Herstal offre une capacité de 3 960 emplacements palettes [1][2].,1.0,1.0,1.0,,0.0,,
+dev,56,Q046,factual,La maintenance de niveau 3 de l'ERP après l'hypercare coûte 38 000 € HT par an [1].,1.0,1.0,1.0,,0.0,,
+dev,56,Q047,action_tracking,"Le déploiement de la MFA sur tous les comptes (A-26-003) était confié à Kevin Mertens, avec une échéance fixée au 28/02/2026 [1][2]. L'action a été clôturée lors du CODIR du 2 mars 2026, les comptes de bureau ayant été protégés le 27 février [4].",1.0,1.0,1.0,,0.0,1.0,1.0
+dev,56,Q048,decision_current,"L'indemnité forfaitaire de bureau est de 40 € par mois depuis la version 3 de la politique, entrée en vigueur le 1er mai 2026 [1][3][4]. Elle remplace l'indemnité de 20 € par mois prévue par la version 2 [1][2].",1.0,1.0,1.0,1.0,0.0,1.0,1.0
+dev,56,Q049,board_resolution,"Le conseil a approuvé l'investissement de 1,2 M€ pour la phase 1 de la ligne L4 à la condition que la commande ne soit passée qu'après la décision de la Région wallonne sur l'aide à l'investissement, et au plus tard le 31 janvier 2026 [1].",1.0,1.0,1.0,,0.0,1.0,0.0
+dev,56,Q051,board_resolution,"L'assemblée générale a renouvelé le mandat d'administratrice indépendante de Martine Claessens pour une durée de quatre ans, jusqu'à l'assemblée générale de 2030 [1].",1.0,1.0,1.0,,0.0,1.0,1.0
+dev,56,Q052,decision_history,"Lors de la commande de la ligne L4 en janvier 2026, la mise en service était prévue à la mi-juin [1].",1.0,1.0,1.0,,0.0,0.7,0.0
+dev,56,Q053,action_tracking,"L'avancement des interventions du rappel Aéris 12 était suivi par AV [1][2][3][4][5]. L'action s'est terminée par sa clôture, avec une campagne clôturée comptant 211 unités réparées et 3 introuvables [1].",0.5,1.0,1.0,,0.0,0.4,0.5
+dev,56,Q054,decision_current,L'entrepôt de Herstal est opérationnel depuis le 18 mai 2026 [1][2][3][5].,1.0,1.0,1.0,0.0,0.0,0.7,1.0
+dev,56,Q056,image_only,"Depuis avril 2026, le service des achats (Céline Moreau) est rattaché au Directeur des opérations, Thomas Lambert [1].",1.0,1.0,1.0,1.0,0.0,0.8,0.0
+dev,56,Q057,scan_ocr,L'assurance responsabilité civile couvre les dommages corporels à hauteur de 10 000 000 € par sinistre [1].,1.0,1.0,1.0,,0.0,0.7,1.0
+dev,56,Q058,decision_reason,La livraison de la ligne L4 a été retardée de trois semaines en raison d'une pénurie de composants pour l'armoire de commande [1].,1.0,1.0,1.0,,0.0,0.8,1.0
+dev,56,Q059,image_only,Le numéro de série de la presse plieuse de Seneffe est BRV-19-04417 [1].,1.0,1.0,1.0,,0.0,0.7,0.0
+dev,56,Q061,factual,La durée de garantie du compresseur d'une pompe à chaleur Calorvia est de 5 ans [1][3][4][5].,1.0,1.0,1.0,,0.0,,
+dev,56,Q062,multilingual,"Le rapport d'incident identifie quatre causes : l'absence de passage piéton marqué dans les allées, la visibilité limitée aux angles des racks, une vitesse autorisée de 12 km/h jugée trop élevée pour les zones avec piétons, et l'emplacement du printer d'étiquettes de l'autre côté de l'allée [3].",1.0,1.0,0.33333334,,0.0,,
+dev,56,Q063,decision_current,La vitesse maximale des chariots dans les allées de stockage de l'entrepôt de Gand est de 6 km/h [3].,1.0,1.0,0.33333334,1.0,0.0,0.6,1.0
+dev,56,Q064,scan_ocr,Le réceptionnaire a noté « Reçu le 12/02 - 2 cartons abîmés / photos envoyées - R. Dethier » [1].,1.0,1.0,1.0,,0.0,1.0,1.0
+dev,56,Q066,decision_history,"L'enveloppe de 1 400 000 € a d'abord été soumise au conseil d'administration pour la ligne L4 [1][2][3]. Le conseil d'octobre 2025 ne s'est pas prononcé ce jour et a demandé une analyse complémentaire (variante phasée, éligibilité aux aides de la Région wallonne, impact sur la trésorerie 2026), reportant le point à la séance du 18 novembre [3].",1.0,1.0,1.0,,0.0,1.0,0.25
+dev,56,Q067,meeting_detail,"Le taux de service (OTIF) présenté au CODIR du 8 juin 2026 était de 84,2 % [1][2].",1.0,1.0,1.0,,0.0,,
+dev,56,Q068,meeting_detail,"Le CODIR extraordinaire du 14 janvier 2026 s'est tenu pour traiter de l'incident de sécurité informatique du 13 janvier [1][3]. Il s'est déroulé en visioconférence (Teams), de 14 h 00 à 15 h 30 [1].",1.0,1.0,1.0,,0.0,,
+dev,56,Q069,excel_reasoning,"La satisfaction moyenne calculée à partir des 84 réponses brutes est de 8,14 sur 10 (8,142857…). (fichier « Enquete teletravail - reponses brutes.xlsx », onglet « Réponses »)",1.0,1.0,1.0,,0.0,1.0,0.0
+dev,56,Q071,image_only,"Les stocks du WMS LogiPath (site de Gand) sont transmis toutes les 15 minutes au bus d'intégration, qui les achemine ensuite vers l'ERP Praxio [1].",1.0,1.0,1.0,,0.0,1.0,1.0
+dev,56,Q072,factual,"Le montant total HT de l'offre DV-2026-0201 est de 400 248,00 € [1].",1.0,1.0,1.0,,0.0,,
+dev,56,Q073,decision_current,"Pendant l'été 2026, le comité de direction se réunit toutes les deux semaines (rythme bimensuel) en juillet et en août [1][2][3].",1.0,1.0,1.0,,0.0,0.8,1.0
+dev,56,Q074,multilingual,Le délai de livraison contractuel de Kompra est de six (6) semaines à compter de la commande [1].,1.0,1.0,1.0,,0.0,,
+dev,56,Q076,meeting_detail,L'audit de surveillance ISO 9001 de février 2026 a relevé 0 non-conformité majeure et 2 non-conformités mineures [1].,1.0,1.0,1.0,,0.0,,
+dev,56,Q077,factual,"Les extraits ne mentionnent pas de conditions de paiement propres à Calorvia ; ils ne détaillent que les conditions de paiement de l'offre Linetech (30 % à la commande, 60 % à la livraison, 10 % à la réception) [1].",0.0,0.0,0.0,,0.0,,
+dev,56,Q078,excel_reasoning,"La Flandre a réalisé le plus gros chiffre d'affaires en octobre 2025, avec 4568 k€ [3]. (Source : Reporting 2025-10.xlsx, onglet « Ventes par région »)",1.0,1.0,1.0,,0.0,1.0,1.0
+dev,56,Q079,meeting_detail,Thomas Lambert a présidé le CODIR du 23 février 2026 [1].,1.0,1.0,1.0,,0.0,,
+dev,56,Q081,decision_current,"Les extraits indiquent un budget approuvé de 680 k€ au 1er avril 2026 [1][3][5] et de 725 k€ au 1er juin 2026 [2][4], mais ils ne précisent pas le budget total initial ou final du projet Atlas.",0.0,0.0,0.0,0.0,0.0,0.4,0.6666667
+dev,56,Q082,out_of_corpus,Je ne sais pas.,,,,,1.0,,
+dev,56,Q083,multilingual,"L'objectif de chiffre d'affaires 2026 avec Klimaat Partners (Distributeur, Vlaanderen) est de 9,6 million d'euros, soit +8 % par rapport aux 8,9 millions d'euros de 2025 [1].",1.0,1.0,1.0,,0.0,,
+dev,56,Q084,image_only,La température maximale du four de brasage FBC-1200 de Seneffe est de 1120 °C [1].,1.0,1.0,1.0,,0.0,1.0,1.0
+dev,56,Q086,multilingual,"Selon le contrat d'approvisionnement 2025, le fournisseur doit supporter les coûts du rappel proportionnellement à sa responsabilité, jusqu'à un maximum de 250 000 € par événement [4].",1.0,1.0,0.25,,0.0,,
+dev,56,Q087,excel_lookup,Je ne sais pas.,0.0,0.0,0.0,,1.0,,
+dev,56,Q088,factual,"La garantie bancaire du bail de Herstal est de 24 675 €, correspondant à trois mois de loyer [1].",1.0,1.0,1.0,,0.0,,
+dev,56,Q089,version_trap,Le prix catalogue 2026 de l'Aéris Pro 22 est de 18 110 € [4].,1.0,1.0,0.25,0.0,0.0,0.7,1.0
+dev,56,Q091,decision_current,La hausse des prix catalogue applicable à la gamme premium (Aéris Pro et Ventis D450 Pro) au 1er janvier 2026 est de +5 % [1][2][3].,1.0,1.0,1.0,0.0,0.0,0.6,1.0
+dev,56,Q092,decision_history,"Juste après l'accident, la vitesse des chariots a été limitée à 8 km/h dans tout l'entrepôt de Gand [4][5], alors que la vitesse maximale autorisée avant l'accident était de 12 km/h [1][2].",1.0,1.0,1.0,,0.0,0.9,0.5
+dev,56,Q093,factual,"Les extraits ne mentionnent pas de simulation d'hameçonnage de mai 2026 ; le taux de clic de 4 % (9 personnes sur 228) figure dans le rapport du deuxième trimestre 2026, sans date précise de la simulation [2].",1.0,1.0,0.5,,0.0,,
+dev,56,Q094,factual,"Le profil demandé est un bachelier en électromécanique ou une expérience équivalente, trois ans d'expérience en maintenance industrielle et une connaissance des automates programmables [1].",1.0,1.0,1.0,,0.0,,
+dev,56,Q096,decision_current,"Non, le gel des recrutements des fonctions support n'est plus en vigueur : il a été levé par le conseil d'administration du 21 avril 2026 à partir du 1er mai 2026 [2][3].",1.0,1.0,0.5,0.0,0.0,0.8,1.0
+dev,56,Q097,factual,"Le plafond de remboursement d'une nuit d'hôtel en Belgique est de 120 €, petit-déjeuner compris [1].",1.0,1.0,1.0,,0.0,,
+dev,56,Q098,image_only,"Le taux de réclamations clients en décembre 2025 était de 1,9 % des unités livrées [1].",1.0,1.0,1.0,,0.0,0.7,1.0
+dev,56,Q099,decision_current,Le télétravail est autorisé à raison de 2 jours par semaine au maximum [2]. Le mardi est un jour de présence obligatoire pour toutes les équipes [2][4].,1.0,1.0,0.5,0.0,0.0,0.8,1.0
+dev,56,Q101,multi_doc,"Valtek a pris en charge 65 % du coût du rappel, soit 117 000 € sur les 180 000 € provisionnés [1][2][4][5]. Les extraits ne contiennent aucune information sur le plafond du contrat de Valtek, il est donc impossible de dire si cette prise en charge est conforme à ce plafond.",0.5,1.0,0.5,,0.0,,
+dev,56,Q102,excel_lookup,"La ligne L2 de Seneffe a cumulé 41,5 heures d'arrêt en décembre 2025 [1][4].",1.0,1.0,1.0,,0.0,,
+dev,56,Q103,excel_lookup,"Le site qui consomme le plus d'énergie en 2025 est Seneffe, avec 6 820 MWh [1][2].",1.0,1.0,1.0,,0.0,,
+dev,56,Q104,decision_reason,La mise en production de l'ERP a été reportée en raison de la qualité des données articles et de l'interface avec le WMS de Gand [1].,1.0,1.0,1.0,,0.0,0.4,1.0
+dev,56,Q106,action_tracking,Nadia Benali devait publier la version 3 de la politique de télétravail pour le 24/04/2026 [2][3][4].,1.0,1.0,0.5,,0.0,0.7,1.0
+dev,56,Q107,image_only,"La première cause de non-conformité en 2025, c'est-à-dire celle qui figure en tête du classement, est « Fournisseur » avec 19 fiches [1].",1.0,1.0,1.0,,0.0,1.0,1.0
+dev,56,Q108,decision_current,La mise en service officielle de la ligne d'assemblage L4 de Seneffe est fixée au 6 juillet 2026 [1][3][4][5].,1.0,1.0,1.0,0.0,0.0,0.7,1.0
+dev,56,Q109,decision_reason,"Le gel des recrutements des fonctions support a été décidé fin 2025 « compte tenu de la pression sur les marges » [1]. Cette décision s'inscrit dans la maîtrise des frais de structure, le CODIR ayant constaté que l'EBITDA cumulé à fin novembre 2025 atteignait 7,9 % du chiffre d'affaires, contre 9,0 % au budget 2025 [4].",1.0,1.0,1.0,,0.0,,
+dev,56,Q111,out_of_corpus,Je ne sais pas.,,,,,1.0,,
+dev,56,Q112,multilingual,"Le taux d'absentéisme du site de Gand en mars 2026 était de 5,1 % [2].",1.0,1.0,0.5,,0.0,,
+dev,56,Q113,excel_reasoning,Le plan 2026 prévoit 620 heures de formation à la sécurité sur un total de 1 840 heures [1][3][5].,1.0,1.0,0.5,,0.0,,
+dev,56,Q114,image_only,L'ouverture du marché néerlandais est prévue de 03/2027 à 12/2027 [1].,1.0,1.0,1.0,,0.0,1.0,1.0
+dev,56,Q116,out_of_corpus,"Les extraits indiquent que Calorvia utilise l'ERP GesPro 7 depuis 2011 [4], mais ils ne précisent pas quel ERP le bureau de Lille utilisait avant cette date.",,,,,0.0,,
+dev,56,Q117,multi_doc,"Non, le niveau sonore mesuré par Habitat Confort est de 58 dB(A) à un mètre [1], alors que la fiche technique annonce une puissance acoustique de 52 dB(A) [2][3].",1.0,1.0,1.0,,0.0,,
+dev,56,Q118,factual,"Le helpdesk informatique est joignable par téléphone au poste 2200, du lundi au vendredi de 7 h 30 à 18 h 00, ou via le portail de tickets [1][4].",1.0,1.0,1.0,,0.0,,
+dev,56,Q119,scan_ocr,"Les vannes du lot V-2544 ont été réceptionnées le 19/11 par F. Collin, pour une quantité de 600 pièces [1].",1.0,1.0,1.0,,0.0,1.0,1.0
+dev,56,Q121,excel_lookup,La prochaine maintenance préventive du four de brasage de Seneffe est prévue le 06/07/2026 [1][5].,1.0,1.0,1.0,,0.0,,
+dev,56,Q122,excel_lookup,Valtek Components Ltd a obtenu un score global de 60 dans l'évaluation des fournisseurs 2025 [1][2].,1.0,1.0,1.0,,0.0,,
+dev,56,Q123,board_resolution,"Le dividende versé aux actionnaires au titre de l'exercice 2025 est de 0,80 € brut par action, soit un total de 1 600 000 € pour les 2 000 000 actions [1][2].",1.0,1.0,1.0,,0.0,0.7,0.5
+dev,56,Q124,excel_lookup,Le budget 2026 approuvé prévoit un montant de 680 k€ pour le remplacement de l'ERP (projet Atlas) [1][4][5].,1.0,1.0,1.0,,0.0,,
+dev,56,Q126,excel_reasoning,"Le chiffre d'affaires budgété pour 2026 est passé de 158,5 M€ dans la version 1 [1][3] à 156,0 M€ dans la version approuvée [2][4], soit une baisse de 2,5 M€.",0.5,1.0,0.25,,0.0,,
+dev,56,Q127,multi_doc,"À fin mai 2026, Distrinergie a acheté 1 230 unités [1], soit 51,25 % de son engagement annuel de 2 400 unités [2][3][4][5]. Les extraits ne précisent pas le rythme d'achat attendu à cette date, si bien qu'il n'est pas possible de conclure à un respect ou non de l'engagement à ce stade.",0.5,1.0,1.0,,0.0,,
+dev,56,Q128,excel_lookup,Kerneo a obtenu la note de 7 sur 10 pour le critère « Interface FR / NL / EN » [1][2].,1.0,1.0,1.0,,0.0,,
+dev,56,Q129,meeting_detail,"Au CODIR du 16 février 2026, Sarah Vandamme, responsable du contrôle de gestion, a été invitée dans le cadre de la passation de la direction financière [1].",1.0,1.0,1.0,,0.0,,
+dev,56,Q131,decision_reason,"Le CODIR a préféré la location à Herstal car l'extension du site de Gand, bien que plus petite (2 800 m²), nécessitait un investissement de 2 100 000 € et un délai de 12 à 18 mois pour l'obtention du permis, ce qui a été jugé « trop lent » [1][3]. En revanche, l'option de Herstal (4 200 m²) était disponible dès le 1er mai 2026, a été formellement « Recommandée » [1], et offre des avantages supplémentaires tels que la proximité des clients de la province de Liège et de l'Allemagne, ainsi que la libération d'environ 1 900 emplacements palettes à Gand [2].",1.0,1.0,1.0,,0.0,,
+dev,56,Q132,decision_current,"Depuis le 1er juillet 2026, le support de l'ERP Praxio est assuré par l'équipe informatique interne [1].",1.0,1.0,1.0,,0.0,0.5,1.0
+dev,56,Q133,decision_current,"Fin juin 2026, la directrice financière de Calorvia est Isabelle Gérard, qui a pris ses fonctions le 15 juin 2026 [1][2][4].",1.0,1.0,0.5,0.0,0.0,0.7,1.0
+dev,56,Q134,decision_reason,"Le projet de quatrième ligne d'assemblage à Seneffe a été justifié par un taux d'utilisation des lignes L1 à L3 de 92 % en moyenne sur les huit premiers mois de 2025, une progression des ventes de la gamme Aéris Pro de 18 % sur la même période et des délais de livraison dépassant désormais cinq semaines [3].",1.0,1.0,0.33333334,,0.0,,
+dev,56,Q136,version_trap,"Les opérateurs s'authentifient en présentant leur badge d'accès devant le lecteur installé sur le terminal, puis en saisissant leur code PIN à quatre chiffres, le badge remplaçant l'application mobile [1].",1.0,1.0,1.0,,0.0,1.0,1.0
+dev,56,Q137,excel_lookup,"Au 30 juin 2026, le montant réalisé (déjà payé) sur la ligne d'assemblage L4 (Seneffe) s'élève à 702 k€, sur un budget de 1 250 k€ et un montant engagé de 1 170 k€ (Suivi capex 2026, onglet « Suivi 2026 »).",1.0,1.0,1.0,,0.0,,
+dev,56,Q138,decision_history,"Au 26 janvier 2026, 168 interventions du rappel de l'Aéris 12 avaient été réalisées sur 214, soit 78 % [1].",1.0,1.0,1.0,,0.0,1.0,1.0
+dev,56,Q139,image_only,"Dans le premier planning du projet Atlas (version 1 du 10/12/2025), la bascule était prévue du 28/03 au 31/03 [2].",1.0,1.0,0.5,,0.0,0.4,0.0
+dev,56,Q141,action_tracking,Le marquage au sol des passages piétons à Gand devait être réalisé par Pieter De Smet [2][3]. Il a été terminé le 15 janvier [1][4].,1.0,1.0,1.0,,0.0,0.7,0.5
+dev,56,Q142,action_tracking,"L'action A-26-008 consiste à mettre en œuvre le plan de nettoyage des données articles, et elle était responsable par Kevin Mertens (KM) [1][2][3][4][5].",1.0,1.0,1.0,,0.0,0.7,1.0
+dev,56,Q143,decision_current,"La capacité de production actuelle de la ligne L4 est de 38 unités par jour, retenue jusqu'en septembre [1][2].",1.0,1.0,1.0,,0.0,0.5,1.0
+dev,56,Q144,image_in_document,Calorvia a produit 612 tonnes de déchets métalliques (métaux) en 2025 [5].,1.0,1.0,0.2,,0.0,1.0,1.0
+dev,56,Q146,excel_lookup,La ligne V2 du site de Gand a produit 1403 unités en janvier 2026 [1][2].,1.0,1.0,1.0,,0.0,,
+dev,56,Q147,image_only,"D'après l'organigramme de la direction d'avril 2026, le service après-vente est dirigé par Grégory Pirard, rattaché à la direction qualité d'Anne Vercammen [1].",1.0,1.0,1.0,,0.0,1.0,0.0
+dev,56,Q148,excel_lookup,Les images de vidéosurveillance sont conservées pendant 30 jours [1][2].,1.0,1.0,1.0,,0.0,,
+dev,56,Q149,decision_history,"Au moment de la signature du bail le 4 mars 2026, l'entrée dans les lieux de l'entrepôt de Herstal était prévue le 1er mai [1].",1.0,1.0,1.0,,0.0,0.8,1.0
+dev,56,Q151,action_tracking,"Le cabinet mandaté pour recruter le successeur du directeur financier est Altair Executive Search [1][2]. Les extraits ne précisent pas la date exacte du mandat, mais une action dédiée à ce mandat était en cours au 9 février 2026 avec une échéance fixée au 13/02/2026 [4][5].",1.0,1.0,1.0,,0.0,0.4,1.0
+dev,56,Q152,action_tracking,La réclamation financière auprès de Valtek devait être ouverte par Laurent Dewit (LD) [1][2][3][4][5]. Elle a été clôturée avec un accord de Valtek de prise en charge de 65 % du coût [2].,1.0,1.0,1.0,,0.0,0.7,1.0
+dev,56,Q153,version_trap,Le chiffre d'affaires visé par Calorvia en 2028 est de 185 M€ [1][3]. Une version antérieure du plan stratégique mentionnait un objectif de 190 M€ [5].,1.0,1.0,1.0,1.0,0.0,1.0,0.0
+dev,56,Q154,excel_lookup,La grille 2026 prévoit un salaire mensuel brut médian de 4897 pour la classe C3 (Cadre) [1].,1.0,1.0,1.0,,0.0,,
+dev,56,Q156,meeting_detail,"Le CODIR du 17 novembre 2025 s'est tenu à Gand, dans la salle Schelde [1][2].",1.0,1.0,1.0,,0.0,,
+dev,56,Q157,scan_ocr,Le conseil a approuvé le renouvellement du programme d'assurances pour 2026 pour une prime totale de 212 400 € [1].,1.0,1.0,1.0,,0.0,1.0,1.0
+dev,56,Q158,excel_reasoning,"Trois unités Aéris 12 du rappel sont restées introuvables, toutes chez l'installateur Chauffage Lambert & Fils (fichier « Liste numeros de serie concernes.xlsx », onglet « Unités concernées »).",1.0,1.0,0.33333334,,0.0,,
+test,66,Q005,factual,Le budget mensuel maximal de leasing (hors carburant) pour un membre du comité de direction est de 1 150 € [1].,1.0,1.0,1.0,,0.0,0.7,1.0
+test,66,Q010,scan_ocr,"Linetech a facturé 351 000,00 EUR à la commande de la ligne L4, correspondant à un acompte de 30 % [1].",1.0,1.0,1.0,,0.0,0.8,1.0
+test,66,Q015,decision_reason,"Le site de Gand est passé sur le nouvel ERP le 15 juin 2026, soit deux semaines après les autres sites (Namur, Seneffe, Lille) qui étaient en production depuis le 1er juin 2026 [2]. Ce retard initial de la mise en production, reportée du 1er avril au 1er juin 2026, était dû à la qualité des données articles et à l'interface avec le WMS de Gand [3].",0.0,0.0,0.0,,0.0,0.4,1.0
+test,66,Q020,multi_doc,Je ne sais pas.,0.0,0.0,0.0,,1.0,0.0,
+test,66,Q025,decision_current,"La mise en production du nouvel ERP Praxio a eu lieu le 1er juin 2026 à Namur, Seneffe et Lille, et le 15 juin 2026 à Gand [3][5].",1.0,1.0,0.2,1.0,0.0,0.7,1.0
+test,66,Q030,multi_doc,"600 vannes du lot V-2544 ont été reçues à Seneffe [2], et 386 pièces restaient en stock lors du confinement [1].",1.0,1.0,1.0,,0.0,1.0,1.0
+test,66,Q035,excel_lookup,La Flandre a réalisé un chiffre d'affaires de 4 568 k€ en octobre 2025 [1][3][4].,1.0,1.0,0.33333334,,0.0,1.0,1.0
+test,66,Q040,decision_reason,La cause des fuites est un brasage défectueux sur le lot de vannes quatre voies V-2544 livré par le fournisseur Valtek [3][5]. Ce défaut peut provoquer une fuite de fluide frigorigène (R32) au niveau de la vanne [2][4].,1.0,1.0,0.33333334,,0.0,0.7,1.0
+test,66,Q045,image_in_document,46 % des répondants souhaitaient le mardi comme jour de présence commun [1][3].,1.0,1.0,1.0,,0.0,0.7,1.0
+test,66,Q050,factual,"Calorvia rémunère chaque intervention de rappel de l'Aéris 12 à 240 € HT, déplacement compris, sur présentation du bon d'intervention [1].",1.0,1.0,1.0,,0.0,0.9,1.0
+test,66,Q055,decision_history,La direction commerciale avait d'abord proposé une hausse générale des prix catalogue de 4 % au 1er janvier 2026 [1].,1.0,1.0,1.0,,0.0,0.7,1.0
+test,66,Q060,multi_doc,L'IBAN frauduleux que l'attaquant voulait imposer était LT62 3250 0219 7745 1180 [1]. Les extraits ne mentionnent pas l'IBAN légitime du fournisseur.,0.5,1.0,1.0,,0.0,0.5,0.5
+test,66,Q065,decision_reason,NovaGest a été écarté car sa solution ne propose ni interface en néerlandais ni module de gestion d'entrepôt [1].,1.0,1.0,1.0,,0.0,1.0,1.0
+test,66,Q070,image_only,"Selon le tableau de bord commercial de mars 2026, l'écart du chiffre d'affaires au budget était de +2,5 % [1].",1.0,1.0,1.0,,0.0,0.8,1.0
+test,66,Q075,decision_history,"Avant 2026, la politique de télétravail (version 2 de 2023) autorisait un jour de télétravail par semaine [5].",1.0,1.0,0.2,,0.0,0.9,1.0
+test,66,Q080,version_trap,"Laura Mertz est responsable du marketing chez Calorvia, comme indiqué dans les organigrammes de septembre 2025, avril 2026 et juin 2026 [1][2][3].",1.0,1.0,1.0,,0.0,0.9,0.0
+test,66,Q085,multilingual,On peut gerber au maximum 4 unités par palette [1].,1.0,1.0,1.0,,0.0,1.0,1.0
+test,66,Q090,out_of_corpus,Je ne sais pas.,,,,,1.0,1.0,
+test,66,Q095,excel_lookup,Le prix catalogue 2026 de l'Aéris 9 est de 8 750 € [1][2][3][4][5].,0.0,0.0,0.0,0.0,0.0,0.7,1.0
+test,66,Q100,decision_history,"En décembre 2025, la mise en production du nouvel ERP Praxio était prévue au 1er avril 2026 [1][2][3].",1.0,1.0,1.0,0.0,0.0,0.6,0.0
+test,66,Q105,board_resolution,Le conseil a approuvé le choix de la solution Praxio à la condition que le contrat d'intégration avec Intégra Conseil soit conclu au forfait [1].,1.0,1.0,1.0,,0.0,0.7,1.0
+test,66,Q110,decision_history,"Lors du CODIR du 23 février 2026, 87 % des comptes étaient protégés par la MFA [1][2].",1.0,1.0,1.0,,0.0,1.0,1.0
+test,66,Q115,multilingual,"Le chariot élévateur impliqué dans l'accident du 12 novembre 2025 à Gand était le numéro 9, un Lyftec LE-20 [5].",1.0,1.0,0.2,,0.0,1.0,1.0
+test,66,Q120,excel_lookup,"Lors de la recette 2, 36 cas de test portaient sur les éditions de documents, dont 31 étaient conformes [1].",1.0,1.0,1.0,,0.0,1.0,1.0
+test,66,Q125,excel_reasoning,"Le mois au chiffre d'affaires budgété le plus élevé est décembre, avec 17 685 k€. (Budget 2026 - version approuvée CA 16-12-2025, onglet « Compte de résultats »)",0.0,0.0,0.0,,0.0,1.0,0.5
+test,66,Q130,action_tracking,"Lors du CODIR du 2 février 2026, deux actions étaient en retard : A-26-006 « Signer l'avenant tarifaire avec Distrinergie » (responsable PYC, échéance 30/01/2026) et A-25-019 « Ouvrir une réclamation financière auprès de Valtek » (responsable LD, échéance 19/12/2025, réclamation envoyée le 18 décembre, réponse de Valtek attendue) [1][2].",1.0,1.0,1.0,,0.0,1.0,1.0
+test,66,Q135,image_only,"Le point de rassemblement en cas d'évacuation de l'usine de Seneffe se trouve au parking P2, côté rue de la Forge [1][2].",1.0,1.0,0.5,,0.0,1.0,1.0
+test,66,Q140,version_trap,L'accident de chariot élévateur à Gand a eu lieu le mercredi 12 novembre 2025 [2][4][5].,1.0,1.0,0.5,1.0,0.0,0.8,1.0
+test,66,Q145,multilingual,"À Gand, dès que la température atteint 30 °C, des mesures de lutte contre la chaleur sont appliquées : installation de points d'eau supplémentaires et attribution d'une pause supplémentaire de 10 minutes par équipe [4].",1.0,1.0,0.25,,0.0,1.0,0.5
+test,66,Q150,scan_ocr,"Distrinergie perd l'avantage tarifaire de 2026 si le volume acheté au 31 décembre 2026 est inférieur à 2 160 unités, soit 90 % de l'engagement de 2 400 unités [2].",1.0,1.0,0.5,,0.0,1.0,1.0
+test,66,Q155,board_resolution,"Le budget 2026 approuvé par le conseil prévoit un chiffre d'affaires de 156 000 k€, un EBITDA de 14 820 k€ (soit 9,5 % du chiffre d'affaires), des investissements de 2 825 k€ et un effectif de 643 ETP à fin 2026 [4].",1.0,1.0,0.5,,0.0,1.0,1.0

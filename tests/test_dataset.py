@@ -96,3 +96,9 @@ def test_a_transcribed_image_is_checked_like_text():
     image = ev("02_RH/Organigrammes/Organigramme direction 2026-04.png", ["Céline Moreau"])
     assert evidence_status(image, REGISTRY, lambda path: "Achats : Céline Moreau") == "found"
     assert evidence_status(image, REGISTRY, lambda path: "Achats : C. Moreau") == "not_in_text"
+
+
+def test_split_of_a_config():
+    from rag_calorvia.evaluation.runner import split_of
+    assert split_of({"name": "time_rules"}) == "dev"  # every tuning run, and every config stored so far
+    assert split_of({"name": "time_rules__test", "evaluation": {"split": "test"}}) == "test"
