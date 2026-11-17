@@ -1,6 +1,7 @@
 """The OpenAI-compatible endpoint (step 13), with a fake agent: format, streaming, history handling."""
 import json
 
+import pytest
 from fastapi.testclient import TestClient
 from openai import OpenAI
 
@@ -12,17 +13,25 @@ STEP = {"tool": "execute_sql", "args": {"source": "erp", "sql": "SELECT 1"}, "ok
 
 class FakeAgent:
     def __init__(self):
-        self.received = None
+        self.received, self.who = None, None
 
-    async def stream(self, messages, session_id=None):
-        self.received = messages
+    async def stream(self, messages, session_id=None, user="default", conversation_id=None):
+        self.received, self.who = messages, (user, conversation_id)
         yield "agent", {}
         yield "tools", {"steps": [STEP]}
         yield "finish", {"answer": "CA : 5 €"}
 
-    async def ask(self, messages, session_id=None):
-        self.received = messages
+    async def ask(self, messages, session_id=None, user="default", conversation_id=None):
+        self.received, self.who = messages, (user, conversation_id)
         return {"answer": "CA : 5 €", "steps": [STEP]}
+
+
+@pytest.fixture(autouse=True)
+def saved(monkeypatch):
+    """Turns are recorded here instead of the course PostgreSQL."""
+    turns = []
+    monkeypatch.setattr("text2sql_calorvia.memory.save_turn", lambda *a: turns.append(a))
+    return turns
 
 
 def client(agent=None):
@@ -39,19 +48,20 @@ def test_a_completion_has_the_openai_format():
     http, _ = client()
     body = http.post("/v1/chat/completions", json={"model": "calorvia-agent",
                                                    "messages": [{"role": "user", "content": "CA ?"}]}).json()
-    assert body["object"] == "chat.completion" and body["choices"][0]["message"] == {"role": "assistant",
-                                                                                    "content": "CA : 5 €"}
+    message = body["choices"][0]["message"]
+    assert body["object"] == "chat.completion" and message["role"] == "assistant"
+    assert message["content"].startswith("CA : 5 €\n\n<!-- calorvia:conversation=chatcmpl-")
 
 
 def test_the_openai_sdk_reads_it():
     http, _ = client()
     sdk = OpenAI(base_url="http://testserver/v1", api_key="x", http_client=http)
     answer = sdk.chat.completions.create(model="calorvia-agent", messages=[{"role": "user", "content": "CA ?"}])
-    assert answer.choices[0].message.content == "CA : 5 €"
+    assert answer.choices[0].message.content.startswith("CA : 5 €")
     chunks = sdk.chat.completions.create(model="calorvia-agent", stream=True,
                                          messages=[{"role": "user", "content": "CA ?"}])
     text = "".join(c.choices[0].delta.content or "" for c in chunks)
-    assert text.startswith("<details>") and "✓ `erp` requête — q1 : 1 ligne(s)" in text and text.endswith("CA : 5 €")
+    assert text.startswith("<details>") and "✓ `erp` requête — q1 : 1 ligne(s)" in text and "CA : 5 €\n\n<!--" in text
 
 
 def test_streaming_sends_steps_then_the_answer_then_done():
@@ -86,10 +96,50 @@ def test_the_last_message_must_be_a_question():
 
 def test_an_agent_failure_ends_the_stream_cleanly():
     class Broken(FakeAgent):
-        async def stream(self, messages, session_id=None):
+        async def stream(self, messages, session_id=None, user="default", conversation_id=None):
             yield "tools", {"steps": [STEP]}
             raise RuntimeError("LLM down")
     http, _ = client(Broken())
     text = http.post("/v1/chat/completions", json={"messages": [{"role": "user", "content": "CA ?"}],
                                                    "stream": True}).text
     assert "</details>" in text and "RuntimeError: LLM down" in text and text.rstrip().endswith("[DONE]")
+
+
+def test_a_conversation_is_found_again_from_the_marker_of_an_earlier_answer(saved):
+    http, agent = client()
+    first = http.post("/v1/chat/completions", json={"messages": [{"role": "user", "content": "CA de mars ?"}]}).json()
+    content = first["choices"][0]["message"]["content"]
+    conversation_id = first["id"]
+    assert agent.who == ("default", conversation_id) and saved[0][:3] == (conversation_id, "default", "CA de mars ?")
+    http.post("/v1/chat/completions", json={"user": "cfo", "messages": [
+        {"role": "user", "content": "CA de mars ?"}, {"role": "assistant", "content": content},
+        {"role": "user", "content": "et avril ?"}]})
+    assert agent.who == ("cfo", conversation_id)                     # same conversation, the request's user
+    assert agent.received[1]["content"] == "CA : 5 €"                # the marker is not shown to the model
+    assert saved[1][:3] == (conversation_id, "cfo", "et avril ?")
+
+
+def test_a_client_can_name_the_conversation_and_the_user_by_header(saved):
+    http, agent = client()
+    http.post("/v1/chat/completions", headers={"X-Conversation-Id": "conv-42", "X-OpenWebUI-User-Id": "u7"},
+              json={"messages": [{"role": "user", "content": "CA ?"}], "stream": True})
+    assert agent.who == ("u7", "conv-42") and saved[0][:2] == ("conv-42", "u7")
+
+
+def test_a_failed_save_does_not_cost_the_answer(monkeypatch):
+    def broken(*a):
+        raise RuntimeError("database down")
+    monkeypatch.setattr("text2sql_calorvia.memory.save_turn", broken)
+    http, _ = client()
+    body = http.post("/v1/chat/completions", json={"messages": [{"role": "user", "content": "CA ?"}]}).json()
+    assert body["choices"][0]["message"]["content"].startswith("CA : 5 €")
+
+
+def test_charts_are_served_by_id_only(tmp_path, monkeypatch):
+    from text2sql_calorvia.config import settings
+    monkeypatch.setattr(settings, "charts_dir", tmp_path)
+    (tmp_path / "0123456789abcdef.png").write_bytes(b"\x89PNG")
+    http, _ = client()
+    assert http.get("/charts/0123456789abcdef.png").status_code == 200
+    assert http.get("/charts/..%2F..%2F.env").status_code == 404
+    assert http.get("/charts/0123456789abcdeg.png").status_code == 404
