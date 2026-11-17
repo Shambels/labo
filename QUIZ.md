@@ -1278,3 +1278,40 @@ The grounding check (step 13) compares every number ≥ 1 000 of the answer with
 
 An evaluation must measure the code at a commit. With memory on, the prompt would depend on what someone asked the agent to remember before the run: a preference in k€ changes every answer's format, a validated query changes the path. Two runs of the same commit could then differ for a reason recorded nowhere. `run_t2sql_eval.py` builds the agent with `use_memory=False`: no memory in the prompt, no `remember` or `forget` tool.
 </details>
+
+## Step 16: delivery
+
+**1.** `offer_readings` was rejected in step 14 and kept in step 16. What changed, and what does it say about deciding on one run?
+
+<details><summary>Answer</summary>
+
+Two things. A scorer fix (S09's dates, step 15) lifted its first run from 30 to 31/33 with no confidently wrong answer, and a second run on the step 15 code scored 30/33 while **A03 passed for the reason the rule targets**: the answer named EBITDA and booked revenue as other readings. Runs without the rule scored 29 and 29. The first decision used a sound principle (keep a change for its mechanism, seen in a trace, not for its total), but a single run can't show a mechanism that fires only sometimes. With noise of ±1–2 questions per run, a decision about a probabilistic behaviour needs at least two runs, and a scorer you trust.
+</details>
+
+**2.** The final configuration scores 30/33 on dev and 13/18 on test. Name the two reasons for the gap that the report found, and say which one should worry you more.
+
+<details><summary>Answer</summary>
+
+(1) **The scorer was overfitted to dev**: it was corrected while reading dev answers, and test showed two shapes it had never met, an expected answer with more than the question asks (E04's "40 factures") and a number written as a word (X04's "le seul"). By hand, test is 15/18. (2) **The agent met new kinds of error**: a `COUNT(*)` after a one-to-many join (C02: 47 lines for 12 entries) and a business word with no certified term (P06: contracts started instead of hires). The second worries more: the ontology was written from the starter questions and covers what dev asks, so the agent is strongest where it was taught and makes ordinary SQL mistakes elsewhere.
+</details>
+
+**3.** After seeing that E04 failed only because of the scorer, why not fix the scorer and re-score the test run?
+
+<details><summary>Answer</summary>
+
+Because then the test set would have shaped the scorer, and the next test score would no longer be held-out: every fix made after reading test answers is a fix tuned on test. The honest report gives the score as measured (13/18), the reading by hand (15/18), and why they differ. A scorer fix would be fine for future dev runs, but measuring it on test would need new test questions. The same goes for certifying "embauche" after P06.
+</details>
+
+**4.** Why couldn't the grounding check catch C02 or P06?
+
+<details><summary>Answer</summary>
+
+For two reasons. Both wrong numbers (47 and 38) are below its 1 000 threshold, which is there so that years, days and account numbers are not flagged. More fundamentally, the check verifies that a number **comes from a tool result**, and both did: the query really returned 47 and 38. It checks provenance, not meaning. A query that answers the wrong question passes it. Catching C02 needs knowledge of the schema (a warning on `COUNT(*)` after a one-to-many join, which the catalog's foreign keys make possible). Catching P06 needs knowledge of the business (a certified "hire" term).
+</details>
+
+**5.** In X05's run 11 trace, the agent took IND_TELE's account to be 623200 without querying. Where did it get that, and what would change in the table card?
+
+<details><summary>Answer</summary>
+
+From the card of `pay_elements`, which lists the distinct values of each code column **separately**: the 14 element codes in one list, the 7 accounts with their counts (`623200` ×2, `623100` ×1) in another. Lists meant for recognising codes were read as if they were the table, and the agent even inferred "two elements share 623200" from the count. For a small mapping table (14 rows), the card should show row pairs (`IND_TELE → 623100`), so that the right mapping is the one in front of the model, or the term should say the link must be queried.
+</details>
