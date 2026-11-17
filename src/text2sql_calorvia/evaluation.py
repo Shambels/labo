@@ -66,6 +66,9 @@ def prose_numbers(text: str) -> set:
     values |= {Decimal(m) for m in re.findall(r"(?<![\d.,])\d+\.\d+(?![\d.,])", text)}
     values |= {date.fromisoformat(m) for m in re.findall(r"\b\d{4}-\d{2}-\d{2}\b", text)}
     values |= {date(int(y), MONTHS.index(m.lower()) + 1, int(d)) for d, m, y in FRENCH_DATE.findall(text)}
+    # A date also counts by its day: "du 13/11/2025 au 28/11/2025" answers "du 13 au 28 novembre" (S09), as
+    # result_values does for the rows
+    values |= {Decimal(v.day) for v in list(values) if isinstance(v, date)}
     return values
 
 

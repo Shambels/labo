@@ -75,3 +75,9 @@ def test_a_yes_no_question_needs_the_right_conclusion():
     assert score(q, "**Non, les deux montants ne correspondent pas.**\n- Paie : 1 660 €")["missing"] == ["conclusion: oui"]
     assert not score(q, "C'est confirmé : 1 660 € des deux côtés.\n\n**Réponse : oui.**")["missing"]   # S11's layout
     assert score(q, "Non, il n'y a pas d'écart : 1 660 € des deux côtés.")["missing"] == ["conclusion: oui"]  # X03
+
+
+def test_a_date_written_in_full_answers_its_day():
+    q = {"behavior": "answer", "expected": "12 jours ouvrés, du 13 au 28 novembre"}
+    assert not score(q, "**12 jours**, du 13/11/2025 au 28/11/2025.")["missing"]
+    assert score(q, "**12 jours**, du 14/11/2025 au 28/11/2025.")["missing"] == ["13"]
