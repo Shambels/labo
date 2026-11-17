@@ -37,6 +37,7 @@ from text2sql_calorvia.config import settings
 from text2sql_calorvia.reconcile import KEY_TYPES, reconcile
 
 PROMPT = Path(__file__).resolve().parents[2] / "prompts" / "agent.txt"
+ONTOLOGY_PROMPT = PROMPT.with_name("agent_ontology.txt")   # the ontology's part, left out when use_ontology is off
 INJECTED = {"question", "session_id", "max_rows"}   # filled by the agent (query log, row budget), never by the model
 SQL_TOOLS = {"execute_sql", "validate_sql"}
 ENGINE = {"erp": "SQL Server", "compta": "PostgreSQL", "paie": "PostgreSQL"}
@@ -73,11 +74,13 @@ class AgentState(TypedDict, total=False):
     answer: str
 
 
-def system_prompt(sources: list[dict]) -> str:
-    return PROMPT.read_text(encoding="utf-8").format(
+def system_prompt(sources: list[dict], use_ontology: bool = True) -> str:
+    section = (ONTOLOGY_PROMPT.read_text(encoding="utf-8").format(tables=ontology.table_index(), metrics=ontology.glossary())
+               if use_ontology else "")
+    return PROMPT.read_text(encoding="utf-8").format(ontology=section,
         sources="\n".join(f"- {s['source']} ({s['engine']}, dialecte {s['dialect']}) : {s['description']}"
                           for s in sources),
-        tables=ontology.table_index(), metrics=ontology.glossary(), data_until=settings.data_until,
+        data_until=settings.data_until,
         max_sql_errors=settings.max_sql_errors, min_group_size=settings.min_group_size,
         rows_to_model=settings.rows_to_model)
 
@@ -189,8 +192,9 @@ def previous_answer(text: str) -> str:
 class Agent:
     """One graph, one MCP client per question. `mcp_target` is a URL, or the server object in tests."""
 
-    def __init__(self, mcp_target: Any = None, llm: Any = None):
+    def __init__(self, mcp_target: Any = None, llm: Any = None, use_ontology: bool = True):
         self.mcp_target = mcp_target or settings.mcp_url
+        self.use_ontology = use_ontology   # off: no ontology in the prompt nor in the cards (step 14's comparison)
         self.llm = llm or ChatOpenAI(model=settings.llm_model, base_url=settings.llm_url, api_key="local",
                                      temperature=0, timeout=300)
         self.graph = self._build()
@@ -231,6 +235,10 @@ class Agent:
                 if name in SQL_TOOLS and not ok:
                     sql_errors += 1
                     step["errors"] = output.get("errors") or [output.get("error")]
+                    # execute returns the SQL it ran only when validation passed: then the database refused it
+                    step["stage"] = "execution" if name == "execute_sql" and "sql" in output else "validation"
+                if name == "get_table_card" and ok and not self.use_ontology:
+                    output.pop("ontology_terms", None)
                 if name == "execute_sql" and ok:
                     qid = f"q{len(results) + 1}"
                     results[qid] = {k: output.get(k) for k in ("source", "sql", "columns", "rows", "row_count", "truncated")}
@@ -320,7 +328,7 @@ class Agent:
             mcp_tools = (await client.list_tools()).tools
             tools = [tool_schema(t) for t in mcp_tools] + [RECONCILE_TOOL]
             sources = structured(await client.call_tool("list_sources", {}))
-            history = [SystemMessage(system_prompt(sources))] + [
+            history = [SystemMessage(system_prompt(sources, self.use_ontology))] + [
                 HumanMessage(m["content"]) if m["role"] == "user" else AIMessage(previous_answer(m["content"]))
                 for m in messages if m["role"] in ("user", "assistant")]
             state = {"messages": history, "question": question, "session_id": session_id,

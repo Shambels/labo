@@ -185,3 +185,21 @@ def test_the_system_prompt_carries_the_ontology(sources):
 
 def test_agent_module_exposes_a_default_agent():
     assert callable(agent_module.default_agent)
+
+
+def test_without_ontology_neither_the_prompt_nor_the_cards_carry_it(sources):
+    llm = ScriptedLLM(AIMessage("", tool_calls=[call("get_table_card", source="erp", table="VTE_FACT")]),
+                      AIMessage("Pouvez-vous préciser ?"))
+    anyio.run(lambda: Agent(mcp_target=server, llm=llm, use_ontology=False).ask(
+        [{"role": "user", "content": "CA ?"}], "test"))
+    system, card = llm.calls[0][0].content, llm.calls[1][-1].content
+    assert "ontologie" not in system.lower() and "EBITDA" not in system and "{" not in system
+    assert "ontology_terms" not in card and "FAC_TYPE" in card
+
+
+def test_failed_queries_say_where_they_failed(sources):
+    llm = ScriptedLLM(AIMessage("", tool_calls=[call("execute_sql", 1, source="erp", sql="SELECT NOPE FROM VTE_FACT"),
+                                                call("execute_sql", 2, source="erp", sql="SELECT 1/0 AS x")]),
+                      AIMessage("Je ne sais pas."))
+    steps = run(llm)["steps"]
+    assert [s["stage"] for s in steps] == ["validation", "execution"]

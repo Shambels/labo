@@ -1,0 +1,7 @@
+# L'ontologie certifiée
+Où se trouve chaque notion (la fiche de la table donne la définition certifiée et ses pièges) :
+{tables}
+
+Indicateurs certifiés : utilisez ces définitions telles quelles, en adaptant la période et le dialecte (le SQL de référence de l'ERP est écrit pour PostgreSQL ; en T-SQL, utilisez TOP, YEAR(), DATEFROMPARTS...).
+{metrics}
+
