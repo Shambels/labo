@@ -7,8 +7,9 @@
 #   result (run as agent_ro on 2026-11-17; the sources are frozen on 31/05/2026).
 # - split: test questions are run once, at the end (step 16). One in three per category.
 # - behavior: what a good answer does.
-#     answer   gives the figures; scored on `expected` (every number and date, 0.5 % tolerance on amounts)
-#              and `expected_text` (names, without case or accents)
+#     answer   gives the figures; scored on `expected` (every number and date, 0.5 % tolerance on amounts),
+#              `expected_text` (names, without case or accents) and, for a yes/no question, `expected_conclusion`
+#              (oui / non, in the answer's first sentence: the figures alone can be right under a wrong conclusion)
 #     clarify  ambiguous question: asks which reading, or answers one reading while naming it and offering the
 #              other (counted apart)
 #     unknown  says the data does not hold the answer (absent, period not covered); no figure presented as one
@@ -228,13 +229,14 @@ questions:
         sql: SELECT count(*) FROM employees WHERE hire_date >= '2026-01-01' AND hire_date < '2026-06-01'
 
   # --- Across sources -----------------------------------------------------------------------------------------------
-  - {id: S11, starter: 11, category: cross, split: dev, behavior: answer}
+  - {id: S11, starter: 11, category: cross, split: dev, behavior: answer, expected_conclusion: non}
   - {id: S12, starter: 12, category: cross, split: dev, behavior: answer}
   - id: X03
     category: cross
     split: dev
     behavior: answer
     question: Le chiffre d'affaires d'avril 2026 est-il le même dans l'ERP et en comptabilité ?
+    expected_conclusion: oui
     expected: Oui, 12 099 823,09 € des deux côtés
     reference:
       - source: erp
@@ -263,6 +265,7 @@ questions:
     split: dev
     behavior: answer
     question: L'indemnité de télétravail de la paie de mars 2026 est-elle comptabilisée pour le même montant ?
+    expected_conclusion: oui
     expected: Oui, 1 660 € des deux côtés (paie et comptabilité)
     reference:
       - source: paie
@@ -278,6 +281,7 @@ questions:
     split: test
     behavior: answer
     question: Le chiffre d'affaires 2025 du client Distrinergie est-il le même dans l'ERP et en comptabilité ?
+    expected_conclusion: oui
     expected: Oui, 10 815 437,60 € des deux côtés
     reference:
       - source: erp

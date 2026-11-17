@@ -61,3 +61,10 @@ def test_sql_counts_separate_refusals_from_database_errors():
     steps = [{"tool": "execute_sql", "ok": True}, {"tool": "execute_sql", "ok": False, "stage": "validation"},
              {"tool": "execute_sql", "ok": False, "stage": "execution"}, {"tool": "get_table_card", "ok": True}]
     assert sql_counts(steps) == {"queries": 3, "refused": 1, "exec_errors": 1, "ran": 1, "tool_calls": 4}
+
+
+def test_a_yes_no_question_needs_the_right_conclusion():
+    q = {"behavior": "answer", "expected": "1 660 €", "expected_conclusion": "oui"}
+    assert not score(q, "**Oui**, 1 660 € des deux côtés.")["missing"]
+    assert score(q, "**Non, les deux montants ne correspondent pas.**\n- Paie : 1 660 €")["missing"] == ["conclusion: oui"]
+    assert score(q, "Les montants : 1 660 € et 1 660 €, donc oui.")["missing"] == ["conclusion: oui"]

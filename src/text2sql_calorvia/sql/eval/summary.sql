@@ -1,5 +1,5 @@
 -- One row per experiment and category; the report adds the totals. Only finished, clean runs (git_dirty = false)
-SELECT e.id, e.name, e.split, left(e.git_commit, 7), r.category,
+SELECT e.id, e.name, e.split, left(e.git_commit, 7) || ' / scored ' || left(coalesce(e.scorer_commit, e.git_commit), 7), r.category,
        count(*)                                                        AS questions,
        count(*) FILTER (WHERE r.ok)                                    AS ok,
        count(*) FILTER (WHERE r.behavior = 'answer' AND NOT r.ok

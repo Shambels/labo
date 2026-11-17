@@ -3,6 +3,7 @@
     uv run python scripts/run_t2sql_eval.py experiments/t2sql/with_ontology.toml            # dev questions
     uv run python scripts/run_t2sql_eval.py experiments/t2sql/with_ontology.toml -q A01 M05 # some questions
     uv run python scripts/run_t2sql_eval.py experiments/t2sql/final.toml --test             # once, at the end
+    uv run python scripts/run_t2sql_eval.py --rescore 2 3     # re-score stored answers with the current scoring code
 
 Needs the MCP server (9001) and the LLM (8000). A run made with uncommitted changes is stored with git_dirty = true
 and left out of the report.
@@ -26,10 +27,13 @@ from text2sql_calorvia.sources import load_sql
 
 async def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("config", type=Path)
+    parser.add_argument("config", type=Path, nargs="?")
+    parser.add_argument("--rescore", type=int, nargs="*", help="experiment ids: re-score their stored answers")
     parser.add_argument("-q", "--questions", nargs="*", help="question ids (default: the whole split)")
     parser.add_argument("--test", action="store_true", help="the held-out test questions (run once, step 16)")
     args = parser.parse_args()
+    if args.rescore:
+        return rescore(args.rescore)
     config = tomllib.loads(args.config.read_text())
     split = "test" if args.test else "dev"
     questions = [q for q in load_questions(split=split) if not args.questions or q["id"] in args.questions]
@@ -38,7 +42,8 @@ async def main():
 
     with psycopg.connect(settings.postgres_url, autocommit=True) as db:
         db.execute(load_sql("eval/schema"))
-        experiment = db.execute(load_sql("eval/start"), (config["name"], json.dumps(config), split, commit, dirty)).fetchone()[0]
+        experiment = db.execute(load_sql("eval/start"), (config["name"], json.dumps(config), split, commit, dirty,
+                                                          commit)).fetchone()[0]
         print(f"experiment {experiment}: {config['name']}, {len(questions)} {split} questions, commit {commit[:7]}"
               f"{' (dirty: not for the report)' if dirty else ''}", flush=True)
         for q in questions:
@@ -62,6 +67,28 @@ async def main():
                   f"missing={scored['missing']} leaked={scored['leaked']}{' ERROR ' + error if error else ''}", flush=True)
         db.execute(load_sql("eval/finish"), (experiment,))
     print(f"done: experiment {experiment}")
+
+
+def rescore(experiments):
+    """Score stored answers again (scores and judge), without asking the agent again."""
+    commit, dirty = git_state()
+    if dirty:
+        raise SystemExit("commit the scoring code first: the experiment keeps the scorer's commit")
+    questions = {q["id"]: q for q in load_questions(split="all")}
+    judge_client = OpenAI(base_url=settings.llm_url, api_key="local")
+    with psycopg.connect(settings.postgres_url, autocommit=True) as db:
+        db.execute(load_sql("eval/schema"))
+        for experiment in experiments:
+            for qid, answer, error in db.execute(load_sql("eval/answers"), (experiment,)).fetchall():
+                q = questions[qid]
+                scored = score(q, answer)
+                judged = judge(q["question"], answer, judge_client) if answer else {"label": "error", "why": error}
+                ok = verdict(q, scored, judged["label"]) and not error
+                db.execute(load_sql("eval/rescore"), (judged["label"], judged.get("why"), ok, json.dumps(scored["missing"]),
+                                                      json.dumps(scored["leaked"]), experiment, qid))
+                print(f"{experiment} {qid} {'OK  ' if ok else 'MISS'} {q['behavior']:7} → {judged['label']:7} "
+                      f"missing={scored['missing']}", flush=True)
+            db.execute(load_sql("eval/rescored"), (commit, experiment))
 
 
 if __name__ == "__main__":

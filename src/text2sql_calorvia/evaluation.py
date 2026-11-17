@@ -77,6 +77,11 @@ def score(question: dict, answer: str) -> dict:
     values, flat = prose_numbers(text), normalize(text)
     missing = [str(t) for t in expected_tokens(question.get("expected", "")) if not matches_with_tolerance(t, values)]
     missing += [name for name in question.get("expected_text", []) if normalize(name) not in flat]
+    if question.get("expected_conclusion"):
+        first = normalize(re.split(r"(?<=[.!?:])\s|\n", text.strip().lstrip("*# "), maxsplit=1)[0])
+        said = {w for w in ("oui", "non") if re.search(rf"\b{w}\b", first)}
+        if said != {question["expected_conclusion"]}:
+            missing.append(f"conclusion: {question['expected_conclusion']}")
     leaked = [p for p in question.get("forbidden", []) if re.search(p, answer)]
     return {"missing": missing, "leaked": leaked}
 

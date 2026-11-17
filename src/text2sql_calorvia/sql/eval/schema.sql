@@ -9,6 +9,9 @@ CREATE TABLE IF NOT EXISTS t2sql_experiments (
     started_at   TIMESTAMPTZ NOT NULL DEFAULT now(),
     finished_at  TIMESTAMPTZ
 );
+-- The scoring code can change after a run (a stricter check, a better judge prompt): answers are re-scored, not
+-- re-asked, and the commit of the scoring code is kept apart from the commit of the agent that answered
+ALTER TABLE t2sql_experiments ADD COLUMN IF NOT EXISTS scorer_commit TEXT;
 
 CREATE TABLE IF NOT EXISTS t2sql_results (
     experiment_id INTEGER NOT NULL REFERENCES t2sql_experiments(id) ON DELETE CASCADE,
