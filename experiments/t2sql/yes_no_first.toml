@@ -1,0 +1,6 @@
+# experiments/t2sql/yes_no_first.toml — step 14 fix 2: a closed question starts with Oui/Non answering the question
+# as asked (X03 opened with "Non, il n'y a pas d'écart" when the figures were equal); on top of count_star
+name = "yes_no_first"
+
+[agent]
+use_ontology = true   # the only change: one sentence in prompts/agent.txt, "# La réponse"
