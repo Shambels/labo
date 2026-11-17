@@ -1,0 +1,5 @@
+# experiments/t2sql/pay_element_term.toml — step 14 fix 4: certify pay_elements (gl_account = the payroll ↔ accounting link)
+name = "pay_element_term"
+
+[agent]
+use_ontology = true   # the only change: one more certified term in ontology/certification.yaml (on top of no_repeat)
