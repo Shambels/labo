@@ -38,7 +38,9 @@ async def main():
     split = "test" if args.test else "dev"
     questions = [q for q in load_questions(split=split) if not args.questions or q["id"] in args.questions]
     commit, dirty = git_state()
-    agent, judge_client = Agent(**config.get("agent", {})), OpenAI(base_url=settings.llm_url, api_key="local")
+    # Memory off: an evaluation must not depend on what someone asked the agent to remember (step 15)
+    agent = Agent(**{"use_memory": False, **config.get("agent", {})})
+    judge_client = OpenAI(base_url=settings.llm_url, api_key="local")
 
     with psycopg.connect(settings.postgres_url, autocommit=True) as db:
         db.execute(load_sql("eval/schema"))
