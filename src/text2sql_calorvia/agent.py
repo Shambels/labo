@@ -190,6 +190,10 @@ def fit(messages: list[AnyMessage]) -> list[AnyMessage]:
 NUMBER = re.compile(r"\d{1,3}(?:[ \u00a0\u202f.]\d{3})+(?:,\d+)?|\d+(?:[.,]\d+)?")
 OWN_FOOTER = re.compile(r"\n*-{3,}\s*\n\*\*Comment ce résultat a été obtenu.*", re.S)
 HISTORY_NOTE = re.compile(r"\s*\[Requêtes exécutées pour cette réponse :.*?\]", re.S)
+# A unit after a number scales it: "13 599,6 k€" is 13 599 600 € (a remembered preference, step 15)
+SCALE = re.compile(r"\s?(k€|K€|M€|Md€|millions?\b|milliers?\b|milliards?\b)")
+SCALES = {"k€": 1e3, "K€": 1e3, "millier": 1e3, "milliers": 1e3, "M€": 1e6, "million": 1e6, "millions": 1e6,
+          "Md€": 1e9, "milliard": 1e9, "milliards": 1e9}
 
 
 def own_text(content: str | None) -> str:
@@ -197,14 +201,19 @@ def own_text(content: str | None) -> str:
     return HISTORY_NOTE.sub("", OWN_FOOTER.sub("", content or "")).strip()
 
 
-def numbers(text: str) -> list[tuple[str, float]]:
-    """Numbers as written and their value: '13 599 646,63' (French), '13599646.63' (JSON), '1.234.567'."""
+def numbers(text: str, scaled: bool = False) -> list[tuple[str, float]]:
+    """Numbers as written and their value: '13 599 646,63' (French), '13599646.63' (JSON), '1.234.567'.
+    scaled: a unit after the number multiplies it ('13 599,6 k€' -> 13 599 600, '1,2 M€' -> 1 200 000)."""
     found = []
-    for token in NUMBER.findall(text):
+    for match in NUMBER.finditer(text):
+        token = match.group()
         t = re.sub(r"[ \u00a0\u202f]", "", token)
         if re.fullmatch(r"\d{1,3}(?:\.\d{3})+(?:,\d+)?", t):   # dots as thousands separators
             t = t.replace(".", "")
-        found.append((token, float(t.replace(",", "."))))
+        value = float(t.replace(",", "."))
+        if scaled and (unit := SCALE.match(text, match.end())):
+            value *= SCALES[unit.group(1)]
+        found.append((token, value))
     return found
 
 
@@ -220,7 +229,7 @@ def ungrounded(answer: str, corpus: str, minimum: float = 1000, max_pairs_of: in
 
     def is_known(v):
         return any(abs(v - k) <= max(0.01, 0.005 * k) for k in known)
-    return [token for token, v in numbers(answer) if abs(v) >= minimum and not is_known(abs(v))]
+    return [token for token, v in numbers(answer, scaled=True) if abs(v) >= minimum and not is_known(abs(v))]
 
 
 def previous_answer(text: str) -> str:
