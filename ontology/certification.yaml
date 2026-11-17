@@ -1,0 +1,285 @@
+# Certification of the auto-ontology terms (step 12): what we corrected and certified, and why.
+# Applied by scripts/certify_ontology.py (idempotent): each term is found by its table, renamed, re-described,
+# and its name and description marked certified; each metric becomes a certified SQL attribute of its term.
+#
+# Names stay in English (auto-ontology's convention) with the French business word; descriptions are in French,
+# the language of the questions (D3). Every rule below comes from a trap found in step 10 (docs/sources/NOTES.md).
+# "was:" is the name the model generated, kept as the before/after record.
+
+terms:
+  # --- ERP (the PostgreSQL copy: schema dbo, lower-case names) -----------------------------------------------------
+  - database: gespro
+    table: vdr_vendeur
+    was: Vendor
+    name: Salesperson (commercial)
+    description: >-
+      Commerciaux (vendeurs) de Calorvia : ce ne sont pas des fournisseurs. VDR_MATRICULE est le matricule de paie
+      sans son préfixe M (99999 dans l'ERP = M99999 dans la paie). Trois commerciaux n'ont pas de matricule (dont le
+      pseudo-commercial SIEGE). Le commercial d'une vente est celui de la commande (vte_cde.vdr_id).
+  - database: gespro
+    table: vte_cde
+    was: Order
+    name: Sales Order (commande client)
+    description: >-
+      Commandes des clients. Une commande peut être expédiée et facturée en plusieurs fois. Statuts dans par_code
+      (STATUT_CDE) ; une commande ANNULEE ne compte pas.
+  - database: gespro
+    table: vte_cde_lig
+    was: Order Line Item
+    name: Sales Order Line (ligne de commande client)
+    description: >-
+      Lignes des commandes clients (article, quantité commandée, prix, remise, quantité livrée).
+  - database: gespro
+    table: vte_fact
+    was: Invoice
+    name: Customer Invoice and Credit Note (facture et avoir client)
+    description: >-
+      Factures (fac_type = 'F') ET avoirs / notes de crédit (fac_type = 'A') des clients, dans la même table, avec
+      des montants POSITIFS dans les deux cas : le chiffre d'affaires net = factures moins avoirs. Le motif d'un
+      avoir est dans fac_motif (par_code MOTIF_AVOIR) ; REGUL_TARIF est une régularisation de prix sans retour de
+      marchandise. fac_statut EMISE = émise mais pas encore transférée en comptabilité (d'où un écart avec le
+      journal VEN).
+  - database: gespro
+    table: vte_fact_lig
+    was: Order Line Item
+    name: Customer Invoice Line (ligne de facture client)
+    description: >-
+      Lignes des factures et des avoirs clients (article, quantité, prix, montant HT). Les unités vendues =
+      quantités des factures moins celles des avoirs de motif RETOUR uniquement : un avoir REGUL_TARIF reprend des
+      quantités pour calculer un écart de prix, sans retour de marchandise.
+  - database: gespro
+    table: ach_cde
+    was: Purchase Order
+    name: Purchase Order (commande fournisseur)
+    description: >-
+      Commandes passées aux fournisseurs d'articles (composants, matières, négoce).
+  - database: gespro
+    table: ach_cde_lig
+    was: Access Control List
+    name: Purchase Order Line (ligne de commande fournisseur)
+    description: >-
+      Lignes des commandes fournisseurs : article, quantité commandée (acl_qte), prix, quantité déjà reçue
+      (acl_qte_recue). Rien à voir avec des droits d'accès : ACH = achats.
+  - database: gespro
+    table: ach_fact
+    was: Invoice
+    name: Supplier Invoice (facture fournisseur)
+    description: >-
+      Factures des fournisseurs d'articles, rapprochées de la commande et de la réception. Ce ne sont pas des
+      factures clients. Les autres factures d'achat (énergie, loyers, transport, honoraires) ne sont qu'en
+      comptabilité.
+  - database: gespro
+    table: ach_recep
+    was: Receipt
+    name: Goods Receipt (réception fournisseur)
+    description: >-
+      Réceptions des livraisons fournisseurs (bon de livraison du fournisseur, date). rec_comment signale les
+      livraisons incomplètes (palette manquante) et les relivraisons.
+  - database: gespro
+    table: ach_recep_lig
+    was: Recovery Link
+    name: Goods Receipt Line (ligne de réception)
+    description: >-
+      Lignes des réceptions : quantité reçue (rl_qte_recue, « reçue » et non « récupérée »), quantité refusée à la
+      réception, numéro de lot. Un retour au fournisseur après la réception n'est pas ici : c'est un mouvement de
+      stock de type RET dans stk_mvt.
+  - database: gespro
+    table: prd_of
+    was: Order
+    name: Manufacturing Order (ordre de fabrication)
+    description: >-
+      Ordres de fabrication : un par produit fini, par semaine et par ligne de production (Seneffe, Gand).
+  - database: gespro
+    table: art_tarif
+    was: Tariff
+    name: Price List Entry (tarif)
+    description: >-
+      Prix de vente par article et par période, et prix spéciaux par client (cli_id renseigné).
+  - database: gespro
+    table: log_exped
+    was: Shipment Log
+    name: Shipment (expédition, bon de livraison)
+    description: >-
+      Expéditions aux clients (bons de livraison), avec transporteur, colis, poids, statut et incidents.
+  - database: gespro
+    table: stk_mvt
+    was: Stock Movement
+    name: Stock Movement (mouvement de stock)
+    description: >-
+      Tous les mouvements de stock, quantités signées (entrée positive, sortie négative) : INIT, REC (réception),
+      RET (retour au fournisseur), CONS, PROD, REB, EXP, RCL, TRF, INV (par_code TYPE_MVT). mvt_lot porte le numéro
+      de lot ; mvt_ref la pièce d'origine (réception, non-conformité NC-...).
+  - database: gespro
+    table: frn_fournisseur
+    was: Supplier
+    name: Supplier (fournisseur)
+    description: >-
+      Fournisseurs d'articles. Attention aux doublons : une fiche marquée « (NE PAS UTILISER) » double un
+      fournisseur actif (Kompra). Le numéro de TVA (frn_tva, format BE0123456789) relie au tiers de la comptabilité.
+  - database: gespro
+    table: cli_client
+    was: Client
+    name: Customer (client)
+    description: >-
+      Clients : distributeurs, installateurs, promoteurs (par_code CLI_TYPE). cli_tva (format BE0123456789) relie au
+      tiers de la comptabilité, qui l'écrit 'BE 0123.456.789'.
+
+  - database: gespro
+    table: art_article
+    was: Product Article
+    name: Article (article, produit)
+    description: >-
+      Les 62 articles. art_type (par_code TYPE_ART) : PF = produit fini fabriqué (les 8 pompes à chaleur Aéris et
+      groupes Ventis : « produits finis »), NEG = négoce, COMP = composant, MP = matière première, SRV = prestation.
+      art_ligne et sit_id_prod : ligne et usine de production des produits finis.
+  # --- Accounting ------------------------------------------------------------------------------------------------
+  - database: compta
+    table: immobilisation
+    was: Real Estate Asset
+    name: Fixed Asset (immobilisation)
+    description: >-
+      Registre des immobilisations (bâtiments, machines, véhicules, informatique, en-cours), avec valeur
+      d'acquisition, durée et méthode d'amortissement. Les dotations sont dans amortissement.
+  - database: compta
+    table: tiers
+    was: Tier
+    name: Third Party (tiers)
+    description: >-
+      Clients et fournisseurs de la comptabilité, avec numéro de TVA au format 'BE 0123.456.789' (l'ERP écrit
+      BE0123456789 : comparer sans espaces ni points).
+  - database: compta
+    table: ligne_ecriture
+    was: Accounting Entry Line
+    name: Accounting Entry Line (ligne d'écriture)
+    description: >-
+      Lignes des écritures, au débit ou au crédit, montants toujours positifs. Classe du compte = premier chiffre de
+      numero_compte : 6 charges (au débit), 7 produits (au crédit), 1 à 5 bilan. Ne compter que les écritures
+      VALIDEE. Le compte 693000 (affectation du résultat) n'est pas une charge d'exploitation : il ramène le
+      résultat à zéro en fin d'exercice.
+  - database: compta
+    table: ecriture
+    was: Accounting Entry
+    name: Accounting Entry (écriture comptable)
+    description: >-
+      Écritures (pièces) par journal : VEN ventes (factures de l'ERP), ACH achats, BQ1 banque, SAL salaires, OD
+      opérations diverses, AN à-nouveaux (reprise des soldes au 01/01/2025, pas une opération de l'exercice). statut
+      BROUILLARD = provisoire, à exclure ; code_periode AAAA-MM.
+  - database: compta
+    table: budget
+    was: Budget
+    name: Budget 2026
+    description: >-
+      Budget 2026 par compte et par mois, montant positif pour les charges comme pour les produits. Plusieurs
+      versions (V1, V2, FINAL) : seule FINAL est approuvée.
+
+  - database: compta
+    table: amortissement
+    was: Depreciation
+    name: Depreciation Charge (dotation aux amortissements)
+    description: >-
+      Dotations mensuelles aux amortissements, une ligne par immobilisation et par mois. « Les amortissements
+      comptabilisés » sur une période = la SOMME des montants (en euros), pas le nombre de lignes ; le même total
+      est au débit du compte 630000.
+  # --- Payroll ---------------------------------------------------------------------------------------------------
+  - database: paie
+    table: contracts
+    was: Employment Contract
+    name: Employment Contract (contrat)
+    description: >-
+      Contrats et avenants : une ligne par période, donc plusieurs lignes par personne. L'effectif à une date =
+      nombre de employee_id DISTINCTS dont une ligne couvre la date (start_date <= date et end_date vide ou >=
+      date). Le site vient du département (departments.site_code).
+  - database: paie
+    table: payslip_lines
+    was: Payslip Line
+    name: Payslip Line (ligne de fiche de paie)
+    description: >-
+      Lignes des fiches de paie, montants signés (retenues négatives). Pour la commission (element_code COMMISSION),
+      quantity = ventes du mois précédent et rate = un POURCENTAGE (0.1000 = 0,1 %). Montants individuels :
+      seulement agrégés sur 5 personnes au moins (règle de confidentialité de l'agent).
+  - database: paie
+    table: timesheets
+    was: Timesheet
+    name: Timesheet (prestation journalière)
+    description: >-
+      Une ligne par personne et par jour ouvré : heures prévues et prestées, absence (absence_code, ex. ACC accident
+      du travail), lieu (work_location TELE = télétravail). Compter les lignes = compter les jours.
+  - database: paie
+    table: payroll_runs
+    was: Payroll Run
+    name: Payroll Run (calcul de paie)
+    description: >-
+      Calculs de paie : MENSUEL pour le mois de period_month, ou CORRECTION (une correction de février 2026 a été
+      payée en mars). La fiche de paie d'un mois = le calcul MENSUEL de ce mois.
+
+# Certified metrics: SQL attributes, full queries over the catalog tables, run by auto-ontology on its connections.
+# The ERP ones run on the PostgreSQL copy (schema dbo); our agent writes the T-SQL equivalent.
+metrics:
+  - database: gespro
+    table: vte_fact
+    name: Net invoiced revenue (chiffre d'affaires net facturé HT)
+    description: Factures moins avoirs, hors taxes, sur fac_dt. Filtrer la période sur fac_dt.
+    expression: |
+      SELECT SUM(CASE WHEN fac_type = 'A' THEN -fac_mt_ht ELSE fac_mt_ht END) AS chiffre_affaires_net_ht
+      FROM dbo.vte_fact
+  - database: gespro
+    table: vte_fact_lig
+    name: Units sold net of returns (unités vendues)
+    description: Quantités facturées moins les quantités des avoirs de motif RETOUR (pas REGUL_TARIF ni les autres).
+    expression: |
+      SELECT SUM(CASE WHEN f.fac_type = 'F' THEN l.fl_qte WHEN f.fac_motif = 'RETOUR' THEN -l.fl_qte ELSE 0 END) AS unites
+      FROM dbo.vte_fact_lig l JOIN dbo.vte_fact f ON f.fac_id = l.fac_id
+  - database: compta
+    table: ligne_ecriture
+    name: Booked revenue (chiffre d'affaires comptable)
+    description: Comptes 70, crédit moins débit, écritures VALIDEE. Filtrer la période sur ecriture.code_periode.
+    expression: |
+      SELECT SUM(l.credit - l.debit) AS chiffre_affaires_comptable
+      FROM public.ligne_ecriture l JOIN public.ecriture e ON e.id_ecriture = l.id_ecriture
+      WHERE e.statut = 'VALIDEE' AND l.numero_compte LIKE '70%'
+  - database: compta
+    table: ligne_ecriture
+    name: EBITDA
+    description: >-
+      Résultat d'exploitation avant amortissements et provisions : comptes 60, 61, 62, 64 et 70 à 74 (crédit moins
+      débit), écritures VALIDEE. Exclut 63 (amortissements, provisions et leurs reprises), 65 (intérêts, frais
+      bancaires), 66, 67 (impôts) et 69. Marge d'EBITDA = EBITDA / comptes 70.
+    expression: |
+      SELECT SUM(l.credit - l.debit) FILTER (WHERE left(l.numero_compte, 2) IN ('60','61','62','64','70','71','72','73','74')) AS ebitda,
+             SUM(l.credit - l.debit) FILTER (WHERE left(l.numero_compte, 2) = '70') AS chiffre_affaires
+      FROM public.ligne_ecriture l JOIN public.ecriture e ON e.id_ecriture = l.id_ecriture
+      WHERE e.statut = 'VALIDEE'
+  - database: compta
+    table: ligne_ecriture
+    name: Net result (résultat net)
+    description: >-
+      Produits (classe 7) moins charges (classe 6), écritures VALIDEE, SANS le compte 693000 : l'écriture d'affectation
+      du résultat (31/12) le ramènerait à zéro. Filtrer l'exercice via periode.code_exercice.
+    expression: |
+      SELECT SUM(l.credit - l.debit) AS resultat_net
+      FROM public.ligne_ecriture l JOIN public.ecriture e ON e.id_ecriture = l.id_ecriture
+      WHERE e.statut = 'VALIDEE' AND left(l.numero_compte, 1) IN ('6', '7') AND l.numero_compte <> '693000'
+  - database: compta
+    table: ligne_ecriture
+    name: Depreciation expense (dotations aux amortissements)
+    description: Compte 630000, débit moins crédit, écritures VALIDEE (égal au total du registre amortissement).
+    expression: |
+      SELECT SUM(l.debit - l.credit) AS amortissements
+      FROM public.ligne_ecriture l JOIN public.ecriture e ON e.id_ecriture = l.id_ecriture
+      WHERE e.statut = 'VALIDEE' AND l.numero_compte = '630000'
+  - database: paie
+    table: contracts
+    name: Headcount on a date (effectif)
+    description: >-
+      Personnes distinctes sous contrat à une date (ici le 31/05/2026, à remplacer), par site via le département.
+    expression: |
+      SELECT d.site_code, COUNT(DISTINCT c.employee_id) AS personnes
+      FROM public.contracts c JOIN public.departments d ON d.department_code = c.department_code
+      WHERE c.start_date <= DATE '2026-05-31' AND (c.end_date IS NULL OR c.end_date >= DATE '2026-05-31')
+      GROUP BY d.site_code
+  - database: paie
+    table: timesheets
+    name: Telework days (jours de télétravail)
+    description: Lignes de prestation avec work_location = 'TELE' (une ligne par jour).
+    expression: |
+      SELECT COUNT(*) AS jours_teletravail FROM public.timesheets WHERE work_location = 'TELE'

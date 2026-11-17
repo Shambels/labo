@@ -1,0 +1,86 @@
+diff --git a/auto_ontology/retrieval/text_to_sql/react/loop.py b/auto_ontology/retrieval/text_to_sql/react/loop.py
+index 22b12d2..5c77473 100644
+--- a/auto_ontology/retrieval/text_to_sql/react/loop.py
++++ b/auto_ontology/retrieval/text_to_sql/react/loop.py
+@@ -105,7 +105,7 @@ def submit(
+                 None,
+             )
+         return "Accepted.", Submission("", response, assumptions, None)
+-    connector = connector_for(ctx)
++    connector = connector_for(ctx, sql)
+     if connector is None:
+         return "Error: no database to run on. Retrieve the tables you need first.", None
+     check = check_query(ctx, connector, sql)
+diff --git a/auto_ontology/retrieval/text_to_sql/react/run_sql.py b/auto_ontology/retrieval/text_to_sql/react/run_sql.py
+index 1777c74..76d83b4 100644
+--- a/auto_ontology/retrieval/text_to_sql/react/run_sql.py
++++ b/auto_ontology/retrieval/text_to_sql/react/run_sql.py
+@@ -364,11 +364,42 @@ def check_query(ctx: ToolContext, connector: SQLDatabase, sql: str) -> CheckResu
+     return CheckResult(tables_not_shown(check.statement, ctx, catalog), check.statement)
+ 
+ 
+-def connector_for(ctx: ToolContext) -> SQLDatabase | None:
++def _tables_in_sql(sql: str, seen: list[dict]) -> list[dict]:
++    """The seen tables a query references (Calorvia patch).
++
++    ``retrieve`` searches every database, so over an episode ``seen_tables``
++    collects tables of several of them, and routing on all of them refused every
++    query once more than one database was connected. Only the tables the query
++    names matter.
++    """
++    import sqlglot
++    from sqlglot import exp
++
++    try:
++        trees = [t for t in sqlglot.parse(sql) if t is not None]
++    except Exception:  # noqa: BLE001 - unparseable SQL: fall back to every seen table
++        return seen
++    named = {
++        (str(t.db or "").lower(), t.name.lower())
++        for tree in trees
++        for t in tree.find_all(exp.Table)
++        if t.name
++    }
++    used = [
++        table
++        for table in seen
++        if (str(table.get("schema_name") or "").lower(), str(table.get("name") or "").lower()) in named
++        or ("", str(table.get("name") or "").lower()) in named
++    ]
++    return used or seen
++
++
++def connector_for(ctx: ToolContext, sql: str | None = None) -> SQLDatabase | None:
+     """The database the episode's SQL runs on.
+ 
+     The target database when the caller named one; otherwise the connector that
+-    owns the tables ``retrieve`` has shown, or the only one configured.
++    owns the tables ``retrieve`` has shown -- the ones *sql* references when it
++    is given -- or the only one configured.
+     """
+     if ctx.database_name:
+         for connector in ctx.connectors:
+@@ -376,10 +407,11 @@ def connector_for(ctx: ToolContext) -> SQLDatabase | None:
+                 return connector
+     if len(ctx.connectors) == 1:
+         return ctx.connectors[0]
++    seen = list(ctx.seen_tables.values())
++    if sql:
++        seen = _tables_in_sql(sql, seen)
+     try:
+-        return resolve_connector_from_tables(
+-            list(ctx.seen_tables.values()), ctx.connectors
+-        )
++        return resolve_connector_from_tables(seen, ctx.connectors)
+     except ValueError:
+         return None
+ 
+@@ -427,7 +459,7 @@ def run_sql(ctx: ToolContext, sql: str) -> str:
+             "Error: no exploratory run_sql calls left in this episode. Run your "
+             "best query with final=true."
+         )
+-    connector = connector_for(ctx)
++    connector = connector_for(ctx, sql)
+     if connector is None:
+         return "Error: no database to run on. Retrieve the tables you need first."
+     dialect = getattr(connector, "dialect", None)

@@ -1,0 +1,34 @@
+diff --git a/auto_ontology/ingestion_service/__main__.py b/auto_ontology/ingestion_service/__main__.py
+index 9f662d8..28ae0ce 100644
+--- a/auto_ontology/ingestion_service/__main__.py
++++ b/auto_ontology/ingestion_service/__main__.py
+@@ -103,7 +103,7 @@ def main() -> None:
+     )
+     uvicorn.run(
+         app,
+-        host="0.0.0.0",
++        host=os.environ.get("BIND_HOST", "0.0.0.0"),  # Calorvia patch: 127.0.0.1 under host networking
+         port=int(os.environ.get("INGESTION_PORT", "3002")),
+         log_config=None,
+     )
+diff --git a/auto_ontology/server/__main__.py b/auto_ontology/server/__main__.py
+index 058d00c..39f26cb 100644
+--- a/auto_ontology/server/__main__.py
++++ b/auto_ontology/server/__main__.py
+@@ -10,6 +10,7 @@ from contextlib import asynccontextmanager
+ 
+ from fastapi import FastAPI
+ from fastapi.middleware.cors import CORSMiddleware
++import os
+ import uvicorn
+ from auto_ontology.env import load_env
+ 
+@@ -123,7 +124,7 @@ def main() -> None:
+ 
+     uvicorn.run(
+         app,
+-        host="0.0.0.0",
++        host=os.environ.get("BIND_HOST", "0.0.0.0"),  # Calorvia patch: 127.0.0.1 under host networking
+         port=3001,
+         log_config=None,
+     )

@@ -1,0 +1,22 @@
+diff --git a/auto_ontology/vdb/__init__.py b/auto_ontology/vdb/__init__.py
+index f12cafb..3309d62 100644
+--- a/auto_ontology/vdb/__init__.py
++++ b/auto_ontology/vdb/__init__.py
+@@ -4,6 +4,8 @@
+ 
+ """VDB initialization — data layer and semantic layer collections."""
+ 
++import os
++
+ from auto_ontology.infra.postgres import get_postgres_connection_string
+ from auto_ontology.vdb.postgres import PostgresVDB
+ 
+@@ -27,6 +29,8 @@ def get_vdb(
+         "connection_string": connection_string,
+         "collection_name": collection_name,
+         "schema_name": VDB_SCHEMA,
++        # Calorvia patch: the vector size of the embedding model (bge-m3: 1024), not NVIDIA's 2048
++        "vector_size": int(os.environ.get("EMBED_DIMENSIONS", "2048")),
+     }
+     if database_name:
+         kwargs["database_name"] = database_name

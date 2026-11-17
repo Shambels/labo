@@ -1,0 +1,25 @@
+diff --git a/auto_ontology/connectors/postgres.py b/auto_ontology/connectors/postgres.py
+index d455948..66c2c00 100644
+--- a/auto_ontology/connectors/postgres.py
++++ b/auto_ontology/connectors/postgres.py
+@@ -179,7 +179,9 @@ class PostgresDatabase(SQLDatabase):
+               -- the ingesting role cannot read must not be catalogued, or
+               -- text-to-SQL will offer it and every query dies with
+               -- "permission denied".
+-              AND has_table_privilege(c.oid, 'SELECT')
++              -- Calorvia patch: a table the role reads through column grants only
++              -- (personal columns revoked) is still readable, column by column.
++              AND has_any_column_privilege(c.oid, 'SELECT')
+             ORDER BY n.nspname, c.relname
+         """)
+ 
+@@ -225,7 +227,8 @@ class PostgresDatabase(SQLDatabase):
+               AND n.nspname NOT LIKE 'pg\\_%'
+               AND c.relispartition = false
+               AND c.relkind IN ('r', 'p', 'v', 'm', 'f')
+-              AND has_table_privilege(c.oid, 'SELECT')
++              -- Calorvia patch: only the columns the role may read (see get_tables)
++              AND has_column_privilege(c.oid, a.attnum, 'SELECT')
+               AND a.attnum > 0
+               AND NOT a.attisdropped
+             ORDER BY n.nspname, c.relname, a.attnum

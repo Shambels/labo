@@ -1,0 +1,42 @@
+# Step 12: the two ways tried to show the SQL Server ERP to auto-ontology, which can't read SQL Server (O6).
+#
+#   docker compose -f ontology/docker-compose.yaml --env-file .env up -d erp-copy   # (a) a PostgreSQL copy of GESPRO
+#   docker compose -f ontology/docker-compose.yaml --env-file .env up -d trino      # (b) Trino over the three sources
+#
+# The copy is filled by scripts/copy_erp.py. Trino reads the sources live, as agent_ro.
+name: calorvia-ontology
+
+services:
+  erp-copy:
+    image: postgres:16
+    container_name: calorvia-erp-copy
+    environment:
+      POSTGRES_DB: gespro
+      POSTGRES_USER: ${ERP_COPY_ADMIN_USER}
+      POSTGRES_PASSWORD: ${ERP_COPY_ADMIN_PASSWORD}
+    ports:
+      - "127.0.0.1:5436:5432"
+    volumes:
+      - erp-copy-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$${POSTGRES_USER}\" -d gespro"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+    restart: unless-stopped
+
+  trino:
+    image: trinodb/trino:480
+    container_name: calorvia-trino
+    environment:
+      AGENT_RO_PASSWORD: ${AGENT_RO_PASSWORD}
+    ports:
+      - "127.0.0.1:8080:8080"
+    volumes:
+      - ./trino/catalog:/etc/trino/catalog:ro
+    extra_hosts:
+      - "host.docker.internal:host-gateway"   # the sources are published on the host's ports
+    restart: unless-stopped
+
+volumes:
+  erp-copy-data:

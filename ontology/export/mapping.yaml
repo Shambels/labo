@@ -1,0 +1,1189 @@
+version: 0.2.0.dev0
+name: auto_ontology_model_mapping
+description: Maps the auto_ontology_model_ontology onto the auto_ontology_model semantic model
+ontology_ref:
+  name: auto_ontology_model_ontology
+  iri: ./ontology.yaml
+semantic_model_ref:
+  name: auto_ontology_model
+  iri: ./semantic_model.yaml
+concept_mappings:
+- concept: AbsenceType
+  object_mappings:
+  - expression: absence_type.absence_code
+  link_mappings:
+  - object_mapping:
+      expression: absence_type.absence_code
+    children:
+    - object_mapping:
+        concept: String
+        expression: absence_type.label
+      relationship: label
+    - object_mapping:
+        concept: Boolean
+        expression: absence_type.paid_by_employer
+      relationship: paid_by_employer
+    - object_mapping:
+        concept: Boolean
+        expression: absence_type.meal_voucher
+      relationship: meal_voucher
+- concept: AccountingEntryCritureComptable
+  object_mappings:
+  - expression: accounting_entry_écriture_comptable.entry_id
+  link_mappings:
+  - object_mapping:
+      expression: accounting_entry_écriture_comptable.entry_id
+    children:
+    - object_mapping:
+        concept: String
+        expression: accounting_entry_écriture_comptable.user
+      relationship: user
+    - object_mapping:
+        concept: Date
+        expression: accounting_entry_écriture_comptable.due_date
+      relationship: due_date
+    - object_mapping:
+        concept: Date
+        expression: accounting_entry_écriture_comptable.entry_date
+      relationship: entry_date
+    - object_mapping:
+        concept: DateTime
+        expression: accounting_entry_écriture_comptable.entry_timestamp
+      relationship: entry_timestamp
+    - object_mapping:
+        concept: String
+        expression: accounting_entry_écriture_comptable.status
+      relationship: status
+    - object_mapping:
+        concept: String
+        expression: accounting_entry_écriture_comptable.external_reference
+      relationship: external_reference
+    - object_mapping:
+        concept: String
+        expression: accounting_entry_écriture_comptable.document_number
+      relationship: document_number
+    - object_mapping:
+        concept: String
+        expression: accounting_entry_écriture_comptable.description
+      relationship: description
+    - object_mapping:
+        concept: ThirdPartyTiers
+        expression: accounting_entry_écriture_comptable.id_tiers
+      relationship: third_party_tiers
+    - object_mapping:
+        concept: FiscalPeriod
+        expression: accounting_entry_écriture_comptable.code_periode
+      relationship: fiscal_period
+    - object_mapping:
+        concept: AccountingJournal
+        expression: accounting_entry_écriture_comptable.code_journal
+      relationship: accounting_journal
+- concept: AccountingJournal
+  object_mappings:
+  - expression: accounting_journal.journal_code
+  link_mappings:
+  - object_mapping:
+      expression: accounting_journal.journal_code
+    children:
+    - object_mapping:
+        concept: String
+        expression: accounting_journal.journal_type
+      relationship: journal_type
+    - object_mapping:
+        concept: String
+        expression: accounting_journal.journal_label
+      relationship: journal_label
+- concept: AnalyticalCentre
+  object_mappings:
+  - expression: analytical_centre.centre_code
+  link_mappings:
+  - object_mapping:
+      expression: analytical_centre.centre_code
+    children:
+    - object_mapping:
+        concept: Boolean
+        expression: analytical_centre.active_status
+      relationship: active_status
+    - object_mapping:
+        concept: String
+        expression: analytical_centre.site
+      relationship: site
+    - object_mapping:
+        concept: String
+        expression: analytical_centre.centre_label
+      relationship: centre_label
+- concept: ArticleArticleProduit
+  object_mappings:
+  - expression: article_article_produit.article_identifier
+  link_mappings:
+  - object_mapping:
+      expression: article_article_produit.article_identifier
+    children:
+    - object_mapping:
+        concept: Decimal
+        expression: article_article_produit.standard_packaging_quantity
+      relationship: standard_packaging_quantity
+    - object_mapping:
+        concept: Boolean
+        expression: article_article_produit.is_available_for_sale
+      relationship: is_available_for_sale
+    - object_mapping:
+        concept: Date
+        expression: article_article_produit.creation_date
+      relationship: creation_date
+    - object_mapping:
+        concept: Boolean
+        expression: article_article_produit.is_active
+      relationship: is_active
+    - object_mapping:
+        concept: Decimal
+        expression: article_article_produit.standard_selling_price
+      relationship: standard_selling_price
+    - object_mapping:
+        concept: Decimal
+        expression: article_article_produit.weight_in_kilograms
+      relationship: weight_in_kilograms
+    - object_mapping:
+        concept: String
+        expression: article_article_produit.product_category_code
+      relationship: product_category_code
+    - object_mapping:
+        concept: String
+        expression: article_article_produit.product_sku_code
+      relationship: product_sku_code
+    - object_mapping:
+        concept: String
+        expression: article_article_produit.product_model_label
+      relationship: product_model_label
+    - object_mapping:
+        concept: String
+        expression: article_article_produit.product_line_code
+      relationship: product_line_code
+    - object_mapping:
+        concept: String
+        expression: article_article_produit.unit_of_measure
+      relationship: unit_of_measure
+    - object_mapping:
+        concept: Boolean
+        expression: article_article_produit.is_held_in_inventory
+      relationship: is_held_in_inventory
+    - object_mapping:
+        concept: SupplierFournisseur
+        expression: article_article_produit.frn_id_princ
+      relationship: supplier_fournisseur
+    - object_mapping:
+        concept: Site
+        expression: article_article_produit.sit_id_prod
+      relationship: site
+    - object_mapping:
+        concept: ProductFamily
+        expression: article_article_produit.fam_code
+      relationship: product_family
+- concept: BankAccount
+  object_mappings:
+  - expression: bank_account.bank_code
+  link_mappings:
+  - object_mapping:
+      expression: bank_account.bank_code
+    children:
+    - object_mapping:
+        concept: String
+        expression: bank_account.account_label
+      relationship: account_label
+    - object_mapping:
+        concept: String
+        expression: bank_account.iban
+      relationship: iban
+    - object_mapping:
+        concept: String
+        expression: bank_account.currency
+      relationship: currency
+    - object_mapping:
+        concept: ChartOfAccountsEntry
+        expression: bank_account.numero_compte
+      relationship: chart_of_accounts_entry
+- concept: ChartOfAccountsEntry
+  object_mappings:
+  - expression: chart_of_accounts_entry.account_number
+  link_mappings:
+  - object_mapping:
+      expression: chart_of_accounts_entry.account_number
+    children:
+    - object_mapping:
+        concept: String
+        expression: chart_of_accounts_entry.account_type
+      relationship: account_type
+    - object_mapping:
+        concept: Boolean
+        expression: chart_of_accounts_entry.analytical_account_required
+      relationship: analytical_account_required
+    - object_mapping:
+        concept: Integer
+        expression: chart_of_accounts_entry.account_class
+      relationship: account_class
+    - object_mapping:
+        concept: String
+        expression: chart_of_accounts_entry.account_label
+      relationship: account_label
+    - object_mapping:
+        concept: Boolean
+        expression: chart_of_accounts_entry.active_status
+      relationship: active_status
+    - object_mapping:
+        concept: Boolean
+        expression: chart_of_accounts_entry.letterable
+      relationship: letterable
+- concept: CostCenter
+  object_mappings:
+  - expression: cost_center.cost_center_code
+  link_mappings:
+  - object_mapping:
+      expression: cost_center.cost_center_code
+    children:
+    - object_mapping:
+        concept: String
+        expression: cost_center.general_ledger_cost_center
+      relationship: general_ledger_cost_center
+    - object_mapping:
+        concept: String
+        expression: cost_center.name
+      relationship: name
+    - object_mapping:
+        concept: WorkSite
+        expression: cost_center.site_code
+      relationship: work_site
+- concept: CustomerClient
+  object_mappings:
+  - expression: customer_client.client_id
+  link_mappings:
+  - object_mapping:
+      expression: customer_client.client_id
+    children:
+    - object_mapping:
+        concept: String
+        expression: customer_client.client_code
+      relationship: client_code
+    - object_mapping:
+        concept: String
+        expression: customer_client.vat_number
+      relationship: vat_number
+    - object_mapping:
+        concept: Decimal
+        expression: customer_client.discount_percentage
+      relationship: discount_percentage
+    - object_mapping:
+        concept: String
+        expression: customer_client.client_type
+      relationship: client_type
+    - object_mapping:
+        concept: String
+        expression: customer_client.country
+      relationship: country
+    - object_mapping:
+        concept: String
+        expression: customer_client.client_name
+      relationship: client_name
+    - object_mapping:
+        concept: String
+        expression: customer_client.region
+      relationship: region
+    - object_mapping:
+        concept: String
+        expression: customer_client.postal_code
+      relationship: postal_code
+    - object_mapping:
+        concept: String
+        expression: customer_client.street_address
+      relationship: street_address
+    - object_mapping:
+        concept: Date
+        expression: customer_client.creation_date
+      relationship: creation_date
+    - object_mapping:
+        concept: Decimal
+        expression: customer_client.credit_limit
+      relationship: credit_limit
+    - object_mapping:
+        concept: Boolean
+        expression: customer_client.is_active
+      relationship: is_active
+    - object_mapping:
+        concept: String
+        expression: customer_client.payment_terms
+      relationship: payment_terms
+    - object_mapping:
+        concept: String
+        expression: customer_client.city
+      relationship: city
+    - object_mapping:
+        concept: SalespersonCommercial
+        expression: customer_client.vdr_id
+      relationship: salesperson_commercial
+- concept: CustomerInvoiceAndCreditNoteFactureEtAvoirClient
+  object_mappings:
+  - expression: customer_invoice_and_credit_note_facture_et_avoir_client.invoice_id
+  link_mappings:
+  - object_mapping:
+      expression: customer_invoice_and_credit_note_facture_et_avoir_client.invoice_id
+    children:
+    - object_mapping:
+        concept: Decimal
+        expression: customer_invoice_and_credit_note_facture_et_avoir_client.vat_rate
+      relationship: vat_rate
+    - object_mapping:
+        concept: Date
+        expression: customer_invoice_and_credit_note_facture_et_avoir_client.issue_date
+      relationship: issue_date
+    - object_mapping:
+        concept: Date
+        expression: customer_invoice_and_credit_note_facture_et_avoir_client.due_date
+      relationship: due_date
+    - object_mapping:
+        concept: String
+        expression: customer_invoice_and_credit_note_facture_et_avoir_client.status
+      relationship: status
+    - object_mapping:
+        concept: String
+        expression: customer_invoice_and_credit_note_facture_et_avoir_client.invoice_number
+      relationship: invoice_number
+    - object_mapping:
+        concept: Decimal
+        expression: customer_invoice_and_credit_note_facture_et_avoir_client.gross_amount
+      relationship: gross_amount
+    - object_mapping:
+        concept: Decimal
+        expression: customer_invoice_and_credit_note_facture_et_avoir_client.net_amount
+      relationship: net_amount
+    - object_mapping:
+        concept: String
+        expression: customer_invoice_and_credit_note_facture_et_avoir_client.invoice_type
+      relationship: invoice_type
+    - object_mapping:
+        concept: String
+        expression: customer_invoice_and_credit_note_facture_et_avoir_client.motivation
+      relationship: motivation
+    - object_mapping:
+        concept: Decimal
+        expression: customer_invoice_and_credit_note_facture_et_avoir_client.vat_amount
+      relationship: vat_amount
+    - object_mapping:
+        concept: CustomerInvoiceAndCreditNoteFactureEtAvoirClient
+        expression: customer_invoice_and_credit_note_facture_et_avoir_client.fac_id_orig
+      relationship: customer_invoice_and_credit_note_facture_et_avoir_client
+    - object_mapping:
+        concept: SalesOrderCommandeClient
+        expression: customer_invoice_and_credit_note_facture_et_avoir_client.cde_id
+      relationship: sales_order_commande_client
+    - object_mapping:
+        concept: CustomerClient
+        expression: customer_invoice_and_credit_note_facture_et_avoir_client.cli_id
+      relationship: customer_client
+- concept: Department
+  object_mappings:
+  - expression: department.department_code
+  link_mappings:
+  - object_mapping:
+      expression: department.department_code
+    children:
+    - object_mapping:
+        concept: String
+        expression: department.name
+      relationship: name
+    - object_mapping:
+        concept: WorkSite
+        expression: department.site_code
+      relationship: work_site
+    - object_mapping:
+        concept: CostCenter
+        expression: department.cost_center_code
+      relationship: cost_center
+    - object_mapping:
+        concept: Employee
+        expression: department.head_employee_id
+      relationship: employee
+- concept: Employee
+  object_mappings:
+  - expression: employee.employee_id
+  link_mappings:
+  - object_mapping:
+      expression: employee.employee_id
+    children:
+    - object_mapping:
+        concept: String
+        expression: employee.exit_reason
+      relationship: exit_reason
+    - object_mapping:
+        concept: String
+        expression: employee.last_name
+      relationship: last_name
+    - object_mapping:
+        concept: String
+        expression: employee.work_email
+      relationship: work_email
+    - object_mapping:
+        concept: String
+        expression: employee.city
+      relationship: city
+    - object_mapping:
+        concept: String
+        expression: employee.gender
+      relationship: gender
+    - object_mapping:
+        concept: Date
+        expression: employee.exit_date
+      relationship: exit_date
+    - object_mapping:
+        concept: String
+        expression: employee.first_name
+      relationship: first_name
+    - object_mapping:
+        concept: Date
+        expression: employee.birth_date
+      relationship: birth_date
+    - object_mapping:
+        concept: String
+        expression: employee.postal_code
+      relationship: postal_code
+    - object_mapping:
+        concept: Date
+        expression: employee.hire_date
+      relationship: hire_date
+    - object_mapping:
+        concept: Employee
+        expression: employee.manager_id
+      relationship: employee
+- concept: EmploymentContractContrat
+  object_mappings:
+  - expression: employment_contract_contrat.contract_identifier
+  link_mappings:
+  - object_mapping:
+      expression: employment_contract_contrat.contract_identifier
+    children:
+    - object_mapping:
+        concept: Date
+        expression: employment_contract_contrat.start_date
+      relationship: start_date
+    - object_mapping:
+        concept: Boolean
+        expression: employment_contract_contrat.telework_allowed
+      relationship: telework_allowed
+    - object_mapping:
+        concept: Decimal
+        expression: employment_contract_contrat.weekly_hours
+      relationship: weekly_hours
+    - object_mapping:
+        concept: Date
+        expression: employment_contract_contrat.end_date
+      relationship: end_date
+    - object_mapping:
+        concept: String
+        expression: employment_contract_contrat.shift_pattern
+      relationship: shift_pattern
+    - object_mapping:
+        concept: Date
+        expression: employment_contract_contrat.planned_end_date
+      relationship: planned_end_date
+    - object_mapping:
+        concept: Decimal
+        expression: employment_contract_contrat.work_regime
+      relationship: work_regime
+    - object_mapping:
+        concept: String
+        expression: employment_contract_contrat.contract_type
+      relationship: contract_type
+    - object_mapping:
+        concept: Department
+        expression: employment_contract_contrat.department_code
+      relationship: department
+    - object_mapping:
+        concept: Employee
+        expression: employment_contract_contrat.employee_id
+      relationship: employee
+    - object_mapping:
+        concept: JobPosition
+        expression: employment_contract_contrat.position_code
+      relationship: job_position
+- concept: FiscalPeriod
+  object_mappings:
+  - expression: fiscal_period.period_code
+  link_mappings:
+  - object_mapping:
+      expression: fiscal_period.period_code
+    children:
+    - object_mapping:
+        concept: String
+        expression: fiscal_period.status
+      relationship: status
+    - object_mapping:
+        concept: Date
+        expression: fiscal_period.start_date
+      relationship: start_date
+    - object_mapping:
+        concept: Date
+        expression: fiscal_period.end_date
+      relationship: end_date
+    - object_mapping:
+        concept: FiscalYear
+        expression: fiscal_period.code_exercice
+      relationship: fiscal_year
+- concept: FiscalYear
+  object_mappings:
+  - expression: fiscal_year.fiscal_year_code
+  link_mappings:
+  - object_mapping:
+      expression: fiscal_year.fiscal_year_code
+    children:
+    - object_mapping:
+        concept: Date
+        expression: fiscal_year.start_date
+      relationship: start_date
+    - object_mapping:
+        concept: Date
+        expression: fiscal_year.closure_date
+      relationship: closure_date
+    - object_mapping:
+        concept: Date
+        expression: fiscal_year.end_date
+      relationship: end_date
+    - object_mapping:
+        concept: String
+        expression: fiscal_year.fiscal_period_label
+      relationship: fiscal_period_label
+    - object_mapping:
+        concept: String
+        expression: fiscal_year.status
+      relationship: status
+- concept: FixedAssetImmobilisation
+  object_mappings:
+  - expression: fixed_asset_immobilisation.real_estate_asset_id
+  link_mappings:
+  - object_mapping:
+      expression: fixed_asset_immobilisation.real_estate_asset_id
+    children:
+    - object_mapping:
+        concept: Decimal
+        expression: fixed_asset_immobilisation.acquisition_value
+      relationship: acquisition_value
+    - object_mapping:
+        concept: String
+        expression: fixed_asset_immobilisation.asset_status
+      relationship: asset_status
+    - object_mapping:
+        concept: String
+        expression: fixed_asset_immobilisation.real_estate_asset_code
+      relationship: real_estate_asset_code
+    - object_mapping:
+        concept: String
+        expression: fixed_asset_immobilisation.real_estate_asset_name
+      relationship: real_estate_asset_name
+    - object_mapping:
+        concept: Integer
+        expression: fixed_asset_immobilisation.useful_life_in_years
+      relationship: useful_life_in_years
+    - object_mapping:
+        concept: String
+        expression: fixed_asset_immobilisation.depreciation_method
+      relationship: depreciation_method
+    - object_mapping:
+        concept: Date
+        expression: fixed_asset_immobilisation.in_service_date
+      relationship: in_service_date
+    - object_mapping:
+        concept: ThirdPartyTiers
+        expression: fixed_asset_immobilisation.id_tiers_fournisseur
+      relationship: third_party_tiers
+    - object_mapping:
+        concept: AnalyticalCentre
+        expression: fixed_asset_immobilisation.code_centre
+      relationship: analytical_centre
+    - object_mapping:
+        concept: ChartOfAccountsEntry
+        expression: fixed_asset_immobilisation.numero_compte
+      relationship: chart_of_accounts_entry
+- concept: GoodsReceiptRCeptionFournisseur
+  object_mappings:
+  - expression: goods_receipt_réception_fournisseur.record_identifier
+  link_mappings:
+  - object_mapping:
+      expression: goods_receipt_réception_fournisseur.record_identifier
+    children:
+    - object_mapping:
+        concept: String
+        expression: goods_receipt_réception_fournisseur.rec_bl_frn
+      relationship: rec_bl_frn
+    - object_mapping:
+        concept: Date
+        expression: goods_receipt_réception_fournisseur.receipt_date
+      relationship: receipt_date
+    - object_mapping:
+        concept: String
+        expression: goods_receipt_réception_fournisseur.receipt_number
+      relationship: receipt_number
+    - object_mapping:
+        concept: String
+        expression: goods_receipt_réception_fournisseur.receipt_comment
+      relationship: receipt_comment
+    - object_mapping:
+        concept: Site
+        expression: goods_receipt_réception_fournisseur.sit_id
+      relationship: site
+    - object_mapping:
+        concept: PurchaseOrderCommandeFournisseur
+        expression: goods_receipt_réception_fournisseur.ac_id
+      relationship: purchase_order_commande_fournisseur
+- concept: JobPosition
+  object_mappings:
+  - expression: job_position.position_code
+  link_mappings:
+  - object_mapping:
+      expression: job_position.position_code
+    children:
+    - object_mapping:
+        concept: String
+        expression: job_position.joint_committee
+      relationship: joint_committee
+    - object_mapping:
+        concept: String
+        expression: job_position.salary_class
+      relationship: salary_class
+    - object_mapping:
+        concept: String
+        expression: job_position.title
+      relationship: title
+    - object_mapping:
+        concept: String
+        expression: job_position.category
+      relationship: category
+- concept: PayrollElement
+  object_mappings:
+  - expression: payroll_element.element_code
+  link_mappings:
+  - object_mapping:
+      expression: payroll_element.element_code
+    children:
+    - object_mapping:
+        concept: Boolean
+        expression: payroll_element.onss_subject
+      relationship: onss_subject
+    - object_mapping:
+        concept: String
+        expression: payroll_element.gl_account
+      relationship: gl_account
+    - object_mapping:
+        concept: String
+        expression: payroll_element.element_type
+      relationship: element_type
+    - object_mapping:
+        concept: String
+        expression: payroll_element.label
+      relationship: label
+    - object_mapping:
+        concept: Boolean
+        expression: payroll_element.taxable
+      relationship: taxable
+- concept: PayrollRunCalculDePaie
+  object_mappings:
+  - expression: payroll_run_calcul_de_paie.run_id
+  link_mappings:
+  - object_mapping:
+      expression: payroll_run_calcul_de_paie.run_id
+    children:
+    - object_mapping:
+        concept: String
+        expression: payroll_run_calcul_de_paie.run_type
+      relationship: run_type
+    - object_mapping:
+        concept: String
+        expression: payroll_run_calcul_de_paie.status
+      relationship: status
+    - object_mapping:
+        concept: String
+        expression: payroll_run_calcul_de_paie.description
+      relationship: description
+    - object_mapping:
+        concept: Date
+        expression: payroll_run_calcul_de_paie.period_month
+      relationship: period_month
+    - object_mapping:
+        concept: Date
+        expression: payroll_run_calcul_de_paie.run_date
+      relationship: run_date
+    - object_mapping:
+        concept: Date
+        expression: payroll_run_calcul_de_paie.payment_date
+      relationship: payment_date
+- concept: Payslip
+  object_mappings:
+  - expression: payslip.payslip_id
+  link_mappings:
+  - object_mapping:
+      expression: payslip.payslip_id
+    children:
+    - object_mapping:
+        concept: String
+        expression: payslip.pdf_file_path
+      relationship: pdf_file_path
+    - object_mapping:
+        concept: Decimal
+        expression: payslip.employer_social_security_contributions
+      relationship: employer_social_security_contributions
+    - object_mapping:
+        concept: Decimal
+        expression: payslip.gross_amount
+      relationship: gross_amount
+    - object_mapping:
+        concept: Decimal
+        expression: payslip.taxable_amount
+      relationship: taxable_amount
+    - object_mapping:
+        concept: Decimal
+        expression: payslip.employee_social_security_contributions
+      relationship: employee_social_security_contributions
+    - object_mapping:
+        concept: Decimal
+        expression: payslip.net_amount
+      relationship: net_amount
+    - object_mapping:
+        concept: Decimal
+        expression: payslip.withholding_tax
+      relationship: withholding_tax
+    - object_mapping:
+        concept: Employee
+        expression: payslip.employee_id
+      relationship: employee
+    - object_mapping:
+        concept: CostCenter
+        expression: payslip.cost_center_code
+      relationship: cost_center
+    - object_mapping:
+        concept: EmploymentContractContrat
+        expression: payslip.contract_id
+      relationship: employment_contract_contrat
+    - object_mapping:
+        concept: PayrollRunCalculDePaie
+        expression: payslip.run_id
+      relationship: payroll_run_calcul_de_paie
+- concept: ProductFamily
+  object_mappings:
+  - expression: product_family.family_code
+  link_mappings:
+  - object_mapping:
+      expression: product_family.family_code
+    children:
+    - object_mapping:
+        concept: String
+        expression: product_family.family_name
+      relationship: family_name
+    - object_mapping:
+        concept: String
+        expression: product_family.purchase_account_code
+      relationship: purchase_account_code
+    - object_mapping:
+        concept: String
+        expression: product_family.family_type
+      relationship: family_type
+    - object_mapping:
+        concept: String
+        expression: product_family.product_range
+      relationship: product_range
+    - object_mapping:
+        concept: String
+        expression: product_family.sales_account_code
+      relationship: sales_account_code
+- concept: PurchaseOrderCommandeFournisseur
+  object_mappings:
+  - expression: purchase_order_commande_fournisseur.purchase_order_id
+  link_mappings:
+  - object_mapping:
+      expression: purchase_order_commande_fournisseur.purchase_order_id
+    children:
+    - object_mapping:
+        concept: Decimal
+        expression: purchase_order_commande_fournisseur.total_amount_including_tax
+      relationship: total_amount_including_tax
+    - object_mapping:
+        concept: Date
+        expression: purchase_order_commande_fournisseur.previous_delivery_date
+      relationship: previous_delivery_date
+    - object_mapping:
+        concept: String
+        expression: purchase_order_commande_fournisseur.purchase_order_status
+      relationship: purchase_order_status
+    - object_mapping:
+        concept: Date
+        expression: purchase_order_commande_fournisseur.purchase_order_date
+      relationship: purchase_order_date
+    - object_mapping:
+        concept: String
+        expression: purchase_order_commande_fournisseur.purchase_order_number
+      relationship: purchase_order_number
+    - object_mapping:
+        concept: SupplierFournisseur
+        expression: purchase_order_commande_fournisseur.frn_id
+      relationship: supplier_fournisseur
+    - object_mapping:
+        concept: Site
+        expression: purchase_order_commande_fournisseur.sit_id
+      relationship: site
+- concept: PurchaseOrderLineLigneDeCommandeFournisseur
+  object_mappings:
+  - expression: purchase_order_line_ligne_de_commande_fournisseur.id
+  link_mappings:
+  - object_mapping:
+      expression: purchase_order_line_ligne_de_commande_fournisseur.id
+    children:
+    - object_mapping:
+        concept: Decimal
+        expression: purchase_order_line_ligne_de_commande_fournisseur.unit_price
+      relationship: unit_price
+    - object_mapping:
+        concept: Integer
+        expression: purchase_order_line_ligne_de_commande_fournisseur.number
+      relationship: number
+    - object_mapping:
+        concept: Decimal
+        expression: purchase_order_line_ligne_de_commande_fournisseur.quantity
+      relationship: quantity
+    - object_mapping:
+        concept: Decimal
+        expression: purchase_order_line_ligne_de_commande_fournisseur.recovered_quantity
+      relationship: recovered_quantity
+    - object_mapping:
+        concept: PurchaseOrderCommandeFournisseur
+        expression: purchase_order_line_ligne_de_commande_fournisseur.ac_id
+      relationship: purchase_order_commande_fournisseur
+    - object_mapping:
+        concept: ArticleArticleProduit
+        expression: purchase_order_line_ligne_de_commande_fournisseur.art_id
+      relationship: article_article_produit
+- concept: SalesOrderCommandeClient
+  object_mappings:
+  - expression: sales_order_commande_client.order_id
+  link_mappings:
+  - object_mapping:
+      expression: sales_order_commande_client.order_id
+    children:
+    - object_mapping:
+        concept: Decimal
+        expression: sales_order_commande_client.order_amount_excluding_tax
+      relationship: order_amount_excluding_tax
+    - object_mapping:
+        concept: Date
+        expression: sales_order_commande_client.order_date
+      relationship: order_date
+    - object_mapping:
+        concept: Date
+        expression: sales_order_commande_client.planned_delivery_date
+      relationship: planned_delivery_date
+    - object_mapping:
+        concept: String
+        expression: sales_order_commande_client.client_name
+      relationship: client_name
+    - object_mapping:
+        concept: String
+        expression: sales_order_commande_client.order_status
+      relationship: order_status
+    - object_mapping:
+        concept: String
+        expression: sales_order_commande_client.order_number
+      relationship: order_number
+    - object_mapping:
+        concept: Site
+        expression: sales_order_commande_client.sit_id_exp
+      relationship: site
+    - object_mapping:
+        concept: CustomerClient
+        expression: sales_order_commande_client.cli_id
+      relationship: customer_client
+    - object_mapping:
+        concept: SalespersonCommercial
+        expression: sales_order_commande_client.vdr_id
+      relationship: salesperson_commercial
+- concept: SalesOrderLineLigneDeCommandeClient
+  object_mappings:
+  - expression: sales_order_line_ligne_de_commande_client.line_item_id
+  link_mappings:
+  - object_mapping:
+      expression: sales_order_line_ligne_de_commande_client.line_item_id
+    children:
+    - object_mapping:
+        concept: Integer
+        expression: sales_order_line_ligne_de_commande_client.line_number
+      relationship: line_number
+    - object_mapping:
+        concept: Decimal
+        expression: sales_order_line_ligne_de_commande_client.delivered_quantity
+      relationship: delivered_quantity
+    - object_mapping:
+        concept: Decimal
+        expression: sales_order_line_ligne_de_commande_client.ordered_quantity
+      relationship: ordered_quantity
+    - object_mapping:
+        concept: Decimal
+        expression: sales_order_line_ligne_de_commande_client.discount_percentage
+      relationship: discount_percentage
+    - object_mapping:
+        concept: Decimal
+        expression: sales_order_line_ligne_de_commande_client.unit_price
+      relationship: unit_price
+    - object_mapping:
+        concept: ArticleArticleProduit
+        expression: sales_order_line_ligne_de_commande_client.art_id
+      relationship: article_article_produit
+    - object_mapping:
+        concept: SalesOrderCommandeClient
+        expression: sales_order_line_ligne_de_commande_client.cde_id
+      relationship: sales_order_commande_client
+- concept: SalespersonCommercial
+  object_mappings:
+  - expression: salesperson_commercial.vendor_id
+  link_mappings:
+  - object_mapping:
+      expression: salesperson_commercial.vendor_id
+    children:
+    - object_mapping:
+        concept: String
+        expression: salesperson_commercial.zone
+      relationship: zone
+    - object_mapping:
+        concept: String
+        expression: salesperson_commercial.email_address
+      relationship: email_address
+    - object_mapping:
+        concept: String
+        expression: salesperson_commercial.surname
+      relationship: surname
+    - object_mapping:
+        concept: String
+        expression: salesperson_commercial.vendor_code
+      relationship: vendor_code
+    - object_mapping:
+        concept: String
+        expression: salesperson_commercial.first_name
+      relationship: first_name
+    - object_mapping:
+        concept: Date
+        expression: salesperson_commercial.entry_date
+      relationship: entry_date
+    - object_mapping:
+        concept: Boolean
+        expression: salesperson_commercial.active_status
+      relationship: active_status
+    - object_mapping:
+        concept: String
+        expression: salesperson_commercial.registration_number
+      relationship: registration_number
+- concept: Site
+  object_mappings:
+  - expression: site.site_id
+  link_mappings:
+  - object_mapping:
+      expression: site.site_id
+    children:
+    - object_mapping:
+        concept: Boolean
+        expression: site.is_active
+      relationship: is_active
+    - object_mapping:
+        concept: Date
+        expression: site.opening_date
+      relationship: opening_date
+    - object_mapping:
+        concept: String
+        expression: site.site_type
+      relationship: site_type
+    - object_mapping:
+        concept: String
+        expression: site.country
+      relationship: country
+    - object_mapping:
+        concept: String
+        expression: site.site_name
+      relationship: site_name
+    - object_mapping:
+        concept: String
+        expression: site.city
+      relationship: city
+    - object_mapping:
+        concept: String
+        expression: site.site_code
+      relationship: site_code
+    - object_mapping:
+        concept: String
+        expression: site.street_address
+      relationship: street_address
+- concept: SupplierFournisseur
+  object_mappings:
+  - expression: supplier_fournisseur.supplier_identifier
+  link_mappings:
+  - object_mapping:
+      expression: supplier_fournisseur.supplier_identifier
+    children:
+    - object_mapping:
+        concept: Boolean
+        expression: supplier_fournisseur.is_active
+      relationship: is_active
+    - object_mapping:
+        concept: String
+        expression: supplier_fournisseur.country
+      relationship: country
+    - object_mapping:
+        concept: String
+        expression: supplier_fournisseur.vat_number
+      relationship: vat_number
+    - object_mapping:
+        concept: String
+        expression: supplier_fournisseur.postal_code
+      relationship: postal_code
+    - object_mapping:
+        concept: String
+        expression: supplier_fournisseur.supplier_name
+      relationship: supplier_name
+    - object_mapping:
+        concept: String
+        expression: supplier_fournisseur.payment_terms
+      relationship: payment_terms
+    - object_mapping:
+        concept: Integer
+        expression: supplier_fournisseur.delivery_delay_days
+      relationship: delivery_delay_days
+    - object_mapping:
+        concept: Date
+        expression: supplier_fournisseur.creation_date
+      relationship: creation_date
+    - object_mapping:
+        concept: String
+        expression: supplier_fournisseur.city
+      relationship: city
+    - object_mapping:
+        concept: String
+        expression: supplier_fournisseur.street_address
+      relationship: street_address
+    - object_mapping:
+        concept: String
+        expression: supplier_fournisseur.supplier_code
+      relationship: supplier_code
+- concept: ThirdPartyTiers
+  object_mappings:
+  - expression: third_party_tiers.tier_id
+  link_mappings:
+  - object_mapping:
+      expression: third_party_tiers.tier_id
+    children:
+    - object_mapping:
+        concept: Date
+        expression: third_party_tiers.creation_date
+      relationship: creation_date
+    - object_mapping:
+        concept: String
+        expression: third_party_tiers.iban
+      relationship: iban
+    - object_mapping:
+        concept: String
+        expression: third_party_tiers.tier_code
+      relationship: tier_code
+    - object_mapping:
+        concept: String
+        expression: third_party_tiers.legal_name
+      relationship: legal_name
+    - object_mapping:
+        concept: String
+        expression: third_party_tiers.country
+      relationship: country
+    - object_mapping:
+        concept: String
+        expression: third_party_tiers.tier_type
+      relationship: tier_type
+    - object_mapping:
+        concept: String
+        expression: third_party_tiers.payment_terms
+      relationship: payment_terms
+    - object_mapping:
+        concept: String
+        expression: third_party_tiers.vat_number
+      relationship: vat_number
+    - object_mapping:
+        concept: Boolean
+        expression: third_party_tiers.active
+      relationship: active
+    - object_mapping:
+        concept: ChartOfAccountsEntry
+        expression: third_party_tiers.compte_collectif
+      relationship: chart_of_accounts_entry
+- concept: TransportProvider
+  object_mappings:
+  - expression: transport_provider.transport_provider_id
+  link_mappings:
+  - object_mapping:
+      expression: transport_provider.transport_provider_id
+    children:
+    - object_mapping:
+        concept: Boolean
+        expression: transport_provider.transport_provider_is_active
+      relationship: transport_provider_is_active
+    - object_mapping:
+        concept: String
+        expression: transport_provider.transport_provider_name
+      relationship: transport_provider_name
+    - object_mapping:
+        concept: String
+        expression: transport_provider.transport_provider_code
+      relationship: transport_provider_code
+    - object_mapping:
+        concept: String
+        expression: transport_provider.transport_provider_country
+      relationship: transport_provider_country
+    - object_mapping:
+        concept: String
+        expression: transport_provider.transport_provider_vat_number
+      relationship: transport_provider_vat_number
+    - object_mapping:
+        concept: String
+        expression: transport_provider.transport_provider_type
+      relationship: transport_provider_type
+- concept: VatRate
+  object_mappings:
+  - expression: vat_rate.vat_code
+  link_mappings:
+  - object_mapping:
+      expression: vat_rate.vat_code
+    children:
+    - object_mapping:
+        concept: String
+        expression: vat_rate.vat_label
+      relationship: vat_label
+    - object_mapping:
+        concept: Decimal
+        expression: vat_rate.vat_rate
+      relationship: vat_rate
+    - object_mapping:
+        concept: ChartOfAccountsEntry
+        expression: vat_rate.numero_compte
+      relationship: chart_of_accounts_entry
+- concept: WorkSite
+  object_mappings:
+  - expression: work_site.site_code
+  link_mappings:
+  - object_mapping:
+      expression: work_site.site_code
+    children:
+    - object_mapping:
+        concept: String
+        expression: work_site.city
+      relationship: city
+    - object_mapping:
+        concept: String
+        expression: work_site.site_name
+      relationship: site_name
+    - object_mapping:
+        concept: String
+        expression: work_site.street
+      relationship: street
+    - object_mapping:
+        concept: String
+        expression: work_site.postal_code
+      relationship: postal_code
+    - object_mapping:
+        concept: Date
+        expression: work_site.opened_on
+      relationship: opened_on

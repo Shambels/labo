@@ -1044,3 +1044,63 @@ An exception inside the SQL rule would have to be proven safe for every query th
 
 (1) Matching that the databases can't do the same way on both engines: without accents (`Aeris` → "Aéris"; SQL Server's collation is accent-sensitive, and PostgreSQL has no `unaccent` extension here), and without punctuation (the ERP's VAT `BE0236099757` → accounting's `BE 0236.099.757`). (2) Typo tolerance (`Distrinergy` → "Distrinergie SA", with difflib). It costs 1.5–2.6 s per source once, then a search takes milliseconds. Salary columns are numeric, so they are never indexed.
 </details>
+
+---
+
+## Step 12: the ontology
+
+**1.** Through Trino and through the PostgreSQL copy, auto-ontology ingested the same 23 tables and 211 columns. Why did the copy win anyway, and why was its usual drawback irrelevant here?
+
+<details><summary>Answer</summary>
+
+Through the copy, the 41 declared foreign keys came along; through Trino, none did, because Trino exposes no constraints and auto-ontology's connector returns empty key tables. auto-ontology builds its join paths from the keys; without them it would have to infer every ERP join from the data. A copy's usual drawback is staleness, but the ERP stopped changing when it was extracted on 31/05/2026 and replaced by Atlas the next day, so a copy loses nothing.
+</details>
+
+**2.** The payroll `employees` table was missing from auto-ontology's catalog, with no error in the log. What caused it, and why is "silently" the worst part?
+
+<details><summary>Answer</summary>
+
+The connector kept only tables where `has_table_privilege(…, 'SELECT')` is true. `agent_ro` reads `employees` through column grants (the personal columns are revoked), so that test is false and the table was skipped. The fix tests `has_any_column_privilege` for tables and `has_column_privilege` for columns. Silently is the worst part because the ontology just lacked the people table, and every question about employees would have failed later without pointing at the cause. It was caught by comparing the ingest's table count (13) with our catalog (14).
+</details>
+
+**3.** Shipped as is, auto-ontology answered 0 of 12 questions with three databases connected. What was the bug, and why would a single-database demo never show it?
+
+<details><summary>Answer</summary>
+
+`retrieve` searches every database, and every table it shows goes into `seen_tables`. The router then tried to find one connector owning *all* the seen tables; with tables from two databases it refused, and every query (even a correct one) came back "no database to run on" until the tool budget ran out. With one database, every seen table belongs to it, so the check always passes. The patch routes on the tables the submitted SQL actually references.
+</details>
+
+**4.** The model named `vdr_vendeur` "Vendor" and `ach_cde_lig` "Access Control List". What do these errors have in common, and what kind of correction fixes them?
+
+<details><summary>Answer</summary>
+
+The model read French abbreviations as English words: *vendeur* (salesperson) became *vendor* (in English, a supplier), and *ACH* (achats, purchases) became ACL. Only a human who knows the business can fix them: rename the term, describe it with the business rule, and certify it. A wrong name is dangerous because retrieval is by meaning: "Vendor" would come up for questions about suppliers.
+</details>
+
+**5.** After certification, Q5 (net result) went from 7,425,716 to 5,412,000 €. What did the certified metric say that the model couldn't infer?
+
+<details><summary>Answer</summary>
+
+That the net result is classes 6 and 7 *without* account 693000, and on validated entries only. 693000 is the year-end appropriation entry, which moves the profit to equity and brings classes 6+7 to zero. Nothing in the column names says this; it's a convention of Belgian accounting and of this ledger. That is exactly what an ontology adds: definitions, not tables.
+</details>
+
+**6.** The last two runs scored 7/12 and 8/12 with nearly the same ontology, and Q4 passed in one but failed in the other. What does that mean for how to read these numbers?
+
+<details><summary>Answer</summary>
+
+The agent isn't deterministic even at temperature 0 (long multi-step episodes, a single llama-server slot, different tool paths). Run to run, about ±2 questions out of 12 change, so 7 and 8 are equal. Only large gaps (0 → 4 → 7–8) are evidence. Also, the 12 starter questions are what we certified *from*, so this is a training score. The evaluation (step 14) needs other questions, and ideally several runs.
+</details>
+
+**7.** auto-ontology's export put employee names, work e-mails and staff numbers in `semantic_model.yaml`. Where did they come from, and how does `export_ontology.py` make sure none reaches the public repo?
+
+<details><summary>Answer</summary>
+
+The export embeds the catalog with up to five `sample_values` per column, sampled during profiling. The script empties the samples of every payroll table, of the ERP's salesperson table, and of any IBAN, e-mail or address column. Then it *checks* the written files for anything shaped like a staff number, a work e-mail or an IBAN, and fails if it finds one. The check caught three leaks while the script was being written, including a real staff number in our own certification text.
+</details>
+
+**8.** Why will the agent of step 13 use the ontology as knowledge rather than call auto-ontology's `ask_question` and relay the answer (D49)?
+
+<details><summary>Answer</summary>
+
+auto-ontology runs its SQL on the ERP *copy* and on the sources with its own rules. It returned one salesperson's name and commission (our payroll rule, D43, would be bypassed), and it can't combine two databases (Q11 needs both the ERP and the ledger). Our MCP server is the single, read-only, logged, privacy-checked path to the data. The ontology's value is the certified definitions and join paths that help the agent write the right query.
+</details>
