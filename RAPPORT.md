@@ -1,5 +1,7 @@
 # RAPPORT — A documentary assistant for Calorvia
 
+> Phase A (RAG). The text-to-SQL agent of phase B has its own report: `RAPPORT_T2SQL.md`.
+
 A RAG over the shared drive of Calorvia SA (393 files: DOCX, PDF, scans, XLSX, images, HTML, PPTX, CSV; French,
 Dutch, English), evaluated on the course's 158-question set: 127 development questions for every experiment,
 31 held-out test questions evaluated **once**, at the end. Everything is reproducible from the repository and the
