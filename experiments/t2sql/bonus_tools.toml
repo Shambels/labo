@@ -1,0 +1,6 @@
+# experiments/t2sql/bonus_tools.toml — step 15 regression check: chart tool, memory section of the prompt and the
+# k€-aware grounding check added; memory off (as for every evaluation). Compared with yes_no_first (run 8)
+name = "bonus_tools"
+
+[agent]
+use_ontology = true
