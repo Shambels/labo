@@ -127,7 +127,15 @@ docker logs -f calorvia-erp-restore      # ends with "GESPRO restored." (under a
 uv run python scripts/explore_sources.py # schemas -> docs/sources/{erp,compta,paie}.md (no data values)
 uv run python scripts/run_starter.py -v  # the 12 starter questions, by hand-written SQL, checked against the presentation
 uv run pytest tests/test_sources.py      # agent_ro is read-only, tested on each database
+
+uv run python -m text2sql_calorvia.mcp_server          # MCP server on http://127.0.0.1:9001/mcp
+uv run python -m text2sql_calorvia.mcp_server --stdio  # or for a client that starts it itself
 ```
+
+The MCP server `calorvia-sources` is the only component that connects to the sources. Its tools: `list_sources`,
+`list_tables`, `get_table_card`, `find_values`, `validate_sql`, `execute_sql` and `get_sales_commission`. Every
+query is validated (sqlglot), run read-only with a timeout and a row limit, and logged in `t2sql_query_log`
+(course PostgreSQL). Payroll salaries are only shown aggregated over at least 5 people (`privacy.py`).
 
 The application connects only as `agent_ro` (`text2sql_calorvia/sources.py`); the admin passwords in `.env` are
 for the restore. To start again from scratch: the same `docker compose` command with `down -v`, then `up -d`.
@@ -154,7 +162,14 @@ src/text2sql_calorvia/
 ├── sources.py      # the three sources; the only module that connects to them, always as agent_ro
 ├── catalog.py      # tables, columns (readable or not), keys, row counts, from the database catalog
 ├── starter.py      # the 12 starter questions: expected answers read from the course material, checked
-└── sql/            # catalog queries per engine, starter/ queries per question and source
+├── privacy.py      # payroll rule: salaries only aggregated over >= 5 people
+├── validation.py   # layer 2: one read, dialect, tables/columns, privacy, row limit (sqlglot)
+├── execution.py    # layers 3-4: read-only transaction, timeout, row limit; query log
+├── cards.py        # list_sources, list_tables, get_table_card
+├── values.py       # find_values: case/accent/punctuation/typo-tolerant search of text values
+├── commission.py   # get_sales_commission: the one individual payroll figure allowed
+├── mcp_server.py   # the MCP server and its 7 tools
+└── sql/            # catalog queries per engine, starter/ queries, log/ (query log table)
 docs/sources/       # generated schemas + NOTES.md (exploration, read-only findings, traps)
 scripts/            # command-line entry points
 exclusions.toml     # hand-reviewed exclusions, with their reason

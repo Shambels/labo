@@ -58,6 +58,10 @@ Companion file: `QUIZ.md` (one quiz per step, answers collapsed).
 | D40 | Phase B's repository | **This repo** (public), not a separate private `text2sql-calorvia` as the statement asks | Your choice. The course material stays out of Git (`enonces/` ignored): SQL scripts, payslip PDFs and the presentation's expected answers are never committed; generated schemas hold no data values |
 | D41 | Running the sources | The course's compose file as is, from `enonces/`, with `--env-file .env` (our one `.env`); ERP on **14330** as that file publishes it (the guide says 1433) | No copy of course files in the repo; one place for passwords |
 | D42 | Starter questions | Our SQL in `sql/starter/`; the questions and expected answers read at run time from the presentation | Same rule as D39: the repo is public |
+| D43 | Payroll privacy (was O5) | **Aggregates only**: salary columns only inside SUM/AVG/COUNT (MIN/MAX and window functions refused), only in a plain SELECT, and each group must cover ≥ 5 distinct people (counted by a second query before the real one). One narrow tool for the single individual figure a finance question needs: `get_sales_commission` (salespeople of the ERP only) | Your choice. Enforced on the SQL by the server, not by the prompt; MIN/MAX of a group *is* one person's salary |
+| D44 | MCP SDK | `mcp` 2.3: FastMCP is now `MCPServer` (`mcp.server.mcpserver`); streamable HTTP on **9001**, stdio as an option | Latest SDK; 9000 is kept for the agent's OpenAI endpoint (step 13), 3000–3003 for auto-ontology |
+| D45 | What runs is what the model wrote | sqlglot only *checks*; the query text is never regenerated. Row limit: `LIMIT n+1` appended (PostgreSQL), `SET ROWCOUNT n+1` in the session (SQL Server) | sqlglot's output rewrote `ROUND(AVG(x), 2)` into `ROUND(CAST(AVG(x) AS DECIMAL), 2)`: equivalent here, but the CFO must read the query that ran |
+| D46 | Query log | `t2sql_query_log` in the course PostgreSQL; a row is written **before** the query runs, completed after; no log → no query | Traceability can't depend on the query finishing |
 | D9 | Porting strategy | Port each hospital_rag module **in the step that needs it** (step 0: config, db, logs; step 3: evaluation; step 4: ETL and RAG) | Nothing unused or untested sits in the repo |
 
 ### Open decisions (to settle with you when we reach them)
@@ -65,7 +69,6 @@ Companion file: `QUIZ.md` (one quiz per step, answers collapsed).
 | # | Question | When |
 |---|---|---|
 | O4 | Agent framework for phase B: LangGraph (Python, testable) or n8n (visual, already installed). | Step 13 |
-| O5 | Payroll privacy rule: may the agent show a named person's salary? | Step 11 |
 | O6 | How to feed SQL Server to auto-ontology: Trino, a copy into PostgreSQL/DuckDB, or a hand-written YAML description. | Step 12 |
 
 ---
@@ -88,6 +91,7 @@ Companion file: `QUIZ.md` (one quiz per step, answers collapsed).
 | 5432 | PostgreSQL (registry, experiments) | Docker |
 | 14330 | Source: ERP GesPro (SQL Server 2022) | Docker, course compose (D41) |
 | 5433, 5434 | Sources: accounting, payroll (PostgreSQL 16) | Docker, course compose (D41) |
+| 9001 | MCP server `calorvia-sources` (streamable HTTP) | `python -m text2sql_calorvia.mcp_server` |
 | 6333 | Qdrant | Docker |
 
 ---
@@ -300,11 +304,23 @@ Deliberately more open than phase A: the steps below are a skeleton we will refi
 - **12/12 starter questions** answered by hand-written SQL (`sql/starter/`, one file per question and source), checked by `scripts/run_starter.py` against the presentation's numbers and dates; 23–85 ms each. Traps each needs (the ontology's raw material): credit notes stored positive; a `REGUL_TARIF` credit note listing 270 units but returning none (Q2); a return visible only in stock movements (Q3); a duplicate supplier "NE PAS UTILISER" (Q4); the year-end appropriation entry that zeroes classes 6–7 (Q5); EBITDA as a definition over account ranges (Q6); contract rows per period (Q8); 23 ERP invoices not yet transferred to accounting, exactly the May gap (Q11); staff number `10405` vs `M10405` and a rate stored as a percentage (Q12).
 - **Layer 1 tested** (`tests/test_sources.py`, 22 tests, statements sent without any validation): writes, DDL, `SELECT INTO` a real table, `xp_cmdshell`, `COPY` to a file are refused on all three; the PostgreSQL grants still refuse writes after `SET default_transaction_read_only = off`; the 3 personal columns are unreadable (so `SELECT *` on `employees` fails). **Gaps found:** temp tables are allowed (SQL Server `SELECT … INTO #tmp`; PostgreSQL once the default is off), and SQL Server has no server-side timeout. Both for step 11's validation and execution layers.
 
-### ⬜ Step 11. The MCP server (FastMCP)
+### ✅ Step 11. The MCP server (FastMCP → `MCPServer`)
 - Tools: `list_sources`, `list_tables`, `get_table_card`, `find_values`, `validate_sql` (sqlglot, `tsql` / `postgres`), `execute_sql`.
 - Read-only in layers: DB account, sqlglot validation, read-only transaction rolled back + timeout + row limit, logging of every query. Tests proving a write is refused even when validation is bypassed.
 - Payroll privacy rule (O5).
 - **Tag `t2sql/v0.2-mcp`.**
+- **Server** `calorvia-sources` (`mcp_server.py`, mcp 2.3, D44): 7 tools, all annotated read-only: the 6 above + `get_sales_commission` (D43). Streamable HTTP on 9001 (checked with a real client), or stdio. Tool answers and errors in French, for the model.
+- **The four layers** (837 lines in `privacy`, `validation`, `execution`, `cards`, `values`, `commission`, `mcp_server`):
+  1. *Account* (step 10): grants only.
+  2. *Validation* (`validation.py`): one statement; a `Query` at the top **and** no write node anywhere in the tree (a `DELETE` in a CTE parses as a SELECT); no `SELECT INTO`, `FOR UPDATE`, `SET`, `EXEC`, `COPY`; dangerous functions refused by name (`pg_*`, `lo_*`, `dblink`, `xp_*`, `sp_*`, `OPENROWSET`, `set_config`…); tables and columns resolved against the **readable** schema with readable errors (close names, "this table is in compta: no join between sources", "personal column, not readable", `SELECT *` on `employees`); the payroll rule; a row limit.
+  3. *Execution* (`execution.py`): PostgreSQL `BEGIN READ ONLY` + `SET LOCAL statement_timeout` + a client-side cancel; SQL Server `SET LOCK_TIMEOUT`, `SET ROWCOUNT`, the driver's query timeout; always rolled back; ≤ 200 rows + `truncated`.
+  4. *Log* (`t2sql_query_log`, D46): written before the query, completed after.
+- **Table cards** (`cards.py`, 0.1–0.3 s, cached): description, readable columns with type, comment and 3 examples, keys, row count, code columns (≤ 25 distinct values) with their **PAR_CODE label** found automatically (the code list whose values contain the column's: `FAC_TYPE` → `TYPE_FACT`, "Avoir … montants positifs à déduire"), hidden columns and why, ontology terms (empty until step 12). No examples of salaries or identities.
+- **`find_values`** (`values.py`): every distinct value of every readable text column in memory (54 k / 109 k / 12 k, loaded in 1.5–2.6 s), compared without case, accents, punctuation: `Aeris 12` → "Pompe à chaleur Aéris 12", `Distrinergy` → "Distrinergie SA", the ERP VAT `BE0236099757` → accounting's `BE 0236.099.757`, both Kompra records.
+- **Tests: 83 new** (261 in all): the privacy rule on a hand-written schema (no DB); 26 statements refused by validation; writes sent **past validation** straight to execution, all refused (incl. `SET TRANSACTION READ WRITE` inside the query); a SQL Server temp table doesn't outlive its call; 2-second timeouts on both engines; no log → no query; a payroll average over sites shown, over one person refused at run time; the commission tool (a non-salesperson refused, an injection-shaped staff number refused); the tools through a real MCP client.
+- **Found on the way:** sqlglot regenerates queries differently from what was written (D45); it also *accepts* `SELECT TOP 5 FROM t` (no column), now refused explicitly; pymssql reports a timeout as "not connected", and a `rollback` in `finally` hid it; the commission tool first *cleaned* `10405'; DROP…` into `10405` instead of refusing it.
+- **The 12 starter queries pass validation**, except the payroll side of Q12 (one person's commission line), refused as intended: `get_sales_commission` gives 731.38 € on 731 384.61 € at 0.1 %.
+- **Known limits** (privacy.py docstring): differencing two filtered aggregates; accounting cost centres of one person; absences (sickness) not covered.
 
 ### ⬜ Step 12. The ontology (NVIDIA auto-ontology)
 - Run it with local models only (structured output, rerank API format), on non-conflicting ports, KumoRFM off.
@@ -354,3 +370,5 @@ Deliberately more open than phase A: the steps below are a skeleton we will refi
 | 2026-11-16 | 9 | Branch `rag/step-09-final`: final choice reopened and judged on 77 questions; `status_filter` evaluated once on the test set (correctness 0.823); results exported, report written, chat UI |
 | 2026-11-17 | – | Merged, tagged `rag/v1.0`, pushed. Phase A done |
 | 2026-11-17 | 10 | Branch `t2sql/step-10-sources`: the three sources restored (ERP on 14330), `text2sql_calorvia` package, schemas and notes in `docs/sources/`, 12/12 starter questions in SQL, `agent_ro` tested read-only on each database (temp tables and SQL Server's missing timeout left for step 11) |
+| 2026-11-17 | – | Step 10 merged, tagged `t2sql/v0.1-sources`, pushed. O5 settled: aggregates only (D43) |
+| 2026-11-17 | 11 | Branch `t2sql/step-11-mcp`: MCP server (7 read-only tools, HTTP on 9001), four protection layers, payroll rule enforced on the SQL, table cards with PAR_CODE labels, accent/typo/format-tolerant value search, 83 new tests |
