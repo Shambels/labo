@@ -65,13 +65,20 @@ Companion file: `QUIZ.md` (one quiz per step, answers collapsed).
 | D47 | SQL Server for auto-ontology (was O6) | A **PostgreSQL copy** of GESPRO (`scripts/copy_erp.py`, lower-case names, keys kept), not Trino | Both built and ingested: same tables and columns, but **41 foreign keys** through the copy, **0** through Trino (it exposes no constraints); the copy's cost, staleness, is nil for an ERP frozen on 31/05/2026 |
 | D48 | Running auto-ontology here | Host networking (the firewall drops Docker's bridge → host model servers), everything bound to 127.0.0.1, local models only (`openai/` alias for structured output), five patches kept in `ontology/patches/` | Each patch fixes a measured failure; see `ontology/NOTE.md` §3 |
 | D49 | How the agent uses the ontology | As **knowledge** (terms, certified definitions and metrics, join paths), not as an answering engine; every query still goes through our MCP server | auto-ontology runs SQL on the ERP copy, would show individual salaries with names (D43), and cannot combine two databases |
+| D50 | Agent framework (was O4) | **LangGraph**, an explicit `StateGraph` (`agent → tools → … → check → finish`, plus `wrap_up`) rather than the prebuilt ReAct agent; **one agent** for the three sources | Your choice of LangGraph (testable in Python). The explicit graph puts the retry bound, the grounding check and the footer in code; one agent is enough while the cards carry each source's knowledge (to revisit in step 14 if cross-source questions fail) |
+| D51 | MCP client | The `mcp` 2.3 SDK's own `Client`, not `langchain-mcp-adapters` | The adapter (0.3.1) does not import with `mcp` 2.x; ten lines replace it, and hide `question`, `session_id`, `max_rows` from the model |
+| D52 | Rows: fetching vs showing | The agent fetches up to **2 000 rows** per query (server cap 5 000, default for other clients still 200), keeps them in its state as `q1`, `q2`…; the model sees **50**; `reconcile` reads the full rows by id | The cross-source question overflowed the 32k context (38 623 tokens) with rows the model did not need; no GPU memory left for a larger context |
+| D53 | Transparency | The footer (every query as run, source, engine, rows; every reconciliation) is built by the `finish` node from the state; a footer the model writes is removed | The CFO must see exactly what ran; a model can forget, shorten or rewrite a query |
+| D54 | Grounding check | Every number ≥ 1 000 of an answer must be found (± 0.5 %, or as the sum/difference of two found numbers) in this question's tool results or the conversation; else one retry, then "je ne sais pas" (no query ran) or the numbers flagged | Found in testing: on "et pour avril ?" the model invented 13 999 646,63 € (real: 12 099 823,09 €) with a copied footer, without calling a tool |
+| D55 | Endpoint | FastAPI on **127.0.0.1:9000**; streaming sends the steps as they happen in a `<details>` block, then the answer (not token by token); earlier answers sent back by the client lose that block, and their footer becomes a short query note | Progress during 10–150 s answers; the check must run on the whole answer before it is shown, so the answer itself cannot stream before it |
+| D56 | "Today" for the agent | **31/05/2026** (`data_until`): "ce mois-ci", "cette année" read from that date | The sources stop there (ERP frozen on 31/05/2026, D47) |
 | D9 | Porting strategy | Port each hospital_rag module **in the step that needs it** (step 0: config, db, logs; step 3: evaluation; step 4: ETL and RAG) | Nothing unused or untested sits in the repo |
 
 ### Open decisions (to settle with you when we reach them)
 
 | # | Question | When |
 |---|---|---|
-| O4 | Agent framework for phase B: LangGraph (Python, testable) or n8n (visual, already installed). | Step 13 |
+| – | None open at the moment. | – |
 
 ---
 
@@ -94,6 +101,7 @@ Companion file: `QUIZ.md` (one quiz per step, answers collapsed).
 | 14330 | Source: ERP GesPro (SQL Server 2022) | Docker, course compose (D41) |
 | 5433, 5434 | Sources: accounting, payroll (PostgreSQL 16) | Docker, course compose (D41) |
 | 9001 | MCP server `calorvia-sources` (streamable HTTP) | `python -m text2sql_calorvia.mcp_server` |
+| 9000 | The agent's OpenAI-compatible endpoint, model `calorvia-agent` (D55) | `python -m text2sql_calorvia.api` |
 | 3000-3002, 5435 | auto-ontology: web app and API, backend, ingestion; its PostgreSQL | `ontology/ao.sh`, 127.0.0.1 only (D48) |
 | 5436 | The ERP's PostgreSQL copy (D47) | `ontology/docker-compose.yaml` |
 | 8000 | for auto-ontology the generator is served as `openai/qwen3.8-27b`, 32k context | see `ontology/NOTE.md` |
@@ -340,10 +348,18 @@ Deliberately more open than phase A: the steps below are a skeleton we will refi
 - **Export** (`ontology/export/`, Ossie: ontology, mapping, semantic model): its sample values would have published employee names, work e-mails, staff numbers and IBANs; `export_ontology.py` scrubs payroll, salespeople and IBAN/e-mail/address columns and fails on any leak. It caught three leaks while it was written, one in my own certification text (a real staff number as an example).
 - **Choices and results:** `ontology/NOTE.md`.
 
-### ⬜ Step 13. The agent and the OpenAI-compatible endpoint
+### ✅ Step 13. The agent and the OpenAI-compatible endpoint
 - Agent (O4) using the ontology and the MCP server: pick sources, write dialect-correct SQL, self-correct with a bounded retry, cross-source reconciliation in Python, show its queries, refuse or ask when ambiguous.
 - `GET /v1/models`, `POST /v1/chat/completions` (streaming if possible).
 - **Tag `t2sql/v0.4-agent`.**
+- **Graph** (LangGraph, D50; `agent.py`): `agent` (Qwen3.8-27B on 8000, native tool calling, temperature 0) ⇄ `tools` (the 7 MCP tools through the SDK's own client, D51, plus `reconcile`) → `check` (grounding, D54) → `finish` (footer, D53); `wrap_up` when the budget is spent (24 tool calls, 4 failed queries). The ontology is knowledge (D49): the certified table index and the 8 metrics with their reference SQL in the prompt (`prompts/agent.txt`), the certified term of each table in its card (`ontology.py`).
+- **Cross-source** (`reconcile.py`): one query per source, then matching in Python on a key normalized by type (VAT, staff number, name); the model names result ids, rows never pass through it (D52). On "ERP vs VEN journal per client, May 2026": 224 clients against 219, 21 with a difference, all explained by the invoices still `EMISE` (352 505,79 €), as step 10 found by hand.
+- **Endpoint** (`api.py`, D55): FastAPI on 9000; checked with the `openai` SDK, streaming and not, and with follow-ups ("et pour avril ?", "détaille par site").
+- **Behaviour seen by hand:** the ambiguous "CA de mai" answered with the natural reading (invoiced) and the other offered; "supprime les factures de test" refused (read only); an individual salary refused with the rule and the allowed alternatives (aggregates, `get_sales_commission`).
+- **Found on the way:** `langchain-mcp-adapters` incompatible with `mcp` 2.x; the context overflow on cross-source questions (D52); the **invented follow-up figure** (D54) and the model copying its earlier footers and notes, now removed by code; the first grounding check counting its own retry message (which quotes the number) as evidence, caught by a test.
+- **Starter questions through the agent** (`scripts/ask_agent.py`, same check as step 12, plus a stricter "in the prose" score): **11/12**, in the rows and in the prose (auto-ontology: 8/12). 10–39 s per question, 1–3 queries. The miss, Q2, is a reading of the question: "Distrinergie a acheté" read as Calorvia buying from Distrinergie, 0 units after 24 tool calls, the right reading offered as a clarifying question. Training score: the ontology was certified from these questions; no rule was added for Q2.
+- **Tests: 30 new** (303 in all): the graph's control flow with a scripted model on the real MCP server (footer, preview vs rows kept, both budgets, grounding retry then refusal, copied footer removed, log fields injected), the endpoint (OpenAI SDK, SSE, history cleaning), reconcile, the ontology, the row cap.
+- **Known limits:** answers are not streamed token by token (the check needs the whole answer first); the model still does some arithmetic itself (a count of 219 for 203 in the cross-source answer: below the check's 1 000 threshold); one agent for three sources is untested against the alternative (step 14).
 
 ### ⬜ Step 14. Evaluation
 - ≥ 40 questions: simple per source, cross-source, ambiguous, impossible, malicious; expected answer and reference SQL.
@@ -386,3 +402,5 @@ Deliberately more open than phase A: the steps below are a skeleton we will refi
 | 2026-11-17 | 11 | Branch `t2sql/step-11-mcp`: MCP server (7 read-only tools, HTTP on 9001), four protection layers, payroll rule enforced on the SQL, table cards with PAR_CODE labels, accent/typo/format-tolerant value search, 83 new tests |
 | 2026-11-17 | – | Step 11 merged, tagged `t2sql/v0.2-mcp`, pushed |
 | 2026-11-17 | 12 | Branch `t2sql/step-12-ontology`: O6 compared (copy 41 FKs vs Trino 0), auto-ontology on local models with five patches, 51 terms generated, 27 certified + 8 metrics; starter questions 0 → 4 → 8/12; scrubbed Ossie export |
+| 2026-11-17 | – | Step 12 merged, tagged `t2sql/v0.3-ontologie`, pushed. O4 settled: LangGraph (D50) |
+| 2026-11-17 | 13 | Branch `t2sql/step-13-agent`: LangGraph agent over the MCP server, reconcile in Python, grounding check after an invented follow-up figure, OpenAI endpoint on 9000 with streamed steps; starter questions 11/12; 30 new tests |

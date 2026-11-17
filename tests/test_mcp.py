@@ -78,3 +78,13 @@ def test_find_values(sources):
     from text2sql_calorvia.privacy import SENSITIVE
     for m in find_values("paie", "4330")["matches"]:               # salary amounts are never indexed
         assert m["column"] not in SENSITIVE.get(m["table"], set())
+
+
+def test_a_client_may_ask_for_more_rows_but_not_past_the_server_limit(sources, monkeypatch):
+    from text2sql_calorvia.config import settings
+    sql = "SELECT id_ecriture FROM ecriture"
+    assert len(call("execute_sql", {"source": "compta", "sql": sql})["rows"]) == settings.max_rows
+    assert len(call("execute_sql", {"source": "compta", "sql": sql, "max_rows": 500})["rows"]) == 500
+    monkeypatch.setattr(settings, "max_rows_limit", 300)
+    result = call("execute_sql", {"source": "compta", "sql": sql, "max_rows": 10_000})
+    assert len(result["rows"]) == 300 and result["truncated"]

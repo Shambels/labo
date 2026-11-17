@@ -162,6 +162,26 @@ uv run python scripts/export_ontology.py       # Ossie YAML into ontology/export
 
 The generator must be served as `openai/qwen3.8-27b` with a 32k context for auto-ontology (structured output).
 
+## Phase B: the agent (LangGraph) and its OpenAI endpoint
+
+```bash
+uv run python -m text2sql_calorvia.mcp_server    # the MCP server on 127.0.0.1:9001 (the only one with DB connections)
+uv run python -m text2sql_calorvia.api           # the agent on http://127.0.0.1:9000/v1, model "calorvia-agent"
+uv run python scripts/ask_agent.py run1          # the 12 starter questions through the agent, scored
+```
+
+```python
+from openai import OpenAI
+client = OpenAI(base_url="http://localhost:9000/v1", api_key="...")
+answer = client.chat.completions.create(model="calorvia-agent",
+                                        messages=[{"role": "user", "content": "Quel est le chiffre d'affaires de mars 2026 ?"}])
+```
+
+Every answer ends with the queries that ran (source, SQL as executed, row count); with `stream=True` the agent's
+steps arrive first in a collapsed `<details>` block (Open WebUI shows it as a fold-out). The generator on 8000
+(`openai/qwen3.8-27b`, 32k context, tool calling) is the agent's model; the auto-ontology containers are not needed.
+Graph, budgets and the grounding check: `src/text2sql_calorvia/agent.py`; prompt: `prompts/agent.txt`.
+
 ## Layout
 
 ```text
@@ -180,7 +200,7 @@ src/rag_calorvia/
 │   └── coverage.py   # the ceiling: evidence findable in the converted text
 └── sql/            # schema and queries (documents, experiments, answers, scores)
 src/text2sql_calorvia/
-├── config.py       # settings from .env (agent_ro password, ports)
+├── config.py       # settings from .env (agent_ro password, ports, agent budgets)
 ├── sources.py      # the three sources; the only module that connects to them, always as agent_ro
 ├── catalog.py      # tables, columns (readable or not), keys, row counts, from the database catalog
 ├── starter.py      # the 12 starter questions: expected answers read from the course material, checked
@@ -192,6 +212,10 @@ src/text2sql_calorvia/
 ├── commission.py   # get_sales_commission: the one individual payroll figure allowed
 ├── erp_copy.py     # step 12 tooling: the ERP copied into PostgreSQL for auto-ontology
 ├── mcp_server.py   # the MCP server and its 7 tools
+├── ontology.py     # the certified ontology (ontology/certification.yaml) as the agent's knowledge
+├── reconcile.py    # cross-source matching in Python on a normalized key (VAT, staff number, name)
+├── agent.py        # the LangGraph agent: agent -> tools -> ... -> check -> finish, budgets, grounding check
+├── api.py          # the OpenAI-compatible endpoint (FastAPI): /v1/models, /v1/chat/completions, streaming
 └── sql/            # catalog queries per engine, starter/ queries, log/ (query log table)
 docs/sources/       # generated schemas + NOTES.md (exploration, read-only findings, traps)
 ontology/           # auto-ontology: NOTE.md, certification.yaml, export/ (Ossie YAML), patches/, compose files

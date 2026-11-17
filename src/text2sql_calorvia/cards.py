@@ -6,7 +6,7 @@ and the ontology terms linked to the table (step 12). Built once per table, then
 """
 from functools import cache
 
-from text2sql_calorvia import privacy
+from text2sql_calorvia import ontology, privacy
 from text2sql_calorvia.catalog import quote
 from text2sql_calorvia.execution import run_unvalidated
 from text2sql_calorvia.sources import SOURCES
@@ -129,5 +129,5 @@ def get_table_card(source, table):
         "code_columns": codes,
         "hidden_columns": ({"columns": hidden, "why": "données personnelles, non lisibles par le compte de l'agent : "
                                                       "nommez les colonnes, pas de SELECT *"} if hidden else None),
-        "ontology_terms": [],   # filled from the ontology in step 12
+        "ontology_terms": ontology.terms_for(source, name),   # the certified ontology (step 12, D49)
     }

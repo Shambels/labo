@@ -69,11 +69,13 @@ def validate_sql(source: str, sql: str) -> dict[str, Any]:
 
 
 @server.tool(annotations=READ_ONLY)
-def execute_sql(source: str, sql: str, question: str | None = None, session_id: str | None = None) -> dict[str, Any]:
-    """Exécute une requête de lecture sur une source (validée d'abord). Renvoie les colonnes, les lignes (au plus
-    la limite du serveur, 200 par défaut) et un indicateur de troncature, ou les erreurs. `question` : la question de l'utilisateur, pour le
-    journal."""
-    return execution.execute(source, sql, question=question, session_id=session_id)
+def execute_sql(source: str, sql: str, question: str | None = None, session_id: str | None = None,
+                max_rows: int | None = None) -> dict[str, Any]:
+    """Exécute une requête de lecture sur une source (validée d'abord). Renvoie les colonnes, les lignes (200 par
+    défaut, `max_rows` pour plus, jusqu'à la limite du serveur) et un indicateur de troncature, ou les erreurs.
+    `question` : la question de l'utilisateur, pour le journal."""
+    limit = min(max(max_rows or settings.max_rows, 1), settings.max_rows_limit)
+    return execution.execute(source, sql, question=question, session_id=session_id, max_rows=limit)
 
 
 @server.tool(annotations=READ_ONLY)

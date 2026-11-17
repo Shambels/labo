@@ -1104,3 +1104,68 @@ The export embeds the catalog with up to five `sample_values` per column, sample
 
 auto-ontology runs its SQL on the ERP *copy* and on the sources with its own rules. It returned one salesperson's name and commission (our payroll rule, D43, would be bypassed), and it can't combine two databases (Q11 needs both the ERP and the ledger). Our MCP server is the single, read-only, logged, privacy-checked path to the data. The ontology's value is the certified definitions and join paths that help the agent write the right query.
 </details>
+
+## Step 13: the agent and the OpenAI-compatible endpoint
+
+**1.** `langchain-mcp-adapters` is the usual bridge between LangGraph and an MCP server. Why does the agent use the `mcp` SDK's own `Client` instead, and what does the adapter really do?
+
+<details><summary>Answer</summary>
+
+Version 0.3.1 of the adapter doesn't import with `mcp` 2.3: it uses `mcp.shared.context.RequestContext`, which 2.x removed (the same kind of break as FastMCP becoming `MCPServer` in step 11). The adapter only turns each MCP tool into a LangChain tool: name, description, JSON schema, and a call. That's about ten lines: `list_tools()` gives the schemas, which `bind_tools` accepts as OpenAI functions, and the tools node calls `client.call_tool`. Writing it ourselves also let us hide parameters from the model (`question`, `session_id`, `max_rows`) and fill them in code.
+</details>
+
+**2.** The cross-source question first crashed with "request (38,623 tokens) exceeds the available context size (32,768 tokens)". Give the two causes, and the design change that fixed both.
+
+<details><summary>Answer</summary>
+
+(1) Each query result went to the model in full: 200 rows per client list, twice. (2) The server stops at 200 rows; the model saw `truncated`, re-ran the query with `TOP 500` (which changes nothing, since the limit is on the server), and the rows went into the context again. The fix separates *fetching* from *showing*. The agent fetches up to 2,000 rows (a parameter hidden from the model, capped by the server at 5,000) and keeps them in its state under `q1`, `q2`… The model sees 50 rows and a note. `reconcile` reads the full rows from the state. Rows the model doesn't need to read never enter its context, and it can't mistype them either.
+</details>
+
+**3.** Why does `reconcile` take result *ids* (`q1`, `q2`) and column names, rather than the rows themselves?
+
+<details><summary>Answer</summary>
+
+If the model passed rows as arguments, it would copy hundreds of numbers by generating text, and a model copying numbers makes mistakes without noticing. With ids, the model only decides *what* to match: which results, which key columns, which key type (`vat`, `staff_number`, `text`), which amounts to compare. Python does the matching on complete data. It also normalizes the keys the same way on both sides: `BE 0236.099.757` = `BE0236099757`, `M10405` = `10405`.
+</details>
+
+**4.** Asked "et pour avril ?" after a March answer, the first version answered 13,999,646.63 € (the real figure is 12,099,823.09 €). What happened, and why is this the worst kind of failure?
+
+<details><summary>Answer</summary>
+
+The model called no tool. It copied the layout of its previous answer, footer included, invented a query `q2` and a number: March plus exactly 400,000 €, with the same cents. It's the worst kind because it *looks* fully checked: a bold figure, a definition, a SQL block. The statement says it: a confidently wrong figure is worse than no answer. Two causes: the history showed a footer that looks like ordinary answer text, and nothing in the code checked that a new figure came from a query.
+</details>
+
+**5.** What does the `check` node verify, why is a number ≥ 1,000 accepted when it's the sum or difference of two known numbers, and why must the corpus exclude the agent's own instructions?
+
+<details><summary>Answer</summary>
+
+Every number ≥ 1,000 in the answer must appear, within 0.5 % (rounding, sign), in a tool result of this question or in the conversation the client sent. Otherwise the model is sent back once; if it still fails, an answer with no query at all becomes "je ne sais pas", and any other answer gets the unverified numbers listed under it. A difference between two months ("1,499,823.54 € less than March") is correct arithmetic on known figures, so sums and differences of two known numbers are accepted (up to 400 numbers in the corpus, beyond which almost any value would match by chance). The corpus must exclude the agent's own instructions because the retry message quotes the questioned number ("13 999 646,63 ne figure dans aucun résultat"). The first version counted it, and the invented figure passed on the second attempt. A test with a scripted model caught it.
+</details>
+
+**6.** Why is the footer of executed queries added by the `finish` node, and not requested from the model in the prompt?
+
+<details><summary>Answer</summary>
+
+The statement requires the CFO to be able to check, which needs exactly the queries that ran, in full, every time. A model asked to list its queries can forget one, shorten one, or rewrite one in a "cleaner" form, the same problem as sqlglot regenerating SQL in step 11 (D45). The `finish` node builds the footer from the state: each successful `execute_sql` with its source, its engine, the SQL as the server ran it (including the added `LIMIT 2001`) and its row count, plus each reconciliation. It also removes any footer the model wrote itself, so a copied fake footer can't appear next to the real one.
+</details>
+
+**7.** How is "corriger une requête refusée ou en erreur, sans boucler indéfiniment" enforced? What happens to tool calls the model asked for after the limit?
+
+<details><summary>Answer</summary>
+
+The routing after `agent` counts failed `execute_sql` and `validate_sql` calls and all tool calls. At 4 failures, or when the next calls would exceed 24, it routes to `wrap_up` instead of `tools`. `wrap_up` answers each pending call with "Non exécuté : limite d'appels atteinte" (an OpenAI conversation must answer every `tool_call_id`, or the next request is invalid). It then adds "Limite atteinte… répondez avec les seuls résultats obtenus" and calls the model without tools. The model can only answer, and the answer still goes through `finish`. A test with a scripted model that always sends the same bad query checks that exactly 4 run.
+</details>
+
+**8.** In the streaming response, the agent's steps are inside `<details>…</details>`. Why, and what does the endpoint do with them when the client sends the conversation back?
+
+<details><summary>Answer</summary>
+
+The OpenAI format has a single `content` stream. Sending the steps (cards read, queries, failures) as they happen means the user sees progress during a 30–150 s answer instead of a blank wait. Open WebUI shows `<details>` as a collapsed section, so the steps don't clutter the answer. The API is stateless, so the client sends every earlier answer back with each question. The endpoint strips the `<details>` blocks from that history, so old steps don't fill the 32k context, and replaces the footer with a short "[Requêtes exécutées…]" note that the model can reuse for a follow-up without imitating it.
+</details>
+
+**9.** A fake LLM in the tests returned the same `AIMessage` object each time, and the history stopped growing. Why?
+
+<details><summary>Answer</summary>
+
+LangGraph's `add_messages` reducer gives a message an id when it's first added, and the object keeps it. When a message with an existing id is added again, the reducer *replaces* the message instead of appending. Returning the same object meant the same id, so the conversation never got longer and the loop never reached its limits. The fake LLM now returns a copy without an id each time. The agent itself isn't affected: the real LLM returns a new message on every call.
+</details>
