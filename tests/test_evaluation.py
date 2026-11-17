@@ -54,7 +54,13 @@ def test_score_and_verdict():
     assert score(q, leak)["leaked"] and not verdict(q, score(q, leak), "answer")
     assert score(q, "Distrinergie : 9 000 000 €")["missing"] == ["10815437.60"]
     clarify = {"behavior": "clarify"}
-    assert verdict(clarify, score(clarify, "x"), "assume") and not verdict(clarify, score(clarify, "x"), "answer")
+    assert verdict(clarify, score(clarify, "x"), "assume") and not verdict(clarify, score(clarify, "x"), "answer", "1 €")
+    offered = "Coût : 35 M€ ; si vous voulez le coût au sens comptable, je peux le reprendre."
+    assert verdict(clarify, score(clarify, offered), "answer", offered)    # the judge missed the offer (A05)
+    unknown = {"behavior": "unknown"}
+    said = "Je ne peux pas répondre : les bases s'arrêtent au 31 mai 2026. Si vous vouliez dire juin 2025, dites-le."
+    assert verdict(unknown, score(unknown, said), "assume", said)          # the judge saw the offer only (I01)
+    assert not verdict(unknown, score(unknown, "CA de juin : 0 €"), "answer", "CA de juin : 0 €")
 
 
 def test_sql_counts_separate_refusals_from_database_errors():
@@ -67,4 +73,5 @@ def test_a_yes_no_question_needs_the_right_conclusion():
     q = {"behavior": "answer", "expected": "1 660 €", "expected_conclusion": "oui"}
     assert not score(q, "**Oui**, 1 660 € des deux côtés.")["missing"]
     assert score(q, "**Non, les deux montants ne correspondent pas.**\n- Paie : 1 660 €")["missing"] == ["conclusion: oui"]
-    assert score(q, "Les montants : 1 660 € et 1 660 €, donc oui.")["missing"] == ["conclusion: oui"]
+    assert not score(q, "C'est confirmé : 1 660 € des deux côtés.\n\n**Réponse : oui.**")["missing"]   # S11's layout
+    assert score(q, "Non, il n'y a pas d'écart : 1 660 € des deux côtés.")["missing"] == ["conclusion: oui"]  # X03

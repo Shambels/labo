@@ -55,7 +55,7 @@ async def main():
             seconds = time.perf_counter() - start
             scored = score(q, result["answer"])
             judged = judge(q["question"], result["answer"], judge_client) if result["answer"] else {"label": "error", "why": error}
-            ok = verdict(q, scored, judged["label"]) and not error
+            ok = verdict(q, scored, judged["label"], result["answer"]) and not error
             counts = sql_counts(result["steps"])
             db.execute(load_sql("eval/result"), (
                 experiment, q["id"], q["category"], q["behavior"], judged["label"], judged.get("why"), ok,
@@ -83,7 +83,7 @@ def rescore(experiments):
                 q = questions[qid]
                 scored = score(q, answer)
                 judged = judge(q["question"], answer, judge_client) if answer else {"label": "error", "why": error}
-                ok = verdict(q, scored, judged["label"]) and not error
+                ok = verdict(q, scored, judged["label"], answer) and not error
                 db.execute(load_sql("eval/rescore"), (judged["label"], judged.get("why"), ok, json.dumps(scored["missing"]),
                                                       json.dumps(scored["leaked"]), experiment, qid))
                 print(f"{experiment} {qid} {'OK  ' if ok else 'MISS'} {q['behavior']:7} → {judged['label']:7} "
