@@ -440,3 +440,4 @@ Deliberately more open than phase A: the steps below are a skeleton we will refi
 | 2026-11-17 | – | Step 13 merged, tagged `t2sql/v0.4-agent`, pushed |
 | 2026-11-17 | 14 | Branch `t2sql/step-14-eval`: 51-question set (33 dev, 18 test), scoring in code + judge with rules, experiments in PostgreSQL; first scores 33/33 found too lenient by hand and re-scored; with ontology 30 and 29/33 vs 28/33 without, confidently wrong 1 vs 4 |
 | 2026-11-17 | 14 | Fixes, one change per run (5–9): repeated-query guard, `pay_elements` certified, `COUNT(*)` validation bug fixed in the MCP server, yes/no-first rule kept; offer-readings rule rejected (its targets still failed). Ontology re-exported (28 terms) |
+| 2026-11-17 | – | Step 14 merged, tagged `t2sql/v0.5-eval`, pushed |
