@@ -62,6 +62,9 @@ Companion file: `QUIZ.md` (one quiz per step, answers collapsed).
 | D44 | MCP SDK | `mcp` 2.3: FastMCP is now `MCPServer` (`mcp.server.mcpserver`); streamable HTTP on **9001**, stdio as an option | Latest SDK; 9000 is kept for the agent's OpenAI endpoint (step 13), 3000–3003 for auto-ontology |
 | D45 | What runs is what the model wrote | sqlglot only *checks*; the query text is never regenerated. Row limit: `LIMIT n+1` appended (PostgreSQL), `SET ROWCOUNT n+1` in the session (SQL Server) | sqlglot's output rewrote `ROUND(AVG(x), 2)` into `ROUND(CAST(AVG(x) AS DECIMAL), 2)`: equivalent here, but the CFO must read the query that ran |
 | D46 | Query log | `t2sql_query_log` in the course PostgreSQL; a row is written **before** the query runs, completed after; no log → no query | Traceability can't depend on the query finishing |
+| D47 | SQL Server for auto-ontology (was O6) | A **PostgreSQL copy** of GESPRO (`scripts/copy_erp.py`, lower-case names, keys kept), not Trino | Both built and ingested: same tables and columns, but **41 foreign keys** through the copy, **0** through Trino (it exposes no constraints); the copy's cost, staleness, is nil for an ERP frozen on 31/05/2026 |
+| D48 | Running auto-ontology here | Host networking (the firewall drops Docker's bridge → host model servers), everything bound to 127.0.0.1, local models only (`openai/` alias for structured output), five patches kept in `ontology/patches/` | Each patch fixes a measured failure; see `ontology/NOTE.md` §3 |
+| D49 | How the agent uses the ontology | As **knowledge** (terms, certified definitions and metrics, join paths), not as an answering engine; every query still goes through our MCP server | auto-ontology runs SQL on the ERP copy, would show individual salaries with names (D43), and cannot combine two databases |
 | D9 | Porting strategy | Port each hospital_rag module **in the step that needs it** (step 0: config, db, logs; step 3: evaluation; step 4: ETL and RAG) | Nothing unused or untested sits in the repo |
 
 ### Open decisions (to settle with you when we reach them)
@@ -69,7 +72,6 @@ Companion file: `QUIZ.md` (one quiz per step, answers collapsed).
 | # | Question | When |
 |---|---|---|
 | O4 | Agent framework for phase B: LangGraph (Python, testable) or n8n (visual, already installed). | Step 13 |
-| O6 | How to feed SQL Server to auto-ontology: Trino, a copy into PostgreSQL/DuckDB, or a hand-written YAML description. | Step 12 |
 
 ---
 
@@ -92,6 +94,9 @@ Companion file: `QUIZ.md` (one quiz per step, answers collapsed).
 | 14330 | Source: ERP GesPro (SQL Server 2022) | Docker, course compose (D41) |
 | 5433, 5434 | Sources: accounting, payroll (PostgreSQL 16) | Docker, course compose (D41) |
 | 9001 | MCP server `calorvia-sources` (streamable HTTP) | `python -m text2sql_calorvia.mcp_server` |
+| 3000-3002, 5435 | auto-ontology: web app and API, backend, ingestion; its PostgreSQL | `ontology/ao.sh`, 127.0.0.1 only (D48) |
+| 5436 | The ERP's PostgreSQL copy (D47) | `ontology/docker-compose.yaml` |
+| 8000 | for auto-ontology the generator is served as `openai/qwen3.8-27b`, 32k context | see `ontology/NOTE.md` |
 | 6333 | Qdrant | Docker |
 
 ---
@@ -322,11 +327,18 @@ Deliberately more open than phase A: the steps below are a skeleton we will refi
 - **The 12 starter queries pass validation**, except the payroll side of Q12 (one person's commission line), refused as intended: `get_sales_commission` gives 731.38 € on 731 384.61 € at 0.1 %.
 - **Known limits** (privacy.py docstring): differencing two filtered aggregates; accounting cost centres of one person; absences (sickness) not covered.
 
-### ⬜ Step 12. The ontology (NVIDIA auto-ontology)
+### ✅ Step 12. The ontology (NVIDIA auto-ontology)
 - Run it with local models only (structured output, rerank API format), on non-conflicting ports, KumoRFM off.
 - SQL Server support (O6): compare at least two options.
 - Certify the key terms (revenue, EBITDA, customer, headcount…) with before/after examples; YAML export + note.
 - **Tag `t2sql/v0.3-ontologie`.**
+- **O6 compared, then settled** (D47): the copy keeps the ERP's 41 foreign keys, Trino passes none; same tables, columns and types otherwise; ingest 2.9 s vs 4.7 s.
+- **auto-ontology on local models** (D48): Qwen3.8-27B, bge-m3, bge-reranker; no adapter needed. Five patches, each for a measured failure: vector size (bge-m3 is 1024, not 2048); payroll `employees` **silently dropped** (column grants); `SELECT *` profiling and an all-NULL key crash; **queries refused whenever more than one database is connected** (routing on every table seen instead of the ones the query uses); services listening on every interface without authentication.
+- **Generated:** 51 terms in 29 min, one per table. The model read the French abbreviations as English: salespeople *Vendor* (= supplier), purchase order lines *Access Control List*, receipt lines *Recovery Link*, fixed assets *Real Estate Asset*, three tables named *Order*.
+- **Certified** (`ontology/certification.yaml`): 27 terms renamed and re-described with step 10's traps, 8 metrics (net revenue, units net of returns, booked revenue, EBITDA, net result, depreciation, headcount, telework days).
+- **Starter questions answered by auto-ontology:** as shipped 0/12 (routing bug), generated 4/12, certified 7/12, with two more definitions 8/12 (±2 run to run at temperature 0). Every gain is a definition column names can't give (credit notes positive, the 693000 entry, EBITDA's ranges, "amortissements" = amount). Misses left are about reading the question (Q2 "achetées", Q10 per month).
+- **Export** (`ontology/export/`, Ossie: ontology, mapping, semantic model): its sample values would have published employee names, work e-mails, staff numbers and IBANs; `export_ontology.py` scrubs payroll, salespeople and IBAN/e-mail/address columns and fails on any leak. It caught three leaks while it was written, one in my own certification text (a real staff number as an example).
+- **Choices and results:** `ontology/NOTE.md`.
 
 ### ⬜ Step 13. The agent and the OpenAI-compatible endpoint
 - Agent (O4) using the ontology and the MCP server: pick sources, write dialect-correct SQL, self-correct with a bounded retry, cross-source reconciliation in Python, show its queries, refuse or ask when ambiguous.
@@ -372,3 +384,5 @@ Deliberately more open than phase A: the steps below are a skeleton we will refi
 | 2026-11-17 | 10 | Branch `t2sql/step-10-sources`: the three sources restored (ERP on 14330), `text2sql_calorvia` package, schemas and notes in `docs/sources/`, 12/12 starter questions in SQL, `agent_ro` tested read-only on each database (temp tables and SQL Server's missing timeout left for step 11) |
 | 2026-11-17 | – | Step 10 merged, tagged `t2sql/v0.1-sources`, pushed. O5 settled: aggregates only (D43) |
 | 2026-11-17 | 11 | Branch `t2sql/step-11-mcp`: MCP server (7 read-only tools, HTTP on 9001), four protection layers, payroll rule enforced on the SQL, table cards with PAR_CODE labels, accent/typo/format-tolerant value search, 83 new tests |
+| 2026-11-17 | – | Step 11 merged, tagged `t2sql/v0.2-mcp`, pushed |
+| 2026-11-17 | 12 | Branch `t2sql/step-12-ontology`: O6 compared (copy 41 FKs vs Trino 0), auto-ontology on local models with five patches, 51 terms generated, 27 certified + 8 metrics; starter questions 0 → 4 → 8/12; scrubbed Ossie export |

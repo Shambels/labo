@@ -140,6 +140,28 @@ query is validated (sqlglot), run read-only with a timeout and a row limit, and 
 The application connects only as `agent_ro` (`text2sql_calorvia/sources.py`); the admin passwords in `.env` are
 for the restore. To start again from scratch: the same `docker compose` command with `down -v`, then `up -d`.
 
+## Phase B: the ontology (auto-ontology)
+
+Choices, patches and results: `ontology/NOTE.md`. In short:
+
+```bash
+# The ERP as a PostgreSQL copy on 5436 (auto-ontology has no SQL Server connector)
+docker compose -f ontology/docker-compose.yaml --env-file .env up -d erp-copy
+uv run python scripts/copy_erp.py
+
+# NVIDIA auto-ontology (commit a630ebd) cloned in ~/src/auto-ontology, with ontology/patches/*.patch applied
+# (git apply) and ~/src/auto-ontology/.env made from ontology/auto-ontology.env.example
+ontology/ao.sh build auto-ontology auto-ontology-frontend
+ontology/ao.sh up -d postgres auto-ontology ingestion-service frontend-migrate auto-ontology-frontend
+# turn on Settings -> Semantic Compilation in http://localhost:3000, create an API token (AUTO_ONTOLOGY_API_TOKEN in .env)
+
+uv run python scripts/certify_ontology.py      # apply ontology/certification.yaml (terms, metrics), idempotent
+uv run python scripts/ask_ontology.py after     # the 12 starter questions through auto-ontology's chat API
+uv run python scripts/export_ontology.py       # Ossie YAML into ontology/export/, personal samples removed
+```
+
+The generator must be served as `openai/qwen3.8-27b` with a 32k context for auto-ontology (structured output).
+
 ## Layout
 
 ```text
@@ -168,9 +190,11 @@ src/text2sql_calorvia/
 ├── cards.py        # list_sources, list_tables, get_table_card
 ├── values.py       # find_values: case/accent/punctuation/typo-tolerant search of text values
 ├── commission.py   # get_sales_commission: the one individual payroll figure allowed
+├── erp_copy.py     # step 12 tooling: the ERP copied into PostgreSQL for auto-ontology
 ├── mcp_server.py   # the MCP server and its 7 tools
 └── sql/            # catalog queries per engine, starter/ queries, log/ (query log table)
 docs/sources/       # generated schemas + NOTES.md (exploration, read-only findings, traps)
+ontology/           # auto-ontology: NOTE.md, certification.yaml, export/ (Ossie YAML), patches/, compose files
 scripts/            # command-line entry points
 exclusions.toml     # hand-reviewed exclusions, with their reason
 tests/

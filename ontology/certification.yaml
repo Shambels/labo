@@ -14,7 +14,7 @@ terms:
     name: Salesperson (commercial)
     description: >-
       Commerciaux (vendeurs) de Calorvia : ce ne sont pas des fournisseurs. VDR_MATRICULE est le matricule de paie
-      sans son préfixe M (10405 dans l'ERP = M10405 dans la paie). Trois commerciaux n'ont pas de matricule (dont le
+      sans son préfixe M (99999 dans l'ERP = M99999 dans la paie). Trois commerciaux n'ont pas de matricule (dont le
       pseudo-commercial SIEGE). Le commercial d'une vente est celui de la commande (vte_cde.vdr_id).
   - database: gespro
     table: vte_cde

@@ -48,15 +48,12 @@ def ask(question, token, timeout=1800):
 
 
 def prose_numbers(text):
-    """Numbers written in the prose answer ('1 278 366,78', '9.4 %', '1,230'), as Decimals."""
-    values = set()
-    for raw in re.findall(r"\d[\d   .,]*\d|\d", text or ""):
-        compact = re.sub(r"[   ]", "", raw)
-        for candidate in (compact.replace(",", ""), compact.replace(".", "").replace(",", "."), compact):
-            try:
-                values.add(Decimal(candidate))
-            except ArithmeticError:
-                pass
+    """Numbers and dates written in the prose answer, read like the expected answers (French: '1 278 366,78',
+    '9,4 %', '13, 14 et 17' as three numbers), plus English decimals ('9.4') and ISO dates."""
+    text = text or ""
+    values = set(expected_tokens(text))
+    values |= {Decimal(m) for m in re.findall(r"(?<![\d.,])\d+\.\d+(?![\d.,])", text)}
+    values |= {date.fromisoformat(m) for m in re.findall(r"\b\d{4}-\d{2}-\d{2}\b", text)}
     return values
 
 

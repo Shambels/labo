@@ -1,0 +1,3190 @@
+version: 0.2.0.dev0
+name: auto_ontology_model_ontology
+description: Business concepts of the auto_ontology_model semantic model
+ontology:
+- concept: AbsenceType
+  type: EntityType
+  description: Definitions for different categories of employee absences, including whether they are paid by the employer
+    and if meal vouchers apply.
+  identify_by:
+  - absence_code
+  relationships:
+  - name: absence_code
+    description: Identifies the specific category of employee absence, serving as a unique reference for timesheet entries.
+    roles:
+    - concept: String
+    multiplicity: OneToOne
+    verbalizes:
+    - '{AbsenceType} is identified by absence code {String}'
+  - name: label
+    description: Provides the human-readable business name corresponding to a specific absence code for clear identification.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{AbsenceType} has label {String}'
+  - name: paid_by_employer
+    description: Indicates whether the employer covers the salary costs associated with a specific type of employee absence.
+    roles:
+    - concept: Boolean
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{AbsenceType} has paid by employer {Boolean}'
+  - name: meal_voucher
+    description: Indicates whether meal vouchers remain valid or payable during a specific category of employee absence.
+    roles:
+    - concept: Boolean
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{AbsenceType} has meal voucher {Boolean}'
+- concept: AccountingEntryCritureComptable
+  type: EntityType
+  description: 'Écritures (pièces) par journal : VEN ventes (factures de l''ERP), ACH achats, BQ1 banque, SAL salaires, OD
+    opérations diverses, AN à-nouveaux (reprise des soldes au 01/01/2025, pas une opération de l''exercice). statut BROUILLARD
+    = provisoire, à exclure ; code_periode AAAA-MM.'
+  identify_by:
+  - entry_id
+  relationships:
+  - name: user
+    description: Identifies the user account or automated process responsible for creating or modifying the entry.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{AccountingEntryCritureComptable} has user {String}'
+  - name: due_date
+    description: Specifies the due date for settling the financial obligation, formatted as YYYY-MM-DD.
+    roles:
+    - concept: Date
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{AccountingEntryCritureComptable} has due date {Date}'
+  - name: entry_date
+    description: Indicates the calendar date the transaction was recorded in the ledger, formatted as YYYY-MM-DD.
+    roles:
+    - concept: Date
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{AccountingEntryCritureComptable} has entry date {Date}'
+  - name: entry_timestamp
+    description: Records the precise timestamp when the entry was inputted or imported, formatted as YYYY-MM-DD HH:MM:SS.
+    roles:
+    - concept: DateTime
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{AccountingEntryCritureComptable} has entry timestamp {DateTime}'
+  - name: status
+    description: Indicates the entry's processing state, distinguishing between final approved records and drafts.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{AccountingEntryCritureComptable} has status {String}'
+  - name: external_reference
+    description: References the original document number from source systems or partner invoices, like FA25-00012.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{AccountingEntryCritureComptable} has external reference {String}'
+  - name: document_number
+    description: Identifies the specific invoice or accounting document via an alphanumeric code, such as AN-2025-00001.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{AccountingEntryCritureComptable} has document number {String}'
+  - name: description
+    description: Provides a textual summary of the transaction nature, such as service interventions or balance carryovers.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{AccountingEntryCritureComptable} has description {String}'
+  - name: entry_id
+    description: Uniquely identifies the accounting entry, linking it to associated amortization lines, journal details, and
+      bank movements.
+    roles:
+    - concept: Integer
+    multiplicity: OneToOne
+    verbalizes:
+    - '{AccountingEntryCritureComptable} is identified by entry id {Integer}'
+  - name: third_party_tiers
+    roles:
+    - concept: ThirdPartyTiers
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{AccountingEntryCritureComptable} has {ThirdPartyTiers}'
+  - name: fiscal_period
+    roles:
+    - concept: FiscalPeriod
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{AccountingEntryCritureComptable} has {FiscalPeriod}'
+  - name: accounting_journal
+    roles:
+    - concept: AccountingJournal
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{AccountingEntryCritureComptable} has {AccountingJournal}'
+- concept: AccountingEntryLineLigneDCriture
+  type: EntityType
+  description: 'Lignes des écritures, au débit ou au crédit, montants toujours positifs. Classe du compte = premier chiffre
+    de numero_compte : 6 charges (au débit), 7 produits (au crédit), 1 à 5 bilan. Ne compter que les écritures VALIDEE. Le
+    compte 693000 (affectation du résultat) n''est pas une charge d''exploitation : il ramène le résultat à zéro en fin d''exercice.'
+  relationships:
+  - name: credit_amount
+    description: Specifies the monetary amount recorded on the credit side of this particular accounting line.
+    roles:
+    - concept: Decimal
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{AccountingEntryLineLigneDCriture} has credit amount {Decimal}'
+  - name: reconciliation_code
+    description: Stores the code used for matching or clearing this specific accounting entry line.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{AccountingEntryLineLigneDCriture} has reconciliation code {String}'
+  - name: debit_amount
+    description: Specifies the monetary amount recorded on the debit side of this particular accounting line.
+    roles:
+    - concept: Decimal
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{AccountingEntryLineLigneDCriture} has debit amount {Decimal}'
+  - name: entry_line_id
+    description: Uniquely identifies each individual line within the accounting entry table for technical record tracking.
+    roles:
+    - concept: Integer
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{AccountingEntryLineLigneDCriture} has entry line id {Integer}'
+  - name: description
+    description: Contains the text description or label, such as invoice references, detailing the nature of this specific
+      financial line.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{AccountingEntryLineLigneDCriture} has description {String}'
+  - name: reconciliation_date
+    description: Records the date in YYYY-MM-DD format when this accounting entry line was matched or cleared.
+    roles:
+    - concept: Date
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{AccountingEntryLineLigneDCriture} has reconciliation date {Date}'
+  - name: line_number
+    description: Provides the sequential line number indicating the position of this specific financial impact within the
+      journal entry.
+    roles:
+    - concept: Integer
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{AccountingEntryLineLigneDCriture} has line number {Integer}'
+  - name: chart_of_accounts_entry
+    roles:
+    - concept: ChartOfAccountsEntry
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{AccountingEntryLineLigneDCriture} has {ChartOfAccountsEntry}'
+  - name: accounting_entry_criture_comptable
+    roles:
+    - concept: AccountingEntryCritureComptable
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{AccountingEntryLineLigneDCriture} has {AccountingEntryCritureComptable}'
+  - name: third_party_tiers
+    roles:
+    - concept: ThirdPartyTiers
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{AccountingEntryLineLigneDCriture} has {ThirdPartyTiers}'
+  - name: vat_rate
+    roles:
+    - concept: VatRate
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{AccountingEntryLineLigneDCriture} has {VatRate}'
+  - name: analytical_centre
+    roles:
+    - concept: AnalyticalCentre
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{AccountingEntryLineLigneDCriture} has {AnalyticalCentre}'
+- concept: AccountingJournal
+  type: EntityType
+  description: A single entity representing an accounting journal with its unique identifier, descriptive label, and functional
+    type.
+  identify_by:
+  - journal_code
+  relationships:
+  - name: journal_type
+    description: Indicates the functional category of the journal, such as sales, purchases, or financial, to define its operational
+      purpose.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{AccountingJournal} has journal type {String}'
+  - name: journal_label
+    description: Provides the descriptive label and context for the journal, specifying details like data source or period
+      coverage.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{AccountingJournal} has journal label {String}'
+  - name: journal_code
+    description: Identifies the accounting journal by a unique short alphanumeric code, such as AN or VEN, used to classify
+      specific transaction entries.
+    roles:
+    - concept: String
+    multiplicity: OneToOne
+    verbalizes:
+    - '{AccountingJournal} is identified by journal code {String}'
+- concept: AnalyticalCentre
+  type: EntityType
+  description: A specific department or organizational unit within the company, including its identifier, label, and operational
+    status.
+  identify_by:
+  - centre_code
+  relationships:
+  - name: centre_code
+    description: Stores the alphanumeric identifier of the department or unit, which is referenced by budget, asset, and journal
+      entry records.
+    roles:
+    - concept: String
+    multiplicity: OneToOne
+    verbalizes:
+    - '{AnalyticalCentre} is identified by centre code {String}'
+  - name: active_status
+    description: Indicates whether the organizational unit is currently operational, with true signifying active status.
+    roles:
+    - concept: Boolean
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{AnalyticalCentre} has active status {Boolean}'
+  - name: site
+    description: Specifies the location or facility code associated with the unit, using codes like NAM or SEN.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{AnalyticalCentre} has site {String}'
+  - name: centre_label
+    description: Provides the human-readable name of the organizational unit, such as General Direction or Finance and Accounting.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{AnalyticalCentre} has centre label {String}'
+- concept: ArticleArticleProduit
+  type: EntityType
+  description: 'Les 62 articles. art_type (par_code TYPE_ART) : PF = produit fini fabriqué (les 8 pompes à chaleur Aéris et
+    groupes Ventis : « produits finis »), NEG = négoce, COMP = composant, MP = matière première, SRV = prestation. art_ligne
+    et sit_id_prod : ligne et usine de production des produits finis.'
+  identify_by:
+  - article_identifier
+  relationships:
+  - name: standard_packaging_quantity
+    description: The quantity of units included in one standard packaging or order condition, expressed as a numeric integer.
+    roles:
+    - concept: Decimal
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{ArticleArticleProduit} has standard packaging quantity {Decimal}'
+  - name: is_available_for_sale
+    description: A boolean flag indicating whether the product is currently available for sale to customers.
+    roles:
+    - concept: Boolean
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{ArticleArticleProduit} has is available for sale {Boolean}'
+  - name: creation_date
+    description: The date the product record was created, formatted as YYYY-MM-DD.
+    roles:
+    - concept: Date
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{ArticleArticleProduit} has creation date {Date}'
+  - name: is_active
+    description: A boolean flag indicating whether the product record is currently active and valid in the system.
+    roles:
+    - concept: Boolean
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{ArticleArticleProduit} has is active {Boolean}'
+  - name: standard_selling_price
+    description: The standard selling price of the product, recorded as a numeric monetary value.
+    roles:
+    - concept: Decimal
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{ArticleArticleProduit} has standard selling price {Decimal}'
+  - name: article_identifier
+    description: Uniquely identifies the product article, serving as the primary key for related records like nomenclature
+      and pricing.
+    roles:
+    - concept: Integer
+    multiplicity: OneToOne
+    verbalizes:
+    - '{ArticleArticleProduit} is identified by article identifier {Integer}'
+  - name: weight_in_kilograms
+    description: The physical weight of the product measured in kilograms, expressed as a numeric decimal value.
+    roles:
+    - concept: Decimal
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{ArticleArticleProduit} has weight in kilograms {Decimal}'
+  - name: product_category_code
+    description: A classification code indicating the product's nature, such as component, negative item, or service, using
+      values like COMP or SRV.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{ArticleArticleProduit} has product category code {String}'
+  - name: product_sku_code
+    description: The alphanumeric SKU code assigned to the product, formatted as letters followed by digits, such as AE06.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{ArticleArticleProduit} has product sku code {String}'
+  - name: product_model_label
+    description: A descriptive text label identifying the specific model or variant of the product, such as Pompe à chaleur
+      Aéris 6.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{ArticleArticleProduit} has product model label {String}'
+  - name: product_line_code
+    description: A code representing the specific product line or series to which the article belongs, such as L1 or V2.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{ArticleArticleProduit} has product line code {String}'
+  - name: unit_of_measure
+    description: The unit of measure used for billing or inventory, represented by codes like PCE for pieces or JOUR for days.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{ArticleArticleProduit} has unit of measure {String}'
+  - name: is_held_in_inventory
+    description: A boolean flag indicating whether the product is held in physical inventory for stock management.
+    roles:
+    - concept: Boolean
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{ArticleArticleProduit} has is held in inventory {Boolean}'
+  - name: supplier_fournisseur
+    roles:
+    - concept: SupplierFournisseur
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{ArticleArticleProduit} has {SupplierFournisseur}'
+  - name: site
+    roles:
+    - concept: Site
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{ArticleArticleProduit} has {Site}'
+  - name: product_family
+    roles:
+    - concept: ProductFamily
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{ArticleArticleProduit} has {ProductFamily}'
+- concept: BankAccount
+  type: EntityType
+  description: Represents a specific financial account held by the organization, identified by a unique bank code and associated
+    with a specific currency.
+  identify_by:
+  - bank_code
+  relationships:
+  - name: account_label
+    description: Provides a human-readable description of the bank account, including the bank name and account type.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{BankAccount} has account label {String}'
+  - name: iban
+    description: Uniquely identifies the bank account using an International Bank Account Number formatted with spaces, such
+      as 'BE68 5390 0754 7034'.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{BankAccount} has iban {String}'
+  - name: currency
+    description: Specifies the ISO 4217 currency code in which the bank account is denominated.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{BankAccount} has currency {String}'
+  - name: bank_code
+    description: Identifies the specific bank holding the account, linking it to associated banking movements.
+    roles:
+    - concept: String
+    multiplicity: OneToOne
+    verbalizes:
+    - '{BankAccount} is identified by bank code {String}'
+  - name: chart_of_accounts_entry
+    roles:
+    - concept: ChartOfAccountsEntry
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{BankAccount} has {ChartOfAccountsEntry}'
+- concept: BankMovement
+  type: EntityType
+  description: Records individual financial transactions within a bank account, including details on amounts, counterparties,
+    and reconciliation status.
+  relationships:
+  - name: operation_type
+    description: Classifies the transaction category, such as SEPA transfers or account fees.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{BankMovement} has operation type {String}'
+  - name: value_date
+    description: Indicates the settlement value date of the transaction in YYYY-MM-DD format.
+    roles:
+    - concept: Date
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{BankMovement} has value date {Date}'
+  - name: operation_date
+    description: Records the execution date of the transaction in YYYY-MM-DD format.
+    roles:
+    - concept: Date
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{BankMovement} has operation date {Date}'
+  - name: movement_id
+    description: Uniquely identifies each recorded financial transaction within the bank movement history.
+    roles:
+    - concept: Integer
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{BankMovement} has movement id {Integer}'
+  - name: counterparty_iban
+    description: Stores the International Bank Account Number (IBAN) of the transaction counterparty.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{BankMovement} has counterparty iban {String}'
+  - name: counterparty_name
+    description: Specifies the name of the external entity involved as the counterparty in the transaction.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{BankMovement} has counterparty name {String}'
+  - name: amount
+    description: Represents the monetary value of the transaction, where positive figures are credits and negative figures
+      are debits.
+    roles:
+    - concept: Decimal
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{BankMovement} has amount {Decimal}'
+  - name: communication
+    description: Contains the reference text or memo associated with the payment, such as invoice details.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{BankMovement} has communication {String}'
+  - name: reconciliation_status
+    description: Indicates whether the transaction is reconciled or pending reconciliation.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{BankMovement} has reconciliation status {String}'
+  - name: accounting_entry_criture_comptable
+    roles:
+    - concept: AccountingEntryCritureComptable
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{BankMovement} has {AccountingEntryCritureComptable}'
+  - name: bank_account
+    roles:
+    - concept: BankAccount
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{BankMovement} has {BankAccount}'
+- concept: Budget2026
+  type: EntityType
+  description: 'Budget 2026 par compte et par mois, montant positif pour les charges comme pour les produits. Plusieurs versions
+    (V1, V2, FINAL) : seule FINAL est approuvée.'
+  relationships:
+  - name: budget_identifier
+    description: Uniquely identifies each specific financial budget allocation record.
+    roles:
+    - concept: Integer
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{Budget2026} has budget identifier {Integer}'
+  - name: month
+    description: Represents the calendar month number associated with the specific budget entry as an integer.
+    roles:
+    - concept: Integer
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{Budget2026} has month {Integer}'
+  - name: budget_version
+    description: Indicates the specific document iteration or status, using codes like V1, V2, or FINAL.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{Budget2026} has budget version {String}'
+  - name: budget_amount
+    description: Stores the financial budget value allocated for the specific month and document version.
+    roles:
+    - concept: Decimal
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{Budget2026} has budget amount {Decimal}'
+  - name: analytical_centre
+    roles:
+    - concept: AnalyticalCentre
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{Budget2026} has {AnalyticalCentre}'
+  - name: fiscal_year
+    roles:
+    - concept: FiscalYear
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{Budget2026} has {FiscalYear}'
+  - name: chart_of_accounts_entry
+    roles:
+    - concept: ChartOfAccountsEntry
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{Budget2026} has {ChartOfAccountsEntry}'
+- concept: ChartOfAccountsEntry
+  type: EntityType
+  description: A record representing a specific account within the company's general ledger or chart of accounts.
+  identify_by:
+  - account_number
+  relationships:
+  - name: account_type
+    description: Functional type defining the account nature as a balance sheet item, expense, or revenue.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{ChartOfAccountsEntry} has account type {String}'
+  - name: analytical_account_required
+    description: Boolean flag specifying whether the account requires the use of an analytical sub-account.
+    roles:
+    - concept: Boolean
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{ChartOfAccountsEntry} has analytical account required {Boolean}'
+  - name: account_number
+    description: Unique alphanumeric identifier for the account, referencing budgets, bank accounts, assets, journal lines,
+      and tax rates.
+    roles:
+    - concept: String
+    multiplicity: OneToOne
+    verbalizes:
+    - '{ChartOfAccountsEntry} is identified by account number {String}'
+  - name: account_class
+    description: Integer class code ranging from one to seven that categorizes the account within the accounting framework.
+    roles:
+    - concept: Integer
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{ChartOfAccountsEntry} has account class {Integer}'
+  - name: account_label
+    description: Descriptive label identifying the specific account name within the chart of accounts, such as Capital or
+      Reserves.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{ChartOfAccountsEntry} has account label {String}'
+  - name: active_status
+    description: Boolean flag indicating whether the account is currently active and enabled for use.
+    roles:
+    - concept: Boolean
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{ChartOfAccountsEntry} has active status {Boolean}'
+  - name: letterable
+    description: Boolean flag indicating whether the account supports the lettering process for matching transactions.
+    roles:
+    - concept: Boolean
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{ChartOfAccountsEntry} has letterable {Boolean}'
+- concept: CostCenter
+  type: EntityType
+  description: Organizational unit used for cost allocation and financial reporting.
+  identify_by:
+  - cost_center_code
+  relationships:
+  - name: general_ledger_cost_center
+    description: Represents the cost center as an alphanumeric General Ledger code, like NAM-DIR, used specifically for financial
+      reporting purposes.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{CostCenter} has general ledger cost center {String}'
+  - name: cost_center_code
+    description: Identifies the organizational unit for cost allocation, stored as a numeric code such as 110, and links departments
+      and payslips to their respective cost centers.
+    roles:
+    - concept: String
+    multiplicity: OneToOne
+    verbalizes:
+    - '{CostCenter} is identified by cost center code {String}'
+  - name: name
+    description: Provides the descriptive title of the organizational unit, such as Direction générale, used for identifying
+      specific departments within the cost center structure.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{CostCenter} has name {String}'
+  - name: work_site
+    roles:
+    - concept: WorkSite
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{CostCenter} has {WorkSite}'
+- concept: CustomerClient
+  type: EntityType
+  description: 'Clients : distributeurs, installateurs, promoteurs (par_code CLI_TYPE). cli_tva (format BE0123456789) relie
+    au tiers de la comptabilité, qui l''écrit ''BE 0123.456.789''.'
+  identify_by:
+  - client_id
+  relationships:
+  - name: client_id
+    description: Uniquely identifies the client entity, serving as the key for related tariff, certificate, and invoice records.
+    roles:
+    - concept: Integer
+    multiplicity: OneToOne
+    verbalizes:
+    - '{CustomerClient} is identified by client id {Integer}'
+  - name: client_code
+    description: Alphanumeric code identifying the client, formatted as 'CL' followed by a five-digit number.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{CustomerClient} has client code {String}'
+  - name: vat_number
+    description: Value Added Tax registration number for the client, prefixed by the relevant country code.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{CustomerClient} has vat number {String}'
+  - name: discount_percentage
+    description: Percentage discount or rebate applied to transactions with this specific client.
+    roles:
+    - concept: Decimal
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{CustomerClient} has discount percentage {Decimal}'
+  - name: client_type
+    description: Business role classification of the client, categorized as institutional, distributor, or promoter.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{CustomerClient} has client type {String}'
+  - name: country
+    description: Two-letter country code indicating the client's country of operation.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{CustomerClient} has country {String}'
+  - name: client_name
+    description: Official legal or commercial name of the client organization, such as a company's registered name.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{CustomerClient} has client name {String}'
+  - name: region
+    description: Regional code identifying the administrative or linguistic region where the client is located.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{CustomerClient} has region {String}'
+  - name: postal_code
+    description: Postal code corresponding to the client's primary business address.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{CustomerClient} has postal code {String}'
+  - name: street_address
+    description: Street address of the client's primary business location.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{CustomerClient} has street address {String}'
+  - name: creation_date
+    description: Date the client record was created in the system, formatted as YYYY-MM-DD.
+    roles:
+    - concept: Date
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{CustomerClient} has creation date {Date}'
+  - name: credit_limit
+    description: Maximum credit limit authorized for the client, expressed in monetary units.
+    roles:
+    - concept: Decimal
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{CustomerClient} has credit limit {Decimal}'
+  - name: is_active
+    description: Boolean flag indicating whether the client account is currently active or inactive.
+    roles:
+    - concept: Boolean
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{CustomerClient} has is active {Boolean}'
+  - name: payment_terms
+    description: Agreed payment terms specifying the duration and timing of invoice settlement for the client.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{CustomerClient} has payment terms {String}'
+  - name: city
+    description: City where the client's primary business location is situated.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{CustomerClient} has city {String}'
+  - name: salesperson_commercial
+    roles:
+    - concept: SalespersonCommercial
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{CustomerClient} has {SalespersonCommercial}'
+- concept: CustomerInvoiceAndCreditNoteFactureEtAvoirClient
+  type: EntityType
+  description: 'Factures (fac_type = ''F'') ET avoirs / notes de crédit (fac_type = ''A'') des clients, dans la même table,
+    avec des montants POSITIFS dans les deux cas : le chiffre d''affaires net = factures moins avoirs. Le motif d''un avoir
+    est dans fac_motif (par_code MOTIF_AVOIR) ; REGUL_TARIF est une régularisation de prix sans retour de marchandise. fac_statut
+    EMISE = émise mais pas encore transférée en comptabilité (d''où un écart avec le journal VEN).'
+  identify_by:
+  - invoice_id
+  relationships:
+  - name: vat_rate
+    description: Stores the applicable Value Added Tax rate percentage applied to the invoice calculation.
+    roles:
+    - concept: Decimal
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{CustomerInvoiceAndCreditNoteFactureEtAvoirClient} has vat rate {Decimal}'
+  - name: issue_date
+    description: Records the primary issue date of the invoice, formatted in the standard YYYY-MM-DD pattern.
+    roles:
+    - concept: Date
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{CustomerInvoiceAndCreditNoteFactureEtAvoirClient} has issue date {Date}'
+  - name: due_date
+    description: Indicates the payment deadline or due date for the invoice, formatted in the standard YYYY-MM-DD pattern.
+    roles:
+    - concept: Date
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{CustomerInvoiceAndCreditNoteFactureEtAvoirClient} has due date {Date}'
+  - name: status
+    description: Indicates the current processing stage of the invoice, such as being newly issued or fully accounted for.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{CustomerInvoiceAndCreditNoteFactureEtAvoirClient} has status {String}'
+  - name: invoice_id
+    description: Uniquely identifies each invoice record, serving as the primary reference for related shipment logs, line
+      items, and original invoice mappings.
+    roles:
+    - concept: Integer
+    multiplicity: OneToOne
+    verbalizes:
+    - '{CustomerInvoiceAndCreditNoteFactureEtAvoirClient} is identified by invoice id {Integer}'
+  - name: invoice_number
+    description: Displays the human-readable invoice number using a format consisting of a two-character prefix followed by
+      a hyphen and a sequential identifier.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{CustomerInvoiceAndCreditNoteFactureEtAvoirClient} has invoice number {String}'
+  - name: gross_amount
+    description: Indicates the total gross amount of the invoice, inclusive of all applicable taxes.
+    roles:
+    - concept: Decimal
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{CustomerInvoiceAndCreditNoteFactureEtAvoirClient} has gross amount {Decimal}'
+  - name: net_amount
+    description: Represents the net financial amount of the invoice before any taxes are applied.
+    roles:
+    - concept: Decimal
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{CustomerInvoiceAndCreditNoteFactureEtAvoirClient} has net amount {Decimal}'
+  - name: invoice_type
+    description: Specifies the document category, distinguishing between standard invoices and credit notes based on the assigned
+      character code.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{CustomerInvoiceAndCreditNoteFactureEtAvoirClient} has invoice type {String}'
+  - name: motivation
+    description: Describes the specific business reason for the transaction, such as returns, price errors, or damage, using
+      predefined text codes.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{CustomerInvoiceAndCreditNoteFactureEtAvoirClient} has motivation {String}'
+  - name: vat_amount
+    description: Records the specific monetary amount of Value Added Tax owed on the invoice.
+    roles:
+    - concept: Decimal
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{CustomerInvoiceAndCreditNoteFactureEtAvoirClient} has vat amount {Decimal}'
+  - name: customer_invoice_and_credit_note_facture_et_avoir_client
+    roles:
+    - concept: CustomerInvoiceAndCreditNoteFactureEtAvoirClient
+      name: customer_invoice_and_credit_note_facture_et_avoir_client
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{CustomerInvoiceAndCreditNoteFactureEtAvoirClient} has {CustomerInvoiceAndCreditNoteFactureEtAvoirClient:customer_invoice_and_credit_note_facture_et_avoir_client}'
+  - name: sales_order_commande_client
+    roles:
+    - concept: SalesOrderCommandeClient
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{CustomerInvoiceAndCreditNoteFactureEtAvoirClient} has {SalesOrderCommandeClient}'
+  - name: customer_client
+    roles:
+    - concept: CustomerClient
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{CustomerInvoiceAndCreditNoteFactureEtAvoirClient} has {CustomerClient}'
+- concept: CustomerInvoiceLineLigneDeFactureClient
+  type: EntityType
+  description: 'Lignes des factures et des avoirs clients (article, quantité, prix, montant HT). Les unités vendues = quantités
+    des factures moins celles des avoirs de motif RETOUR uniquement : un avoir REGUL_TARIF reprend des quantités pour calculer
+    un écart de prix, sans retour de marchandise.'
+  relationships:
+  - name: quantity
+    description: Specifies the numeric quantity of goods ordered on this specific line.
+    roles:
+    - concept: Decimal
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{CustomerInvoiceLineLigneDeFactureClient} has quantity {Decimal}'
+  - name: unit_price
+    description: Records the numeric unit price of the item before any discounts are applied.
+    roles:
+    - concept: Decimal
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{CustomerInvoiceLineLigneDeFactureClient} has unit price {Decimal}'
+  - name: line_number
+    description: Indicates the sequential position of the item within the associated order.
+    roles:
+    - concept: Integer
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{CustomerInvoiceLineLigneDeFactureClient} has line number {Integer}'
+  - name: discount_percentage
+    description: Denotes the percentage discount rate applied to reduce the line item's total cost.
+    roles:
+    - concept: Decimal
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{CustomerInvoiceLineLigneDeFactureClient} has discount percentage {Decimal}'
+  - name: net_total_amount
+    description: Calculates the total net amount for the line item after applying the discount.
+    roles:
+    - concept: Decimal
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{CustomerInvoiceLineLigneDeFactureClient} has net total amount {Decimal}'
+  - name: line_item_id
+    description: Uniquely identifies a specific line item record within the sales or purchase order.
+    roles:
+    - concept: Integer
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{CustomerInvoiceLineLigneDeFactureClient} has line item id {Integer}'
+  - name: article_article_produit
+    roles:
+    - concept: ArticleArticleProduit
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{CustomerInvoiceLineLigneDeFactureClient} has {ArticleArticleProduit}'
+  - name: customer_invoice_and_credit_note_facture_et_avoir_client
+    roles:
+    - concept: CustomerInvoiceAndCreditNoteFactureEtAvoirClient
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{CustomerInvoiceLineLigneDeFactureClient} has {CustomerInvoiceAndCreditNoteFactureEtAvoirClient}'
+  - name: sales_order_line_ligne_de_commande_client
+    roles:
+    - concept: SalesOrderLineLigneDeCommandeClient
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{CustomerInvoiceLineLigneDeFactureClient} has {SalesOrderLineLigneDeCommandeClient}'
+- concept: Department
+  type: EntityType
+  description: An organizational unit within the company.
+  identify_by:
+  - department_code
+  relationships:
+  - name: department_code
+    description: Uniquely identifies a company organizational department using a short alphanumeric code, such as FIN or IT.
+    roles:
+    - concept: String
+    multiplicity: OneToOne
+    verbalizes:
+    - '{Department} is identified by department code {String}'
+  - name: name
+    description: Provides the formal French-language name of the organizational department, such as Finance et comptabilité.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{Department} has name {String}'
+  - name: work_site
+    roles:
+    - concept: WorkSite
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{Department} has {WorkSite}'
+  - name: cost_center
+    roles:
+    - concept: CostCenter
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{Department} has {CostCenter}'
+  - name: employee
+    roles:
+    - concept: Employee
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{Department} has {Employee}'
+- concept: DepreciationChargeDotationAuxAmortissements
+  type: EntityType
+  description: Dotations mensuelles aux amortissements, une ligne par immobilisation et par mois. « Les amortissements comptabilisés
+    » sur une période = la SOMME des montants (en euros), pas le nombre de lignes ; le même total est au débit du compte 630000.
+  relationships:
+  - name: amount
+    description: Records the monetary amount associated with a specific depreciation entry as a numeric value.
+    roles:
+    - concept: Decimal
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{DepreciationChargeDotationAuxAmortissements} has amount {Decimal}'
+  - name: depreciation_id
+    description: Uniquely identifies each depreciation entry in the records, stored as an integer.
+    roles:
+    - concept: Integer
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{DepreciationChargeDotationAuxAmortissements} has depreciation id {Integer}'
+  - name: fixed_asset_immobilisation
+    roles:
+    - concept: FixedAssetImmobilisation
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{DepreciationChargeDotationAuxAmortissements} has {FixedAssetImmobilisation}'
+  - name: fiscal_period
+    roles:
+    - concept: FiscalPeriod
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{DepreciationChargeDotationAuxAmortissements} has {FiscalPeriod}'
+  - name: accounting_entry_criture_comptable
+    roles:
+    - concept: AccountingEntryCritureComptable
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{DepreciationChargeDotationAuxAmortissements} has {AccountingEntryCritureComptable}'
+- concept: Employee
+  type: EntityType
+  description: Represents an individual who is or was employed by the organization, including personal details, contact information,
+    and employment history.
+  identify_by:
+  - employee_id
+  relationships:
+  - name: exit_reason
+    description: The specific cause of the employee's departure, such as resignation, contract end, retirement, or dismissal.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{Employee} has exit reason {String}'
+  - name: last_name
+    description: The family name of the employee.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{Employee} has last name {String}'
+  - name: work_email
+    description: The official corporate email address assigned to the employee.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{Employee} has work email {String}'
+  - name: city
+    description: The city where the employee currently resides.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{Employee} has city {String}'
+  - name: gender
+    description: The employee's biological sex, recorded as M for male or F for female.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{Employee} has gender {String}'
+  - name: exit_date
+    description: The date the employee left the organization, stored in YYYY-MM-DD format.
+    roles:
+    - concept: Date
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{Employee} has exit date {Date}'
+  - name: first_name
+    description: The given name of the employee.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{Employee} has first name {String}'
+  - name: employee_id
+    description: Unique alphanumeric identifier distinguishing each employee, used to link contracts, department headship,
+      managerial reporting, pay slips, and salary history.
+    roles:
+    - concept: String
+    multiplicity: OneToOne
+    verbalizes:
+    - '{Employee} is identified by employee id {String}'
+  - name: birth_date
+    description: The employee's date of birth, stored in YYYY-MM-DD format.
+    roles:
+    - concept: Date
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{Employee} has birth date {Date}'
+  - name: postal_code
+    description: The postal code associated with the employee's residential address.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{Employee} has postal code {String}'
+  - name: hire_date
+    description: The date the employee was formally hired, stored in YYYY-MM-DD format.
+    roles:
+    - concept: Date
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{Employee} has hire date {Date}'
+  - name: employee
+    roles:
+    - concept: Employee
+      name: employee
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{Employee} has {Employee:employee}'
+- concept: EmploymentContractContrat
+  type: EntityType
+  description: 'Contrats et avenants : une ligne par période, donc plusieurs lignes par personne. L''effectif à une date =
+    nombre de employee_id DISTINCTS dont une ligne couvre la date (start_date <= date et end_date vide ou >= date). Le site
+    vient du département (departments.site_code).'
+  identify_by:
+  - contract_identifier
+  relationships:
+  - name: contract_identifier
+    description: Identifies the unique employment contract referenced by employee payslip records.
+    roles:
+    - concept: Integer
+    multiplicity: OneToOne
+    verbalizes:
+    - '{EmploymentContractContrat} is identified by contract identifier {Integer}'
+  - name: start_date
+    description: Records the official commencement date of the employment agreement in YYYY-MM-DD format.
+    roles:
+    - concept: Date
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{EmploymentContractContrat} has start date {Date}'
+  - name: telework_allowed
+    description: Indicates whether the employee is authorized to perform their duties remotely from home.
+    roles:
+    - concept: Boolean
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{EmploymentContractContrat} has telework allowed {Boolean}'
+  - name: weekly_hours
+    description: Records the total expected weekly working hours based on the specific work regime.
+    roles:
+    - concept: Decimal
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{EmploymentContractContrat} has weekly hours {Decimal}'
+  - name: end_date
+    description: Specifies the actual termination date of the employment contract in YYYY-MM-DD format.
+    roles:
+    - concept: Date
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{EmploymentContractContrat} has end date {Date}'
+  - name: shift_pattern
+    description: Describes the scheduled working hours classification, such as early, day, or night shift.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{EmploymentContractContrat} has shift pattern {String}'
+  - name: planned_end_date
+    description: Tracks the originally scheduled expiration date for fixed-term contracts in YYYY-MM-DD format.
+    roles:
+    - concept: Date
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{EmploymentContractContrat} has planned end date {Date}'
+  - name: work_regime
+    description: Indicates the full-time equivalent ratio representing the proportion of standard working time contracted.
+    roles:
+    - concept: Decimal
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{EmploymentContractContrat} has work regime {Decimal}'
+  - name: contract_type
+    description: Classifies the agreement as either an indefinite (CDI) or fixed-term (CDD) employment contract.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{EmploymentContractContrat} has contract type {String}'
+  - name: department
+    roles:
+    - concept: Department
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{EmploymentContractContrat} has {Department}'
+  - name: employee
+    roles:
+    - concept: Employee
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{EmploymentContractContrat} has {Employee}'
+  - name: job_position
+    roles:
+    - concept: JobPosition
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{EmploymentContractContrat} has {JobPosition}'
+- concept: FiscalPeriod
+  type: EntityType
+  description: A defined time interval for financial reporting or operational accounting, including its start date, end date,
+    and current open/closed status.
+  identify_by:
+  - period_code
+  relationships:
+  - name: status
+    description: Indicates the operational status of the fiscal period as either open or closed.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{FiscalPeriod} has status {String}'
+  - name: start_date
+    description: The start date marking the beginning of the defined fiscal period, formatted as YYYY-MM-DD.
+    roles:
+    - concept: Date
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{FiscalPeriod} has start date {Date}'
+  - name: period_code
+    description: Alphanumeric code identifying the specific fiscal period in YYYY-MM format, referenced by amortization and
+      journal entry records.
+    roles:
+    - concept: String
+    multiplicity: OneToOne
+    verbalizes:
+    - '{FiscalPeriod} is identified by period code {String}'
+  - name: end_date
+    description: The end date marking the conclusion of the defined fiscal period, formatted as YYYY-MM-DD.
+    roles:
+    - concept: Date
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{FiscalPeriod} has end date {Date}'
+  - name: fiscal_year
+    roles:
+    - concept: FiscalYear
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{FiscalPeriod} has {FiscalYear}'
+- concept: FiscalYear
+  type: EntityType
+  description: Represents a specific accounting or fiscal period defined by a year code, start and end dates, and its operational
+    status (open or closed).
+  identify_by:
+  - fiscal_year_code
+  relationships:
+  - name: start_date
+    description: Specifies the start date marking the beginning of the fiscal period, stored in YYYY-MM-DD format.
+    roles:
+    - concept: Date
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{FiscalYear} has start date {Date}'
+  - name: closure_date
+    description: Records the specific date the fiscal period was officially closed, stored in YYYY-MM-DD format.
+    roles:
+    - concept: Date
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{FiscalYear} has closure date {Date}'
+  - name: end_date
+    description: Indicates the end date marking the conclusion of the fiscal period, stored in YYYY-MM-DD format.
+    roles:
+    - concept: Date
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{FiscalYear} has end date {Date}'
+  - name: fiscal_period_label
+    description: Provides the human-readable label for the fiscal period, formatted as 'Exercice' followed by the year.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{FiscalYear} has fiscal period label {String}'
+  - name: status
+    description: Indicates the operational status of the fiscal period as either open (OUVERT) or closed (CLOTURE).
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{FiscalYear} has status {String}'
+  - name: fiscal_year_code
+    description: Identifies the fiscal year by a four-digit year string, linking it to associated budgets and periods.
+    roles:
+    - concept: String
+    multiplicity: OneToOne
+    verbalizes:
+    - '{FiscalYear} is identified by fiscal year code {String}'
+- concept: FixedAssetImmobilisation
+  type: EntityType
+  description: Registre des immobilisations (bâtiments, machines, véhicules, informatique, en-cours), avec valeur d'acquisition,
+    durée et méthode d'amortissement. Les dotations sont dans amortissement.
+  identify_by:
+  - real_estate_asset_id
+  relationships:
+  - name: acquisition_value
+    description: Original monetary cost paid to acquire the real estate asset, expressed in numeric currency units.
+    roles:
+    - concept: Decimal
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{FixedAssetImmobilisation} has acquisition value {Decimal}'
+  - name: asset_status
+    description: Current operational status of the asset, indicating states like in service, fully amortized, or under construction.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{FixedAssetImmobilisation} has asset status {String}'
+  - name: real_estate_asset_code
+    description: Human-readable alphanumeric code identifying specific real estate assets, formatted as IMM followed by four
+      digits.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{FixedAssetImmobilisation} has real estate asset code {String}'
+  - name: real_estate_asset_name
+    description: Descriptive name or label assigned to the specific real estate asset or building.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{FixedAssetImmobilisation} has real estate asset name {String}'
+  - name: real_estate_asset_id
+    description: Unique identifier for each real estate asset, linking records to their associated depreciation schedules.
+    roles:
+    - concept: Integer
+    multiplicity: OneToOne
+    verbalizes:
+    - '{FixedAssetImmobilisation} is identified by real estate asset id {Integer}'
+  - name: useful_life_in_years
+    description: Estimated useful life of the real estate asset in years, used for depreciation calculations.
+    roles:
+    - concept: Integer
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{FixedAssetImmobilisation} has useful life in years {Integer}'
+  - name: depreciation_method
+    description: Accounting method applied to calculate the asset's depreciation, such as linear depreciation.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{FixedAssetImmobilisation} has depreciation method {String}'
+  - name: in_service_date
+    description: Date the real estate asset was put into service, recorded in YYYY-MM-DD format.
+    roles:
+    - concept: Date
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{FixedAssetImmobilisation} has in service date {Date}'
+  - name: third_party_tiers
+    roles:
+    - concept: ThirdPartyTiers
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{FixedAssetImmobilisation} has {ThirdPartyTiers}'
+  - name: analytical_centre
+    roles:
+    - concept: AnalyticalCentre
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{FixedAssetImmobilisation} has {AnalyticalCentre}'
+  - name: chart_of_accounts_entry
+    roles:
+    - concept: ChartOfAccountsEntry
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{FixedAssetImmobilisation} has {ChartOfAccountsEntry}'
+- concept: GoodsReceiptLineLigneDeRCeption
+  type: EntityType
+  description: 'Lignes des réceptions : quantité reçue (rl_qte_recue, « reçue » et non « récupérée »), quantité refusée à
+    la réception, numéro de lot. Un retour au fournisseur après la réception n''est pas ici : c''est un mouvement de stock
+    de type RET dans stk_mvt.'
+  relationships:
+  - name: batch_code
+    description: Identifies the specific batch of items using an alphanumeric lot code.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{GoodsReceiptLineLigneDeRCeption} has batch code {String}'
+  - name: quantity_refused
+    description: Indicates the numeric quantity of items refused during the recovery process.
+    roles:
+    - concept: Decimal
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{GoodsReceiptLineLigneDeRCeption} has quantity refused {Decimal}'
+  - name: recovery_link_id
+    description: Uniquely identifies each individual recovery link record.
+    roles:
+    - concept: Integer
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{GoodsReceiptLineLigneDeRCeption} has recovery link id {Integer}'
+  - name: quantity_recovered
+    description: Represents the numeric count of items successfully recovered during the process.
+    roles:
+    - concept: Decimal
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{GoodsReceiptLineLigneDeRCeption} has quantity recovered {Decimal}'
+  - name: reason_for_refusal
+    description: Records the specific reason for item refusal, such as damaged packaging or reference errors.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{GoodsReceiptLineLigneDeRCeption} has reason for refusal {String}'
+  - name: article_article_produit
+    roles:
+    - concept: ArticleArticleProduit
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{GoodsReceiptLineLigneDeRCeption} has {ArticleArticleProduit}'
+  - name: purchase_order_line_ligne_de_commande_fournisseur
+    roles:
+    - concept: PurchaseOrderLineLigneDeCommandeFournisseur
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{GoodsReceiptLineLigneDeRCeption} has {PurchaseOrderLineLigneDeCommandeFournisseur}'
+  - name: goods_receipt_r_ception_fournisseur
+    roles:
+    - concept: GoodsReceiptRCeptionFournisseur
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{GoodsReceiptLineLigneDeRCeption} has {GoodsReceiptRCeptionFournisseur}'
+- concept: GoodsReceiptRCeptionFournisseur
+  type: EntityType
+  description: Réceptions des livraisons fournisseurs (bon de livraison du fournisseur, date). rec_comment signale les livraisons
+    incomplètes (palette manquante) et les relivraisons.
+  identify_by:
+  - record_identifier
+  relationships:
+  - name: record_identifier
+    description: Internally identifies the receipt record, linking it to fact and line items.
+    roles:
+    - concept: Integer
+    multiplicity: OneToOne
+    verbalizes:
+    - '{GoodsReceiptRCeptionFournisseur} is identified by record identifier {Integer}'
+  - name: rec_bl_frn
+    description: Stores the unique bill of lading reference number, like BL005303, associated with the receipt.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{GoodsReceiptRCeptionFournisseur} has rec bl frn {String}'
+  - name: receipt_date
+    description: Indicates the date the receipt or delivery occurred, stored in YYYY-MM-DD format.
+    roles:
+    - concept: Date
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{GoodsReceiptRCeptionFournisseur} has receipt date {Date}'
+  - name: receipt_number
+    description: Uniquely identifies the receipt event via a formatted alphanumeric code, such as RE25-00001.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{GoodsReceiptRCeptionFournisseur} has receipt number {String}'
+  - name: receipt_comment
+    description: Documents specific conditions, discrepancies, or actions, such as shortages or replacements, regarding the
+      receipt.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{GoodsReceiptRCeptionFournisseur} has receipt comment {String}'
+  - name: site
+    roles:
+    - concept: Site
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{GoodsReceiptRCeptionFournisseur} has {Site}'
+  - name: purchase_order_commande_fournisseur
+    roles:
+    - concept: PurchaseOrderCommandeFournisseur
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{GoodsReceiptRCeptionFournisseur} has {PurchaseOrderCommandeFournisseur}'
+- concept: JobPosition
+  type: EntityType
+  description: A record defining a specific role within the organization, including its identifier, title, classification,
+    and compensation grade.
+  identify_by:
+  - position_code
+  relationships:
+  - name: position_code
+    description: Identifies the specific job position and is referenced to determine the role for which an employee signed
+      a contract.
+    roles:
+    - concept: String
+    multiplicity: OneToOne
+    verbalizes:
+    - '{JobPosition} is identified by position code {String}'
+  - name: joint_committee
+    description: Identifies the specific joint committee associated with the position using a numerical code for organizational
+      grouping.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{JobPosition} has joint committee {String}'
+  - name: salary_class
+    description: Indicates the alphanumeric grade or bracket used to determine the pay scale for employees in this position.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{JobPosition} has salary class {String}'
+  - name: title
+    description: Specifies the formal French language job title for the position, indicating the exact role within the organization.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{JobPosition} has title {String}'
+  - name: category
+    description: Classifies the position into a broad labor group such as worker, cadre, or management for administrative
+      purposes.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{JobPosition} has category {String}'
+- concept: ManufacturingOrderOrdreDeFabrication
+  type: EntityType
+  description: 'Ordres de fabrication : un par produit fini, par semaine et par ligne de production (Seneffe, Gand).'
+  relationships:
+  - name: actual_quantity
+    description: The actual quantity of units successfully completed for the order.
+    roles:
+    - concept: Integer
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{ManufacturingOrderOrdreDeFabrication} has actual quantity {Integer}'
+  - name: start_date
+    description: The start date for the order work period, formatted as YYYY-MM-DD.
+    roles:
+    - concept: Date
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{ManufacturingOrderOrdreDeFabrication} has start date {Date}'
+  - name: status
+    description: The current status of the order, indicating whether it is finished or planned.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{ManufacturingOrderOrdreDeFabrication} has status {String}'
+  - name: planned_quantity
+    description: The planned quantity of units intended for production on the order.
+    roles:
+    - concept: Integer
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{ManufacturingOrderOrdreDeFabrication} has planned quantity {Integer}'
+  - name: order_line
+    description: The specific line or version identifier associated with the order, such as L1 or V2.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{ManufacturingOrderOrdreDeFabrication} has order line {String}'
+  - name: order_number
+    description: The alphanumeric reference code assigned to the order, formatted like OF25-0001.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{ManufacturingOrderOrdreDeFabrication} has order number {String}'
+  - name: end_date
+    description: The end date for the order work period, formatted as YYYY-MM-DD.
+    roles:
+    - concept: Date
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{ManufacturingOrderOrdreDeFabrication} has end date {Date}'
+  - name: rejected_quantity
+    description: The number of units rejected during the order production process.
+    roles:
+    - concept: Integer
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{ManufacturingOrderOrdreDeFabrication} has rejected quantity {Integer}'
+  - name: order_id
+    description: A unique integer identifier for each production or work order record.
+    roles:
+    - concept: Integer
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{ManufacturingOrderOrdreDeFabrication} has order id {Integer}'
+  - name: site
+    roles:
+    - concept: Site
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{ManufacturingOrderOrdreDeFabrication} has {Site}'
+  - name: article_article_produit
+    roles:
+    - concept: ArticleArticleProduit
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{ManufacturingOrderOrdreDeFabrication} has {ArticleArticleProduit}'
+- concept: Nomenclature
+  type: EntityType
+  description: Represents a nomenclature record containing its unique identifier, associated quantity, and reference date.
+  relationships:
+  - name: nomenclature_id
+    description: Uniquely identifies each nomenclature record within the system.
+    roles:
+    - concept: Integer
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{Nomenclature} has nomenclature id {Integer}'
+  - name: nomenclature_date
+    description: Records the reference date for the nomenclature in YYYY-MM-DD format.
+    roles:
+    - concept: Date
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{Nomenclature} has nomenclature date {Date}'
+  - name: nomenclature_quantity
+    description: Specifies the numeric quantity associated with the nomenclature record.
+    roles:
+    - concept: Decimal
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{Nomenclature} has nomenclature quantity {Decimal}'
+  - name: art_id_comp
+    roles:
+    - concept: ArticleArticleProduit
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{Nomenclature} has {ArticleArticleProduit}'
+  - name: art_id_pf
+    roles:
+    - concept: ArticleArticleProduit
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{Nomenclature} has {ArticleArticleProduit}'
+- concept: PayrollElement
+  type: EntityType
+  description: A specific component of an employee's compensation, detailing its classification, tax implications, and financial
+    posting.
+  identify_by:
+  - element_code
+  relationships:
+  - name: onss_subject
+    description: A boolean flag indicating whether the specific payroll component is subject to National Social Security (ONSS)
+      contributions for financial and legal compliance.
+    roles:
+    - concept: Boolean
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{PayrollElement} has onss subject {Boolean}'
+  - name: gl_account
+    description: The General Ledger account code, such as '620300', used for posting the financial transaction associated
+      with this specific payroll compensation component.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{PayrollElement} has gl account {String}'
+  - name: element_type
+    description: The classification of the payroll element indicating whether it is a gain, net gain, retention, or informational
+      item within compensation.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{PayrollElement} has element type {String}'
+  - name: label
+    description: The human-readable French description detailing the specific nature of the payroll element, such as 'Salaire
+      mensuel', for employee comprehension.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{PayrollElement} has label {String}'
+  - name: element_code
+    description: The unique alphanumeric identifier for a payroll component, such as base salary, which is referenced by payslip
+      lines to link specific compensation items.
+    roles:
+    - concept: String
+    multiplicity: OneToOne
+    verbalizes:
+    - '{PayrollElement} is identified by element code {String}'
+  - name: taxable
+    description: A boolean flag indicating whether the specific payroll component is subject to personal income tax calculation
+      during the payroll processing cycle.
+    roles:
+    - concept: Boolean
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{PayrollElement} has taxable {Boolean}'
+- concept: PayrollRunCalculDePaie
+  type: EntityType
+  description: 'Calculs de paie : MENSUEL pour le mois de period_month, ou CORRECTION (une correction de février 2026 a été
+    payée en mars). La fiche de paie d''un mois = le calcul MENSUEL de ce mois.'
+  identify_by:
+  - run_id
+  relationships:
+  - name: run_type
+    description: Categorizes the payroll execution as either a regular monthly run or a correction.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{PayrollRunCalculDePaie} has run type {String}'
+  - name: status
+    description: Indicates the current state of the payroll run, such as closed, to track its completion status.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{PayrollRunCalculDePaie} has status {String}'
+  - name: description
+    description: Provides a textual label, such as monthly payroll for a specific month, to identify the run.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{PayrollRunCalculDePaie} has description {String}'
+  - name: period_month
+    description: Indicates the specific calendar month, in YYYY-MM-DD format, for which the payroll calculations are performed.
+    roles:
+    - concept: Date
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{PayrollRunCalculDePaie} has period month {Date}'
+  - name: run_date
+    description: Specifies the date, in YYYY-MM-DD format, when the payroll processing activity was actually performed.
+    roles:
+    - concept: Date
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{PayrollRunCalculDePaie} has run date {Date}'
+  - name: run_id
+    description: Serves as the unique sequential identifier for a specific payroll execution, linking it to its generated
+      employee payslips.
+    roles:
+    - concept: Integer
+    multiplicity: OneToOne
+    verbalizes:
+    - '{PayrollRunCalculDePaie} is identified by run id {Integer}'
+  - name: payment_date
+    description: Defines the scheduled date, in YYYY-MM-DD format, when calculated wages are paid to employees.
+    roles:
+    - concept: Date
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{PayrollRunCalculDePaie} has payment date {Date}'
+- concept: Payslip
+  type: EntityType
+  description: A record detailing the compensation breakdown for an employee for a specific pay period, including gross earnings,
+    social security contributions, taxes, and net pay.
+  identify_by:
+  - payslip_id
+  relationships:
+  - name: pdf_file_path
+    description: Stores the file system path to the PDF document containing the detailed compensation breakdown for the payslip.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{Payslip} has pdf file path {String}'
+  - name: employer_social_security_contributions
+    description: Represents the additional social security contributions paid by the employer on behalf of the employee.
+    roles:
+    - concept: Decimal
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{Payslip} has employer social security contributions {Decimal}'
+  - name: gross_amount
+    description: Represents the total earnings of an employee for the pay period before any deductions or contributions.
+    roles:
+    - concept: Decimal
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{Payslip} has gross amount {Decimal}'
+  - name: taxable_amount
+    description: Specifies the base salary amount subject to income tax calculation for the pay period.
+    roles:
+    - concept: Decimal
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{Payslip} has taxable amount {Decimal}'
+  - name: employee_social_security_contributions
+    description: Indicates the social security contributions deducted directly from the employee's gross salary.
+    roles:
+    - concept: Decimal
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{Payslip} has employee social security contributions {Decimal}'
+  - name: payslip_id
+    description: Serves as the unique identifier for the payslip record, referenced by individual payslip lines.
+    roles:
+    - concept: Integer
+    multiplicity: OneToOne
+    verbalizes:
+    - '{Payslip} is identified by payslip id {Integer}'
+  - name: net_amount
+    description: Records the final compensation paid to the employee after all deductions and taxes are subtracted.
+    roles:
+    - concept: Decimal
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{Payslip} has net amount {Decimal}'
+  - name: withholding_tax
+    description: Denotes the income tax amount withheld from the employee's paycheck for the specific pay period.
+    roles:
+    - concept: Decimal
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{Payslip} has withholding tax {Decimal}'
+  - name: employee
+    roles:
+    - concept: Employee
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{Payslip} has {Employee}'
+  - name: cost_center
+    roles:
+    - concept: CostCenter
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{Payslip} has {CostCenter}'
+  - name: employment_contract_contrat
+    roles:
+    - concept: EmploymentContractContrat
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{Payslip} has {EmploymentContractContrat}'
+  - name: payroll_run_calcul_de_paie
+    roles:
+    - concept: PayrollRunCalculDePaie
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{Payslip} has {PayrollRunCalculDePaie}'
+- concept: PayslipLineLigneDeFicheDePaie
+  type: EntityType
+  description: 'Lignes des fiches de paie, montants signés (retenues négatives). Pour la commission (element_code COMMISSION),
+    quantity = ventes du mois précédent et rate = un POURCENTAGE (0.1000 = 0,1 %). Montants individuels : seulement agrégés
+    sur 5 personnes au moins (règle de confidentialité de l''agent).'
+  relationships:
+  - name: amount
+    description: Reflects the total monetary value of the line item, calculated from quantity and rate.
+    roles:
+    - concept: Decimal
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{PayslipLineLigneDeFicheDePaie} has amount {Decimal}'
+  - name: quantity
+    description: Indicates the total count of units associated with a specific pay component.
+    roles:
+    - concept: Decimal
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{PayslipLineLigneDeFicheDePaie} has quantity {Decimal}'
+  - name: rate
+    description: Represents the unit price or cost assigned to each individual pay component.
+    roles:
+    - concept: Decimal
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{PayslipLineLigneDeFicheDePaie} has rate {Decimal}'
+  - name: line_id
+    description: Uniquely identifies each specific line item within a payslip.
+    roles:
+    - concept: Integer
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{PayslipLineLigneDeFicheDePaie} has line id {Integer}'
+  - name: payroll_element
+    roles:
+    - concept: PayrollElement
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{PayslipLineLigneDeFicheDePaie} has {PayrollElement}'
+  - name: payslip
+    roles:
+    - concept: Payslip
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{PayslipLineLigneDeFicheDePaie} has {Payslip}'
+- concept: PriceListEntryTarif
+  type: EntityType
+  description: Prix de vente par article et par période, et prix spéciaux par client (cli_id renseigné).
+  relationships:
+  - name: comment
+    description: Provides descriptive labels or notes identifying specific tariff versions or amendments.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{PriceListEntryTarif} has comment {String}'
+  - name: tariff_id
+    description: Uniquely identifies each tariff record.
+    roles:
+    - concept: Integer
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{PriceListEntryTarif} has tariff id {Integer}'
+  - name: start_date
+    description: Indicates the effective start date of the tariff period in YYYY-MM-DD format.
+    roles:
+    - concept: Date
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{PriceListEntryTarif} has start date {Date}'
+  - name: price
+    description: Stores the monetary price or rate associated with the tariff.
+    roles:
+    - concept: Decimal
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{PriceListEntryTarif} has price {Decimal}'
+  - name: end_date
+    description: Indicates the effective end date of the tariff period in YYYY-MM-DD format.
+    roles:
+    - concept: Date
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{PriceListEntryTarif} has end date {Date}'
+  - name: customer_client
+    roles:
+    - concept: CustomerClient
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{PriceListEntryTarif} has {CustomerClient}'
+  - name: article_article_produit
+    roles:
+    - concept: ArticleArticleProduit
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{PriceListEntryTarif} has {ArticleArticleProduit}'
+- concept: ProductFamily
+  type: EntityType
+  description: Represents a classification group for products, including its identity, type, range, and associated financial
+    accounts.
+  identify_by:
+  - family_code
+  relationships:
+  - name: family_code
+    description: Stores the short alphanumeric code uniquely identifying a specific product family.
+    roles:
+    - concept: String
+    multiplicity: OneToOne
+    verbalizes:
+    - '{ProductFamily} is identified by family code {String}'
+  - name: family_name
+    description: Provides the descriptive label or name for the product family.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{ProductFamily} has family name {String}'
+  - name: purchase_account_code
+    description: Stores the purchasing or procurement account code for the product family.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{ProductFamily} has purchase account code {String}'
+  - name: family_type
+    description: Classifies the product family type using specific codes.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{ProductFamily} has family type {String}'
+  - name: product_range
+    description: Indicates the product range or tier, such as standard or premium.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{ProductFamily} has product range {String}'
+  - name: sales_account_code
+    description: Records the sales account code associated with the product family.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{ProductFamily} has sales account code {String}'
+- concept: PurchaseOrderCommandeFournisseur
+  type: EntityType
+  description: Commandes passées aux fournisseurs d'articles (composants, matières, négoce).
+  identify_by:
+  - purchase_order_id
+  relationships:
+  - name: total_amount_including_tax
+    description: Represents the total monetary value of the purchase order including tax, stored as a numeric amount.
+    roles:
+    - concept: Decimal
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{PurchaseOrderCommandeFournisseur} has total amount including tax {Decimal}'
+  - name: previous_delivery_date
+    description: Tracks the date of the previous delivery or status update for the purchase order, formatted as YYYY-MM-DD.
+    roles:
+    - concept: Date
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{PurchaseOrderCommandeFournisseur} has previous delivery date {Date}'
+  - name: purchase_order_status
+    description: Indicates the current status of the purchase order, such as paid or sent, using text values.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{PurchaseOrderCommandeFournisseur} has purchase order status {String}'
+  - name: purchase_order_date
+    description: Records the date associated with the purchase order entry, formatted as YYYY-MM-DD.
+    roles:
+    - concept: Date
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{PurchaseOrderCommandeFournisseur} has purchase order date {Date}'
+  - name: purchase_order_id
+    description: Identifies the unique purchase order referenced by its line items, financial facts, and receipt records.
+    roles:
+    - concept: Integer
+    multiplicity: OneToOne
+    verbalizes:
+    - '{PurchaseOrderCommandeFournisseur} is identified by purchase order id {Integer}'
+  - name: purchase_order_number
+    description: Stores the unique alphanumeric purchase order number assigned to the transaction, formatted as PO-YYYY-NNNNN.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{PurchaseOrderCommandeFournisseur} has purchase order number {String}'
+  - name: supplier_fournisseur
+    roles:
+    - concept: SupplierFournisseur
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{PurchaseOrderCommandeFournisseur} has {SupplierFournisseur}'
+  - name: site
+    roles:
+    - concept: Site
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{PurchaseOrderCommandeFournisseur} has {Site}'
+- concept: PurchaseOrderLineLigneDeCommandeFournisseur
+  type: EntityType
+  description: 'Lignes des commandes fournisseurs : article, quantité commandée (acl_qte), prix, quantité déjà reçue (acl_qte_recue).
+    Rien à voir avec des droits d''accès : ACH = achats.'
+  identify_by:
+  - id
+  relationships:
+  - name: unit_price
+    description: Defines the unit price applied to the access control list item.
+    roles:
+    - concept: Decimal
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{PurchaseOrderLineLigneDeCommandeFournisseur} has unit price {Decimal}'
+  - name: id
+    description: Uniquely identifies the access control list record and is referenced by receipt entries to link them to this
+      list.
+    roles:
+    - concept: Integer
+    multiplicity: OneToOne
+    verbalizes:
+    - '{PurchaseOrderLineLigneDeCommandeFournisseur} is identified by id {Integer}'
+  - name: number
+    description: Assigns a sequential number to each entry within the access control list.
+    roles:
+    - concept: Integer
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{PurchaseOrderLineLigneDeCommandeFournisseur} has number {Integer}'
+  - name: quantity
+    description: Specifies the total quantity associated with the specific access control list item.
+    roles:
+    - concept: Decimal
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{PurchaseOrderLineLigneDeCommandeFournisseur} has quantity {Decimal}'
+  - name: recovered_quantity
+    description: Indicates the recovered or retrieved quantity for the specific access control list item.
+    roles:
+    - concept: Decimal
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{PurchaseOrderLineLigneDeCommandeFournisseur} has recovered quantity {Decimal}'
+  - name: purchase_order_commande_fournisseur
+    roles:
+    - concept: PurchaseOrderCommandeFournisseur
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{PurchaseOrderLineLigneDeCommandeFournisseur} has {PurchaseOrderCommandeFournisseur}'
+  - name: article_article_produit
+    roles:
+    - concept: ArticleArticleProduit
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{PurchaseOrderLineLigneDeCommandeFournisseur} has {ArticleArticleProduit}'
+- concept: ReferenceCode
+  type: EntityType
+  description: A standardized reference code entry that links a specific code type to its unique alphanumeric identifier,
+    human-readable label, and display order, serving as a lookup table for various system attributes and classifications.
+  relationships:
+  - name: display_order
+    description: Defines the integer display or processing order for reference entries within a specific code type.
+    roles:
+    - concept: Integer
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{ReferenceCode} has display order {Integer}'
+  - name: code_value
+    description: Stores the unique standardized alphanumeric identifier for a specific entry within the defined reference
+      type.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{ReferenceCode} has code value {String}'
+  - name: code_type
+    description: Categorizes the specific attribute type, such as movement types or status codes, associated with the reference
+      code entry.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{ReferenceCode} has code type {String}'
+  - name: code_label
+    description: Provides the human-readable label or description, such as region names, corresponding to the specific code
+      value.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{ReferenceCode} has code label {String}'
+- concept: SalaryRecord
+  type: EntityType
+  description: A historical record of an employee's compensation details, including the effective date, gross amounts, and
+    the reason for the change.
+  relationships:
+  - name: historical_salary_id
+    description: Uniquely identifies each historical compensation entry in the salary history.
+    roles:
+    - concept: Integer
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{SalaryRecord} has historical salary id {Integer}'
+  - name: historical_hourly_rate
+    description: Indicates the employee's gross hourly pay rate as a numeric value.
+    roles:
+    - concept: Decimal
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{SalaryRecord} has historical hourly rate {Decimal}'
+  - name: historical_reason
+    description: Records the business justification for the salary change, such as recruitment or indexing.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{SalaryRecord} has historical reason {String}'
+  - name: historical_valid_from_date
+    description: Specifies the effective start date for the compensation, formatted as YYYY-MM-DD.
+    roles:
+    - concept: Date
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{SalaryRecord} has historical valid from date {Date}'
+  - name: historical_monthly_gross
+    description: Represents the employee's gross monthly salary amount in numeric format.
+    roles:
+    - concept: Decimal
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{SalaryRecord} has historical monthly gross {Decimal}'
+  - name: employee
+    roles:
+    - concept: Employee
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{SalaryRecord} has {Employee}'
+- concept: SalaryScale
+  type: EntityType
+  description: Defines the minimum and maximum monthly salary limits for a specific pay grade, effective from a certain date.
+  relationships:
+  - name: salary_class
+    description: Identifies the specific pay grade, such as E1 or C1, for which the salary limits apply.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{SalaryScale} has salary class {String}'
+  - name: minimum_monthly
+    description: Defines the minimum monthly salary amount applicable to the specific pay grade during the validity period.
+    roles:
+    - concept: Decimal
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{SalaryScale} has minimum monthly {Decimal}'
+  - name: valid_from
+    description: Specifies the effective date, formatted as YYYY-MM-DD, from which these salary parameters are in force.
+    roles:
+    - concept: Date
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{SalaryScale} has valid from {Date}'
+  - name: maximum_monthly
+    description: Defines the maximum monthly salary amount applicable to the specific pay grade during the validity period.
+    roles:
+    - concept: Decimal
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{SalaryScale} has maximum monthly {Decimal}'
+- concept: SalesOrderCommandeClient
+  type: EntityType
+  description: Commandes des clients. Une commande peut être expédiée et facturée en plusieurs fois. Statuts dans par_code
+    (STATUT_CDE) ; une commande ANNULEE ne compte pas.
+  identify_by:
+  - order_id
+  relationships:
+  - name: order_id
+    description: Uniquely identifies the order, which is referenced by logistics, line item, and fact tables.
+    roles:
+    - concept: Integer
+    multiplicity: OneToOne
+    verbalizes:
+    - '{SalesOrderCommandeClient} is identified by order id {Integer}'
+  - name: order_amount_excluding_tax
+    description: Represents the total order value excluding taxes.
+    roles:
+    - concept: Decimal
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{SalesOrderCommandeClient} has order amount excluding tax {Decimal}'
+  - name: order_date
+    description: Indicates the order creation date, formatted as YYYY-MM-DD.
+    roles:
+    - concept: Date
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{SalesOrderCommandeClient} has order date {Date}'
+  - name: planned_delivery_date
+    description: Specifies the planned delivery date for the order, formatted as YYYY-MM-DD.
+    roles:
+    - concept: Date
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{SalesOrderCommandeClient} has planned delivery date {Date}'
+  - name: client_name
+    description: Identifies the client by name associated with the order.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{SalesOrderCommandeClient} has client name {String}'
+  - name: order_status
+    description: Indicates the current processing status of the order, such as invoiced, delivered, or confirmed.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{SalesOrderCommandeClient} has order status {String}'
+  - name: order_number
+    description: Displays the unique alphanumeric order code, formatted as two letters, two digits, a hyphen, and five digits.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{SalesOrderCommandeClient} has order number {String}'
+  - name: site
+    roles:
+    - concept: Site
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{SalesOrderCommandeClient} has {Site}'
+  - name: customer_client
+    roles:
+    - concept: CustomerClient
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{SalesOrderCommandeClient} has {CustomerClient}'
+  - name: salesperson_commercial
+    roles:
+    - concept: SalespersonCommercial
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{SalesOrderCommandeClient} has {SalespersonCommercial}'
+- concept: SalesOrderLineLigneDeCommandeClient
+  type: EntityType
+  description: Lignes des commandes clients (article, quantité commandée, prix, remise, quantité livrée).
+  identify_by:
+  - line_item_id
+  relationships:
+  - name: line_number
+    description: Indicates the sequential line number of the specific item within its associated sales order or invoice.
+    roles:
+    - concept: Integer
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{SalesOrderLineLigneDeCommandeClient} has line number {Integer}'
+  - name: line_item_id
+    description: Uniquely identifies each line item within a sales order, serving as the primary key referenced by fact tables.
+    roles:
+    - concept: Integer
+    multiplicity: OneToOne
+    verbalizes:
+    - '{SalesOrderLineLigneDeCommandeClient} is identified by line item id {Integer}'
+  - name: delivered_quantity
+    description: Represents the quantity of the product that has actually been delivered for this line item.
+    roles:
+    - concept: Decimal
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{SalesOrderLineLigneDeCommandeClient} has delivered quantity {Decimal}'
+  - name: ordered_quantity
+    description: Represents the total quantity of the product ordered on this specific line item.
+    roles:
+    - concept: Decimal
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{SalesOrderLineLigneDeCommandeClient} has ordered quantity {Decimal}'
+  - name: discount_percentage
+    description: Indicates the discount percentage applied to the unit price of the line item.
+    roles:
+    - concept: Decimal
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{SalesOrderLineLigneDeCommandeClient} has discount percentage {Decimal}'
+  - name: unit_price
+    description: Specifies the unit price of the product before any discounts are applied.
+    roles:
+    - concept: Decimal
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{SalesOrderLineLigneDeCommandeClient} has unit price {Decimal}'
+  - name: article_article_produit
+    roles:
+    - concept: ArticleArticleProduit
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{SalesOrderLineLigneDeCommandeClient} has {ArticleArticleProduit}'
+  - name: sales_order_commande_client
+    roles:
+    - concept: SalesOrderCommandeClient
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{SalesOrderLineLigneDeCommandeClient} has {SalesOrderCommandeClient}'
+- concept: SalespersonCommercial
+  type: EntityType
+  description: 'Commerciaux (vendeurs) de Calorvia : ce ne sont pas des fournisseurs. VDR_MATRICULE est le matricule de paie
+    sans son préfixe M (99999 dans l''ERP = M99999 dans la paie). Trois commerciaux n''ont pas de matricule (dont le pseudo-commercial
+    SIEGE). Le commercial d''une vente est celui de la commande (vte_cde.vdr_id).'
+  identify_by:
+  - vendor_id
+  relationships:
+  - name: zone
+    description: Geographic code indicating the region where the vendor operates.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{SalespersonCommercial} has zone {String}'
+  - name: email_address
+    description: Email address of the vendor.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{SalespersonCommercial} has email address {String}'
+  - name: surname
+    description: Surname of the vendor.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{SalespersonCommercial} has surname {String}'
+  - name: vendor_code
+    description: Short alphanumeric code representing the vendor.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{SalespersonCommercial} has vendor code {String}'
+  - name: first_name
+    description: First name of the vendor.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{SalespersonCommercial} has first name {String}'
+  - name: entry_date
+    description: Date the vendor was onboarded, formatted as YYYY-MM-DD.
+    roles:
+    - concept: Date
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{SalespersonCommercial} has entry date {Date}'
+  - name: active_status
+    description: Boolean flag indicating whether the vendor is currently active.
+    roles:
+    - concept: Boolean
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{SalespersonCommercial} has active status {Boolean}'
+  - name: registration_number
+    description: Unique numeric vendor registration number.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{SalespersonCommercial} has registration number {String}'
+  - name: vendor_id
+    description: Unique identifier for each vendor, referenced by clients and orders to identify the selling vendor entity.
+    roles:
+    - concept: Integer
+    multiplicity: OneToOne
+    verbalizes:
+    - '{SalespersonCommercial} is identified by vendor id {Integer}'
+- concept: ShipmentExpDitionBonDeLivraison
+  type: EntityType
+  description: Expéditions aux clients (bons de livraison), avec transporteur, colis, poids, statut et incidents.
+  relationships:
+  - name: incident_description
+    description: Provides a textual description of specific issues or incidents encountered during the shipping process.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{ShipmentExpDitionBonDeLivraison} has incident description {String}'
+  - name: shipment_identifier
+    description: Serves as the unique internal identifier for each shipping record.
+    roles:
+    - concept: Integer
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{ShipmentExpDitionBonDeLivraison} has shipment identifier {Integer}'
+  - name: tracking_number
+    description: Stores the external alphanumeric tracking number, formatted as a code followed by a sequential ID.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{ShipmentExpDitionBonDeLivraison} has tracking number {String}'
+  - name: shipment_status
+    description: Tracks the current status of the shipment, such as shipped, delivered, or incident.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{ShipmentExpDitionBonDeLivraison} has shipment status {String}'
+  - name: delivery_date
+    description: Indicates the actual or expected delivery date for the shipment in YYYY-MM-DD format.
+    roles:
+    - concept: Date
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{ShipmentExpDitionBonDeLivraison} has delivery date {Date}'
+  - name: exp_poids_kg
+    description: Specifies the total weight of the shipment in kilograms.
+    roles:
+    - concept: Decimal
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{ShipmentExpDitionBonDeLivraison} has exp poids kg {Decimal}'
+  - name: shipping_date
+    description: Indicates the scheduled or recorded shipping date for the parcel in YYYY-MM-DD format.
+    roles:
+    - concept: Date
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{ShipmentExpDitionBonDeLivraison} has shipping date {Date}'
+  - name: parcel_count
+    description: Records the total number of physical parcels included in the shipment.
+    roles:
+    - concept: Integer
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{ShipmentExpDitionBonDeLivraison} has parcel count {Integer}'
+  - name: customer_invoice_and_credit_note_facture_et_avoir_client
+    roles:
+    - concept: CustomerInvoiceAndCreditNoteFactureEtAvoirClient
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{ShipmentExpDitionBonDeLivraison} has {CustomerInvoiceAndCreditNoteFactureEtAvoirClient}'
+  - name: transport_provider
+    roles:
+    - concept: TransportProvider
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{ShipmentExpDitionBonDeLivraison} has {TransportProvider}'
+  - name: sales_order_commande_client
+    roles:
+    - concept: SalesOrderCommandeClient
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{ShipmentExpDitionBonDeLivraison} has {SalesOrderCommandeClient}'
+  - name: site
+    roles:
+    - concept: Site
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{ShipmentExpDitionBonDeLivraison} has {Site}'
+- concept: Site
+  type: EntityType
+  description: A physical business location such as a factory, headquarters, office, or warehouse.
+  identify_by:
+  - site_id
+  relationships:
+  - name: is_active
+    description: Boolean indicator showing whether the site is currently active.
+    roles:
+    - concept: Boolean
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{Site} has is active {Boolean}'
+  - name: site_id
+    description: Uniquely identifies the physical site, referenced by address, recipient, production, logistics, and procurement
+      records.
+    roles:
+    - concept: Integer
+    multiplicity: OneToOne
+    verbalizes:
+    - '{Site} is identified by site id {Integer}'
+  - name: opening_date
+    description: Date the site was opened, recorded in YYYY-MM-DD format.
+    roles:
+    - concept: Date
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{Site} has opening date {Date}'
+  - name: site_type
+    description: Categorizes the site by business function using uppercase codes such as USINE, SIEGE, BUREAU, or ENTREPOT.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{Site} has site type {String}'
+  - name: country
+    description: Country of the site indicated by two-letter ISO country codes, such as BE or FR.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{Site} has country {String}'
+  - name: site_name
+    description: Full descriptive name of the site in French, identifying its specific business function and location.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{Site} has site name {String}'
+  - name: city
+    description: City name where the site is physically located, such as Namur or Lille.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{Site} has city {String}'
+  - name: site_code
+    description: Short alphanumeric code representing the site, formatted as three uppercase letters such as NAM.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{Site} has site code {String}'
+  - name: street_address
+    description: Complete physical street address and postal code of the site, formatted as street number and city zip.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{Site} has street address {String}'
+- concept: StockMovementMouvementDeStock
+  type: EntityType
+  description: 'Tous les mouvements de stock, quantités signées (entrée positive, sortie négative) : INIT, REC (réception),
+    RET (retour au fournisseur), CONS, PROD, REB, EXP, RCL, TRF, INV (par_code TYPE_MVT). mvt_lot porte le numéro de lot ;
+    mvt_ref la pièce d''origine (réception, non-conformité NC-...).'
+  relationships:
+  - name: movement_quantity
+    description: Represents the signed quantity of stock units added to or removed from inventory.
+    roles:
+    - concept: Decimal
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{StockMovementMouvementDeStock} has movement quantity {Decimal}'
+  - name: movement_date
+    description: Specifies the exact date and time the inventory movement occurred, formatted as YYYY-MM-DD HH:MM:SS.
+    roles:
+    - concept: DateTime
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{StockMovementMouvementDeStock} has movement date {DateTime}'
+  - name: movement_user
+    description: Identifies the system user or process role that recorded the inventory movement.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{StockMovementMouvementDeStock} has movement user {String}'
+  - name: movement_type
+    description: Categorizes the movement type using codes like EXP, CONS, INIT, TRF, or REC.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{StockMovementMouvementDeStock} has movement type {String}'
+  - name: movement_reference
+    description: Identifies the associated business document or reference code, such as a specific order number.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{StockMovementMouvementDeStock} has movement reference {String}'
+  - name: movement_lot
+    description: Identifies the specific lot or batch number of items involved in the movement.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{StockMovementMouvementDeStock} has movement lot {String}'
+  - name: movement_id
+    description: Uniquely identifies each specific inventory movement record within the stock management system.
+    roles:
+    - concept: Integer
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{StockMovementMouvementDeStock} has movement id {Integer}'
+  - name: site
+    roles:
+    - concept: Site
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{StockMovementMouvementDeStock} has {Site}'
+  - name: article_article_produit
+    roles:
+    - concept: ArticleArticleProduit
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{StockMovementMouvementDeStock} has {ArticleArticleProduit}'
+- concept: StockStatus
+  type: EntityType
+  description: Captures the current quantity, minimum threshold, and last movement timestamp for a stock item.
+  relationships:
+  - name: last_movement_date
+    description: Indicates the timestamp of the last recorded stock movement or update, formatted as YYYY-MM-DD HH:MM:SS.
+    roles:
+    - concept: DateTime
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{StockStatus} has last movement date {DateTime}'
+  - name: current_quantity
+    description: Records the current quantity of stock available for the item as a numeric value.
+    roles:
+    - concept: Decimal
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{StockStatus} has current quantity {Decimal}'
+  - name: minimum_threshold
+    description: Defines the minimum inventory threshold level required to trigger restocking alerts for the item.
+    roles:
+    - concept: Decimal
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{StockStatus} has minimum threshold {Decimal}'
+  - name: site
+    roles:
+    - concept: Site
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{StockStatus} has {Site}'
+  - name: article_article_produit
+    roles:
+    - concept: ArticleArticleProduit
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{StockStatus} has {ArticleArticleProduit}'
+- concept: SupplierFournisseur
+  type: EntityType
+  description: 'Fournisseurs d''articles. Attention aux doublons : une fiche marquée « (NE PAS UTILISER) » double un fournisseur
+    actif (Kompra). Le numéro de TVA (frn_tva, format BE0123456789) relie au tiers de la comptabilité.'
+  identify_by:
+  - supplier_identifier
+  relationships:
+  - name: is_active
+    description: Indicates whether the supplier is currently active or inactive in the business relationship.
+    roles:
+    - concept: Boolean
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{SupplierFournisseur} has is active {Boolean}'
+  - name: country
+    description: The country where the supplier is located, represented by standard ISO country codes.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{SupplierFournisseur} has country {String}'
+  - name: vat_number
+    description: The Value Added Tax identification number for the supplier, consisting of a country code prefix and numeric
+      digits.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{SupplierFournisseur} has vat number {String}'
+  - name: postal_code
+    description: The postal code associated with the supplier's location, varying by country format.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{SupplierFournisseur} has postal code {String}'
+  - name: supplier_name
+    description: The legal or registered business name of the supplier, such as GmbH or Ltd entities.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{SupplierFournisseur} has supplier name {String}'
+  - name: payment_terms
+    description: The payment terms agreed with the supplier, specifying the number of days allowed for settlement.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{SupplierFournisseur} has payment terms {String}'
+  - name: delivery_delay_days
+    description: The number of days allowed for delivery or processing associated with the supplier.
+    roles:
+    - concept: Integer
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{SupplierFournisseur} has delivery delay days {Integer}'
+  - name: creation_date
+    description: The date on which the supplier record was created in the system, formatted as YYYY-MM-DD.
+    roles:
+    - concept: Date
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{SupplierFournisseur} has creation date {Date}'
+  - name: city
+    description: The city where the supplier is located.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{SupplierFournisseur} has city {String}'
+  - name: supplier_identifier
+    description: Uniquely identifies the supplier, which is referenced by purchase orders, invoices, and principal articles
+      within the supply chain.
+    roles:
+    - concept: Integer
+    multiplicity: OneToOne
+    verbalizes:
+    - '{SupplierFournisseur} is identified by supplier identifier {Integer}'
+  - name: street_address
+    description: The street address or specific location details of the supplier's physical premises.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{SupplierFournisseur} has street address {String}'
+  - name: supplier_code
+    description: A unique alphanumeric code assigned to each supplier, formatted as F followed by four digits.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{SupplierFournisseur} has supplier code {String}'
+- concept: SupplierInvoiceFactureFournisseur
+  type: EntityType
+  description: Factures des fournisseurs d'articles, rapprochées de la commande et de la réception. Ce ne sont pas des factures
+    clients. Les autres factures d'achat (énergie, loyers, transport, honoraires) ne sont qu'en comptabilité.
+  relationships:
+  - name: amount_before_tax
+    description: The total monetary value of the goods or services listed on the invoice before adding any value-added tax.
+    roles:
+    - concept: Decimal
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{SupplierInvoiceFactureFournisseur} has amount before tax {Decimal}'
+  - name: total_amount_including_tax
+    description: The final total amount of the invoice, including the subtotal and all applicable taxes, payable by the customer.
+    roles:
+    - concept: Decimal
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{SupplierInvoiceFactureFournisseur} has total amount including tax {Decimal}'
+  - name: invoice_status
+    description: The current processing state of the invoice, indicating whether it is validated, blocked, or awaiting validation.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{SupplierInvoiceFactureFournisseur} has invoice status {String}'
+  - name: vat_amount
+    description: The calculated value-added tax amount applied to the invoice, representing the tax portion of the total cost.
+    roles:
+    - concept: Decimal
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{SupplierInvoiceFactureFournisseur} has vat amount {Decimal}'
+  - name: comments
+    description: Free-text notes providing context on specific discrepancies, verification actions, or historical details
+      related to the invoice.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{SupplierInvoiceFactureFournisseur} has comments {String}'
+  - name: due_date
+    description: The deadline date, formatted as YYYY-MM-DD, by which the customer must settle the invoice payment.
+    roles:
+    - concept: Date
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{SupplierInvoiceFactureFournisseur} has due date {Date}'
+  - name: invoice_reference_number
+    description: An alphanumeric reference number identifying the invoice, formatted with prefixes like PF, TM, or FX to indicate
+      its type.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{SupplierInvoiceFactureFournisseur} has invoice reference number {String}'
+  - name: invoice_id
+    description: A unique integer identifier that distinguishes each individual invoice record within the system.
+    roles:
+    - concept: Integer
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{SupplierInvoiceFactureFournisseur} has invoice id {Integer}'
+  - name: invoice_date
+    description: The specific calendar date, formatted as YYYY-MM-DD, when the invoice was officially issued or recorded.
+    roles:
+    - concept: Date
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{SupplierInvoiceFactureFournisseur} has invoice date {Date}'
+  - name: purchase_order_commande_fournisseur
+    roles:
+    - concept: PurchaseOrderCommandeFournisseur
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{SupplierInvoiceFactureFournisseur} has {PurchaseOrderCommandeFournisseur}'
+  - name: supplier_fournisseur
+    roles:
+    - concept: SupplierFournisseur
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{SupplierInvoiceFactureFournisseur} has {SupplierFournisseur}'
+  - name: goods_receipt_r_ception_fournisseur
+    roles:
+    - concept: GoodsReceiptRCeptionFournisseur
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{SupplierInvoiceFactureFournisseur} has {GoodsReceiptRCeptionFournisseur}'
+- concept: ThirdPartyTiers
+  type: EntityType
+  description: 'Clients et fournisseurs de la comptabilité, avec numéro de TVA au format ''BE 0123.456.789'' (l''ERP écrit
+    BE0123456789 : comparer sans espaces ni points).'
+  identify_by:
+  - tier_id
+  relationships:
+  - name: creation_date
+    description: Calendar date, formatted as YYYY-MM-DD, recording when the tier record was created in the system.
+    roles:
+    - concept: Date
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{ThirdPartyTiers} has creation date {Date}'
+  - name: iban
+    description: International Bank Account Number used for financial transactions with the entity.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{ThirdPartyTiers} has iban {String}'
+  - name: tier_code
+    description: Unique alphanumeric code, such as C10003, identifying the client or supplier entity.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{ThirdPartyTiers} has tier code {String}'
+  - name: legal_name
+    description: Stores the legal name of the client or supplier company.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{ThirdPartyTiers} has legal name {String}'
+  - name: country
+    description: Two-letter country code indicating the geographical location of the entity.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{ThirdPartyTiers} has country {String}'
+  - name: tier_type
+    description: Classifies the entity as either a client (CLIENT) or a supplier (FOURNISSEUR).
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{ThirdPartyTiers} has tier type {String}'
+  - name: payment_terms
+    description: Payment terms agreed upon, such as 30J or COMPT, governing invoice settlement.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{ThirdPartyTiers} has payment terms {String}'
+  - name: vat_number
+    description: VAT identification number formatted with a country code prefix, such as BE 0209.443.478.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{ThirdPartyTiers} has vat number {String}'
+  - name: tier_id
+    description: Uniquely identifies each tier and links to journal entries, fixed assets, and journal entry lines involving
+      that entity.
+    roles:
+    - concept: Integer
+    multiplicity: OneToOne
+    verbalizes:
+    - '{ThirdPartyTiers} is identified by tier id {Integer}'
+  - name: active
+    description: Boolean flag indicating whether the tier is currently active or inactive for business transactions.
+    roles:
+    - concept: Boolean
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{ThirdPartyTiers} has active {Boolean}'
+  - name: chart_of_accounts_entry
+    roles:
+    - concept: ChartOfAccountsEntry
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{ThirdPartyTiers} has {ChartOfAccountsEntry}'
+- concept: TimesheetPrestationJournaliRe
+  type: EntityType
+  description: 'Une ligne par personne et par jour ouvré : heures prévues et prestées, absence (absence_code, ex. ACC accident
+    du travail), lieu (work_location TELE = télétravail). Compter les lignes = compter les jours.'
+  relationships:
+  - name: worked_hours
+    description: Actual hours the employee actively worked during the shift.
+    roles:
+    - concept: Decimal
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{TimesheetPrestationJournaliRe} has worked hours {Decimal}'
+  - name: absence_hours
+    description: Hours the employee was absent from scheduled duties.
+    roles:
+    - concept: Decimal
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{TimesheetPrestationJournaliRe} has absence hours {Decimal}'
+  - name: planned_hours
+    description: Hours originally scheduled for the employee on that day.
+    roles:
+    - concept: Decimal
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{TimesheetPrestationJournaliRe} has planned hours {Decimal}'
+  - name: validated
+    description: Boolean indicating management approval of the timesheet entry.
+    roles:
+    - concept: Boolean
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{TimesheetPrestationJournaliRe} has validated {Boolean}'
+  - name: work_date
+    description: Calendar day of the work activity, formatted as YYYY-MM-DD.
+    roles:
+    - concept: Date
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{TimesheetPrestationJournaliRe} has work date {Date}'
+  - name: overtime_hours
+    description: Hours worked beyond the standard scheduled time.
+    roles:
+    - concept: Decimal
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{TimesheetPrestationJournaliRe} has overtime hours {Decimal}'
+  - name: shift
+    description: Specific time-of-day shift, such as morning or night.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{TimesheetPrestationJournaliRe} has shift {String}'
+  - name: work_location
+    description: Physical or remote location where work was performed.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{TimesheetPrestationJournaliRe} has work location {String}'
+  - name: timesheet_id
+    description: Unique identifier for each daily employee work record.
+    roles:
+    - concept: Integer
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{TimesheetPrestationJournaliRe} has timesheet id {Integer}'
+  - name: employee
+    roles:
+    - concept: Employee
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{TimesheetPrestationJournaliRe} has {Employee}'
+  - name: absence_type
+    roles:
+    - concept: AbsenceType
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{TimesheetPrestationJournaliRe} has {AbsenceType}'
+- concept: TransportProvider
+  type: EntityType
+  description: Record representing a registered transport provider, including their identity, tax details, location, service
+    type, and current status.
+  identify_by:
+  - transport_provider_id
+  relationships:
+  - name: transport_provider_is_active
+    description: Indicates whether the transport provider is currently active in the system using a boolean flag.
+    roles:
+    - concept: Boolean
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{TransportProvider} has transport provider is active {Boolean}'
+  - name: transport_provider_name
+    description: Stores the full legal name of the transport provider company.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{TransportProvider} has transport provider name {String}'
+  - name: transport_provider_id
+    description: Identifies the transport provider, which is referenced by expeditions to link shipments to their carrier.
+    roles:
+    - concept: Integer
+    multiplicity: OneToOne
+    verbalizes:
+    - '{TransportProvider} is identified by transport provider id {Integer}'
+  - name: transport_provider_code
+    description: Uniquely identifies the transport provider using a short alphanumeric code.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{TransportProvider} has transport provider code {String}'
+  - name: transport_provider_country
+    description: Indicates the nation where the transport provider is registered using a two-letter country code.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{TransportProvider} has transport provider country {String}'
+  - name: transport_provider_vat_number
+    description: Records the transport provider's Value Added Tax registration number.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{TransportProvider} has transport provider vat number {String}'
+  - name: transport_provider_type
+    description: Categorizes the transport service operationally, such as full truckload or courier.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{TransportProvider} has transport provider type {String}'
+- concept: VatRate
+  type: EntityType
+  description: Defines the applicable Value Added Tax (VAT) categories, their descriptive labels, and the specific tax rates
+    applied.
+  identify_by:
+  - vat_code
+  relationships:
+  - name: vat_code
+    description: Alphanumeric identifier for a VAT category, referenced by journal line entries.
+    roles:
+    - concept: String
+    multiplicity: OneToOne
+    verbalizes:
+    - '{VatRate} is identified by vat code {String}'
+  - name: vat_label
+    description: Descriptive label detailing the specific VAT transaction type and its applicable rate or status.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{VatRate} has vat label {String}'
+  - name: vat_rate
+    description: Numerical value representing the specific VAT rate percentage applied to a transaction.
+    roles:
+    - concept: Decimal
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{VatRate} has vat rate {Decimal}'
+  - name: chart_of_accounts_entry
+    roles:
+    - concept: ChartOfAccountsEntry
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{VatRate} has {ChartOfAccountsEntry}'
+- concept: WorkSite
+  type: EntityType
+  description: A physical business location where work is performed, including its address, identifier, and operational start
+    date.
+  identify_by:
+  - site_code
+  relationships:
+  - name: city
+    description: The city or municipality in which the specific work site is geographically situated.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{WorkSite} has city {String}'
+  - name: site_code
+    description: A unique alphanumeric code, such as NAMUR, that identifies the specific business location and links it to
+      its cost centers and departments.
+    roles:
+    - concept: String
+    multiplicity: OneToOne
+    verbalizes:
+    - '{WorkSite} is identified by site code {String}'
+  - name: site_name
+    description: The formal title describing the facility's function, such as a headquarters, factory, or warehouse, associated
+      with the specific work site.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{WorkSite} has site name {String}'
+  - name: street
+    description: The physical street address or industrial park name where the specific work site is located.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{WorkSite} has street {String}'
+  - name: postal_code
+    description: The numerical postal code associated with the city where the specific work site is geographically situated.
+    roles:
+    - concept: String
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{WorkSite} has postal code {String}'
+  - name: opened_on
+    description: The calendar date, formatted as YYYY-MM-DD, on which the specific work site officially began operations.
+    roles:
+    - concept: Date
+    multiplicity: ManyToOne
+    verbalizes:
+    - '{WorkSite} has opened on {Date}'
