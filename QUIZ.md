@@ -1235,11 +1235,11 @@ At temperature 0 the agent is nearly deterministic for a given prompt, so those 
 In the MCP server's validation, not in the agent. The rule that refuses `SELECT *` on a table with hidden personal columns looked for *any* `*` in the tree, and sqlglot represents `COUNT(*)` as a `Count` around a `Star`. `COUNT(*)` reads no column, so it is now allowed, while `SELECT *` and `e.*` are still refused (tested). Earlier runs showed "1 refused" on P01: the agent had worked around it with `COUNT(employee_id)`, so the answer was right and the bug invisible in the score. An evaluation finds bugs in the whole system, not only in the model, as long as the traces are read.
 </details>
 
-**10.** `offer_readings` scored 30/33, the best total of the series, and was still rejected. Why?
+**10.** `offer_readings` scored 30/33 (31/33 once the S09 scoring fix of step 15 re-scored it), the best total of the series, and was still rejected. Why?
 
 <details><summary>Answer</summary>
 
-Its targets, A03 ("le résultat de mars") and A05 ("combien nous coûte le personnel"), still answered one reading without naming any other. The model doesn't see these words as ambiguous, and a sentence in the prompt doesn't change that judgement. The +1 came from S02 and S03 changing path (and S09 got worse). Keeping a rule with no demonstrated effect makes the prompt longer, and every later change harder to read. A structural fix would mark in the ontology which business words map to several certified metrics, so code can flag the ambiguity.
+Its targets, A03 ("le résultat de mars") and A05 ("combien nous coûte le personnel"), still answered one reading without naming any other. The model doesn't see these words as ambiguous, and a sentence in the prompt doesn't change that judgement. The +1 came from S02 and S03 changing path (and S09 got worse). Keeping a rule with no demonstrated effect makes the prompt longer, and every later change harder to read. (Re-scored, it also had no confidently wrong answer: a reason to run it a second time before deciding for good, not to keep it on one run.) A structural fix would mark in the ontology which business words map to several certified metrics, so code can flag the ambiguity.
 </details>
 
 ## Step 15: charts and memory
