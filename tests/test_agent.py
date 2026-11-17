@@ -98,7 +98,7 @@ def test_the_model_sees_a_preview_and_reconcile_reads_every_row(sources, monkeyp
         seen["reconcile"] = last_tool_result(ms)
         return AIMessage("Rapprochement fait.")
     llm = ScriptedLLM(AIMessage("", tool_calls=[call("execute_sql", 1, source="erp", sql=per_client),
-                                                call("execute_sql", 2, source="erp", sql=per_client)]),
+                                                call("execute_sql", 2, source="erp", sql=per_client + " ORDER BY 1")]),
                       lambda ms: AIMessage("", tool_calls=[call("reconcile", left="q1", right="q2", left_key="CLI_TVA",
                                                                 right_key="cli_tva", key_type="vat",
                                                                 compare=[["ca", "ca"]])]),
@@ -203,3 +203,13 @@ def test_failed_queries_say_where_they_failed(sources):
                       AIMessage("Je ne sais pas."))
     steps = run(llm)["steps"]
     assert [s["stage"] for s in steps] == ["validation", "execution"]
+
+
+def test_the_same_query_twice_is_not_run_again(sources):
+    again = AIMessage("", tool_calls=[call("execute_sql", source="erp", sql=MARCH + "  ;")])
+    llm = ScriptedLLM(AIMessage("", tool_calls=[call("execute_sql", source="erp", sql=MARCH)]), again,
+                      AIMessage("CA de mars : 13 599 646,63 €"))
+    result = run(llm)
+    assert [s.get("stage") for s in result["steps"]] == [None, "repeat"]
+    assert "Requête identique à q1" in llm.calls[2][-1].content
+    assert result["answer"].count("**q") == 1

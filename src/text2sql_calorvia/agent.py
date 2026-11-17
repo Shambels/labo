@@ -110,6 +110,15 @@ def as_tool_text(value: Any) -> str:
     return text
 
 
+def same_query(results: dict[str, dict], args: dict) -> str | None:
+    """The id of an earlier result of exactly this query (same source, same text up to spacing and the row limit)."""
+    def key(source, sql):
+        sql = re.sub(r"\s+", " ", sql or "").strip().rstrip("; ")
+        return source, re.sub(r" LIMIT \d+$", "", sql, flags=re.I)
+    wanted = key(args.get("source"), args.get("sql"))
+    return next((qid for qid, r in results.items() if key(r["source"], r["sql"]) == wanted), None)
+
+
 def for_model(qid: str, output: dict) -> dict:
     """A query result as the model sees it: its id, the first rows, and where the rest is."""
     shown = output["rows"][:settings.rows_to_model]
@@ -224,6 +233,13 @@ class Agent:
                     step["ok"] = False
                 except ValueError as e:
                     output, step["ok"] = {"error": str(e)}, False
+            elif name == "execute_sql" and (same := same_query(results, args)):
+                # Seen in step 14 (X05): the model sent the same query 8 times in a row until the budget ran out
+                output = {"ok": False, "errors": [
+                    f"Requête identique à {same}, déjà exécutée pour cette question : le résultat ne changera pas. "
+                    "Utilisez ce résultat, changez d'approche, ou répondez avec ce que vous avez."]}
+                step.update(ok=False, stage="repeat", errors=output["errors"])
+                sql_errors += 1
             else:
                 if name in {"execute_sql", "get_sales_commission"}:
                     args.update(question=state["question"], session_id=state["session_id"])
