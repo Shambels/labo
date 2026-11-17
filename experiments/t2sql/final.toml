@@ -1,0 +1,7 @@
+# experiments/t2sql/final.toml — the final configuration (step 16, D64): with ontology, step 14's kept fixes,
+# yes_no_first, the step 15 tools and offer_readings (runs 9 and 11: 31 and 30/33, against 29 and 29 without it).
+# Run once on the 18 test questions: uv run python scripts/run_t2sql_eval.py experiments/t2sql/final.toml --test
+name = "final"
+
+[agent]
+use_ontology = true
