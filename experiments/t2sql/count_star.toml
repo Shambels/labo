@@ -1,0 +1,6 @@
+# experiments/t2sql/count_star.toml — step 14: COUNT(*) on employees no longer refused as a SELECT * (MCP server
+# validation bug found by P01); on top of no_repeat and pay_element_term
+name = "count_star"
+
+[agent]
+use_ontology = true
