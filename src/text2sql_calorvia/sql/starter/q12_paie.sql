@@ -5,7 +5,6 @@ SELECT r.period_month, r.run_type, l.quantity AS base, l.rate AS taux_pct, l.amo
 FROM payslips p
 JOIN payroll_runs r USING (run_id)
 JOIN payslip_lines l USING (payslip_id)
-JOIN employees e USING (employee_id)
-WHERE e.first_name = 'Joris' AND e.last_name = 'Claes'
+WHERE p.employee_id = 'M10405'   -- the salesperson's staff number (ERP VDR_MATRICULE 10405)
   AND r.period_month = DATE '2026-03-01' AND r.run_type = 'MENSUEL'
   AND l.element_code = 'COMMISSION'

@@ -55,4 +55,4 @@ Other things worth knowing:
   credit-note reasons, regions. A table card should show them.
 - Accounting: 12 draft entries (`BROUILLARD`) in May 2026; budget has versions (V1, V2, FINAL: only FINAL is approved).
 - ERP data stops on 29 May 2026 (extraction on the 31st); payroll starts in June 2025.
-- Three salespeople have no staff number (`ROUX`, `DUFOUR`, and the `SIEGE` pseudo-salesperson): no payroll link.
+- Three salespeople have no staff number (two people and the `SIEGE` pseudo-salesperson): no payroll link.
