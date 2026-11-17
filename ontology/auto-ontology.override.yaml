@@ -7,6 +7,9 @@
 #   machine's firewall drops traffic from Docker's bridge to host processes (published container ports still
 #   work). With network_mode: host, localhost is the host: models, sources (5433, 5434, 5436, Trino 8080) and
 #   auto-ontology's own PostgreSQL, published on POSTGRES_PORT=5435 (5432 is the course's).
+# - Everything listens on 127.0.0.1 only. With host networking the services would otherwise bind every interface,
+#   and the backend (3001) and ingestion service (3002) have no authentication of their own: BIND_HOST
+#   (patches/bind-host.patch), HOSTNAME for Next.js, and PostgreSQL published on 127.0.0.1.
 # - pgAdmin (5050) is not started.
 x-host: &host
   network_mode: host
@@ -15,8 +18,12 @@ x-host: &host
     POSTGRES_PORT: "5435"
     INGESTION_SERVICE_URL: http://localhost:3002
     PYTHON_API_URL: http://localhost:3001
+    BIND_HOST: 127.0.0.1
+    HOSTNAME: 127.0.0.1
 
 services:
+  postgres:
+    ports: !override ["127.0.0.1:5435:5432"]
   auto-ontology:
     <<: *host
     ports: !reset []
