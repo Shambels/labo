@@ -1,0 +1,5 @@
+# experiments/t2sql/with_ontology.toml — step 14 baseline: the agent of step 13 as merged (t2sql/v0.4-agent)
+name = "with_ontology"
+
+[agent]
+use_ontology = true   # certified table index + 8 metrics in the prompt, certified term in every table card

@@ -11,7 +11,7 @@ def test_terms_are_found_by_source_and_table_without_case():
 
 def test_every_certified_term_and_metric_maps_to_a_source():
     data = ontology.load()
-    assert len(data["terms"]) == 27 and len(data["metrics"]) == 8
+    assert len(data["terms"]) == 28 and len(data["metrics"]) == 8
     assert {t["source"] for t in data["terms"] + data["metrics"]} == {"erp", "compta", "paie"}
 
 

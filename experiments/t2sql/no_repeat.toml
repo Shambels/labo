@@ -1,0 +1,5 @@
+# experiments/t2sql/no_repeat.toml — step 14 fix 1: an identical query is not run twice (X05 sent one 8 times)
+name = "no_repeat"
+
+[agent]
+use_ontology = true   # the only change is in code (agent.same_query), measured against with_ontology (runs 2 and 4)

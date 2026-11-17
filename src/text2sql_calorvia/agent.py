@@ -37,6 +37,7 @@ from text2sql_calorvia.config import settings
 from text2sql_calorvia.reconcile import KEY_TYPES, reconcile
 
 PROMPT = Path(__file__).resolve().parents[2] / "prompts" / "agent.txt"
+ONTOLOGY_PROMPT = PROMPT.with_name("agent_ontology.txt")   # the ontology's part, left out when use_ontology is off
 INJECTED = {"question", "session_id", "max_rows"}   # filled by the agent (query log, row budget), never by the model
 SQL_TOOLS = {"execute_sql", "validate_sql"}
 ENGINE = {"erp": "SQL Server", "compta": "PostgreSQL", "paie": "PostgreSQL"}
@@ -73,11 +74,13 @@ class AgentState(TypedDict, total=False):
     answer: str
 
 
-def system_prompt(sources: list[dict]) -> str:
-    return PROMPT.read_text(encoding="utf-8").format(
+def system_prompt(sources: list[dict], use_ontology: bool = True) -> str:
+    section = (ONTOLOGY_PROMPT.read_text(encoding="utf-8").format(tables=ontology.table_index(), metrics=ontology.glossary())
+               if use_ontology else "")
+    return PROMPT.read_text(encoding="utf-8").format(ontology=section,
         sources="\n".join(f"- {s['source']} ({s['engine']}, dialecte {s['dialect']}) : {s['description']}"
                           for s in sources),
-        tables=ontology.table_index(), metrics=ontology.glossary(), data_until=settings.data_until,
+        data_until=settings.data_until,
         max_sql_errors=settings.max_sql_errors, min_group_size=settings.min_group_size,
         rows_to_model=settings.rows_to_model)
 
@@ -105,6 +108,15 @@ def as_tool_text(value: Any) -> str:
     if len(text) > settings.tool_result_chars:
         text = text[:settings.tool_result_chars] + " ... [tronqué : affinez la requête ou agrégez]"
     return text
+
+
+def same_query(results: dict[str, dict], args: dict) -> str | None:
+    """The id of an earlier result of exactly this query (same source, same text up to spacing and the row limit)."""
+    def key(source, sql):
+        sql = re.sub(r"\s+", " ", sql or "").strip().rstrip("; ")
+        return source, re.sub(r" LIMIT \d+$", "", sql, flags=re.I)
+    wanted = key(args.get("source"), args.get("sql"))
+    return next((qid for qid, r in results.items() if key(r["source"], r["sql"]) == wanted), None)
 
 
 def for_model(qid: str, output: dict) -> dict:
@@ -189,8 +201,9 @@ def previous_answer(text: str) -> str:
 class Agent:
     """One graph, one MCP client per question. `mcp_target` is a URL, or the server object in tests."""
 
-    def __init__(self, mcp_target: Any = None, llm: Any = None):
+    def __init__(self, mcp_target: Any = None, llm: Any = None, use_ontology: bool = True):
         self.mcp_target = mcp_target or settings.mcp_url
+        self.use_ontology = use_ontology   # off: no ontology in the prompt nor in the cards (step 14's comparison)
         self.llm = llm or ChatOpenAI(model=settings.llm_model, base_url=settings.llm_url, api_key="local",
                                      temperature=0, timeout=300)
         self.graph = self._build()
@@ -220,6 +233,13 @@ class Agent:
                     step["ok"] = False
                 except ValueError as e:
                     output, step["ok"] = {"error": str(e)}, False
+            elif name == "execute_sql" and (same := same_query(results, args)):
+                # Seen in step 14 (X05): the model sent the same query 8 times in a row until the budget ran out
+                output = {"ok": False, "errors": [
+                    f"Requête identique à {same}, déjà exécutée pour cette question : le résultat ne changera pas. "
+                    "Utilisez ce résultat, changez d'approche, ou répondez avec ce que vous avez."]}
+                step.update(ok=False, stage="repeat", errors=output["errors"])
+                sql_errors += 1
             else:
                 if name in {"execute_sql", "get_sales_commission"}:
                     args.update(question=state["question"], session_id=state["session_id"])
@@ -231,6 +251,10 @@ class Agent:
                 if name in SQL_TOOLS and not ok:
                     sql_errors += 1
                     step["errors"] = output.get("errors") or [output.get("error")]
+                    # execute returns the SQL it ran only when validation passed: then the database refused it
+                    step["stage"] = "execution" if name == "execute_sql" and "sql" in output else "validation"
+                if name == "get_table_card" and ok and not self.use_ontology:
+                    output.pop("ontology_terms", None)
                 if name == "execute_sql" and ok:
                     qid = f"q{len(results) + 1}"
                     results[qid] = {k: output.get(k) for k in ("source", "sql", "columns", "rows", "row_count", "truncated")}
@@ -320,7 +344,7 @@ class Agent:
             mcp_tools = (await client.list_tools()).tools
             tools = [tool_schema(t) for t in mcp_tools] + [RECONCILE_TOOL]
             sources = structured(await client.call_tool("list_sources", {}))
-            history = [SystemMessage(system_prompt(sources))] + [
+            history = [SystemMessage(system_prompt(sources, self.use_ontology))] + [
                 HumanMessage(m["content"]) if m["role"] == "user" else AIMessage(previous_answer(m["content"]))
                 for m in messages if m["role"] in ("user", "assistant")]
             state = {"messages": history, "question": question, "session_id": session_id,

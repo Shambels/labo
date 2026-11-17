@@ -55,6 +55,7 @@ def test_postgres_gets_a_limit_only_when_it_has_none(sources):
     ("erp", "SELECT numero_compte FROM plan_comptable", "Elle est dans la source compta"),
     ("paie", "SELECT national_number FROM employees", "Colonne non lisible : employees.national_number"),
     ("paie", "SELECT * FROM employees", "SELECT * refusé sur employees"),
+    ("paie", "SELECT e.* FROM employees e", "SELECT * refusé sur employees"),
     ("compta", "SELEC 1", "Erreur de syntaxe postgres (ligne 1"),
     ("erp", "SELECT TOP 5 FROM CLI_CLIENT", "SELECT sans colonne"),   # sqlglot parses it; the server wouldn't
     ("paie", "SELECT employee_id, gross_amount FROM payslips", "Règle de confidentialité"),
@@ -75,3 +76,9 @@ def test_payroll_aggregate_carries_the_group_size_check(sources):
     v = validate("paie", "SELECT AVG(gross_amount) FROM payslips")
     assert v.ok and v.privacy_check.startswith("SELECT MIN(n_people)")
     assert validate("paie", "SELECT COUNT(*) FROM payslips").privacy_check is None
+
+
+def test_count_star_reads_no_column_and_passes_on_a_partly_hidden_table(sources):
+    # Found by step 14's evaluation (P01): COUNT(*) was refused as a SELECT * on employees
+    assert validate("paie", "SELECT exit_reason, COUNT(*) FROM employees GROUP BY exit_reason").ok
+    assert validate("paie", "SELECT COUNT(*) FROM employees WHERE exit_date IS NOT NULL").ok

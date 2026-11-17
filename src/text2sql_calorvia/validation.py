@@ -181,7 +181,10 @@ def validate(source, sql, max_rows=None):
     if errors:
         return Validation(False, errors, tables=tables)
     _, hidden = schema(source)
-    if tree.find(exp.Star) is not None and any(hidden.get(t) for t in tables):
+    # COUNT(*) reads no column: only a star that selects columns (SELECT *, t.*) can reach the hidden ones.
+    # Found by step 14's evaluation: "SELECT exit_reason, COUNT(*) FROM employees" was refused as a SELECT *
+    star = any(not isinstance(s.parent, exp.Count) for s in tree.find_all(exp.Star))
+    if star and any(hidden.get(t) for t in tables):
         partly = [t for t in tables if hidden.get(t)]
         return Validation(False, [f"SELECT * refusé sur {', '.join(partly)} : certaines colonnes sont des données "
                                   "personnelles non lisibles. Nommez les colonnes (get_table_card)."], tables=tables)

@@ -1,0 +1,5 @@
+# experiments/t2sql/without_ontology.toml — the statement's minimum comparison: the same agent without the ontology
+name = "without_ontology"
+
+[agent]
+use_ontology = false   # the only change: no ontology section in the prompt, no ontology_terms in the cards

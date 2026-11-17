@@ -654,32 +654,32 @@ concept_mappings:
         concept: String
         expression: job_position.category
       relationship: category
-- concept: PayrollElement
+- concept: PayElementLMentDePaie
   object_mappings:
-  - expression: payroll_element.element_code
+  - expression: pay_element_élément_de_paie.element_code
   link_mappings:
   - object_mapping:
-      expression: payroll_element.element_code
+      expression: pay_element_élément_de_paie.element_code
     children:
     - object_mapping:
         concept: Boolean
-        expression: payroll_element.onss_subject
+        expression: pay_element_élément_de_paie.onss_subject
       relationship: onss_subject
     - object_mapping:
         concept: String
-        expression: payroll_element.gl_account
+        expression: pay_element_élément_de_paie.gl_account
       relationship: gl_account
     - object_mapping:
         concept: String
-        expression: payroll_element.element_type
+        expression: pay_element_élément_de_paie.element_type
       relationship: element_type
     - object_mapping:
         concept: String
-        expression: payroll_element.label
+        expression: pay_element_élément_de_paie.label
       relationship: label
     - object_mapping:
         concept: Boolean
-        expression: payroll_element.taxable
+        expression: pay_element_élément_de_paie.taxable
       relationship: taxable
 - concept: PayrollRunCalculDePaie
   object_mappings:

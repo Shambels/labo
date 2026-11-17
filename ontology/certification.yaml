@@ -198,6 +198,16 @@ terms:
       quantity = ventes du mois précédent et rate = un POURCENTAGE (0.1000 = 0,1 %). Montants individuels :
       seulement agrégés sur 5 personnes au moins (règle de confidentialité de l'agent).
   - database: paie
+    table: pay_elements
+    was: Payroll Element
+    name: Pay Element (élément de paie)
+    description: >-
+      Les éléments d'une fiche de paie (salaire mensuel ou horaire, primes, commission, indemnité de télétravail,
+      chèques-repas, ONSS, précompte...). gl_account est le compte comptable où l'élément est comptabilisé : c'est le
+      lien entre la paie et la comptabilité (payslip_lines.element_code -> pay_elements.gl_account ->
+      compta.ligne_ecriture.numero_compte). Plusieurs éléments partagent un même compte : comparer un élément à la
+      comptabilité suppose que son compte ne contienne que lui, sinon comparer le total de tous les éléments du compte.
+  - database: paie
     table: timesheets
     was: Timesheet
     name: Timesheet (prestation journalière)

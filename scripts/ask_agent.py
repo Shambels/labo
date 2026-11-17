@@ -11,35 +11,25 @@ Questions and answers come from the course material at run time (D42); data/ is 
 import argparse
 import asyncio
 import json
-import re
 import time
-from datetime import date
 from pathlib import Path
 
-from text2sql_calorvia.agent import Agent, own_text
+from text2sql_calorvia.agent import Agent
+from text2sql_calorvia.evaluation import prose, prose_numbers
 from text2sql_calorvia.starter import expected_tokens, load_questions, matches, result_values
 
-from ask_ontology import _typed, prose_numbers
+from ask_ontology import _typed
 
 OUT = Path("data/agent_runs")
-MONTHS = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre",
-          "décembre"]
-FRENCH_DATE = re.compile(rf"\b(\d{{1,2}})(?:er)? ({'|'.join(MONTHS)}) (\d{{4}})\b", re.I)
-
-
-def french_dates(text):
-    """'10 mars 2026', '1er avril 2026' as dates: the agent writes dates in words, the expected answers in digits."""
-    return {date(int(y), MONTHS.index(m.lower()) + 1, int(d)) for d, m, y in FRENCH_DATE.findall(text)}
 
 
 def check(expected, result):
     """(missing from rows or prose, missing from the prose)."""
-    text = own_text(result["answer"].split("\n---\n**Comment ce résultat")[0])
-    prose = prose_numbers(text) | french_dates(text)
+    prose_values = prose_numbers(prose(result["answer"]))
     rows = [[_typed(v) for v in row] for r in result["results"].values() for row in r["rows"]]
     tokens = expected_tokens(expected)
-    return ([str(t) for t in tokens if not matches(t, result_values(rows) | prose)],
-            [str(t) for t in tokens if not matches(t, prose)])
+    return ([str(t) for t in tokens if not matches(t, result_values(rows) | prose_values)],
+            [str(t) for t in tokens if not matches(t, prose_values)])
 
 
 async def main():
