@@ -1,0 +1,12 @@
+id,name,split,git_commit,scorer_commit,agent_options,started_at,questions,ok,confidently_wrong,assumed,queries,refused,exec_errors,median_s,total_min,agent_errors
+2,with_ontology,dev,4a1a105ecd6e3ddf3d13af0bac5f61ed212fe33a,88bb8ffdb15189f66c66eb9ca312e0de043f8df3,"{""use_ontology"": true}",2026-11-17T18:53+00:00,33,30,1,2,56,1,0,14.94,12.91,0
+3,without_ontology,dev,4a1a105ecd6e3ddf3d13af0bac5f61ed212fe33a,88bb8ffdb15189f66c66eb9ca312e0de043f8df3,"{""use_ontology"": false}",2026-11-17T19:08+00:00,33,28,4,5,60,3,0,20.92,15.41,0
+4,with_ontology,dev,ed041eef4cda5e3b1e97c49f1efc4a2644dcc6f6,88bb8ffdb15189f66c66eb9ca312e0de043f8df3,"{""use_ontology"": true}",2026-11-17T19:32+00:00,33,29,1,1,67,1,0,15.14,14.56,0
+5,no_repeat,dev,fd74bb0cd2ce9aef2103b09fbcf7f843ee078b7d,88bb8ffdb15189f66c66eb9ca312e0de043f8df3,"{""use_ontology"": true}",2026-11-17T20:09+00:00,33,30,2,2,61,1,0,14.82,13.83,0
+6,pay_element_term,dev,dcf5581b8902e116c0a196f11122fdf40dd04eff,88bb8ffdb15189f66c66eb9ca312e0de043f8df3,"{""use_ontology"": true}",2026-11-17T20:26+00:00,33,27,3,2,43,5,0,14.27,10.95,0
+7,count_star,dev,9900de8ffb9dc2c4bf0b9d48ade304ef14cd4a1c,88bb8ffdb15189f66c66eb9ca312e0de043f8df3,"{""use_ontology"": true}",2026-11-17T20:39+00:00,33,28,3,2,40,1,0,14.3,10.47,0
+8,yes_no_first,dev,7932977a61b7dba7e45780f323ad2e8038172a6f,88bb8ffdb15189f66c66eb9ca312e0de043f8df3,"{""use_ontology"": true}",2026-11-17T20:52+00:00,33,29,2,2,43,1,0,14.25,10.5,0
+9,offer_readings,dev,681a927bf9b708c37f510bf6b823f5a81fdb15b3,88bb8ffdb15189f66c66eb9ca312e0de043f8df3,"{""use_ontology"": true}",2026-11-17T21:04+00:00,33,31,0,3,50,0,0,15.69,11.28,0
+10,bonus_tools,dev,662c4244ef36c7e7526662b3278799ae9ce58fdc,88bb8ffdb15189f66c66eb9ca312e0de043f8df3,"{""use_ontology"": true}",2026-11-17T21:40+00:00,33,29,3,3,41,0,0,15.36,10.23,0
+11,offer_readings_retest,dev,c2df3b4f55c7e2e80fbb3a15a1f95ce3c4028b55,c2df3b4f55c7e2e80fbb3a15a1f95ce3c4028b55,"{""use_ontology"": true}",2026-11-17T23:35+00:00,33,30,3,3,39,0,0,14.81,10.09,0
+12,final,test,f1b1cfd6543e02974a2cec73074d3866cc89cbdb,f1b1cfd6543e02974a2cec73074d3866cc89cbdb,"{""use_ontology"": true}",2026-11-17T23:47+00:00,18,13,4,2,16,1,0,11.87,4.54,0
