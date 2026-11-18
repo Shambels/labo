@@ -1,4 +1,5 @@
 """Step 15: charts of query results, conversations and learned memory."""
+import os
 import uuid
 
 import anyio
@@ -6,7 +7,7 @@ import psycopg
 import pytest
 from langchain_core.messages import AIMessage
 
-from text2sql_calorvia import memory
+from text2sql_calorvia import charts, memory
 from text2sql_calorvia.agent import Agent
 from text2sql_calorvia.charts import make_chart
 from text2sql_calorvia.config import settings
@@ -121,3 +122,13 @@ def test_a_query_answer_still_has_its_footer_with_memory_on(user):
     llm = ScriptedLLM(AIMessage("", tool_calls=[call("execute_sql", source="erp", sql=MARCH)]),
                       AIMessage("CA de mars : 13 599 646,63 €"))
     assert "**q1** · erp" in ask(llm, "CA de mars ?", user)["answer"]
+
+
+def test_old_charts_are_deleted_and_other_files_kept(tmp_path):
+    old, new, other = tmp_path / "0123456789abcdef.png", tmp_path / "fedcba9876543210.png", tmp_path / "keep.png"
+    for path in (old, new, other):
+        path.write_bytes(b"x")
+    os.utime(old, (1000, 1000))
+    os.utime(other, (1000, 1000))
+    assert charts.cleanup(tmp_path, max_age_days=30) == 1
+    assert not old.exists() and new.exists() and other.exists()

@@ -57,6 +57,13 @@ def conversation(conversation_id: str) -> list[dict]:
     return [{"role": r, "content": c, "steps": s, "created_at": t.isoformat()} for r, c, s, t in rows]
 
 
+def conversation_owner(conversation_id: str) -> str | None:
+    ensure_schema()
+    with connect() as db:
+        row = db.execute(load_sql("memory/conversation_owner"), (conversation_id,)).fetchone()
+    return row[0] if row else None
+
+
 def remember(user: str, kind: str, content: str, conversation_id: str | None = None) -> dict:
     if kind not in KINDS:
         raise ValueError(f"Type de mémoire inconnu : {kind}. Types : {', '.join(KINDS)}.")

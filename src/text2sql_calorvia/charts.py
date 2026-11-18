@@ -5,6 +5,8 @@ the chart shows exactly what the query returned and nothing the privacy rule kep
 images, so the answer carries ![title](http://…/charts/<id>.png): the link is added by the agent's finish node,
 not written by the model.
 """
+import re
+import time
 import uuid
 from pathlib import Path
 
@@ -18,6 +20,7 @@ from text2sql_calorvia.config import settings  # noqa: E402
 
 KINDS = ("bar", "line", "pie")
 MAX_POINTS = 60
+CHART_FILE = re.compile(r"[0-9a-f]{16}\.png")
 PALETTE = ["#2563eb", "#f97316", "#16a34a", "#9333ea", "#dc2626", "#0891b2"]
 
 
@@ -81,11 +84,23 @@ def make_chart(result: dict, kind: str, x: str, y: list[str], title: str, direct
     fig.tight_layout()
     directory = directory or settings.charts_dir
     directory.mkdir(parents=True, exist_ok=True)
+    cleanup(directory)
     chart_id = uuid.uuid4().hex[:16]
     path = directory / f"{chart_id}.png"
     fig.savefig(path)
     plt.close(fig)
     return {"id": chart_id, "file": str(path), "title": title}
+
+
+def cleanup(directory: Path, max_age_days: int | None = None, now: float | None = None) -> int:
+    """Delete the charts older than the limit (only files named like a chart). Their answers lose the image."""
+    limit = (now or time.time()) - 86_400 * (settings.chart_max_age_days if max_age_days is None else max_age_days)
+    removed = 0
+    for path in directory.glob("*.png"):
+        if CHART_FILE.fullmatch(path.name) and path.stat().st_mtime < limit:
+            path.unlink(missing_ok=True)
+            removed += 1
+    return removed
 
 
 def chart_url(chart_id: str) -> str:
