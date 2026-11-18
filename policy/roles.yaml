@@ -1,0 +1,80 @@
+# Who may read what (Phase D, D74, D75). Applied to the databases by scripts/apply_roles.py; documents are used in step 28.
+# Denied by default: a table or a folder that isn't listed is out of reach. Salaries stay aggregated for every role.
+# `reference` tables hold labels only (code lists, site names), so every role reading the ERP gets them.
+
+table_groups:
+  erp:
+    reference: [PAR_CODE, SOC_SITE]
+    sales: [VTE_CDE, VTE_CDE_LIG, VTE_FACT, VTE_FACT_LIG]
+    sales_invoices: [VTE_FACT, VTE_FACT_LIG]
+    purchases: [ACH_CDE, ACH_CDE_LIG, ACH_FACT, ACH_RECEP, ACH_RECEP_LIG]
+    purchase_orders: [ACH_CDE, ACH_CDE_LIG]
+    purchase_invoices: [ACH_FACT]
+    receipts: [ACH_RECEP, ACH_RECEP_LIG]
+    customers: [CLI_CLIENT]
+    suppliers: [FRN_FOURNISSEUR]
+    salespeople: [VDR_VENDEUR]
+    articles: [ART_ARTICLE, ART_FAMILLE]
+    prices: [ART_TARIF]
+    bills_of_materials: [ART_NOMENC]
+    production: [PRD_OF]
+    stock: [STK_ETAT, STK_MVT]
+    stock_movements: [STK_MVT]
+    shipments: [LOG_EXPED, LOG_TRANSP]
+  paie:
+    pay: [payroll_runs, payslips, payslip_lines, pay_elements, cost_centers]
+    site_staff: [contracts, departments, timesheets]
+
+everyone_documents:
+  - 09_Communication
+  - 10_RSE
+  - 02_RH/Politiques
+  - 02_RH/Notes_de_service
+  - 02_RH/Formation
+  - 02_RH/Organigrammes
+
+roles:
+  direction:
+    sources: {erp: "*", compta: "*", paie: "*"}
+    documents: ["*"]
+  finance:
+    sources:
+      erp: [reference, sales_invoices, purchase_invoices, customers, suppliers, articles]
+      compta: "*"
+      paie: [pay]
+    documents: [01_Finance, 00_Direction/CODIR]
+  rh:
+    sources:
+      erp: [reference, salespeople]
+      paie: "*"
+    documents: [02_RH]
+  commercial:
+    sources:
+      erp: [reference, sales, customers, salespeople, articles, prices, shipments]
+    documents: [05_Commercial, 04_Qualite/Reclamations]
+  achats:
+    sources:
+      erp: [reference, purchases, suppliers, articles, stock]
+    documents: [06_Achats]
+  operations:
+    sources:
+      erp: [reference, production, bills_of_materials, stock, articles, receipts, shipments]
+    documents: [03_Production]
+  qualite:
+    sources:
+      erp: [reference, production, receipts, stock_movements, articles, suppliers, shipments]
+    documents: [04_Qualite]
+  responsable_site:
+    # One role per site. Their rows are limited in step 27: until then these roles are refused
+    sites: {gent: GENT, seneffe: SENEFFE, namur: NAMUR, herstal: HERSTAL}
+    sources:
+      erp: [reference, production, stock, receipts, shipments, purchase_orders]
+      paie: [site_staff]
+    documents: [03_Production/Procedures]
+    site_documents: {gent: [03_Production/Gent], seneffe: [03_Production/Seneffe]}
+  it:
+    sources: {}
+    documents: [07_IT]
+  employe:
+    sources: {}
+    documents: []

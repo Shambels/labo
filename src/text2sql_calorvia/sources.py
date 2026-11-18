@@ -1,6 +1,7 @@
 """The three Calorvia databases: what they are and how to query them, always as the read-only agent_ro account.
 
-The only module that opens connections to the sources. There is no admin connection anywhere in the code.
+The only module that opens connections to the sources. No admin connection here: only agent_ro and the read-only
+logins of the roles (access.py). scripts/apply_roles.py, which creates those logins, is the one exception.
 """
 from dataclasses import dataclass
 from importlib.resources import files
@@ -8,6 +9,7 @@ from importlib.resources import files
 import psycopg
 import pymssql
 
+from text2sql_calorvia import access
 from text2sql_calorvia.config import settings
 
 
@@ -33,22 +35,26 @@ def load_sql(path):
     return files("text2sql_calorvia").joinpath("sql", f"{path}.sql").read_text(encoding="utf-8")
 
 
-def connect(name, query_timeout_s=0):
-    """Open a connection to a source as agent_ro. Both drivers use %s placeholders.
+def connect(name, query_timeout_s=0, role=None):
+    """Open a connection to a source as agent_ro, or as a role's own login. Both drivers use %s placeholders.
 
     query_timeout_s: SQL Server only, a client-side limit per query (0 = none); PostgreSQL gets its own
     in execution.py (statement_timeout + cancel).
     """
     source = SOURCES[name]
+    user, password = "agent_ro", settings.agent_ro_password
+    if role is not None:
+        access.check_usable(role, name)
+        user, password = access.login(role), access.password(role)
     if source.engine == "sqlserver":
         return pymssql.connect(
             server=settings.sources_host, port=source.port, database=source.database,
-            user="agent_ro", password=settings.agent_ro_password,
+            user=user, password=password,
             login_timeout=settings.connect_timeout_s, timeout=query_timeout_s, charset="UTF-8",
         )
     return psycopg.connect(
         host=settings.sources_host, port=source.port, dbname=source.database,
-        user="agent_ro", password=settings.agent_ro_password,
+        user=user, password=password,
         connect_timeout=settings.connect_timeout_s,
     )
 

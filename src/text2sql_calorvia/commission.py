@@ -25,7 +25,7 @@ def _bind(sql, *params):
     return sql % tuple(f"'{p}'" for p in params)
 
 
-def get_sales_commission(staff_number, month, question=None, session_id=None):
+def get_sales_commission(staff_number, month, question=None, session_id=None, role=None):
     """The commission on a salesperson's payslip for a month ('2026-03'), with the sales it was computed on.
 
     staff_number: as the ERP writes it (10405) or as payroll does (M10405).
@@ -36,13 +36,14 @@ def get_sales_commission(staff_number, month, question=None, session_id=None):
         return {"ok": False, "errors": ["Paramètres attendus : un matricule (10405 ou M10405) et un mois AAAA-MM."]}
     log_id = log_start("get_sales_commission", "erp+paie", question, f"staff_number={digits} month={month}", session_id)
     start = time.perf_counter()
-    _, seller, _ = run_unvalidated("erp", _bind(ERP_SALESPERSON, digits), max_rows=1)
+    _, seller, _ = run_unvalidated("erp", _bind(ERP_SALESPERSON, digits), max_rows=1, role=role)
     if not seller:
         message = (f"Le matricule {digits} n'est pas un commercial dans l'ERP : la règle de confidentialité ne "
                    "permet pas d'afficher d'autre montant individuel.")
         log_finish(log_id, "refused", error=message, duration_ms=(time.perf_counter() - start) * 1000)
         return {"ok": False, "errors": [message]}
-    columns, rows, _ = run_unvalidated("paie", _bind(PAYROLL_COMMISSION, f"M{digits}", f"{month}-01"), max_rows=10)
+    columns, rows, _ = run_unvalidated("paie", _bind(PAYROLL_COMMISSION, f"M{digits}", f"{month}-01"), max_rows=10,
+                                  role=role)
     log_finish(log_id, "ok", f"erp: VDR_VENDEUR {digits}; paie: COMMISSION M{digits} {month}", None,
                (time.perf_counter() - start) * 1000, len(rows), False)
     code, first, last = seller[0]

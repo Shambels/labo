@@ -12,7 +12,7 @@ from typing import Any
 from mcp.server.mcpserver import MCPServer
 from mcp.types import ToolAnnotations
 
-from text2sql_calorvia import cards, commission, execution, validation, values
+from text2sql_calorvia import access, cards, commission, execution, validation, values
 from text2sql_calorvia.config import settings
 
 INSTRUCTIONS = """Accès en lecture seule aux trois bases de Calorvia SA : erp (SQL Server, T-SQL), compta et paie
@@ -27,24 +27,39 @@ READ_ONLY = ToolAnnotations(readOnlyHint=True, destructiveHint=False, idempotent
 server = MCPServer("calorvia-sources", instructions=INSTRUCTIONS, version="0.2")
 
 
+def _caller(access_token):
+    """(role, None), or (None, a refusal). The token comes from the agent, never from the model (access.py)."""
+    try:
+        return access.caller_role(access_token), None
+    except access.AccessDenied as error:
+        return None, {"ok": False, "error": str(error)}
+
+
 @server.tool(annotations=READ_ONLY)
-def list_sources() -> list[dict[str, Any]]:
+def list_sources(access_token: str | None = None) -> list[dict[str, Any]]:
     """Les trois sources : moteur, dialecte SQL, nombre de tables, contenu et période couverte."""
-    return cards.list_sources()
+    _, refused = _caller(access_token)
+    return [refused] if refused else cards.list_sources()
 
 
 @server.tool(annotations=READ_ONLY)
-def list_tables(source: str) -> list[dict[str, Any]]:
+def list_tables(source: str, access_token: str | None = None) -> list[dict[str, Any]]:
     """Les tables d'une source (erp, compta ou paie) avec leur nombre de lignes et leur description."""
+    _, refused = _caller(access_token)
+    if refused:
+        return [refused]
     if source not in cards.SOURCES:
         return [{"error": f"Source inconnue : {source}. Sources : erp, compta, paie."}]
     return cards.list_tables(source)
 
 
 @server.tool(annotations=READ_ONLY)
-def get_table_card(source: str, table: str) -> dict[str, Any]:
+def get_table_card(source: str, table: str, access_token: str | None = None) -> dict[str, Any]:
     """La fiche d'une table : description, colonnes et types, clés, nombre de lignes, exemples de valeurs,
     valeurs des colonnes de codes avec leur libellé, colonnes non lisibles. À lire avant d'écrire une requête."""
+    _, refused = _caller(access_token)
+    if refused:
+        return refused
     if source not in cards.SOURCES:
         return {"error": f"Source inconnue : {source}. Sources : erp, compta, paie."}
     return cards.get_table_card(source, table)
@@ -52,39 +67,54 @@ def get_table_card(source: str, table: str) -> dict[str, Any]:
 
 @server.tool(annotations=READ_ONLY)
 def find_values(source: str, value: str, table: str | None = None, column: str | None = None,
-                limit: int = 20) -> dict[str, Any]:
+                limit: int = 20, access_token: str | None = None) -> dict[str, Any]:
     """Où apparaît une valeur (nom de client, fournisseur, article, numéro de facture, de lot, de TVA...) et
     comment elle s'écrit exactement. Insensible à la casse, aux accents et à la ponctuation ; tolère les fautes."""
+    _, refused = _caller(access_token)
+    if refused:
+        return refused
     if source not in cards.SOURCES:
         return {"error": f"Source inconnue : {source}. Sources : erp, compta, paie."}
     return values.find_values(source, value, table, column, min(max(limit, 1), 100))
 
 
 @server.tool(annotations=READ_ONLY)
-def validate_sql(source: str, sql: str) -> dict[str, Any]:
+def validate_sql(source: str, sql: str, access_token: str | None = None) -> dict[str, Any]:
     """Vérifie une requête sans l'exécuter : une seule lecture (SELECT), dans le dialecte de la source, tables et
     colonnes existantes, règle de confidentialité de la paie. Renvoie les erreurs à corriger, ou la requête qui
     sera exécutée (avec sa limite de lignes)."""
+    _, refused = _caller(access_token)
+    if refused:
+        return refused
     return validation.validate(source, sql).as_dict()
 
 
 @server.tool(annotations=READ_ONLY)
 def execute_sql(source: str, sql: str, question: str | None = None, session_id: str | None = None,
-                max_rows: int | None = None) -> dict[str, Any]:
+                max_rows: int | None = None, access_token: str | None = None) -> dict[str, Any]:
     """Exécute une requête de lecture sur une source (validée d'abord). Renvoie les colonnes, les lignes (200 par
     défaut, `max_rows` pour plus, jusqu'à la limite du serveur) et un indicateur de troncature, ou les erreurs.
     `question` : la question de l'utilisateur, pour le journal."""
+    role, refused = _caller(access_token)
+    if refused:
+        return refused
     limit = min(max(max_rows or settings.max_rows, 1), settings.max_rows_limit)
-    return execution.execute(source, sql, question=question, session_id=session_id, max_rows=limit)
+    return execution.execute(source, sql, question=question, session_id=session_id, max_rows=limit, role=role)
 
 
 @server.tool(annotations=READ_ONLY)
 def get_sales_commission(staff_number: str, month: str, question: str | None = None,
-                         session_id: str | None = None) -> dict[str, Any]:
+                         session_id: str | None = None, access_token: str | None = None) -> dict[str, Any]:
     """La commission sur ventes d'un commercial pour un mois de paie (AAAA-MM), avec la base (ventes facturées du
     mois précédent) et le taux. Seul montant individuel de la paie que l'agent peut montrer. staff_number : le
     matricule de l'ERP (10405) ou de la paie (M10405)."""
-    return commission.get_sales_commission(staff_number, month, question, session_id)
+    role, refused = _caller(access_token)
+    if refused:
+        return refused
+    try:
+        return commission.get_sales_commission(staff_number, month, question, session_id, role)
+    except (access.AccessDenied, *execution.DB_ERRORS):
+        return {"ok": False, "errors": ["Cette information n'est pas disponible pour votre rôle."]}
 
 
 def main():
