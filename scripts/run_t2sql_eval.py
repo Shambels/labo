@@ -3,6 +3,7 @@
     uv run python scripts/run_t2sql_eval.py experiments/t2sql/with_ontology.toml            # dev questions
     uv run python scripts/run_t2sql_eval.py experiments/t2sql/with_ontology.toml -q A01 M05 # some questions
     uv run python scripts/run_t2sql_eval.py experiments/t2sql/final.toml --test             # once, at the end
+    uv run python scripts/run_t2sql_eval.py final.toml --final                # the sealed set, once (step 23)
     uv run python scripts/run_t2sql_eval.py --rescore 2 3     # re-score stored answers with the current scoring code
 
 Needs the MCP server (9001) and the LLM (8000). A run made with uncommitted changes is stored with git_dirty = true
@@ -21,7 +22,7 @@ from openai import OpenAI
 from rag_calorvia.git_state import git_state
 from text2sql_calorvia.agent import Agent
 from text2sql_calorvia.config import settings
-from text2sql_calorvia.evaluation import judge, load_questions, score, sql_counts, verdict
+from text2sql_calorvia.evaluation import judge, load_final_questions, load_questions, score, sql_counts, verdict
 from text2sql_calorvia.sources import load_sql
 
 
@@ -31,13 +32,17 @@ async def main():
     parser.add_argument("--rescore", type=int, nargs="*", help="experiment ids: re-score their stored answers")
     parser.add_argument("-q", "--questions", nargs="*", help="question ids (default: the whole split)")
     parser.add_argument("--test", action="store_true", help="the held-out test questions (run once, step 16)")
+    parser.add_argument("--final", action="store_true", help="the sealed final test set (run once, step 23)")
     args = parser.parse_args()
     if args.rescore:
         return rescore(args.rescore)
     config = tomllib.loads(args.config.read_text())
-    split = "test" if args.test else "dev"
-    questions = [q for q in load_questions(split=split) if not args.questions or q["id"] in args.questions]
+    split = "final" if args.final else "test" if args.test else "dev"
+    pool = load_final_questions() if args.final else load_questions(split=split)
+    questions = [q for q in pool if not args.questions or q["id"] in args.questions]
     commit, dirty = git_state()
+    if args.final:
+        check_final_run_allowed(args.questions, args.test, dirty)
     # Memory off: an evaluation must not depend on what someone asked the agent to remember (step 15)
     agent = Agent(**{"use_memory": False, **config.get("agent", {})})
     judge_client = OpenAI(base_url=settings.llm_url, api_key="local")
@@ -71,12 +76,23 @@ async def main():
     print(f"done: experiment {experiment}")
 
 
+def check_final_run_allowed(selected, test, dirty):
+    """The sealed set is run whole, from a clean commit, and only once."""
+    if selected or test or dirty:
+        raise SystemExit("--final runs the whole set from a clean tree, without -q or --test")
+    with psycopg.connect(settings.postgres_url, autocommit=True) as db:
+        db.execute(load_sql("eval/schema"))
+        runs = [row[0] for row in db.execute(load_sql("eval/final_runs")).fetchall()]
+    if runs:
+        raise SystemExit(f"the sealed set has already been run (experiment {runs[0]})")
+
+
 def rescore(experiments):
     """Score stored answers again (scores and judge), without asking the agent again."""
     commit, dirty = git_state()
     if dirty:
         raise SystemExit("commit the scoring code first: the experiment keeps the scorer's commit")
-    questions = {q["id"]: q for q in load_questions(split="all")}
+    questions = {q["id"]: q for q in load_questions(split="all") + load_final_questions()}
     judge_client = OpenAI(base_url=settings.llm_url, api_key="local")
     with psycopg.connect(settings.postgres_url, autocommit=True) as db:
         db.execute(load_sql("eval/schema"))

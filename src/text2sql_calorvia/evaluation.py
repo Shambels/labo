@@ -6,6 +6,7 @@ Correctness is decided by code: every number and date of the expected answer mus
 refused) is classified by an LLM: the agent's own model, the only one loaded (24 GB GPU), at temperature 0, on a
 narrow question that does not ask it to judge figures.
 """
+import hashlib
 import json
 import re
 from datetime import date
@@ -21,6 +22,9 @@ from text2sql_calorvia.starter import expected_tokens, load_questions as load_st
 from text2sql_calorvia.values import normalize
 
 QUESTIONS = Path(__file__).resolve().parents[2] / "evaluation" / "t2sql_questions.yaml"
+# The final test set (step 19, D67): sealed by its fingerprint, run once in step 23
+FINAL_QUESTIONS = QUESTIONS.with_name("t2sql_final_questions.yaml")
+FINAL_QUESTIONS_SHA256 = "b6f60da1c26c3d8cbf6b02330ebd8752fb94b7cade0f23f6f93736adbc5853f3"
 JUDGE_PROMPT = Path(__file__).resolve().parents[2] / "prompts" / "t2sql_judge.txt"
 FOOTER = "\n---\n**Comment ce résultat a été obtenu**"
 LABELS = {"answer", "assume", "clarify", "unknown", "refuse"}
@@ -50,6 +54,13 @@ def load_questions(path: Path = QUESTIONS, split: str | None = None) -> list[dic
                 {"source": f.name.removesuffix(".sql").split("_")[1], "sql": f.read_text(encoding="utf-8")}
                 for f in sorted(sql_dir.iterdir()) if f.name.startswith(f"q{q['starter']:02d}_")])
     return [q for q in questions if split in (None, "all") or q["split"] == split]
+
+
+def load_final_questions(path: Path = FINAL_QUESTIONS) -> list[dict]:
+    """The sealed test set. A changed file is refused: its score would no longer be the one planned."""
+    if hashlib.sha256(path.read_bytes()).hexdigest() != FINAL_QUESTIONS_SHA256:
+        raise ValueError(f"{path.name} does not match its recorded fingerprint: the sealed set has changed")
+    return load_questions(path)
 
 
 # --- reading an answer --------------------------------------------------------------------------------------------
