@@ -1500,3 +1500,40 @@ The score says nothing: no dev question has this problem. The evidence is target
 
 `pay_elements` is keyed by a code: it is a mapping, and its value is the pairing. `VDR_VENDEUR` is keyed by a number and describes people: separate lists of names, staff numbers and e-mails become, as rows, a record linking each person's identifiers. The first draft did include it; the listing of affected tables showed that, and the key condition was added.
 </details>
+
+## Step 22: small figures
+
+**1.** Why are small figures checked against query results only, when large ones may come from any tool result or the prompt?
+
+<details><summary>Answer</summary>
+
+A number like 13 599 646,63 is almost never found by chance, so finding it anywhere is good evidence. Cards and the prompt are full of 5, 12, 47 and 219: finding one there proves nothing. Restricting the evidence to what queries returned is what gives the check meaning at this size.
+</details>
+
+**2.** Why only "a number followed by what it counts", and percentages?
+
+<details><summary>Answer</summary>
+
+Most small numbers in an answer aren't results: years, days of the month, account classes ("comptes 60 à 64"). Checking them all would send correct answers back. A counted noun or a `%` says the number claims to be a measurement. The price is that a bare "219" escapes.
+</details>
+
+**3.** The first replay flagged "609 personnes" on a correct answer. What was missing, and how was it found before reaching the agent?
+
+<details><summary>Answer</summary>
+
+The result had one row per site (190, 6, 126, 287): the 609 of the answer is their total, in no cell. Column totals became evidence. Replaying the check on stored answers, with their queries re-run, showed the false alarms without paying for evaluation runs or disturbing the agent.
+</details>
+
+**4.** S11's "23 factures" was correct. Why is flagging it right?
+
+<details><summary>Answer</summary>
+
+Because the answer presents it as established by the data, and no query for this question produced it: the model read the count in a table card, which describes the whole table at the time it was built, for no particular filter or period. Here it matched. The retry makes the agent count them, and the footer then shows the query that supports the number.
+</details>
+
+**5.** Could this check have caught C02's "47 écritures"? What did catch it?
+
+<details><summary>Answer</summary>
+
+No: 47 was really returned by the query, so its origin is fine; its **meaning** was wrong. The join warning of step 21 addresses that, by looking at the query's shape. The two checks answer different questions: "where does this number come from?" and "does this query count what it seems to count?".
+</details>

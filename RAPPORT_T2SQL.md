@@ -191,6 +191,7 @@ results are in `results/t2sql/experiments.csv` and `by_category.csv`.
 | 16 | `3e0f861` | Phase C: other readings of business words written by code (D68) | 31 | 2 | 40/40 | 0 | 9.7 min | 3.3 |
 | 17 | `2488fb2` | Phase C: warning on joins that multiply rows (D69) | 31 | 2 | 40/40 | 0 | 9.7 min | 3.3 |
 | 18 | `ef57a6b` | Phase C: rows of small code tables in their cards (D70) | 31 | 2 | 35/35 | 0 | 9.4 min | 3.2 |
+| 19 | `c04954d` | Phase C: small counts and percentages checked against results (D71) | 31 | 2 | 36/36 | 0 | 9.6 min | 3.3 |
 
 How to read the table:
 - **The ontology:** +1 to +2 right answers, which is the noise level (runs 2 and 4 are one configuration). What it
@@ -418,9 +419,9 @@ the sales reading (runs 10, 11).
 
 - **Ambiguous business words are covered only when listed.** Since Phase C (D68), code names the other readings of
   five words under the answer. A word outside that list can still be answered with one reading, silently.
-- **The grounding check stops below 1 000.** Counts and small figures are not checked: a count of 219 was written
-  for 203 in one cross-source answer. Lowering the threshold would flag dates, years and account numbers. A check
-  aware of units would be the next step.
+- **The grounding check verifies origin, not meaning.** Since Phase C (D71) it covers counts and percentages below
+  1 000, against query results. A number that is in the results but answers something else still passes, and other
+  small numbers (without a counted noun) are not checked.
 - **The model still does some arithmetic itself.** The prompt asks for gaps and percentages to be computed in SQL or
   with `reconcile`; the check accepts a sum or difference of two found numbers, nothing more complex.
 - **Payroll privacy has known gaps** (`privacy.py`):
