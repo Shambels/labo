@@ -1315,3 +1315,40 @@ For two reasons. Both wrong numbers (47 and 38) are below its 1 000 threshold, w
 
 From the card of `pay_elements`, which lists the distinct values of each code column **separately**: the 14 element codes in one list, the 7 accounts with their counts (`623200` ×2, `623100` ×1) in another. Lists meant for recognising codes were read as if they were the table, and the agent even inferred "two elements share 623200" from the count. For a small mapping table (14 rows), the card should show row pairs (`IND_TELE → 623100`), so that the right mapping is the one in front of the model, or the term should say the link must be queried.
 </details>
+
+## Step 17: the payroll privacy fix
+
+**1.** `SELECT SUM(CASE WHEN p.employee_id = 'X' THEN p.net_amount END) FROM payslips p` passed the old rule and returned one person's total. Which two checks did it get past, and why did each one see nothing wrong?
+
+<details><summary>Answer</summary>
+
+The **column check**: `net_amount` sits inside a `SUM`, which was allowed. The **group-size check**: it replaces the select list with a count of people, so the `CASE` disappears, and the query has one group of 647 people. Both looked at the shape around the column; neither looked at what the aggregate's argument selects. The new rule allows only columns, constants and plain arithmetic there.
+</details>
+
+**2.** Why was `SELECT row_to_json(p) FROM payslips p` invisible to the old rule, and which sqlglot node reveals it?
+
+<details><summary>Answer</summary>
+
+The rule searched for salary **columns** (`exp.Column` named `net_amount`...). Here `p` is the whole row used as a value: after qualification it is an `exp.TableColumn`, with no column name to match, so the query looked as if it read no salary at all and the group-size check never ran. Any `TableColumn`, or an unexpanded `p.*`, is now refused on payroll.
+</details>
+
+**3.** Why is the fix an allowlist rather than four new prohibitions?
+
+<details><summary>Answer</summary>
+
+Because the four attacks have many relatives: `ARRAY_AGG(name)`, `COUNT(CASE ...)`, `BOOL_OR(...)`, `p.net_amount * (p.employee_id = 'X')::int`, `net_amount(p)`. A list of forbidden forms fails on the first form nobody thought of, which is how the bug arose. The set of forms a legitimate aggregate query needs is small and can be written down; the cost is that an unusual but harmless query may be refused, and the model then gets a message telling it what to write. The 68 past queries showed that cost was nil here.
+</details>
+
+**4.** The group-size query now drops `HAVING`, and ignores rows whose amount is NULL or 0. Give the attack each change stops.
+
+<details><summary>Answer</summary>
+
+**HAVING:** `SELECT p.employee_id ... GROUP BY p.employee_id HAVING SUM(p.net_amount) > T`. With HAVING kept, groups above T make it refused and no group makes it empty: the difference answers "does anyone earn more than T?", and it can be narrowed. Without it, the per-person groups are always refused. **NULL or 0:** `AVG(s.monthly_gross) ... WHERE s.employee_id = 'X' OR s.monthly_gross IS NULL`: hourly workers have no monthly salary, so they fill the count of people while the average holds only X's value. (The `OR` is now refused as well; the count is a second layer, and it also covers rows selected through a non-salary column.)
+</details>
+
+**5.** Run 13 scored 30/33, like run 11, with the same misses. What does that prove, what doesn't it prove, and why wasn't the test set run again?
+
+<details><summary>Answer</summary>
+
+It shows the stricter rule **did not cost** the agent anything on those questions: nothing was refused. It says nothing about security: run 11 also scored 30/33 and had no leak, with the bug present, because the evaluation's questions never tried these queries. Security is shown by the attack tests. The test set has been read (step 16), so a new score on it would no longer be held-out; replaying the logged queries answers the only question that mattered, whether its payroll queries still pass.
+</details>
