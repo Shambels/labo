@@ -42,12 +42,12 @@ export MODELS_PATH=~/models
 
 # Embedder (8001): bge-m3. The served name must be the folder name: the chunker loads the tokenizer from it
 ~/vllm_server/.venv/bin/vllm serve $MODELS_PATH/embedder/bge-m3 \
-  --runner pooling --served-model-name bge-m3 --port 8001 \
+  --runner pooling --served-model-name bge-m3 --host 127.0.0.1 --port 8001 \
   --dtype float16 --max-model-len 2048 --gpu-memory-utilization 0.10 --enforce-eager
 
 # Reranker (8002): bge-reranker-v2-m3
 ~/vllm_server/.venv/bin/vllm serve $MODELS_PATH/reranker/bge-reranker-v2-m3 \
-  --runner pooling --served-model-name bge-reranker --port 8002 \
+  --runner pooling --served-model-name bge-reranker --host 127.0.0.1 --port 8002 \
   --dtype float16 --max-model-len 2048 --gpu-memory-utilization 0.10 --enforce-eager
 
 # Generator (8000): Qwen3.8-27B, Q4 (~17.5 GB of weights; with the two vLLM servers, ~21.7 GB of the 24 GB)
@@ -126,7 +126,8 @@ From a fresh clone, with the course material copied into `enonces/` and `.env` f
 uv sync
 # 1. The course PostgreSQL (query log, evaluation runs, conversations, memory) and the three sources
 docker compose up -d postgres
-docker compose -f enonces/calorvia_t2sql/sources_calorvia/docker/docker-compose.yml --env-file .env up -d
+docker compose -f enonces/calorvia_t2sql/sources_calorvia/docker/docker-compose.yml \
+  -f docker-compose.sources-local.yaml --env-file .env up -d   # published on 127.0.0.1 only
 docker logs -f calorvia-erp-restore      # wait for "GESPRO restored." (under a minute)
 
 # 2. The model: Qwen3.8-27B with a 32k context and tool calling (the only model phase B needs)
@@ -155,7 +156,8 @@ show as images, and the queries that ran are listed under every answer.
 
 ```bash
 # ERP (SQL Server) on 14330, accounting on 5433, payroll on 5434; passwords from .env (see .env.example)
-docker compose -f enonces/calorvia_t2sql/sources_calorvia/docker/docker-compose.yml --env-file .env up -d
+docker compose -f enonces/calorvia_t2sql/sources_calorvia/docker/docker-compose.yml \
+  -f docker-compose.sources-local.yaml --env-file .env up -d   # published on 127.0.0.1 only
 docker logs -f calorvia-erp-restore      # ends with "GESPRO restored." (under a minute)
 
 uv run python scripts/explore_sources.py # schemas -> docs/sources/{erp,compta,paie}.md (no data values)

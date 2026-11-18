@@ -1,5 +1,6 @@
 # PostgreSQL (document registry, experiments) and Qdrant (vector index) for the Calorvia RAG.
-# Credentials come from .env. Phase B's source databases have their own compose file (ports 1433, 5433, 5434).
+# Credentials come from .env. Phase B's source databases have their own compose file (ports 14330, 5433, 5434).
+# Published on this machine only (step 18, D66).
 services:
   postgres:
     image: postgres:17
@@ -9,7 +10,7 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_NAME}
     ports:
-      - 5432:5432
+      - "127.0.0.1:5432:5432"
     volumes:
       - pg_data:/var/lib/postgresql/data
   qdrant:
@@ -18,7 +19,7 @@ services:
     environment:
       QDRANT__SERVICE__API_KEY: ${QDRANT_API_KEY}
     ports:
-      - 6333:6333
+      - "127.0.0.1:6333:6333"
     volumes:
       - qdrant_data:/qdrant/storage
 
