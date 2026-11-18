@@ -10,3 +10,4 @@ id,name,split,git_commit,scorer_commit,agent_options,started_at,questions,ok,con
 10,bonus_tools,dev,662c4244ef36c7e7526662b3278799ae9ce58fdc,88bb8ffdb15189f66c66eb9ca312e0de043f8df3,"{""use_ontology"": true}",2026-11-17T21:40+00:00,33,29,3,3,41,0,0,15.36,10.23,0
 11,offer_readings_retest,dev,c2df3b4f55c7e2e80fbb3a15a1f95ce3c4028b55,c2df3b4f55c7e2e80fbb3a15a1f95ce3c4028b55,"{""use_ontology"": true}",2026-11-17T23:35+00:00,33,30,3,3,39,0,0,14.81,10.09,0
 12,final,test,f1b1cfd6543e02974a2cec73074d3866cc89cbdb,f1b1cfd6543e02974a2cec73074d3866cc89cbdb,"{""use_ontology"": true}",2026-11-17T23:47+00:00,18,13,4,2,16,1,0,11.87,4.54,0
+13,privacy_allowlist,dev,b9332f8c7a7872f0201a59eac8c2cdf5a6d5b013,b9332f8c7a7872f0201a59eac8c2cdf5a6d5b013,"{""use_ontology"": true}",2026-11-18T08:23+00:00,33,30,3,3,39,0,0,16.21,10.35,0
