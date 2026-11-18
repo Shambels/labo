@@ -136,6 +136,11 @@ def load_registry(conn):
     }
 
 
+def load_duplicates(conn):
+    """(copy, kept document) pairs of the registry."""
+    return conn.execute(load_sql("load_duplicates")).fetchall()
+
+
 def load_indexable_documents(conn):
     """The registry rows of the documents to chunk, as dicts (column -> value), in path order."""
     cursor = conn.execute(load_sql("load_indexable_documents"))

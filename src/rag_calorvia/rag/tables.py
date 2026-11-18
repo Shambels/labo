@@ -13,6 +13,7 @@ from functools import cache
 from rag_calorvia import db
 from rag_calorvia.config import settings
 from rag_calorvia.etl.excel import Table, read_workbook
+from rag_calorvia.rag.permissions import can_read
 
 logger = logging.getLogger(__name__)
 
@@ -80,10 +81,11 @@ def build_store(documents):
 
 
 @cache
-def get_store():
-    """The store of the indexed workbooks, built once per process."""
+def get_store(role=None):
+    """The store of the indexed workbooks a role may read, built once per process and role (D77)."""
     with db.connect(read_only=True) as conn:
-        documents = [d for d in db.load_indexable_documents(conn) if d["format"] == "xlsx"]
+        documents = [d for d in db.load_indexable_documents(conn)
+                     if d["format"] == "xlsx" and can_read(role, d["path"])]
     return build_store(documents)
 
 

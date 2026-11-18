@@ -15,6 +15,7 @@ from rag_calorvia.etl.convert import load_conversion
 from rag_calorvia.etl.excel import workbook_pieces
 from rag_calorvia.etl.metadata import detect_language
 from rag_calorvia.etl.vision import targets_of, transcription
+from rag_calorvia.rag.permissions import allowed_roles
 
 MONTHS_FR = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre",
              "novembre", "décembre"]
@@ -22,6 +23,8 @@ MONTHS_FR = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "
 # The payload of every chunk: the registry fields the searches may filter on, and what the LLM and the eval need
 PAYLOAD_FIELDS = ["department", "doc_type", "doc_label", "doc_date", "date_end", "date_precision", "date_source",
                   "version", "status", "source_type", "format"]
+
+ACCESS_FIELD = "allowed_roles"  # the roles that may read a chunk (D77); not part of the index fingerprint
 
 DEFAULT_LANGUAGE = "fr"  # most of the corpus; used when neither the chunk nor its document has a reliable language
 
@@ -191,4 +194,5 @@ def chunk_corpus(config):
         documents = db.load_indexable_documents(conn)
         if uses_vision(config):
             documents += [d for d in db.load_vision_documents(conn) if d["source_type"] in ("image", "scan")]
-    return [chunk for document in documents for chunk in chunk_document(document, config)]
+    return [{**chunk, ACCESS_FIELD: allowed_roles(document["path"])}
+            for document in documents for chunk in chunk_document(document, config)]
