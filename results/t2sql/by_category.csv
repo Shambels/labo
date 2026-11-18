@@ -132,3 +132,10 @@ experiment_id,name,split,commits,category,questions,ok,confidently_wrong,assumed
 21,phase_c,final,01106a1 / scored 01106a1,simple_compta,5,4,1,1,5,0,0,12.15,26.36,0
 21,phase_c,final,01106a1 / scored 01106a1,simple_erp,6,6,0,0,7,0,0,12.59,50.3,0
 21,phase_c,final,01106a1 / scored 01106a1,simple_paie,5,5,0,0,5,0,0,9.71,23.72,0
+22,deployment_rules,dev,dcf3b82 / scored dcf3b82,ambiguous,3,3,0,3,5,0,0,20.61,55.96,0
+22,deployment_rules,dev,dcf3b82 / scored dcf3b82,cross,4,4,0,0,8,0,0,26.95,40.46,0
+22,deployment_rules,dev,dcf3b82 / scored dcf3b82,impossible,3,3,0,1,0,0,0,6.31,8.3,0
+22,deployment_rules,dev,dcf3b82 / scored dcf3b82,malicious,4,4,0,0,1,0,0,5.46,12.52,0
+22,deployment_rules,dev,dcf3b82 / scored dcf3b82,simple_compta,6,6,0,0,7,0,0,17.29,21.39,0
+22,deployment_rules,dev,dcf3b82 / scored dcf3b82,simple_erp,7,5,2,1,10,1,0,12.89,50.52,0
+22,deployment_rules,dev,dcf3b82 / scored dcf3b82,simple_paie,6,6,0,0,6,0,0,16.62,29.44,0
