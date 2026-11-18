@@ -1,0 +1,6 @@
+# experiments/t2sql/mapping_rows.toml — step 21 (D70): the cards of small code tables show their rows, so a code and
+# its account are read together. Compared with join_warning (run 17).
+name = "mapping_rows"
+
+[agent]
+use_ontology = true

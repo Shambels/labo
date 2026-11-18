@@ -1,8 +1,8 @@
 """What the model reads before writing a query: the sources, their tables, and a card per table.
 
 A card: description, readable columns with type and comment, keys, row count, a few example values, the
-distinct values of code columns (with their label from PAR_CODE in the ERP), the hidden columns and why,
-and the ontology terms linked to the table (step 12). Built once per table, then cached.
+distinct values of code columns (with their label from PAR_CODE in the ERP), the rows of small code tables, the hidden
+columns and why, and the ontology terms linked to the table (step 12). Built once per table, then cached.
 """
 from functools import cache
 
@@ -24,6 +24,7 @@ DESCRIPTIONS = {
             "fiches de paie. Juin 2025 à mai 2026. Salaires : seulement agrégés sur au moins 5 personnes.",
 }
 CODE_MAX_DISTINCT = 25     # a text column with at most this many distinct values is listed as a code column
+MAPPING_MAX_ROWS = 30      # a table this small, with several code columns, is shown row by row (step 21, D70)
 TEXT_TYPES = ("char", "text")
 
 
@@ -100,6 +101,20 @@ def get_table_card(source, table):
                           "values": [{"value": v, "rows": k, **({"label": labels[v]} if v in labels else {})}
                                      for v, k in rows]}
 
+    # A small table keyed by a code is a mapping: which value goes with which is in its rows, not in the value lists
+    # above (X05 paired an element and an account by reading the two lists). Only values the card already shows. Tables
+    # keyed by a number (salespeople, suppliers) are records, not mappings: linking their columns would add identities
+    mapping = None
+    primary = [c.strip(' "') for k in t["keys"] if k["kind"] == "primary"
+               for c in k["definition"].split("(", 1)[1].rstrip(")").split(",")]
+    if len(codes) >= 2 and 0 < t["rows"] <= MAPPING_MAX_ROWS and primary and set(primary) <= set(codes):
+        q = lambda c: f'"{c}"' if engine == "postgres" else f"[{c}]"  # noqa: E731
+        cols = list(codes)
+        columns, rows, _ = run_unvalidated(source, f"SELECT {', '.join(q(c) for c in cols)} FROM {qname} "
+                                                   f"ORDER BY {q(cols[0])}", max_rows=MAPPING_MAX_ROWS)
+        mapping = {"columns": columns, "rows": rows,
+                   "note": "Lignes de la table : les valeurs d'une même ligne vont ensemble."}
+
     # A few example values per column, from the first rows (none for salaries or identities)
     samples = {}
     sample_cols = [c["column_name"] for c in readable if c["column_name"] not in no_sample and c["column_name"] not in codes]
@@ -127,6 +142,7 @@ def get_table_card(source, table):
                     for c in readable],
         "keys": [k["definition"] for k in t["keys"]],
         "code_columns": codes,
+        **({"mapping_rows": mapping} if mapping else {}),
         "hidden_columns": ({"columns": hidden, "why": "données personnelles, non lisibles par le compte de l'agent : "
                                                       "nommez les colonnes, pas de SELECT *"} if hidden else None),
         "ontology_terms": ontology.terms_for(source, name),   # the certified ontology (step 12, D49)
