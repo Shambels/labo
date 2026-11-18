@@ -8,7 +8,7 @@ import anyio
 import pytest
 from langchain_core.messages import AIMessage, HumanMessage, ToolMessage
 
-from text2sql_calorvia import agent as agent_module
+from text2sql_calorvia import agent as agent_module, grounding
 from text2sql_calorvia.agent import Agent, numbers, previous_answer, tool_schema, ungrounded
 from text2sql_calorvia.config import settings
 from text2sql_calorvia.mcp_server import server
@@ -58,6 +58,40 @@ def test_ungrounded_numbers_are_the_ones_found_in_no_result():
     corpus = '{"rows": [[13599646.63]]} {"rows": [[12099823.09]]}'
     answer = "Avril : 12 099 823 € (−1 499 823,54 € sur mars), soit −11 % ; en 2026. Inventé : 13 999 646,63 €."
     assert ungrounded(answer, corpus + " 2026") == ["13 999 646,63"]
+
+
+def test_a_count_needs_a_query_result():
+    known = grounding.result_numbers({"rows": [["Gand", 190], ["Namur", 126]], "row_count": 2})
+    assert grounding.unsupported("**316 personnes** : 190 à Gand, 126 à Namur, sur 2 sites.", known) == []
+    assert grounding.unsupported("219 clients sur 2 sites", known) == ["219 clients"]
+    assert grounding.unsupported("219 clients", {203.0}) == ["219 clients"]
+    assert grounding.unsupported("au moins 5 personnes", {203.0}, allowed=[5]) == []
+
+
+def test_only_figures_that_say_what_they_are_are_checked():
+    assert grounding.unsupported("En 2026, le 12 mars, comptes 60 à 64, classe 7, `LIMIT 50 lignes`.", {1.0}) == []
+    assert grounding.unsupported("1 facture", {3.0}) == []
+    assert grounding.unsupported("3 860 factures", {3860.0}) == []    # from 1 000 up: the other check
+
+
+def test_a_percentage_is_found_or_computed_from_two_results():
+    assert grounding.unsupported("marge de 9,4 %", {1278366.78, 13599646.63}) == []
+    assert grounding.unsupported("taux de 0,1 %", {0.1}) == []
+    assert grounding.unsupported("baisse de 11 %", {13599646.63, 12099823.09}) == []
+    assert grounding.unsupported("marge de 25,0 %", {1278366.78, 13599646.63}) == ["25,0 %"]
+
+
+def test_days_between_two_dates_of_a_result_are_known():
+    known = grounding.result_numbers({"rows": [["2026-03-03"], ["2026-03-10"]], "row_count": 2})
+    assert grounding.unsupported("arrivés 7 jours plus tard", known) == []
+
+
+def test_a_count_from_no_result_is_sent_back_then_flagged(sources):
+    llm = ScriptedLLM(AIMessage("", tool_calls=[call("execute_sql", source="erp", sql=MARCH)]),
+                      AIMessage("Le mois compte 219 factures."))
+    answer = run(llm)["answer"]
+    assert len(llm.calls) == 3 and "Vérification automatique" in str(llm.calls[-1][-1].content)
+    assert "⚠️" in answer and "219 factures" in answer.split("⚠️")[1]
 
 
 def test_previous_answers_lose_their_footer_but_keep_their_queries():
