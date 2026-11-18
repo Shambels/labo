@@ -189,6 +189,8 @@ results are in `results/t2sql/experiments.csv` and `by_category.csv`.
 | 13 | `b9332f8` | stricter payroll rule (D65), after delivery; same agent and prompt | 30 | 3 | 39/39 | 0 | 10.3 min | 3.4 |
 | 14 | `54bedea` | Phase C: operating result, people hired, sickness days certified | 31 | 2 | 40/40 | 0 | 9.9 min | 3.3 |
 | 16 | `3e0f861` | Phase C: other readings of business words written by code (D68) | 31 | 2 | 40/40 | 0 | 9.7 min | 3.3 |
+| 17 | `2488fb2` | Phase C: warning on joins that multiply rows (D69) | 31 | 2 | 40/40 | 0 | 9.7 min | 3.3 |
+| 18 | `ef57a6b` | Phase C: rows of small code tables in their cards (D70) | 31 | 2 | 35/35 | 0 | 9.4 min | 3.2 |
 
 How to read the table:
 - **The ontology:** +1 to +2 right answers, which is the noise level (runs 2 and 4 are one configuration). What it
