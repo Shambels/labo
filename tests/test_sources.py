@@ -2,7 +2,7 @@
 
 Every write below is sent straight to the database, without any validation in front: this is what still holds
 if step 11's sqlglot check is ever bypassed. Skipped when the sources aren't running
-(docker compose -f enonces/calorvia_t2sql/sources_calorvia/docker/docker-compose.yml --env-file .env up -d).
+(docker compose -f enonces/calorvia_t2sql/sources_calorvia/docker/docker-compose.yml -f docker-compose.sources-local.yaml --env-file .env up -d).
 """
 import psycopg
 import pymssql
