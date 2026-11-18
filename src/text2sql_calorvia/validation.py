@@ -29,10 +29,10 @@ FORBIDDEN = {
     exp.Commit: "COMMIT", exp.Rollback: "ROLLBACK", exp.Grant: "GRANT", exp.Revoke: "REVOKE", exp.Use: "USE",
     exp.Analyze: "ANALYZE", exp.Kill: "KILL", exp.Pragma: "PRAGMA", exp.LoadData: "LOAD DATA",
 }
-# Functions that read files, reach other servers, sleep, or change settings
+# Functions that read files, reach other servers, sleep, change settings, or run SQL given as text
 FORBIDDEN_FUNCTIONS = re.compile(
     r"^(pg_|lo_|dblink|xp_|sp_|fn_|open(rowset|datasource|query|xml)|set_config|current_setting|"
-    r"query_to_xml|table_to_xml|cursor_to_xml|nextval|setval|txid_|waitfor|bulk|sleep)", re.I)
+    r"query_to_xml|table_to_xml|cursor_to_xml|schema_to_xml|database_to_xml|ts_stat|ts_rewrite|nextval|setval|txid_|waitfor|bulk|sleep)", re.I)
 
 
 @dataclass

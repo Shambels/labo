@@ -124,6 +124,21 @@ def test_payroll_aggregate_over_one_person_is_refused(sources):
     assert last_log()[0] == "refused"
 
 
+@pytest.mark.parametrize("sql", [
+    "SELECT row_to_json(p) FROM payslips p",
+    "SELECT SUM(CASE WHEN p.employee_id = 'M10405' THEN p.net_amount END) FROM payslips p",
+    "SELECT AVG(s.monthly_gross) FROM payslips p JOIN salary_history s ON s.employee_id = 'M10405'",
+    "SELECT e.last_name FROM employees e JOIN payslips p ON p.employee_id = e.employee_id WHERE p.net_amount > 3000",
+    "SELECT p.employee_id FROM payslips p GROUP BY p.employee_id HAVING SUM(p.net_amount) > 1000000000",
+    "SELECT word FROM ts_stat('SELECT to_tsvector(net_amount::text) FROM payslips')",
+    "SELECT schema_to_xml('public', true, false, '')",
+])
+def test_individual_pay_cannot_be_reached_by_a_detour(sources, sql):   # step 17, D65
+    r = execute("paie", sql)
+    assert not r["ok"] and "rows" not in r
+    assert last_log()[0] == "refused"
+
+
 def test_sales_commission_tool(sources):
     from text2sql_calorvia.commission import get_sales_commission
     r = get_sales_commission("10405", "2026-03")

@@ -72,9 +72,11 @@ runs exported in `results/t2sql/`.
   4. a log row written **before** each query runs (`t2sql_query_log`, 1 068 rows at the end of the evaluation): no log, no query.
 
   The tests send writes **past validation**, straight to execution, and they are still refused by layers 1 and 3.
-- **Payroll privacy is a rule on the SQL, not a prompt instruction** (D43): salary columns only inside
-  `SUM`/`AVG`/`COUNT` (MIN and MAX of a group *are* one person's salary), and every group must cover at least 5
-  distinct people, counted by a second query before the real one. The one individual figure a finance question
+- **Payroll privacy is a rule on the SQL, not a prompt instruction** (D43, D65): a query reading a salary is one plain
+  `SELECT` returning aggregates, `SUM`/`AVG`/`COUNT` over columns and constants (MIN and MAX of a group *are* one
+  person's salary, a `CASE` inside an aggregate picks one person), and every group must cover at least 5 distinct
+  people, counted by a second query before the real one, on each table a salary comes from. The first version listed
+  forbidden forms and could be bypassed; see "Corrected after delivery". The one individual figure a finance question
   needs, a salesperson's commission, has its own narrow tool (`get_sales_commission`).
 - **The query that runs is the query the model wrote** (D45). sqlglot only checks; it is never used to regenerate the
   text, because its output differs from the input (`ROUND(AVG(x), 2)` became `ROUND(CAST(AVG(x) AS DECIMAL), 2)`) and
@@ -184,6 +186,7 @@ results are in `results/t2sql/experiments.csv` and `by_category.csv`.
 | 9 | `681a927` | `offer_readings` | **31** | **0** | 50/50 | 0 | 11.3 min | 3.9 |
 | 10 | `662c424` | step 15: charts, memory (off), k€-aware check; *without* `offer_readings` | 29 | 3 | 41/41 | 0 | 10.2 min | 3.7 |
 | 11 | `c2df3b4` | `offer_readings` again, on run 10 = **final** | 30 | 3 | 39/39 | 0 | 10.1 min | 3.4 |
+| 13 | `b9332f8` | stricter payroll rule (D65), after delivery; same agent and prompt | 30 | 3 | 39/39 | 0 | 10.3 min | 3.4 |
 
 How to read the table:
 - **The ontology:** +1 to +2 right answers, which is the noise level (runs 2 and 4 are one configuration). What it
@@ -419,7 +422,8 @@ the sales reading (runs 10, 11).
 - **The model still does some arithmetic itself.** The prompt asks for gaps and percentages to be computed in SQL or
   with `reconcile`; the check accepts a sum or difference of two found numbers, nothing more complex.
 - **Payroll privacy has known gaps** (`privacy.py`):
-  - differencing two filtered aggregates over groups of ≥ 5 people can isolate one person;
+  - comparing two allowed queries (groups differing by one person, a refusal against an answer) can tell something
+    about one person;
   - the accounting's cost centres can hold one person's pay;
   - sickness absences are not covered by the rule.
   The rule stops the direct question, not a determined analyst.
@@ -436,3 +440,16 @@ the sales reading (runs 10, 11).
   - there is no authentication on the endpoint, which listens on 127.0.0.1 only;
   - the user a memory belongs to is whatever the client says (the `user` field or Open WebUI's header);
   - chart files are never cleaned up.
+
+## Corrected after delivery
+
+A review of the delivered code (step 17) found that the payroll rule could be bypassed. "No leak in 348 answers" was
+true of the evaluation's questions, and said nothing about queries written to get around the rule.
+
+- **What got through**, past both the validation and the group-size check: whole rows (`row_to_json(p)`, `p::text`);
+  one person picked inside an aggregate (`SUM(CASE WHEN p.employee_id = … THEN p.net_amount END)`, which returned
+  exactly that person's total); people counted on another table than the salary's; names listed by a salary threshold.
+- **The fix:** the rule became an allowlist (D65). 59 of 60 attack queries are refused, and the last one really is
+  `SELECT 1` (a nested comment). The 68 distinct payroll queries that had succeeded in the query log all still pass.
+- **Effect on the results:** none on dev (run 13: 30/33, the same three misses, no query refused). The test run was not
+  repeated, since that set has been read; every payroll query in the log, which includes that run's, still passes.

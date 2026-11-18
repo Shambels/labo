@@ -6,6 +6,7 @@ Two chatbots for the fictional company **Calorvia SA**, built one after the othe
 |---|---|---|
 | **A. RAG** | 393 documents from a shared drive (DOCX, PDF, scans, XLSX, images, HTML, PPTX…) in French, Dutch and English | `enonces/calorvia_rag/laboratoire_calorvia_enonce.md` |
 | **B. Text-to-SQL** | 3 relational databases: the old ERP (SQL Server), accounting and payroll (PostgreSQL) | `enonces/calorvia_t2sql/projet_text2sql_enonce.md` |
+| **C. Improvements** | Both chatbots: what the two reports left open | This roadmap |
 
 Companion file: `QUIZ.md` (one quiz per step, answers collapsed).
 
@@ -80,6 +81,7 @@ Companion file: `QUIZ.md` (one quiz per step, answers collapsed).
 | D62 | Conversations | `t2sql_conversations` / `t2sql_messages`; id = the completion id of the first answer, carried by a hidden `<!-- calorvia:conversation=… -->` at the end of each answer (or an `X-Conversation-Id` header) | The API is stateless; a hash of the first question would merge conversations that start alike |
 | D63 | Learned memory | Only on explicit request (`remember`), per user, never personal payroll data; in the prompt as **data below the rules**; `forget` deactivates; **off in evaluations** | A memory is a prompt injection that survives the conversation; the rules that matter are enforced by the server anyway. An evaluation must not depend on what was remembered |
 | D64 | Final configuration and report | `experiments/t2sql/final.toml`: with ontology, the fixes of D60, the step 15 tools, **and `offer_readings`** (reverses D60's rejection). Report in `RAPPORT_T2SQL.md` (`RAPPORT.md` is phase A's); exports in `results/t2sql/` | `offer_readings` scored 31 and 30/33 in two runs against 29 and 29 without it, and its second run fixed A03 by its own mechanism (the other readings named). One repo for both phases (D40), so one report each |
+| D65 | Payroll rule as an allowlist (revises D43) | A query reading a salary may only be one plain SELECT returning aggregates: SUM/AVG/COUNT over columns and constants, salary filters as constant comparisons joined by AND, no whole-row reference. People are counted per salary column, on that column's table, without HAVING, ignoring rows whose amount is NULL or 0 | The first rule listed forbidden forms, and a review got individual pay through it four ways (step 17). What is allowed can be listed; what is dangerous cannot |
 | D9 | Porting strategy | Port each hospital_rag module **in the step that needs it** (step 0: config, db, logs; step 3: evaluation; step 4: ETL and RAG) | Nothing unused or untested sits in the repo |
 
 ### Open decisions (to settle with you when we reach them)
@@ -420,6 +422,54 @@ Deliberately more open than phase A: the steps below are a skeleton we will refi
 - **Caught while writing the report:** four claims that drafts got wrong, checked against the data and corrected: the starter questions *are* in the dev set; the cross-source questions are 3/4 in the final run, not 4/4; P03 is not a stable win; the credit-note code is `'A'`, not `'AV'`. X05's failure was first described as the model pairing examples by position; the card shows separate value lists, and the text was rewritten from the trace.
 - **Next, if the project went on:** certify "embauche" and mark the business words that map to several metrics (A02, A03); a validation warning on `COUNT(*)` after a one-to-many join (C02); row pairs in the cards of small mapping tables (X05); then a **new** test set, since this one has been read.
 
+### ✅ Step 17. Payroll privacy fix
+- **The bug** (found reviewing the delivered code): queries passing both the validation and the group-size check returned individual pay. Whole rows (`row_to_json(p)`, `p::text`, `SELECT p`, `(p).net_amount`); one person picked inside an aggregate (`SUM(CASE WHEN p.employee_id = … THEN p.net_amount END)`, `FILTER`), which returned exactly that person's total; people counted on another table than the salary's (`payslips p JOIN salary_history s ON s.employee_id = …`), which returned exactly their average; names listed by a salary threshold (14 people in the trial).
+- **The fix** (`privacy.py`, D65): an allowlist, so that close variants fall with the forms tried. `ts_stat`, `ts_rewrite`, `schema_to_xml`, `database_to_xml` (they run SQL given as text, or dump tables) join the forbidden functions.
+- **Checked:** 60 attack queries, 59 refused; the other is a nested comment that really is `SELECT 1`. 17 ordinary payroll questions accepted. All 68 distinct payroll queries that ever succeeded in the query log still pass (40 read salaries). Four attacks refused and the per-site average answered through the live MCP server.
+- **No regression** (run 13, dev, commit `b9332f8`): **30/33** as run 11, the same three misses (S02, S03, X05), 39 queries, none refused, no leak. The test set was **not** run again: it has been read (step 16), and every payroll query of its run still passes.
+- **Tests: 47 new** (403 in all).
+- **Known limits:** comparing two allowed queries still tells something (groups differing by one person; a refusal against an answer); accounting cost centres of one person; sickness absences. A group whose amounts are all 0 is now refused.
+
+---
+
+## Phase C: improvements
+
+What the two reports left open, none of it started. Order: fix the exposure first, then the agent's failures, then measure them once on a **new** test set (the phase B one has been read). One change at a time, as before.
+
+### ⬜ Step 18. Network exposure
+- Bind our `docker-compose.yaml` services (PostgreSQL 5432, Qdrant 6333) to `127.0.0.1`. The course databases (5433, 5434, 14330) and the model servers 8001, 8002 also listen on every interface: decide how to restrict them without editing course files, and test what is reachable from outside.
+- Correct the comment in `docker-compose.yaml` (the ERP is on 14330, not 1433).
+
+### ⬜ Step 19. A new text-to-SQL test set
+- Write it **before** steps 20–22 and leave it unread until step 23: new questions with reference SQL, for each category, including the failure kinds seen so far.
+
+### ⬜ Step 20. Ontology: ambiguous and missing business words
+- Mark the business words that map to several certified metrics, and have **code**, not the model, add the other readings (A02, A03: "le résultat", "travaillent").
+- Certify "embauche" as `hire_date` (P06). Certify sickness days (P03 drifts with the prompt).
+
+### ⬜ Step 21. Better SQL from better checks and cards
+- A validation warning on `COUNT(*)` after a one-to-many join (C02: 47 lines for 12 entries).
+- Row pairs in the cards of small mapping tables, so that a code and its account are read together (X05).
+
+### ⬜ Step 22. Grounding check
+- Check figures below 1 000, aware of units, so that counts are covered without flagging years, days and account numbers (219 written for 203).
+- Accept or verify more than a sum or difference of two found numbers; move the remaining arithmetic out of the model.
+
+### ⬜ Step 23. Final measure of phase C
+- Dev regression, then the step 19 test set, **once**. Report the before and after in `RAPPORT_T2SQL.md`.
+
+### ⬜ Step 24. Before any real deployment
+- Authentication on the endpoint, and a verified user behind the learned memory (today, whatever the client says).
+- Clean up old chart files.
+- Payroll: limit comparisons between queries (the remaining differencing limit), one-person cost centres in accounting, a rule for sickness absences.
+
+### ⬜ Step 25. RAG experiments (one run each, judged on the targeted types)
+- CODIR actions and decisions in PostgreSQL, for `action_tracking`.
+- Rerank each chunk against the question in the chunk's language (Q024).
+- A glossary for query translation ("chariots élévateurs" → "heftrucks").
+- Docling chunks with the SQL tools, to separate the reader's effect from the tools'.
+- Markdown table serialization (Q093). A study of ColPali-style search on page images.
+
 ---
 
 ## Progress log
@@ -459,3 +509,5 @@ Deliberately more open than phase A: the steps below are a skeleton we will refi
 | 2026-11-17 | 15 | Branch `t2sql/step-15-bonus`: charts served by the endpoint, conversations and per-user memory in PostgreSQL (memory as data, off in evaluations); grounding check reads k€/M€; scorer reads a date's day, all runs re-scored; regression run 29/33 = run 8 |
 | 2026-11-18 | – | Step 15 merged, tagged `t2sql/v0.6-bonus`, pushed |
 | 2026-11-18 | 16 | Branch `t2sql/step-16-delivery`: `offer_readings` re-tested and kept (D64); test set run once, 13/18 scored, 15/18 by hand; `RAPPORT_T2SQL.md`, `results/t2sql/`, README quick start |
+| 2026-11-18 | – | Step 16 merged, tagged `t2sql/v1.0`, pushed. Phase B done |
+| 2026-11-18 | 17 | Branch `t2sql/step-17-privacy`: individual pay reachable past the payroll rule (whole rows, CASE/FILTER in aggregates, people counted on the wrong table, names by salary threshold); rule rewritten as an allowlist (D65); 47 new tests; dev regression 30/33 = run 11. Phase C added to this roadmap |
