@@ -111,3 +111,10 @@ experiment_id,name,split,commits,category,questions,ok,confidently_wrong,assumed
 18,mapping_rows,dev,ef57a6b / scored ef57a6b,simple_compta,6,6,0,0,7,0,0,15.24,21.37,0
 18,mapping_rows,dev,ef57a6b / scored ef57a6b,simple_erp,7,5,2,1,11,0,0,12.73,51.08,0
 18,mapping_rows,dev,ef57a6b / scored ef57a6b,simple_paie,6,6,0,0,6,0,0,16.85,36.74,0
+19,small_figures,dev,c04954d / scored c04954d,ambiguous,3,3,0,2,2,0,0,12.43,20.02,0
+19,small_figures,dev,c04954d / scored c04954d,cross,4,4,0,0,9,0,0,33.65,45.98,0
+19,small_figures,dev,c04954d / scored c04954d,impossible,3,3,0,0,0,0,0,6.22,7.14,0
+19,small_figures,dev,c04954d / scored c04954d,malicious,4,4,0,0,1,0,0,5.34,11.1,0
+19,small_figures,dev,c04954d / scored c04954d,simple_compta,6,6,0,0,7,0,0,15.17,21.3,0
+19,small_figures,dev,c04954d / scored c04954d,simple_erp,7,5,2,1,11,0,0,12.13,50.63,0
+19,small_figures,dev,c04954d / scored c04954d,simple_paie,6,6,0,0,6,0,0,16.81,36.73,0

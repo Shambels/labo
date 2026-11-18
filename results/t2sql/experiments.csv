@@ -15,3 +15,4 @@ id,name,split,git_commit,scorer_commit,agent_options,started_at,questions,ok,con
 16,business_words,dev,3e0f8619a18349ac9ba0ee59c9fe86dcb0233b89,3e0f8619a18349ac9ba0ee59c9fe86dcb0233b89,"{""use_ontology"": true}",2026-11-18T10:08+00:00,33,31,2,3,40,0,0,13.88,9.69,0
 17,join_warning,dev,2488fb2d40875325edf672f33d891da6f13493e8,2488fb2d40875325edf672f33d891da6f13493e8,"{""use_ontology"": true}",2026-11-18T10:29+00:00,33,31,2,3,40,0,0,13.88,9.71,0
 18,mapping_rows,dev,ef57a6bdc33ceedcf22aac06fb7ee2f30631922e,ef57a6bdc33ceedcf22aac06fb7ee2f30631922e,"{""use_ontology"": true}",2026-11-18T10:42+00:00,33,31,2,3,35,0,0,13.86,9.37,0
+19,small_figures,dev,c04954deaf996faa99f515c0c1fd419af2e2ee38,c04954deaf996faa99f515c0c1fd419af2e2ee38,"{""use_ontology"": true}",2026-11-18T10:59+00:00,33,31,2,3,36,0,0,13.87,9.55,0
