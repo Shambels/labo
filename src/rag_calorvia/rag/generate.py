@@ -41,7 +41,7 @@ def uses_tools(config):
     return config.get("tools", {}).get("tables", False)
 
 
-def generate(question, chunks, config):
+def generate(question, chunks, config, role=None):
     """The LLM's answer, with token counts and the tool calls it made (none without [tools]).
 
     With tools, the conversation loops: the LLM asks for tool calls, gets their results, and so on, up to
@@ -52,7 +52,7 @@ def generate(question, chunks, config):
     tools, store = None, None
     if uses_tools(config):
         from rag_calorvia.rag.tables import TOOLS, call_tool, get_store  # the store is built only when needed
-        tools, store = TOOLS, get_store()
+        tools, store = TOOLS, get_store(role)
 
     calls, prompt_tokens, completion_tokens = [], 0, 0
     for round_ in range(MAX_TOOL_ROUNDS + 1):

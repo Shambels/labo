@@ -154,7 +154,8 @@ Beyond this machine, set `API_KEYS=name:key,...` in `.env` first (see `.env.exam
 
 Role-based access is being built (Phase D of `ROADMAP.md`; not ready for real users). `uv run python
 scripts/apply_roles.py` creates the role logins and row limits from `policy/roles.yaml` (run it again after restoring
-a source); `USER_ROLES=alice:finance` assigns roles.
+a source); `USER_ROLES=alice:finance` assigns roles. `uv run python scripts/apply_document_roles.py` writes the
+documents' roles on the RAG index (no re-embedding); with `API_KEYS` set, `app/chat.py` asks for a key.
 
 In Open WebUI, add `http://127.0.0.1:9000/v1` as an OpenAI connection: the steps unfold live in a fold-out, charts
 show as images, and the queries that ran are listed under every answer.

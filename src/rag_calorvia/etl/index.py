@@ -8,7 +8,7 @@ from openai import OpenAI
 from qdrant_client import QdrantClient, models
 
 from rag_calorvia.config import settings
-from rag_calorvia.etl.chunk import chunk_corpus
+from rag_calorvia.etl.chunk import ACCESS_FIELD, chunk_corpus
 
 logger = logging.getLogger(__name__)
 
@@ -18,6 +18,7 @@ UPSERT_BATCH = 256
 # Payload fields later steps filter on: an index makes the filter fast and lets Qdrant plan the query.
 # status (step 8: drafts, copies), language (step 5), doc_date/date_end (step 8: reference date of the question)
 PAYLOAD_INDEXES = {
+    ACCESS_FIELD: models.PayloadSchemaType.KEYWORD,    # who may read the chunk (D77)
     "document": models.PayloadSchemaType.KEYWORD,
     "department": models.PayloadSchemaType.KEYWORD,
     "doc_type": models.PayloadSchemaType.KEYWORD,

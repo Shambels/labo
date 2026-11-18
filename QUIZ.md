@@ -1722,3 +1722,40 @@ They were built once as `agent_ro`, with all sites' example values, code lists a
 
 The catalog listed every user schema, so it found `role_site` and tried to count its rows without permission. Security objects live beside the data but aren't part of what the agent should describe, so the catalog now skips that schema.
 </details>
+
+## Step 28: document permissions
+
+**1.** Why does adding permissions not require embedding the corpus again?
+
+<details><summary>Answer</summary>
+
+Permissions don't change what a chunk says, so its vectors stay valid. `allowed_roles` is payload, metadata stored beside the vectors, and `set_payload` updates it in place. The index fingerprint covers the chunk text, so it doesn't trigger a rebuild either.
+</details>
+
+**2.** Why must the role filter be inside each prefetch rather than applied to the final results?
+
+<details><summary>Answer</summary>
+
+The 30 candidates are chosen by the prefetches. Filtering afterwards could leave few or none of the role's chunks, since forbidden chunks would have taken the places, and it would let forbidden text reach steps it shouldn't. Filtering first means every candidate is already allowed.
+</details>
+
+**3.** Two identical files sit in folders with different permissions, and only one is indexed. Why grant access to anyone entitled to either copy?
+
+<details><summary>Answer</summary>
+
+They hold the same content, so someone entitled to one copy is entitled to that content. Requiring every copy would remove legitimate access: `achats` would lose its own evaluation grid because an identical annex sits in the CODIR folder.
+</details>
+
+**4.** The search is filtered. Why do workbook SQL and images need their own checks?
+
+<details><summary>Answer</summary>
+
+They don't go through Qdrant. The SQL tools query an in-memory database of workbooks, and images are read from disk by path. Any route to the data that bypasses the filter needs its own control.
+</details>
+
+**5.** The regression shows the same recall@5 as before. What does it prove, and what doesn't it?
+
+<details><summary>Answer</summary>
+
+It proves that without a role the search is unchanged. It says nothing about the role paths, which never run in that evaluation; those are checked by the permission tests and by questions asked under each role, and step 29 tests them systematically.
+</details>

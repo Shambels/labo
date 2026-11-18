@@ -7,6 +7,7 @@ from PIL import Image
 from rag_calorvia.config import settings
 from rag_calorvia.etl.vision import page_image
 from rag_calorvia.evaluation.metrics import cited_passages
+from rag_calorvia.rag.permissions import can_read
 
 
 def answer_images(answer, chunks, max_images=3):
@@ -22,8 +23,10 @@ def answer_images(answer, chunks, max_images=3):
     return images[:max_images]
 
 
-def image_bytes(path, page=None, max_side=900):
-    """A JPEG of the image (or of the scanned page), small enough to display."""
+def image_bytes(path, page=None, max_side=900, role=None):
+    """A JPEG of the image (or of the scanned page), small enough to display, if the role may read it."""
+    if not can_read(role, path):
+        raise PermissionError(path)
     image = page_image(settings.corpus_path / path, page, dpi=100) if page is not None else Image.open(settings.corpus_path / path)
     image.thumbnail((max_side, max_side))
     buffer = io.BytesIO()

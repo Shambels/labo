@@ -3,6 +3,7 @@ import time
 
 from qdrant_client import models
 
+from rag_calorvia.etl.chunk import ACCESS_FIELD
 from rag_calorvia.rag.generate import generate
 from rag_calorvia.rag.reference_date import date_condition, reference_date
 from rag_calorvia.rag.rerank import rerank
@@ -26,17 +27,22 @@ def status_filter(config):
     return models.Filter(must_not=[models.FieldCondition(key="status", match=models.MatchAny(any=excluded))])
 
 
-def question_filter(config, reference):
-    """The Qdrant filter of a question: the status exclusions and, when the question has a reference date,
-    only chunks dated on or before it (or undated). None when there is nothing to filter."""
+def role_condition(role):
+    """Only the chunks this role may read (D77). A chunk without the field matches no role."""
+    return models.FieldCondition(key=ACCESS_FIELD, match=models.MatchValue(value=role))
+
+
+def question_filter(config, reference, role=None):
+    """The Qdrant filter of a question: the status exclusions, the role's documents and, when the question has a
+    reference date, only chunks dated on or before it (or undated). None when there is nothing to filter."""
     status = status_filter(config)
-    if reference is None:
+    must = ([date_condition(reference)] if reference is not None else []) + ([role_condition(role)] if role else [])
+    if not must:
         return status
-    must = [date_condition(reference)]
     return models.Filter(must=must, must_not=status.must_not if status else None)
 
 
-def retrieve(question, config):
+def retrieve(question, config, role=None):
     """The top_k chunks for a question (translate, search, then rerank), with the time of each stage.
 
     Enough on its own for the retrieval metrics: experiments that only change retrieval skip generation.
@@ -51,7 +57,7 @@ def retrieve(question, config):
     reference_ms = elapsed_ms(start)
 
     start = time.perf_counter()
-    candidates = search(question, config, query_filter=question_filter(config, reference), versions=versions)
+    candidates = search(question, config, query_filter=question_filter(config, reference, role), versions=versions)
     search_ms = elapsed_ms(start)
 
     start = time.perf_counter()
@@ -74,15 +80,15 @@ def context_order(chunks, config):
     return sorted(chunks, key=lambda chunk: chunk.get("doc_date") or "")
 
 
-def answer(question, config):
+def answer(question, config, role=None):
     """The full RAG: {answer, chunks, context, latency_ms, timings, prompt_tokens, completion_tokens, finish_reason}.
 
     chunks: in the reranker's order (the retrieval metrics); context: in the order given to the LLM, the one its
     citations [n] refer to."""
-    result = retrieve(question, config)
+    result = retrieve(question, config, role)
     context = context_order(result["chunks"], config)
 
     start = time.perf_counter()
-    generation = generate(question, context, config)
+    generation = generate(question, context, config, role)
     result["timings"]["generate_ms"] = elapsed_ms(start)
     return {**generation, **result, "context": context, "latency_ms": sum(result["timings"].values())}

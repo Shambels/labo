@@ -12,15 +12,11 @@ import hashlib
 import hmac
 import json
 import time
-from functools import cache
-from pathlib import Path
 from typing import NamedTuple
 
-import yaml
-
 from text2sql_calorvia.config import settings
+from text2sql_calorvia.policy import policy, roles
 
-POLICY = Path(__file__).resolve().parents[2] / "policy" / "roles.yaml"
 LOGIN_PREFIX = "agent_r_"
 DEFAULT_ROLE = "employe"
 TOKEN_SECONDS = 900              # one question, including a long cross-source one
@@ -33,27 +29,6 @@ class Identity(NamedTuple):
 
 class AccessDenied(ValueError):
     """The message is safe to show: it says nothing about what exists."""
-
-
-@cache
-def policy(path: Path = POLICY) -> dict:
-    return yaml.safe_load(path.read_text(encoding="utf-8"))
-
-
-@cache
-def roles() -> dict[str, dict]:
-    """Every role by name; a role with `sites` becomes one role per site (responsable_site_gent...)."""
-    expanded = {}
-    data = policy()
-    for name, role in data["roles"].items():
-        sites = role.get("sites")
-        if not sites:
-            expanded[name] = {**role, "site": None}
-            continue
-        for key, site in sites.items():
-            documents = role.get("documents", []) + role.get("site_documents", {}).get(key, [])
-            expanded[f"{name}_{key}"] = {**role, "site": site, "documents": documents}
-    return expanded
 
 
 def tables_of(role: str, source: str) -> list[str] | str:
