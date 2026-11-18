@@ -38,9 +38,19 @@ def list_sources():
              "tables": len(_tables(s.name)), "description": DESCRIPTIONS[s.name]} for s in SOURCES.values()]
 
 
-def list_tables(source):
-    return [{"table": name, "rows": t["rows"], "columns": len(t["columns"]), "description": t["comment"]}
-            for name, t in _tables(source).items()]
+def _row_count(source, name, t, role):
+    """The catalog's count, or what a role limited to some rows really sees."""
+    if role is None:
+        return t["rows"]
+    table = quote(SOURCES[source].engine, t["table_schema"], name)
+    return run_unvalidated(source, f"SELECT COUNT(*) FROM {table}", max_rows=1, role=role)[1][0][0]
+
+
+def list_tables(source, role=None, only=None):
+    """only: lower-case names; a role limited to some rows must not be counted on tables it can't read."""
+    return [{"table": name, "rows": _row_count(source, name, t, role), "columns": len(t["columns"]),
+             "description": t["comment"]}
+            for name, t in _tables(source).items() if only is None or name.lower() in only]
 
 
 @cache
@@ -69,11 +79,13 @@ def _resolve(source, table):
 
 
 @cache
-def get_table_card(source, table):
+def get_table_card(source, table, role=None):
+    """role: only for a role limited to some rows; examples, code lists and counts then come from what it can read."""
     name = _resolve(source, table)
     if name is None:
         return {"error": f"Table inconnue dans {source} : {table}. Voir list_tables."}
-    t = _tables(source)[name]
+    t = dict(_tables(source)[name])
+    t["rows"] = _row_count(source, name, t, role)
     engine = SOURCES[source].engine
     qname = quote(engine, t["table_schema"], name)
     readable = [c for c in t["columns"] if c["readable"]]
@@ -88,14 +100,14 @@ def get_table_card(source, table):
     if text_cols and t["rows"]:
         q = lambda c: f'"{c}"' if engine == "postgres" else f"[{c}]"  # noqa: E731
         sql = "SELECT " + ", ".join(f"COUNT(DISTINCT {q(c)})" for c in text_cols) + f" FROM {qname}"
-        _, rows, _ = run_unvalidated(source, sql, max_rows=1)
+        _, rows, _ = run_unvalidated(source, sql, max_rows=1, role=role)
         distinct = dict(zip(text_cols, rows[0]))
     codes = {}
     for col, n in distinct.items():
         if 0 < n <= CODE_MAX_DISTINCT and not col.lower().endswith("_id"):  # few managers aren't codes
             c = f'"{col}"' if engine == "postgres" else f"[{col}]"
             _, rows, _ = run_unvalidated(source, f"SELECT {c}, COUNT(*) FROM {qname} GROUP BY {c} ORDER BY 2 DESC",
-                                         max_rows=CODE_MAX_DISTINCT + 1)
+                                         max_rows=CODE_MAX_DISTINCT + 1, role=role)
             code_type, labels = _labels(source, [r[0] for r in rows if r[0] is not None])
             codes[col] = {"code_list": code_type,
                           "values": [{"value": v, "rows": k, **({"label": labels[v]} if v in labels else {})}
@@ -111,7 +123,7 @@ def get_table_card(source, table):
         q = lambda c: f'"{c}"' if engine == "postgres" else f"[{c}]"  # noqa: E731
         cols = list(codes)
         columns, rows, _ = run_unvalidated(source, f"SELECT {', '.join(q(c) for c in cols)} FROM {qname} "
-                                                   f"ORDER BY {q(cols[0])}", max_rows=MAPPING_MAX_ROWS)
+                                                   f"ORDER BY {q(cols[0])}", max_rows=MAPPING_MAX_ROWS, role=role)
         mapping = {"columns": columns, "rows": rows,
                    "note": "Lignes de la table : les valeurs d'une même ligne vont ensemble."}
 
@@ -122,7 +134,7 @@ def get_table_card(source, table):
         q = lambda c: f'"{c}"' if engine == "postgres" else f"[{c}]"  # noqa: E731
         top, limit = ("TOP 5 ", "") if engine == "sqlserver" else ("", " LIMIT 5")
         columns, rows, _ = run_unvalidated(source, f"SELECT {top}{', '.join(q(c) for c in sample_cols)} FROM {qname}{limit}",
-                                           max_rows=5)
+                                           max_rows=5, role=role)
         for i, col in enumerate(columns):
             seen = []
             for row in rows:

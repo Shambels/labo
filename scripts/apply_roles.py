@@ -5,7 +5,10 @@
 
 Uses the admin accounts of .env, the only code that does. A login never gets more than agent_ro has: "*" and column
 grants are copied from agent_ro's own privileges, so the hidden payroll columns stay hidden. Logins of roles no longer
-in the policy are removed. The course's files and agent_ro are not touched.
+in the policy are removed. The course's files are not touched.
+
+Step 27: the logins of the site roles see only their site's rows, through PostgreSQL row-level security and SQL Server
+security policies, in a schema `access_control`. Every other login, agent_ro included, keeps seeing every row.
 """
 import argparse
 
@@ -27,6 +30,79 @@ WHERE n.nspname = 'public' AND c.relkind IN ('r', 'p', 'v') ORDER BY 1
 """
 
 
+SITE_LOGINS = r"agent\_r\_responsable\_site\_%"
+PAYROLL_ROWS = {
+    "departments": "site_code = (SELECT site_code FROM access_control.role_site WHERE login = current_user)",
+    "contracts": "department_code IN (SELECT department_code FROM public.departments)",
+    # The site of a day is the site of the contract running that day: two people changed department
+    "timesheets": "EXISTS (SELECT 1 FROM public.contracts c WHERE c.employee_id = timesheets.employee_id "
+                  "AND c.start_date <= timesheets.work_date "
+                  "AND (c.end_date IS NULL OR c.end_date >= timesheets.work_date))",
+}
+ERP_BY_SITE = ["PRD_OF", "STK_ETAT", "STK_MVT", "ACH_RECEP", "ACH_CDE", "LOG_EXPED"]
+ERP_FUNCTIONS = {
+    "site_allowed": ("@sit_id int", "EXISTS (SELECT 1 FROM access_control.role_site r "
+                                    "WHERE r.login = USER_NAME() AND r.sit_id = @sit_id)"),
+    "receipt_allowed": ("@rec_id int", "EXISTS (SELECT 1 FROM dbo.ACH_RECEP a JOIN access_control.role_site r "
+                                       "ON r.sit_id = a.SIT_ID WHERE a.REC_ID = @rec_id AND r.login = USER_NAME())"),
+    "order_allowed": ("@ac_id int", "EXISTS (SELECT 1 FROM dbo.ACH_CDE a JOIN access_control.role_site r "
+                                    "ON r.sit_id = a.SIT_ID WHERE a.AC_ID = @ac_id AND r.login = USER_NAME())"),
+}
+
+
+def site_roles(source):
+    return {role: access.roles()[role]["site"] for role in wanted(source) if access.roles()[role]["site"]}
+
+
+def drop_payroll_policies(db):
+    for table in PAYROLL_ROWS:
+        for policy in ("everyone_else", "site_rows"):
+            db.execute(sql.SQL("DROP POLICY IF EXISTS {0} ON {1}").format(
+                sql.Identifier(policy), sql.Identifier("public", table)))
+
+
+def apply_payroll_rows(db):
+    logins = [access.login(role) for role in site_roles("paie")]
+    who = sql.SQL(", ").join(map(sql.Identifier, logins))
+    db.execute("CREATE SCHEMA IF NOT EXISTS access_control")
+    db.execute("CREATE TABLE IF NOT EXISTS access_control.role_site (login name PRIMARY KEY, site_code text NOT NULL)")
+    db.execute("DELETE FROM access_control.role_site")
+    for role, site in site_roles("paie").items():
+        db.execute("INSERT INTO access_control.role_site VALUES (%s, %s)", (access.login(role), site["paie"]))
+    db.execute(sql.SQL("GRANT USAGE ON SCHEMA access_control TO {0}").format(who))
+    db.execute(sql.SQL("GRANT SELECT ON access_control.role_site TO {0}").format(who))
+    for table, rows in PAYROLL_ROWS.items():
+        name = sql.Identifier("public", table)
+        db.execute(sql.SQL("ALTER TABLE {0} ENABLE ROW LEVEL SECURITY").format(name))
+        db.execute(sql.SQL("CREATE POLICY everyone_else ON {0} FOR SELECT USING (current_user NOT LIKE {1})")
+                   .format(name, sql.Literal(SITE_LOGINS)))
+        db.execute(sql.SQL("CREATE POLICY site_rows ON {0} FOR SELECT TO {1} USING ({2})")
+                   .format(name, who, sql.SQL(rows)))
+
+
+def apply_erp_rows(cur):
+    roles = site_roles("erp")
+    cur.execute("SELECT SIT_CODE, SIT_ID FROM dbo.SOC_SITE")
+    site_ids = dict(cur.fetchall())
+    cur.execute("IF SCHEMA_ID('access_control') IS NULL EXEC('CREATE SCHEMA access_control')")
+    cur.execute("DROP SECURITY POLICY IF EXISTS access_control.site_rows")
+    for name in ERP_FUNCTIONS:
+        cur.execute(f"DROP FUNCTION IF EXISTS access_control.{name}")
+    cur.execute("IF OBJECT_ID('access_control.role_site') IS NULL CREATE TABLE access_control.role_site "
+                "(login sysname NOT NULL PRIMARY KEY, sit_id int NOT NULL)")
+    cur.execute("DELETE FROM access_control.role_site")
+    for role, site in roles.items():
+        cur.execute("INSERT INTO access_control.role_site VALUES (%s, %d)", (access.login(role), site_ids[site["erp"]]))
+    for name, (parameter, allowed) in ERP_FUNCTIONS.items():
+        cur.execute(f"CREATE FUNCTION access_control.{name}({parameter}) RETURNS TABLE WITH SCHEMABINDING AS RETURN "
+                    rf"SELECT 1 AS ok WHERE USER_NAME() NOT LIKE 'agent\_r\_responsable\_site\_%' ESCAPE '\' OR {allowed}")
+    predicates = [f"ADD FILTER PREDICATE access_control.site_allowed(SIT_ID) ON dbo.{t}" for t in ERP_BY_SITE]
+    predicates += ["ADD FILTER PREDICATE access_control.receipt_allowed(REC_ID) ON dbo.ACH_RECEP_LIG",
+                   "ADD FILTER PREDICATE access_control.order_allowed(AC_ID) ON dbo.ACH_CDE_LIG"]
+    cur.execute("CREATE SECURITY POLICY access_control.site_rows " + ", ".join(predicates)
+                + " WITH (STATE = ON, SCHEMABINDING = ON)")
+
+
 def wanted(source):
     return {role: tables for role in access.roles() if (tables := access.tables_of(role, source))}
 
@@ -38,6 +114,8 @@ def apply_postgres(source, env, dry_run):
         readable = {name: (whole, columns) for name, whole, columns in db.execute(AGENT_RO_TABLES).fetchall() if columns}
         roles = wanted(source)
         logins = {access.login(r) for r in roles}
+        if source == "paie" and not dry_run:
+            drop_payroll_policies(db)
         for (name,) in db.execute("SELECT rolname FROM pg_roles WHERE rolname LIKE %s",
                                   (access.LOGIN_PREFIX.replace("_", r"\_") + "%",)).fetchall():
             if name not in logins:
@@ -67,6 +145,8 @@ def apply_postgres(source, env, dry_run):
                 what = sql.SQL("SELECT") if whole else sql.SQL("SELECT ({0})").format(
                     sql.SQL(", ").join(map(sql.Identifier, columns)))
                 db.execute(sql.SQL("GRANT {0} ON {1} TO {2}").format(what, sql.Identifier("public", table), user))
+        if source == "paie" and not dry_run:
+            apply_payroll_rows(db)
 
 
 def apply_sqlserver(source, env, dry_run):
@@ -102,6 +182,8 @@ def apply_sqlserver(source, env, dry_run):
         for table in names:
             cur.execute(f"GRANT SELECT ON [dbo].[{table}] TO [{name}]")
         cur.execute(f"DENY INSERT, UPDATE, DELETE, ALTER, EXECUTE ON SCHEMA::[dbo] TO [{name}]")
+    if not dry_run:
+        apply_erp_rows(cur)
     conn.close()
 
 

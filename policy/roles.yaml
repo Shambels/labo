@@ -65,8 +65,12 @@ roles:
       erp: [reference, production, receipts, stock_movements, articles, suppliers, shipments]
     documents: [04_Qualite]
   responsable_site:
-    # One role per site. Their rows are limited in step 27: until then these roles are refused
-    sites: {gent: GENT, seneffe: SENEFFE, namur: NAMUR, herstal: HERSTAL}
+    # One role per site, its rows limited by the databases (step 27). Site codes differ between the sources
+    sites:
+      gent: {label: Gand, paie: GENT, erp: GND}
+      seneffe: {label: Seneffe, paie: SENEFFE, erp: SEN}
+      namur: {label: Namur, paie: NAMUR, erp: NAM}
+      herstal: {label: Herstal, paie: HERSTAL, erp: HRS}
     sources:
       erp: [reference, production, stock, receipts, shipments, purchase_orders]
       paie: [site_staff]

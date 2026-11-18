@@ -19,7 +19,9 @@ from text2sql_calorvia.sources import SOURCES, connect
 from text2sql_calorvia.validation import validate
 
 DB_ERRORS = (psycopg.Error, pymssql.Error)
-ACTIVE = [r for r, d in access.roles().items() if not d["site"]]
+ACTIVE = list(access.roles())
+GENT, SENEFFE, NAMUR, HERSTAL = (f"responsable_site_{s}" for s in ("gent", "seneffe", "namur", "herstal"))
+SITES = {GENT: ("GENT", 3), SENEFFE: ("SENEFFE", 2), NAMUR: ("NAMUR", 1), HERSTAL: ("HERSTAL", 5)}
 SAMPLE = {"erp": "VTE_FACT", "compta": "ecriture", "paie": "payslips"}
 
 
@@ -96,11 +98,6 @@ def test_the_model_never_sees_the_token():
             return (await client.list_tools()).tools
     for tool in anyio.run(tools):
         assert "access_token" not in tool_schema(tool)["function"]["parameters"]["properties"]
-
-
-def test_a_site_role_is_refused_until_its_rows_are_limited():
-    with pytest.raises(access.AccessDenied, match="pas encore activé"):
-        connect("paie", role="responsable_site_gent")
 
 
 @pytest.mark.parametrize("role", ACTIVE)
@@ -295,3 +292,96 @@ def test_the_tools_name_no_source_the_role_cannot_read():
     assert "compta" not in text and "paie" not in text
     both = {t["function"]["name"] for t in scoped_tools(anyio.run(schemas), access.scope_of("rh"))}
     assert {"reconcile", "get_sales_commission"} <= both
+
+
+# Step 27: rows
+def count(source, sql, role=None):
+    return run_unvalidated(source, sql, max_rows=1, role=role, timeout_s=30)[1][0][0]
+
+
+@pytest.mark.parametrize("role", list(SITES))
+@pytest.mark.parametrize("table", ["PRD_OF", "STK_ETAT", "STK_MVT", "ACH_RECEP", "ACH_CDE", "LOG_EXPED"])
+def test_a_site_role_sees_its_erp_rows(logins, role, table):
+    expected = count("erp", f"SELECT COUNT(*) FROM {table} WHERE SIT_ID = {SITES[role][1]}")
+    assert count("erp", f"SELECT COUNT(*) FROM {table}", role) == expected
+
+
+@pytest.mark.parametrize("role", list(SITES))
+@pytest.mark.parametrize("lines, parent, key", [("ACH_RECEP_LIG", "ACH_RECEP", "REC_ID"), ("ACH_CDE_LIG", "ACH_CDE", "AC_ID")])
+def test_erp_lines_follow_their_parent(logins, role, lines, parent, key):
+    expected = count("erp", f"SELECT COUNT(*) FROM {lines} l JOIN {parent} p ON p.{key} = l.{key} "
+                            f"WHERE p.SIT_ID = {SITES[role][1]}")
+    assert count("erp", f"SELECT COUNT(*) FROM {lines}", role) == expected
+
+
+@pytest.mark.parametrize("role", list(SITES))
+def test_a_site_role_sees_its_payroll_rows(logins, role):
+    site = SITES[role][0]
+    assert count("paie", "SELECT COUNT(*) FROM departments", role) == count(
+        "paie", f"SELECT COUNT(*) FROM departments WHERE site_code = '{site}'")
+    in_site = f"JOIN departments d ON d.department_code = c.department_code WHERE d.site_code = '{site}'"
+    assert count("paie", "SELECT COUNT(*) FROM contracts", role) == count(
+        "paie", f"SELECT COUNT(*) FROM contracts c {in_site}")
+    assert count("paie", "SELECT COUNT(*) FROM timesheets WHERE work_date = '2026-03-10'", role) == count(
+        "paie", "SELECT COUNT(*) FROM timesheets t WHERE t.work_date = '2026-03-10' AND EXISTS (SELECT 1 FROM contracts c "
+                f"{in_site} AND c.employee_id = t.employee_id AND c.start_date <= t.work_date "
+                "AND (c.end_date IS NULL OR c.end_date >= t.work_date))")
+
+
+@pytest.mark.parametrize("source, sql, role", [
+    ("erp", "SELECT COUNT(*) FROM STK_MVT", "direction"), ("erp", "SELECT COUNT(*) FROM STK_MVT", "achats"),
+    ("paie", "SELECT COUNT(*) FROM timesheets", "rh"), ("paie", "SELECT COUNT(*) FROM contracts", "direction"),
+])
+def test_other_roles_keep_every_row(logins, source, sql, role):
+    assert count(source, sql, role) == count(source, sql)
+
+
+@pytest.mark.parametrize("source, sql", [
+    ("paie", "SET ROLE agent_ro"),
+    ("paie", "SET ROLE agent_r_direction"),
+    ("paie", "ALTER TABLE contracts DISABLE ROW LEVEL SECURITY"),
+    ("paie", "DROP POLICY site_rows ON contracts"),
+    ("paie", "DELETE FROM access_control.role_site"),
+    ("erp", "EXECUTE AS USER = 'dbo'"),
+    ("erp", "ALTER SECURITY POLICY access_control.site_rows WITH (STATE = OFF)"),
+    ("erp", "DELETE FROM access_control.role_site"),
+    ("erp", "SELECT * FROM access_control.role_site"),
+])
+def test_a_site_login_cannot_remove_its_limit(logins, source, sql):
+    with pytest.raises(DB_ERRORS):
+        run_unvalidated(source, sql, role=GENT)
+
+
+def test_row_security_cannot_be_switched_off_for_the_session(logins):
+    conn = connect("paie", role=GENT)
+    try:
+        cur = conn.cursor()
+        cur.execute("SET row_security = off")
+        with pytest.raises(psycopg.Error):
+            cur.execute("SELECT COUNT(*) FROM contracts")
+    finally:
+        conn.rollback()
+        conn.close()
+
+
+def test_what_a_site_role_is_shown_comes_from_its_rows(logins):
+    token = access.issue_token(GENT, "g")
+    departments = tool("get_table_card", source="paie", table="departments", access_token=token)
+    assert departments["rows"] == count("paie", "SELECT COUNT(*) FROM departments WHERE site_code = 'GENT'")
+    assert {v["value"] for v in departments["code_columns"]["site_code"]["values"]} == {"GENT"}
+    tables = {t["table"]: t["rows"] for t in tool("list_tables", source="erp", access_token=token)}
+    assert tables["PRD_OF"] == count("erp", "SELECT COUNT(*) FROM PRD_OF WHERE SIT_ID = 3") and "VTE_FACT" not in tables
+    seneffe = tool("find_values", source="paie", value="Maintenance Seneffe", access_token=token)["matches"]
+    assert not [m for m in seneffe if "Seneffe" in str(m["value"])]
+    assert [m for m in tool("find_values", source="paie", value="Onderhoud Gent", access_token=token)["matches"]]
+
+
+def test_the_prompt_of_a_site_role_names_its_site():
+    prompt = system_prompt([], scope=access.scope_of(GENT), site=access.site_label(GENT))
+    assert "site de Gand" in prompt
+
+
+def test_payroll_rules_still_apply_inside_a_site(logins):
+    assert not execute("paie", "SELECT t.employee_id, t.work_date FROM timesheets t WHERE t.absence_code = 'MAL'",
+                       role=GENT)["ok"]
+    assert execute("paie", "SELECT COUNT(*) FROM timesheets t WHERE t.absence_code IN ('MAL', 'MAL_MUT')", role=GENT)["ok"]
