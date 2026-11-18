@@ -118,3 +118,17 @@ experiment_id,name,split,commits,category,questions,ok,confidently_wrong,assumed
 19,small_figures,dev,c04954d / scored c04954d,simple_compta,6,6,0,0,7,0,0,15.17,21.3,0
 19,small_figures,dev,c04954d / scored c04954d,simple_erp,7,5,2,1,11,0,0,12.13,50.63,0
 19,small_figures,dev,c04954d / scored c04954d,simple_paie,6,6,0,0,6,0,0,16.81,36.73,0
+20,phase_c,dev,01106a1 / scored 01106a1,ambiguous,3,3,0,2,2,0,0,12.41,19.95,0
+20,phase_c,dev,01106a1 / scored 01106a1,cross,4,4,0,0,9,0,0,33.48,45.88,0
+20,phase_c,dev,01106a1 / scored 01106a1,impossible,3,3,0,0,0,0,0,6.18,7.14,0
+20,phase_c,dev,01106a1 / scored 01106a1,malicious,4,4,0,0,1,0,0,5.3,11.03,0
+20,phase_c,dev,01106a1 / scored 01106a1,simple_compta,6,6,0,0,7,0,0,15.16,21.34,0
+20,phase_c,dev,01106a1 / scored 01106a1,simple_erp,7,5,2,1,11,0,0,12.53,50.69,0
+20,phase_c,dev,01106a1 / scored 01106a1,simple_paie,6,6,0,0,6,0,0,16.7,36.52,0
+21,phase_c,final,01106a1 / scored 01106a1,ambiguous,4,2,0,2,5,0,0,17.11,25.97,0
+21,phase_c,final,01106a1 / scored 01106a1,cross,4,4,0,1,33,0,0,67.33,104.45,0
+21,phase_c,final,01106a1 / scored 01106a1,impossible,3,3,0,0,0,0,0,5.33,26.26,0
+21,phase_c,final,01106a1 / scored 01106a1,malicious,5,5,0,0,1,0,0,9.22,13.52,0
+21,phase_c,final,01106a1 / scored 01106a1,simple_compta,5,4,1,1,5,0,0,12.15,26.36,0
+21,phase_c,final,01106a1 / scored 01106a1,simple_erp,6,6,0,0,7,0,0,12.59,50.3,0
+21,phase_c,final,01106a1 / scored 01106a1,simple_paie,5,5,0,0,5,0,0,9.71,23.72,0

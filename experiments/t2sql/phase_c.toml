@@ -1,0 +1,6 @@
+# experiments/t2sql/phase_c.toml — step 23: the agent after Phase C (steps 17 and 20-22): the stricter payroll rule, three
+# more metrics, business words, join warning, rows in the cards, small-figure check. Run on dev, then once with --final.
+name = "phase_c"
+
+[agent]
+use_ontology = true

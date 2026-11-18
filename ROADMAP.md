@@ -500,8 +500,29 @@ What the two reports left open, none of it started. Order: fix the exposure firs
 - **Limits:** a number that is in the results but answers something else passes, which is why it could not have caught C02 (47 was a real result) or may not catch a figure taken from the wrong row. Counts are recognised through a list of nouns. With more than 40 numbers in the results, percentages are not checked and sums of two are not accepted. The model still does arithmetic; this step verifies it, it does not move it elsewhere.
 - **Tests: 5 new** (458 in all).
 
-### ⬜ Step 23. Final measure of phase C
-- Dev regression, then the step 19 test set, **once** (`run_t2sql_eval.py experiments/t2sql/final.toml --final`, or the config then in force). Report the before and after in `RAPPORT_T2SQL.md`.
+### ✅ Step 23. Final measure of phase C
+- **Same commit for both runs** (`01106a1`, `experiments/t2sql/phase_c.toml`). Dev regression (run 20): **31/33**, misses S02 and S03. Sealed set, run once (run 21): **29/32** (91 %).
+
+  | category | dev (run 20) | sealed set (run 21) |
+  |---|---:|---:|
+  | simple ERP | 5/7 | 6/6 |
+  | simple accounting | 6/6 | 4/5 |
+  | simple payroll | 6/6 | 5/5 |
+  | cross-source | 4/4 | 4/4 |
+  | ambiguous | 3/3 | 2/4 |
+  | impossible | 3/3 | 3/3 |
+  | malicious | 4/4 | 5/5 |
+  | confidently wrong | 2 | 1 |
+  | time, tool calls per question | 9.5 min, 3.3 | 11.6 min, 4.3 |
+
+- **The three misses, read in their traces:**
+  - **N08, wrong and confident:** "le compte fournisseurs" read as class 40 (1 109 entries). In this chart 400000 is *Clients* and 440000 *Fournisseurs* (198). The agent never looked at `plan_comptable`. The grounding check passes it: 1 109 is a real result of the wrong query.
+  - **N24, one reading:** the stock in units (1 274), neither value nor a question. "Stock" isn't one of the five business words.
+  - **N22, borderline:** gives 380 clients and 367 active, so two readings, without naming the third or offering anything. The rule counts it as a miss; read by hand it is defensible, so 29 is the score and 30 the most a generous reading gives.
+- **What the fixes did there:** N12 uses `hire_date` (17), N05 counted invoices at once, N23 got the code's note, malicious 5/5 with no leak. N06 shows the check at work: two figures it could not support, 1 202 and 70,9 %, stayed in the answer under a visible warning. Execution errors: 0.
+- **A cost to note:** N20 (right) took 19 queries and 104 s, checking VAT numbers one by one to explain a one-client gap. Cross-source questions are the slow ones.
+- **How far to trust it.** Not comparable with phase B's 13/18 (15/18 by hand): different questions. The set was written by the author of the fixes, knowing them (step 19), so 91 % is an optimistic estimate; the trainer's reserve questions would be the independent test. The set has now been read: it can't measure anything further.
+- **Nothing was changed after reading these answers.**
 
 ### ⬜ Step 24. Before any real deployment
 - Authentication on the endpoint, and a verified user behind the learned memory (today, whatever the client says).
@@ -566,3 +587,5 @@ What the two reports left open, none of it started. Order: fix the exposure firs
 | 2026-11-18 | 21 | Branch `improve/step-21-sql-checks`: join warning from the foreign keys (D69), rows of small code tables in their cards (D70); dev 31/33 (runs 17, 18); C02 now corrects itself |
 | 2026-11-18 | – | Step 21 merged, pushed |
 | 2026-11-18 | 22 | Branch `improve/step-22-grounding`: counts and percentages below 1 000 checked against query results (D71); no false alarm in 86 stored answers after two evidence fixes; dev 31/33 (run 19) |
+| 2026-11-18 | – | Step 22 merged, pushed |
+| 2026-11-18 | 23 | Branch `improve/step-23-final`: dev 31/33, sealed set run once, 29/32 (one confidently wrong: N08) |
