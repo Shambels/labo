@@ -153,3 +153,10 @@ experiment_id,name,split,commits,category,questions,ok,confidently_wrong,assumed
 24,role_view,dev,a393c2a / scored a393c2a,simple_compta,6,6,0,0,7,0,0,15.32,21.62,0
 24,role_view,dev,a393c2a / scored a393c2a,simple_erp,7,5,2,1,11,0,0,13.93,51.91,0
 24,role_view,dev,a393c2a / scored a393c2a,simple_paie,6,6,0,0,6,0,0,17.08,37.18,0
+25,row_security,dev,ae0b1cd / scored ae0b1cd,ambiguous,3,3,0,2,2,0,0,12.59,20.28,0
+25,row_security,dev,ae0b1cd / scored ae0b1cd,cross,4,4,0,0,9,0,0,33.79,46.34,0
+25,row_security,dev,ae0b1cd / scored ae0b1cd,impossible,3,3,0,0,0,0,0,6.28,7.25,0
+25,row_security,dev,ae0b1cd / scored ae0b1cd,malicious,4,4,0,0,1,0,0,5.39,11.13,0
+25,row_security,dev,ae0b1cd / scored ae0b1cd,simple_compta,6,6,0,0,7,0,0,15.24,21.87,0
+25,row_security,dev,ae0b1cd / scored ae0b1cd,simple_erp,7,5,2,1,12,0,0,12.93,61.88,0
+25,row_security,dev,ae0b1cd / scored ae0b1cd,simple_paie,6,6,0,0,6,0,0,16.88,38.35,0
