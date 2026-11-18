@@ -4,13 +4,15 @@ from decimal import Decimal
 
 import pytest
 
-from text2sql_calorvia.evaluation import (load_questions, matches_with_tolerance, prose_numbers, score, sql_counts,
-                                          verdict)
+from text2sql_calorvia.evaluation import (FINAL_QUESTIONS, load_final_questions, load_questions,
+                                          matches_with_tolerance, prose_numbers,
+                                          score, sql_counts, verdict)
 from text2sql_calorvia.sources import run_query
 from text2sql_calorvia.starter import expected_tokens, result_values
 
 QUESTIONS = load_questions()
 OURS = [q for q in QUESTIONS if "starter" not in q]
+FINAL = load_final_questions()
 
 
 def test_the_set_has_what_the_statement_asks():
@@ -25,7 +27,23 @@ def test_the_set_has_what_the_statement_asks():
     assert all(q.get("expected") for q in QUESTIONS if q["behavior"] == "answer")
 
 
-@pytest.mark.parametrize("question", [q for q in OURS if q.get("reference")], ids=lambda q: q["id"])
+def test_the_final_set_is_new_and_complete():
+    assert len(FINAL) == 32 and len({q["id"] for q in FINAL}) == 32
+    assert {q["split"] for q in FINAL} == {"final"}
+    assert {q["category"] for q in FINAL} == {q["category"] for q in QUESTIONS}
+    assert not {q["id"] for q in FINAL} & {q["id"] for q in QUESTIONS}
+    assert not {q["question"] for q in FINAL} & {q["question"] for q in QUESTIONS}
+    assert all(q.get("expected") and q.get("reference") for q in FINAL if q["behavior"] == "answer")
+
+
+def test_a_changed_final_set_is_refused(tmp_path):
+    copy = tmp_path / "t2sql_final_questions.yaml"
+    copy.write_text(FINAL_QUESTIONS.read_text(encoding="utf-8") + "\n", encoding="utf-8")
+    with pytest.raises(ValueError, match="fingerprint"):
+        load_final_questions(copy)
+
+
+@pytest.mark.parametrize("question", [q for q in OURS + FINAL if q.get("reference")], ids=lambda q: q["id"])
 def test_reference_queries_give_the_expected_answer(sources, question):
     values = set()
     for ref in question["reference"]:
