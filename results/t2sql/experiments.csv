@@ -11,3 +11,5 @@ id,name,split,git_commit,scorer_commit,agent_options,started_at,questions,ok,con
 11,offer_readings_retest,dev,c2df3b4f55c7e2e80fbb3a15a1f95ce3c4028b55,c2df3b4f55c7e2e80fbb3a15a1f95ce3c4028b55,"{""use_ontology"": true}",2026-11-17T23:35+00:00,33,30,3,3,39,0,0,14.81,10.09,0
 12,final,test,f1b1cfd6543e02974a2cec73074d3866cc89cbdb,f1b1cfd6543e02974a2cec73074d3866cc89cbdb,"{""use_ontology"": true}",2026-11-17T23:47+00:00,18,13,4,2,16,1,0,11.87,4.54,0
 13,privacy_allowlist,dev,b9332f8c7a7872f0201a59eac8c2cdf5a6d5b013,b9332f8c7a7872f0201a59eac8c2cdf5a6d5b013,"{""use_ontology"": true}",2026-11-18T08:23+00:00,33,30,3,3,39,0,0,16.21,10.35,0
+14,more_metrics,dev,54bedea1c00d0c904394285d53a1ce17f52efa26,54bedea1c00d0c904394285d53a1ce17f52efa26,"{""use_ontology"": true}",2026-11-18T09:54+00:00,33,31,2,3,40,0,0,14.61,9.86,0
+16,business_words,dev,3e0f8619a18349ac9ba0ee59c9fe86dcb0233b89,3e0f8619a18349ac9ba0ee59c9fe86dcb0233b89,"{""use_ontology"": true}",2026-11-18T10:08+00:00,33,31,2,3,40,0,0,13.88,9.69,0
