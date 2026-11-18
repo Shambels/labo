@@ -1648,3 +1648,40 @@ The API tests use a fake agent, whose signature had been updated by hand along w
 
 Their table grants exist, but nothing limits their rows yet: a Gand manager would read every site. Refusing is the safe state until row-level security exists (step 27), so a half-built permission can't be used.
 </details>
+
+## Step 26: what each role sees
+
+**1.** Why should a forbidden table get the same message as a table that doesn't exist?
+
+<details><summary>Answer</summary>
+
+"You may not read `salary_history`" confirms that it exists and what it is called. Validating against the role's own schema gives that result without a special case: to this role, the table isn't there.
+</details>
+
+**2.** The database already refuses forbidden tables. Why filter the prompt as well?
+
+<details><summary>Answer</summary>
+
+The grants protect the data, not its description. Table names and certified definitions are information too: a metric's SQL shows how a figure is built. And a model told about tables it can't use wastes calls and offers answers it can't give.
+</details>
+
+**3.** How is the prompt kept identical when no role is used, and why does that matter?
+
+<details><summary>Answer</summary>
+
+The role text and rewrites apply only when a scope is given. It matters because any prompt change reshuffles borderline answers (step 14): the regression runs stay comparable, and local mode doesn't change behaviour.
+</details>
+
+**4.** Why does `commercial` no longer get "chiffre d'affaires comptabilisé" offered as another reading?
+
+<details><summary>Answer</summary>
+
+It can't compute it, so the offer would be both useless and a hint about data outside its role. Each reading now names its source, and for this role the word simply has one reading.
+</details>
+
+**5.** The tests passed, yet the first live run still mentioned accounting. Where did it come from, and what is the lesson?
+
+<details><summary>Answer</summary>
+
+From fixed sentences of the prompt: examples such as "facturé dans l'ERP ou comptabilisé". The filtering handled the generated lists, and the tests checked those. Reading real answers showed what the tests hadn't thought of; a test now checks the whole prompt and tool text per role.
+</details>
