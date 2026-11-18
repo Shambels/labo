@@ -1,0 +1,6 @@
+# experiments/t2sql/privacy_allowlist.toml — step 17 (D65): the final configuration, unchanged, on the stricter payroll
+# rule. A regression check against run 11: the same agent and prompt, only the MCP server's validation differs.
+name = "privacy_allowlist"
+
+[agent]
+use_ontology = true
