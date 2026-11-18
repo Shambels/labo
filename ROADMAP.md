@@ -93,13 +93,14 @@ Companion file: `QUIZ.md` (one quiz per step, answers collapsed).
 | D72 | Who is calling | `API_KEYS=name:key,...`: `/v1` needs a bearer key, and the user is the key's name; the `user` field is then ignored and conversations are private to it. `TRUSTED_GATEWAYS` lets a shared key (Open WebUI) name its end user, as `gateway/user`. Without keys: local mode, and the server refuses to listen beyond loopback. Chart links stay open, with random ids | Memory was tied to whatever the client claimed. An image tag can't send a key |
 | D73 | Payroll beyond one query | Identifiers only in joins or `COUNT(DISTINCT)`; sickness (`absence_code`, `absence_hours`) follows the salary rules unless the query keeps only other codes; the server remembers the rows behind each aggregate and refuses one that differs from an earlier one by 1–4 people | Differencing was the known gap. Comparing **rows**, not people, lets different months pass, since they share none |
 | D74 | Role-based access | Permissions follow **roles**, not individuals. Enforced by the data layers: one read-only database login per role, row-level security keyed on that login, an `allowed_roles` filter inside the Qdrant search. Denied by default. The payroll rules stay on top | The model must have no way to reach forbidden data. Rewriting its SQL would break D45 and can miss a subquery; a login can't be spoofed by a query |
+| D75 | The roles (was O9) | Ten roles, listed under Phase D: `direction`, `finance`, `rh`, `commercial`, `achats`, `operations`, `qualite`, `responsable_site` (one per site), `it`, `employe` | Your choices: `finance` reads the CODIR minutes; `rh` has no accounting; site managers see absences as aggregates; `commercial` is company-wide; quality is a role of its own |
 | D9 | Porting strategy | Port each hospital_rag module **in the step that needs it** (step 0: config, db, logs; step 3: evaluation; step 4: ETL and RAG) | Nothing unused or untested sits in the repo |
 
 ### Open decisions (to settle with you when we reach them)
 
 | # | Question | When |
 |---|---|---|
-| O9 | Approve the roles proposed under Phase D (names, tables, sites, folders) | Before step 25 |
+| – | None open at the moment. | – |
 
 ---
 
@@ -545,23 +546,24 @@ What the two reports left open, none of it started. Order: fix the exposure firs
 
 Design: D74. Requires step 24's API keys (the key gives the user, the user gives the role). None of it is started.
 
-### Proposed roles (awaiting approval, O9)
+### The roles (D75)
 
 Every role also gets the documents of `employe`. Salaries stay aggregated over at least 5 people for every role, `direction` and `rh` included.
 
 | Role | ERP | Accounting | Payroll | Documents | Rows |
 |---|---|---|---|---|---|
 | `direction` | all | all | all | every indexed folder | all |
-| `finance` | sales and purchase invoices, customers, suppliers, articles, sites | all | pay runs, payslips, pay lines, pay elements, cost centres | `01_Finance` | all |
+| `finance` | sales and purchase invoices, customers, suppliers, articles, sites | all | pay runs, payslips, pay lines, pay elements, cost centres | `01_Finance`, `00_Direction/CODIR` | all |
 | `rh` | salespeople only | none | all | `02_RH`, including `Confidentiel` | all |
 | `commercial` | sales orders and invoices, customers, salespeople, articles, prices, shipments | none | none | `05_Commercial`, `04_Qualite/Reclamations` | all |
 | `achats` | purchase orders, invoices and receipts, suppliers, articles, stock | none | none | `06_Achats` | all |
-| `operations` | production, bills of materials, stock, articles, receipts, shipments | none | none | `03_Production`, `04_Qualite` | all |
-| `responsable_site` (one per site: Gand, Seneffe, Namur, Herstal) | production, stock, receipts, shipments, purchase orders | none | contracts, departments, timesheets | `03_Production/<site>` where it exists, `03_Production/Procedures` | own site |
+| `operations` | production, bills of materials, stock, articles, receipts, shipments | none | none | `03_Production` | all |
+| `qualite` | production, receipts, stock movements, articles, suppliers, shipments | none | none | `04_Qualite` | all |
+| `responsable_site` (one per site: Gand, Seneffe, Namur, Herstal) | production, stock, receipts, shipments, purchase orders | none | contracts, departments, timesheets (absences as aggregates only) | `03_Production/<site>` where it exists, `03_Production/Procedures` | own site |
 | `it` | none | none | none | `07_IT` | – |
 | `employe` (default) | none | none | none | `09_Communication`, `10_RSE`, `02_RH/Politiques`, `02_RH/Notes_de_service`, `02_RH/Formation`, `02_RH/Organigrammes` | – |
 
-Left to `direction` alone: `00_Direction` and `08_Juridique`. `02_RH/Confidentiel` is shared by `direction` and `rh` only. The annual reviews stay out of the index for everyone (D12).
+Left to `direction` alone: `08_Juridique` and `00_Direction`, apart from the CODIR minutes that `finance` also reads. `02_RH/Confidentiel` is shared by `direction` and `rh` only. The annual reviews stay out of the index for everyone (D12).
 
 ### ⬜ Step 25. Policy file and role logins
 - The approved roles in one versioned policy file; a script generates the logins and grants (PostgreSQL, SQL Server), outside the course files. The key's user maps to a role; the API passes it to the MCP server in a signed, short-lived token, never through the model.
@@ -650,3 +652,4 @@ Left to `direction` alone: `00_Direction` and `08_Juridique`. `02_RH/Confidentie
 | 2026-11-18 | – | Step 23 merged, pushed |
 | 2026-11-18 | 24 | Branch `improve/step-24-deployment`: API keys and verified users (D72), chart cleanup, payroll identifiers, sickness rule, overlap between queries (D73); dev 31/33 (run 22) |
 | 2026-11-18 | – | Phase D (role-based access, steps 25–29) added, roles proposed for approval; the RAG experiments moved to Phase E (step 30) |
+| 2026-11-18 | – | Roles approved (D75). Step 24 merged, pushed |
