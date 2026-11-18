@@ -17,6 +17,7 @@ from pathlib import Path
 
 import psycopg
 
+from text2sql_calorvia.charts import without_images
 from text2sql_calorvia.config import settings
 from text2sql_calorvia.sources import load_sql
 
@@ -53,7 +54,8 @@ def main():
         by_category = db.execute(load_sql("eval/summary"), (False, ids)).fetchall()
         answers = db.execute(load_sql("eval/export_answers"))
         answer_columns = [c.name for c in answers.description]
-        answers = answers.fetchall()
+        answer_at = answer_columns.index("answer")   # signed chart links stay out of a public repository (step 29)
+        answers = [(*r[:answer_at], without_images(r[answer_at]), *r[answer_at + 1:]) for r in answers.fetchall()]
     write("experiments.csv", run_columns, runs)
     write("by_category.csv", CATEGORY_COLUMNS, by_category)
     write("answers.csv", answer_columns, answers)

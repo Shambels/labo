@@ -94,6 +94,11 @@ def test_a_count_from_no_result_is_sent_back_then_flagged(sources):
     assert "⚠️" in answer and "219 factures" in answer.split("⚠️")[1]
 
 
+def test_previous_answers_lose_their_chart_links():
+    answer = "CA : 5 €\n\n![CA [2026]](http://x/charts/0123456789abcdef.png?exp=1&sig=abc)"
+    assert previous_answer(answer) == "CA : 5 €"
+
+
 def test_previous_answers_lose_their_footer_but_keep_their_queries():
     answer = ("**CA : 5 €**\n\n---\n**Comment ce résultat a été obtenu** (journal, session `x`)\n\n"
               "**q1** · erp (SQL Server) · 1 ligne(s)\n```sql\nSELECT 1\nFROM t\n```")

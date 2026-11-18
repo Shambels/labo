@@ -89,7 +89,8 @@ def test_a_chart_is_added_under_the_answer(user, tmp_path, monkeypatch):
                       AIMessage("Voici le graphique."))
     answer = ask(llm, "Graphique du CA par mois", user)["answer"]
     chart_id = next(p.stem for p in tmp_path.iterdir())
-    assert f"![CA HT par mois, 2026]({settings.agent_public_url}/charts/{chart_id}.png)" in answer
+    assert f"![CA HT par mois, 2026]({settings.agent_public_url}/charts/{chart_id}.png?exp=" in answer
+    assert "&sig=" in answer
     assert answer.index("![") < answer.index("**Comment ce résultat")
 
 

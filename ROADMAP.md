@@ -96,6 +96,7 @@ Companion file: `QUIZ.md` (one quiz per step, answers collapsed).
 | D75 | The roles (was O9) | Ten roles, listed under Phase D: `direction`, `finance`, `rh`, `commercial`, `achats`, `operations`, `qualite`, `responsable_site` (one per site), `it`, `employe` | Your choices: `finance` reads the CODIR minutes; `rh` has no accounting; site managers see absences as aggregates; `commercial` is company-wide; quality is a role of its own |
 | D76 | Row limits | PostgreSQL row-level security on `departments`, `contracts`, `timesheets`, SQL Server security policies on six ERP tables and two line tables, in a schema `access_control` holding the login-to-site mapping. A day of timesheet belongs to the site of the contract running that day. Every login other than the site roles keeps all rows | The database applies the limit to every query shape, and it follows the login, which a query can't change |
 | D77 | Document permissions | `allowed_roles` on every chunk, computed from `policy/roles.yaml` and required inside each search prefetch; no value means no role. A role reading **any** copy of a file reads the document kept for it. Written with `set_payload`: no re-embedding. The registry doesn't store it: the policy file stays the one source | `finance` reads the CODIR annexes, one of which is kept under `06_Achats`: requiring every copy would also have cost `achats` its own file |
+| D78 | Proving access | Random marker rows planted per kind of data, expected readers computed from the policy alone, checked in both directions, then removed with row counts compared. Evaluation per role: a query on a table outside the role is always a leak; a matching figure is only a flag, read by hand and recorded. Chart links signed, valid 24 hours | Trusting the unit tests; judging leaks from figures alone, since a role can reach the same number from its own tables |
 | D9 | Porting strategy | Port each hospital_rag module **in the step that needs it** (step 0: config, db, logs; step 3: evaluation; step 4: ETL and RAG) | Nothing unused or untested sits in the repo |
 
 ### Open decisions (to settle with you when we reach them)
@@ -546,7 +547,7 @@ What the two reports left open, none of it started. Order: fix the exposure firs
 
 ## Phase D: role-based access
 
-Design: D74. Requires step 24's API keys (the key gives the user, the user gives the role). None of it is started.
+Design: D74. Requires step 24's API keys (the key gives the user, the user gives the role). Done (steps 25–29).
 
 ### The roles (D75)
 
@@ -604,9 +605,13 @@ Left to `direction` alone: `08_Juridique` and `00_Direction`, apart from the COD
 - **Limits:** a document's path can name a folder the role has no rule for, when it reads the file through a copy. The chat keeps one key per person, with no expiry. Generation was not rescored: only retrieval changed.
 - **Tests: 43 new** (669 in all).
 
-### ⬜ Step 29. Closing the gaps and proving it
-- Signed, expiring chart links. Marker values planted per role must never reach another role's answers.
-- The evaluation run once per role, and the access matrix in the report.
+### ✅ Step 29. Closing the gaps and proving it
+- **Chart links** are signed and expire after 24 hours (`CHART_LINK_HOURS`). A bad, altered or expired link gets the same 404 as a missing chart. Reading a conversation back renews only the charts that answer drew, and the model no longer sees links in earlier answers.
+- **Proof** (`scripts/prove_access.py`, D78): 22 marker rows and 16 throw-away documents, asked as all 13 roles through the role's login, the MCP tools, retrieval, the agent and the RAG. **1 192 checks, 0 failures**, including a request claiming to come from the CEO. Rows removed, row counts identical. A control run with the document filter removed and one false expectation failed as it should (192 retrieval failures; the false expectation caught three ways).
+- **Evaluation** (runs 26–38, commit `6861fcf`, 2 h): the 33 dev questions under each role. **No query ran on a table outside a role.** 14 answers were flagged by the figure check; all were read by hand (`results/t2sql/role_flags_review.yaml`) and each came from data the role may read. `direction` gets **31/33**, same misses (S02, S03). Matrix: `results/t2sql/access_matrix.md` and the report.
+- **Misses on questions a role can answer:** `finance` S02 and `achats` S03 are the known misses; `rh` P05 put its figures only in a chart; the Gand manager's S09 gave the 12 days without the dates.
+- **Limits:** a chart link works for whoever holds it until it expires. Chat keys have no expiry. In the proof the RAG quoted planted notes for only one role, so the positive side of documents rests on retrieval. The per-role evaluation covers the text-to-SQL agent; the RAG was checked by the proof and step 28's tests. It is the author's dev set, not an external security test. `SOC_SITE` still shows other sites' labels.
+- **Tests: 59 new** (728 in all).
 
 ---
 
@@ -683,3 +688,5 @@ Left to `direction` alone: `08_Juridique` and `00_Direction`, apart from the COD
 | 2026-11-18 | 27 | Branch `access/step-27-rows`: row-level security for the four site roles (D76), site views of cards and values; dev 31/33 (run 25) |
 | 2026-11-18 | – | Step 27 and the RAG search refactor merged, pushed |
 | 2026-11-18 | 28 | Branch `access/step-28-documents`: `allowed_roles` on every chunk, role filter in the search, per-role workbook stores, image check, login on the chat (D77) |
+| 2026-11-18 | – | Step 28 merged, pushed |
+| 2026-11-18 | 29 | Branch `access/step-29-proof`: signed chart links, access proof 1 192 checks with no failure, evaluation under all 13 roles with no query outside a role (runs 26–38, D78) |

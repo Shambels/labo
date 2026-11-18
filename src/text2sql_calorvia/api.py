@@ -6,9 +6,10 @@ Step 15: every turn is saved (memory.py), under a conversation id: the X-Convers
 one, else the id hidden in an earlier answer of the history (<!-- calorvia:conversation=… -->), else a new one. Charts
 are served from /charts/<id>.png; GET /v1/conversations and /v1/conversations/<id> read conversations back.
 
-Step 24 (auth.py): with API_KEYS set, /v1 needs a key and the user is the key's name. Chart links stay open, since an
-image tag can't send a key: their ids are random. Without keys (local mode) the user is the request's `user` field, or
-Open WebUI's X-OpenWebUI-User-Id header, else "default", and the server only listens on loopback.
+Step 24 (auth.py): with API_KEYS set, /v1 needs a key and the user is the key's name. Without keys (local mode) the user
+is the request's `user` field, or Open WebUI's X-OpenWebUI-User-Id header, else "default", and the server only listens
+on loopback. Step 29: an image tag can't send a key, so a chart link is signed and expires; reading a conversation back
+renews the links of the charts drawn in it.
 
 Streaming sends the agent's steps as they happen (tool calls, queries, failures) inside a collapsed <details>
 block, then the answer. Open WebUI renders <details> as a fold-out; when a client sends the conversation back, those
@@ -26,7 +27,7 @@ from fastapi import Depends, FastAPI, Header, HTTPException
 from fastapi.responses import FileResponse, StreamingResponse
 from pydantic import BaseModel
 
-from text2sql_calorvia import access, auth, memory
+from text2sql_calorvia import access, auth, charts, memory
 from text2sql_calorvia.agent import Agent, default_agent
 from text2sql_calorvia.config import settings
 
@@ -99,6 +100,12 @@ def describe_step(step: dict) -> str:
     return f"{mark} {tool} " + json.dumps(a, ensure_ascii=False)[:200]
 
 
+def with_fresh_chart_links(message: dict) -> dict:
+    """A stored answer, its links valid again: only for the charts its own steps drew."""
+    drawn = {s["result"]["chart"] for s in message.get("steps") or [] if s.get("tool") == "make_chart" and s.get("ok")}
+    return {**message, "content": charts.refresh_links(message["content"], drawn)} if drawn else message
+
+
 def create_app(agent: Agent | None = None, api_keys: str | None = None, gateways: str | None = None) -> FastAPI:
     app = FastAPI(title="Calorvia text-to-SQL agent")
     get_agent = (lambda: agent) if agent else default_agent
@@ -120,12 +127,13 @@ def create_app(agent: Agent | None = None, api_keys: str | None = None, gateways
                                             "created": 0, "owned_by": "calorvia"}]}
 
     @app.get("/charts/{name}")
-    def chart(name: str):
+    def chart(name: str, exp: str = "", sig: str = ""):
         chart_id = name.removesuffix(".png")
         path = settings.charts_dir / f"{chart_id}.png"
-        if not CHART_ID.fullmatch(chart_id) or not path.exists():   # an id, never a path from the client
+        # An id, never a path from the client; the same answer for a bad link and a missing chart
+        if not CHART_ID.fullmatch(chart_id) or not access.chart_link_valid(chart_id, exp, sig) or not path.exists():
             raise HTTPException(404, "Unknown chart.")
-        return FileResponse(path, media_type="image/png")
+        return FileResponse(path, media_type="image/png", headers={"Cache-Control": "private, no-store"})
 
     @app.get("/v1/conversations")
     def list_conversations(user: str = "default", limit: int = 50, who: auth.Caller = Depends(caller),
@@ -140,7 +148,7 @@ def create_app(agent: Agent | None = None, api_keys: str | None = None, gateways
         messages = memory.conversation(conversation_id) if may_read(who, user, conversation_id) else []
         if not messages:
             raise HTTPException(404, "Unknown conversation.")
-        return {"id": conversation_id, "messages": messages}
+        return {"id": conversation_id, "messages": [with_fresh_chart_links(m) for m in messages]}
 
     @app.post("/v1/chat/completions")
     async def chat(request: ChatRequest, x_conversation_id: str | None = Header(default=None),

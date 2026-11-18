@@ -1,10 +1,13 @@
 """The OpenAI-compatible endpoint (step 13), with a fake agent: format, streaming, history handling."""
 import json
+import re
+import time
 
 import pytest
 from fastapi.testclient import TestClient
 from openai import OpenAI
 
+from text2sql_calorvia import access, charts
 from text2sql_calorvia.api import create_app
 from text2sql_calorvia.config import settings
 
@@ -135,14 +138,66 @@ def test_a_failed_save_does_not_cost_the_answer(monkeypatch):
     assert body["choices"][0]["message"]["content"].startswith("CA : 5 €")
 
 
-def test_charts_are_served_by_id_only(tmp_path, monkeypatch):
-    from text2sql_calorvia.config import settings
+CHART = "0123456789abcdef"
+
+
+def link(chart_id=CHART, now=None):
+    return charts.chart_url(chart_id, now).removeprefix(settings.agent_public_url)
+
+
+@pytest.fixture
+def chart_file(tmp_path, monkeypatch):
     monkeypatch.setattr(settings, "charts_dir", tmp_path)
-    (tmp_path / "0123456789abcdef.png").write_bytes(b"\x89PNG")
+    (tmp_path / f"{CHART}.png").write_bytes(b"\x89PNG")
+    return tmp_path
+
+
+def test_a_signed_chart_link_is_served_and_not_cached(chart_file):
+    response = client()[0].get(link())
+    assert response.status_code == 200 and response.headers["cache-control"] == "private, no-store"
+
+
+def test_charts_are_served_by_id_only(chart_file):
     http, _ = client()
-    assert http.get("/charts/0123456789abcdef.png").status_code == 200
     assert http.get("/charts/..%2F..%2F.env").status_code == 404
-    assert http.get("/charts/0123456789abcdeg.png").status_code == 404
+    assert http.get(link("0123456789abcdeg")).status_code == 404
+
+
+def test_a_chart_link_needs_its_signature(chart_file):
+    http, _ = client()
+    good = link()
+    path, query = good.split("?")
+    expires, signature = (part.split("=")[1] for part in query.split("&"))
+    assert http.get(path).status_code == 404
+    assert http.get(f"{path}?exp={expires}&sig={'0' * 64}").status_code == 404
+    assert http.get(f"{path}?exp={int(expires) + 3600}&sig={signature}").status_code == 404   # a longer life
+    assert http.get(f"{path}?exp={expires}&sig=é").status_code == 404
+    assert http.get(f"{path}?exp=soon&sig={signature}").status_code == 404
+
+
+def test_a_signature_is_valid_for_one_chart_only(chart_file):
+    (chart_file / "fedcba9876543210.png").write_bytes(b"\x89PNG")
+    query = link().split("?")[1]
+    assert client()[0].get(f"/charts/fedcba9876543210.png?{query}").status_code == 404
+
+
+def test_a_chart_link_expires(chart_file):
+    old = time.time() - settings.chart_link_hours * 3600 - 1
+    assert client()[0].get(link(now=old)).status_code == 404
+
+
+def test_reading_a_conversation_renews_only_the_charts_it_drew(chart_file, monkeypatch):
+    other = "fedcba9876543210"
+    text = f"![a](http://x/charts/{CHART}.png?exp=1&sig=old) ![b](http://x/charts/{other}.png?exp=1&sig=old)"
+    stored = [{"role": "user", "content": "q", "steps": None, "created_at": "t"},
+              {"role": "assistant", "content": text, "created_at": "t",
+               "steps": [{"tool": "make_chart", "ok": True, "result": {"chart": CHART}}]}]
+    monkeypatch.setattr("text2sql_calorvia.memory.conversation", lambda _: stored)
+    monkeypatch.setattr("text2sql_calorvia.memory.conversation_owner", lambda _: "default")
+    content = client()[0].get("/v1/conversations/c1").json()["messages"][1]["content"]
+    renewed = re.search(rf"/charts/{CHART}\.png\?exp=(\d+)&sig=(\w+)", content)
+    assert access.chart_link_valid(CHART, renewed[1], renewed[2])
+    assert f"/charts/{other}.png?exp=1&sig=old" in content
 
 
 # Step 24 (D72): keys, and the user they prove

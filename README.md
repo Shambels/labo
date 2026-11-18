@@ -152,10 +152,12 @@ uv run python scripts/run_t2sql_eval.py experiments/t2sql/final.toml            
 Beyond this machine, set `API_KEYS=name:key,...` in `.env` first (see `.env.example`): every `/v1` call then needs
 `Authorization: Bearer <key>`, and the server refuses to listen beyond loopback without keys.
 
-Role-based access is being built (Phase D of `ROADMAP.md`; not ready for real users). `uv run python
+Role-based access (Phase D of `ROADMAP.md`) is in place and tested on the course data. `uv run python
 scripts/apply_roles.py` creates the role logins and row limits from `policy/roles.yaml` (run it again after restoring
 a source); `USER_ROLES=alice:finance` assigns roles. `uv run python scripts/apply_document_roles.py` writes the
 documents' roles on the RAG index (no re-embedding); with `API_KEYS` set, `app/chat.py` asks for a key.
+`uv run python scripts/prove_access.py` checks every role with planted values, which it removes afterwards: run it
+with nothing else using the databases. `--role all` on `scripts/run_t2sql_eval.py` evaluates the agent under each role.
 
 In Open WebUI, add `http://127.0.0.1:9000/v1` as an OpenAI connection: the steps unfold live in a fold-out, charts
 show as images, and the queries that ran are listed under every answer.
@@ -229,8 +231,8 @@ Graph, budgets and the grounding check: `src/text2sql_calorvia/agent.py`; prompt
 ## Phase B: charts and memory (step 15)
 
 - **Charts:** ask for a chart ("fais-moi un graphique du CA par mois"); the agent draws the query result with
-  matplotlib, the endpoint serves it from `/charts/<id>.png`, and the answer carries it as a Markdown image (Open WebUI
-  displays it). Set `AGENT_PUBLIC_URL` if the client reaches the endpoint by another address than localhost:9000.
+  matplotlib, the endpoint serves it from a signed `/charts/<id>.png` link that expires after 24 hours, and the answer
+  carries it as a Markdown image (Open WebUI displays it). Set `AGENT_PUBLIC_URL` if the client reaches the endpoint by another address than localhost:9000.
 - **Conversations** are saved in PostgreSQL (`t2sql_conversations`, `t2sql_messages`) and read back with
   `GET /v1/conversations?user=<user>` and `GET /v1/conversations/<id>`. A client may name the conversation with an
   `X-Conversation-Id` header; otherwise the id hidden at the end of each answer is found again in the history.

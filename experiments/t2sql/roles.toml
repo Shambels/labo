@@ -1,0 +1,6 @@
+# experiments/t2sql/roles.toml — step 29: the dev set once per role (--role all). Each run is stored as roles:<role>.
+# `direction` reads everything: it is also the regression check against run 25.
+name = "roles"
+
+[agent]
+use_ontology = true
