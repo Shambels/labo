@@ -22,9 +22,21 @@ exacte d'un nom ou d'un code. validate_sql vérifie une requête, execute_sql l'
 Paie : les montants de salaire ne sont lisibles qu'agrégés (SUM, AVG, COUNT) sur au moins {k} personnes ; pour la
 commission d'un commercial, get_sales_commission.""".format(max_rows=settings.max_rows, k=settings.min_group_size)
 
+UNAVAILABLE = "Cette information n'est pas disponible pour votre rôle."
 READ_ONLY = ToolAnnotations(readOnlyHint=True, destructiveHint=False, idempotentHint=True, openWorldHint=False)
 
 server = MCPServer("calorvia-sources", instructions=INSTRUCTIONS, version="0.2")
+
+
+def _scope(access_token, source):
+    """(tables the caller may see or None for all, None), or (None, a refusal). Cards and value lists hold real data."""
+    role, refused = _caller(access_token)
+    if refused:
+        return None, refused
+    try:
+        return access.allowed_tables(role, source), None
+    except access.AccessDenied:
+        return None, {"ok": False, "error": UNAVAILABLE}
 
 
 def _caller(access_token):
@@ -38,30 +50,34 @@ def _caller(access_token):
 @server.tool(annotations=READ_ONLY)
 def list_sources(access_token: str | None = None) -> list[dict[str, Any]]:
     """Les trois sources : moteur, dialecte SQL, nombre de tables, contenu et période couverte."""
-    _, refused = _caller(access_token)
-    return [refused] if refused else cards.list_sources()
+    role, refused = _caller(access_token)
+    if refused:
+        return [refused]
+    return [s for s in cards.list_sources() if role is None or access.tables_of(role, s["source"])]
 
 
 @server.tool(annotations=READ_ONLY)
 def list_tables(source: str, access_token: str | None = None) -> list[dict[str, Any]]:
     """Les tables d'une source (erp, compta ou paie) avec leur nombre de lignes et leur description."""
-    _, refused = _caller(access_token)
-    if refused:
-        return [refused]
     if source not in cards.SOURCES:
         return [{"error": f"Source inconnue : {source}. Sources : erp, compta, paie."}]
-    return cards.list_tables(source)
+    allowed, refused = _scope(access_token, source)
+    if refused:
+        return [refused]
+    return [t for t in cards.list_tables(source) if allowed is None or t["table"].lower() in allowed]
 
 
 @server.tool(annotations=READ_ONLY)
 def get_table_card(source: str, table: str, access_token: str | None = None) -> dict[str, Any]:
     """La fiche d'une table : description, colonnes et types, clés, nombre de lignes, exemples de valeurs,
     valeurs des colonnes de codes avec leur libellé, colonnes non lisibles. À lire avant d'écrire une requête."""
-    _, refused = _caller(access_token)
-    if refused:
-        return refused
     if source not in cards.SOURCES:
         return {"error": f"Source inconnue : {source}. Sources : erp, compta, paie."}
+    allowed, refused = _scope(access_token, source)
+    if refused:
+        return refused
+    if allowed is not None and table.lower() not in allowed:
+        return {"ok": False, "error": UNAVAILABLE}
     return cards.get_table_card(source, table)
 
 
@@ -70,12 +86,12 @@ def find_values(source: str, value: str, table: str | None = None, column: str |
                 limit: int = 20, access_token: str | None = None) -> dict[str, Any]:
     """Où apparaît une valeur (nom de client, fournisseur, article, numéro de facture, de lot, de TVA...) et
     comment elle s'écrit exactement. Insensible à la casse, aux accents et à la ponctuation ; tolère les fautes."""
-    _, refused = _caller(access_token)
-    if refused:
-        return refused
     if source not in cards.SOURCES:
         return {"error": f"Source inconnue : {source}. Sources : erp, compta, paie."}
-    return values.find_values(source, value, table, column, min(max(limit, 1), 100))
+    allowed, refused = _scope(access_token, source)
+    if refused:
+        return refused
+    return values.find_values(source, value, table, column, min(max(limit, 1), 100), allowed)
 
 
 @server.tool(annotations=READ_ONLY)

@@ -8,7 +8,9 @@ import pytest
 from mcp.client import Client
 
 from text2sql_calorvia import access
-from text2sql_calorvia.agent import tool_schema
+from langchain_core.messages import AIMessage
+
+from text2sql_calorvia.agent import Agent, tool_schema
 from text2sql_calorvia.catalog import describe
 from text2sql_calorvia.execution import execute, run_unvalidated
 from text2sql_calorvia.mcp_server import server
@@ -163,3 +165,48 @@ def test_the_mcp_server_uses_the_role_of_the_token(logins):
     assert anyio.run(call, access.issue_token("finance", "alice"))["ok"]
     assert not anyio.run(call, access.issue_token("commercial", "bob"))["ok"]
     assert not anyio.run(call, "forged.token")["ok"]
+
+
+class OneQuery:
+    """A model that runs one query, then answers."""
+
+    def __init__(self, source, sql):
+        self.replies = [AIMessage("", tool_calls=[{"name": "execute_sql", "args": {"source": source, "sql": sql},
+                                                   "id": "c1", "type": "tool_call"}]), AIMessage("Terminé.")]
+
+    def bind_tools(self, tools):
+        return self
+
+    async def ainvoke(self, messages):
+        return self.replies.pop(0).model_copy(update={"id": None})
+
+
+@pytest.mark.parametrize("role, allowed", [("finance", True), ("commercial", False)])
+def test_the_real_agent_queries_under_the_role_of_its_token(logins, role, allowed):
+    agent = Agent(mcp_target=server, llm=OneQuery("compta", "SELECT COUNT(*) FROM ecriture"), use_memory=False)
+    token = access.issue_token(role, "someone")
+    result = anyio.run(lambda: agent.ask([{"role": "user", "content": "Combien ?"}], "t", access_token=token))
+    assert result["steps"][0]["ok"] is allowed
+
+
+def tool(name, **args):
+    async def call():
+        async with Client(server) as client:
+            return (await client.call_tool(name, args)).structured_content
+    result = anyio.run(call)
+    return result.get("result", result) if isinstance(result, dict) else result
+
+
+def test_a_role_sees_only_its_sources_tables_cards_and_values(logins):
+    commercial, finance = access.issue_token("commercial", "c"), access.issue_token("finance", "f")
+    assert [s["source"] for s in tool("list_sources", access_token=commercial)] == ["erp"]
+    assert tool("list_sources", access_token=access.issue_token("employe", "e")) == []
+    assert "error" in tool("get_table_card", source="compta", table="ecriture", access_token=commercial)
+    assert "columns" in tool("get_table_card", source="compta", table="ecriture", access_token=finance)
+    assert "error" in tool("get_table_card", source="erp", table="ACH_FACT", access_token=commercial)
+    tables = {t["table"] for t in tool("list_tables", source="erp", access_token=commercial)}
+    assert "VTE_FACT" in tables and "ACH_FACT" not in tables
+    assert "error" in tool("find_values", source="compta", value="Distrinergie", access_token=commercial)
+    found = tool("find_values", source="erp", value="Kompra", access_token=commercial)
+    assert found["matches"] == []       # a supplier: commercial doesn't read suppliers or purchases
+    assert tool("find_values", source="erp", value="Distrinergie", access_token=commercial)["matches"]

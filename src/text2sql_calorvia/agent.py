@@ -455,10 +455,10 @@ class Agent:
                     yield node, change
 
     async def ask(self, messages: list[dict], session_id: str | None = None, user: str = "default",
-                  conversation_id: str | None = None) -> dict:
+                  conversation_id: str | None = None, access_token: str | None = None) -> dict:
         """Run to the end; returns {"answer", "steps", "results"} (results: every row of q1, q2...)."""
         steps, answer, results = [], "", {}
-        async for node, change in self.stream(messages, session_id, user, conversation_id):
+        async for node, change in self.stream(messages, session_id, user, conversation_id, access_token):
             if node == "tools":
                 steps, results = change["steps"], change["results"]
             if node == "finish":

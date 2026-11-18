@@ -83,6 +83,15 @@ def check_usable(role: str, source: str) -> None:
         raise AccessDenied(f"La source {source} n'est pas disponible pour votre rôle.")
 
 
+def allowed_tables(role: str | None, source: str) -> set[str] | None:
+    """The tables (lower case) a role may see described in a source; None = no limit (agent_ro, or "*")."""
+    if role is None:
+        return None
+    check_usable(role, source)
+    tables = tables_of(role, source)
+    return None if tables == "*" else {t.lower() for t in tables}
+
+
 def role_of(user: str) -> str:
     """USER_ROLES=alice:finance,webui/bob:rh. Nobody listed gets the default role, which reads no database."""
     assigned = dict(item.strip().split(":", 1) for item in settings.user_roles.split(",") if item.strip())
