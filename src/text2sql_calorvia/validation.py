@@ -43,6 +43,7 @@ class Validation:
     tables: list = field(default_factory=list)
     privacy_check: str | None = None   # payroll: the group-size query to run first (privacy.py)
     warnings: list = field(default_factory=list)   # valid, but probably not what was meant (joins.py)
+    population: tuple | None = None    # payroll: (table, SQL of the rows behind each group), for overlap.py
 
     def as_dict(self):
         return {"ok": self.ok, "errors": self.errors, "sql": self.sql, "tables": self.tables,
@@ -202,12 +203,13 @@ def validate(source, sql, max_rows=None):
     qualified, errors = _qualify(source, tree, tables)
     if errors:
         return Validation(False, errors, tables=tables)
-    privacy_check = None
+    privacy_check = population = None
     if source == "paie":
         try:
             if privacy.check(qualified):
                 privacy_check = privacy.group_size_query(qualified, dialect)
+                population = privacy.population_query(qualified, dialect)
         except privacy.PrivacyError as error:
             return Validation(False, [str(error)], tables=tables)
     return Validation(True, [], _with_limit(source, sql, tree, max_rows), tables, privacy_check,
-                      joins.fan_out_warnings(qualified, foreign_keys(source)))
+                      joins.fan_out_warnings(qualified, foreign_keys(source)), population)

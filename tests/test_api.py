@@ -143,3 +143,71 @@ def test_charts_are_served_by_id_only(tmp_path, monkeypatch):
     assert http.get("/charts/0123456789abcdef.png").status_code == 200
     assert http.get("/charts/..%2F..%2F.env").status_code == 404
     assert http.get("/charts/0123456789abcdeg.png").status_code == 404
+
+
+# Step 24 (D72): keys, and the user they prove
+KEYS = "alice:key-a,bob:key-b,webui:key-w"
+BODY = {"model": settings.agent_model_name, "messages": [{"role": "user", "content": "CA ?"}]}
+
+
+def keyed(agent=None):
+    agent = agent or FakeAgent()
+    return TestClient(create_app(agent, api_keys=KEYS, gateways="webui")), agent
+
+
+def bearer(key):
+    return {"Authorization": f"Bearer {key}"}
+
+
+@pytest.mark.parametrize("headers", [{}, {"Authorization": "Bearer nope"}, {"Authorization": "key-a"}])
+def test_a_key_is_required_once_keys_are_set(headers):
+    http, _ = keyed()
+    assert http.get("/v1/models", headers=headers).status_code == 401
+    assert http.post("/v1/chat/completions", json=BODY, headers=headers).status_code == 401
+    assert http.get("/v1/conversations", headers=headers).status_code == 401
+
+
+def test_the_user_is_the_key_not_what_the_request_says(monkeypatch):
+    monkeypatch.setattr("text2sql_calorvia.memory.conversation_owner", lambda _: None)
+    http, agent = keyed()
+    assert http.post("/v1/chat/completions", json={**BODY, "user": "bob"}, headers={
+        **bearer("key-a"), "X-OpenWebUI-User-Id": "bob"}).status_code == 200
+    assert agent.who[0] == "alice"
+
+
+def test_a_gateway_names_its_end_user_under_its_own_name(monkeypatch):
+    monkeypatch.setattr("text2sql_calorvia.memory.conversation_owner", lambda _: None)
+    http, agent = keyed()
+    http.post("/v1/chat/completions", json=BODY, headers={**bearer("key-w"), "X-OpenWebUI-User-Id": "alice"})
+    assert agent.who[0] == "webui/alice"
+
+
+def test_someone_elses_conversation_is_neither_read_nor_continued(monkeypatch):
+    monkeypatch.setattr("text2sql_calorvia.memory.conversation_owner", lambda _: "bob")
+    monkeypatch.setattr("text2sql_calorvia.memory.conversation", lambda _: [{"role": "user", "content": "secret"}])
+    http, agent = keyed()
+    assert http.get("/v1/conversations/c1", headers=bearer("key-a")).status_code == 404
+    assert http.get("/v1/conversations/c1", headers=bearer("key-b")).status_code == 200
+    http.post("/v1/chat/completions", json=BODY, headers={**bearer("key-a"), "X-Conversation-Id": "c1"})
+    assert agent.who[1] != "c1"
+
+
+def test_the_list_of_conversations_is_the_callers(monkeypatch):
+    seen = []
+    monkeypatch.setattr("text2sql_calorvia.memory.conversations", lambda user, limit: seen.append(user) or [])
+    http, _ = keyed()
+    http.get("/v1/conversations?user=bob", headers=bearer("key-a"))
+    assert seen == ["alice"]
+
+
+def test_the_server_refuses_to_listen_openly_without_keys(monkeypatch):
+    from text2sql_calorvia import api
+    monkeypatch.setattr(api.settings, "api_keys", "")
+    monkeypatch.setattr(api.settings, "agent_host", "0.0.0.0")
+    with pytest.raises(SystemExit, match="API_KEYS"):
+        api.main()
+
+
+def test_a_malformed_key_list_is_refused():
+    with pytest.raises(ValueError, match="name:key"):
+        create_app(FakeAgent(), api_keys="just-a-key")

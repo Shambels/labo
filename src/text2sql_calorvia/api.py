@@ -4,8 +4,11 @@
 
 Step 15: every turn is saved (memory.py), under a conversation id: the X-Conversation-Id header if the client sends
 one, else the id hidden in an earlier answer of the history (<!-- calorvia:conversation=… -->), else a new one. Charts
-are served from /charts/<id>.png; GET /v1/conversations and /v1/conversations/<id> read conversations back. The user
-(for memory) is the request's `user` field, or Open WebUI's X-OpenWebUI-User-Id header, else "default".
+are served from /charts/<id>.png; GET /v1/conversations and /v1/conversations/<id> read conversations back.
+
+Step 24 (auth.py): with API_KEYS set, /v1 needs a key and the user is the key's name. Chart links stay open, since an
+image tag can't send a key: their ids are random. Without keys (local mode) the user is the request's `user` field, or
+Open WebUI's X-OpenWebUI-User-Id header, else "default", and the server only listens on loopback.
 
 Streaming sends the agent's steps as they happen (tool calls, queries, failures) inside a collapsed <details>
 block, then the answer. Open WebUI renders <details> as a fold-out; when a client sends the conversation back, those
@@ -19,11 +22,11 @@ import uuid
 from typing import Any
 
 import uvicorn
-from fastapi import FastAPI, Header, HTTPException
+from fastapi import Depends, FastAPI, Header, HTTPException
 from fastapi.responses import FileResponse, StreamingResponse
 from pydantic import BaseModel
 
-from text2sql_calorvia import memory
+from text2sql_calorvia import auth, memory
 from text2sql_calorvia.agent import Agent, default_agent
 from text2sql_calorvia.config import settings
 
@@ -96,11 +99,22 @@ def describe_step(step: dict) -> str:
     return f"{mark} {tool} " + json.dumps(a, ensure_ascii=False)[:200]
 
 
-def create_app(agent: Agent | None = None) -> FastAPI:
+def create_app(agent: Agent | None = None, api_keys: str | None = None, gateways: str | None = None) -> FastAPI:
     app = FastAPI(title="Calorvia text-to-SQL agent")
     get_agent = (lambda: agent) if agent else default_agent
+    keys = auth.parse_keys(settings.api_keys if api_keys is None else api_keys)
+    trusted = auth.names(settings.trusted_gateways if gateways is None else gateways)
 
-    @app.get("/v1/models")
+    def caller(authorization: str | None = Header(default=None)) -> auth.Caller:
+        found = auth.authenticate(authorization, keys, trusted)
+        if found is None:
+            raise HTTPException(401, "Missing or invalid API key.", {"WWW-Authenticate": "Bearer"})
+        return found
+
+    def may_read(who: auth.Caller, user: str, conversation_id: str) -> bool:
+        return who.name is None or memory.conversation_owner(conversation_id) in (None, user)
+
+    @app.get("/v1/models", dependencies=[Depends(caller)])
     def models():
         return {"object": "list", "data": [{"id": settings.agent_model_name, "object": "model",
                                             "created": 0, "owned_by": "calorvia"}]}
@@ -114,24 +128,30 @@ def create_app(agent: Agent | None = None) -> FastAPI:
         return FileResponse(path, media_type="image/png")
 
     @app.get("/v1/conversations")
-    def list_conversations(user: str = "default", limit: int = 50):
-        return {"object": "list", "data": memory.conversations(user, min(max(limit, 1), 500))}
+    def list_conversations(user: str = "default", limit: int = 50, who: auth.Caller = Depends(caller),
+                           x_openwebui_user_id: str | None = Header(default=None)):
+        owner = auth.user_of(who, user, x_openwebui_user_id)
+        return {"object": "list", "data": memory.conversations(owner, min(max(limit, 1), 500))}
 
     @app.get("/v1/conversations/{conversation_id}")
-    def read_conversation(conversation_id: str):
-        messages = memory.conversation(conversation_id)
+    def read_conversation(conversation_id: str, who: auth.Caller = Depends(caller),
+                          x_openwebui_user_id: str | None = Header(default=None)):
+        user = auth.user_of(who, None, x_openwebui_user_id)
+        messages = memory.conversation(conversation_id) if may_read(who, user, conversation_id) else []
         if not messages:
             raise HTTPException(404, "Unknown conversation.")
         return {"id": conversation_id, "messages": messages}
 
     @app.post("/v1/chat/completions")
     async def chat(request: ChatRequest, x_conversation_id: str | None = Header(default=None),
-                   x_openwebui_user_id: str | None = Header(default=None)):
+                   x_openwebui_user_id: str | None = Header(default=None), who: auth.Caller = Depends(caller)):
         messages = conversation(request.messages)
         completion_id, created = f"chatcmpl-{uuid.uuid4().hex}", int(time.time())
         session_id = completion_id
-        user = request.user or x_openwebui_user_id or "default"
+        user = auth.user_of(who, request.user, x_openwebui_user_id)
         conversation_id = conversation_id_of(request.messages, x_conversation_id) or completion_id
+        if not may_read(who, user, conversation_id):   # someone else's id: this becomes a new conversation
+            conversation_id = completion_id
         marker = f"\n\n<!-- calorvia:conversation={conversation_id} -->"
 
         def save(answer: str, steps: list[dict]):
@@ -190,6 +210,8 @@ app = create_app()
 
 
 def main():
+    if not settings.api_keys and not auth.is_loopback(settings.agent_host):
+        raise SystemExit("API_KEYS is required to listen beyond loopback (AGENT_HOST).")
     uvicorn.run(app, host=settings.agent_host, port=settings.agent_port)
 
 

@@ -120,7 +120,7 @@ def test_payroll_aggregate_over_sites_is_shown(sources):
 
 def test_payroll_aggregate_over_one_person_is_refused(sources):
     r = execute("paie", "SELECT AVG(gross_amount) FROM payslips WHERE employee_id = 'M10405'")
-    assert not r["ok"] and "1 personne" in r["errors"][0]
+    assert not r["ok"] and "désigne une personne" in r["errors"][0]
     assert last_log()[0] == "refused"
 
 
@@ -137,6 +137,33 @@ def test_individual_pay_cannot_be_reached_by_a_detour(sources, sql):   # step 17
     r = execute("paie", sql)
     assert not r["ok"] and "rows" not in r
     assert last_log()[0] == "refused"
+
+
+SITE_AVERAGE = ("SELECT AVG(p.gross_amount) FROM payslips p JOIN contracts c ON c.contract_id = p.contract_id "
+                "JOIN departments d ON d.department_code = c.department_code "
+                "JOIN payroll_runs r ON r.run_id = p.run_id WHERE r.period_month = '{month}' AND r.run_type = 'MENSUEL' "
+                "AND d.site_code = 'HRST'{more}")
+
+
+def test_two_aggregates_cannot_differ_by_a_few_people(sources):   # step 24, D73
+    site = next(row[0] for row in run_unvalidated("paie", "SELECT site_code, COUNT(*) FROM departments GROUP BY 1 "
+                                                          "ORDER BY 2 DESC", max_rows=1)[1])
+    base = SITE_AVERAGE.replace("HRST", site)
+    full = base.format(month="2026-05-01", more="")
+    assert execute("paie", full)["ok"]
+    assert execute("paie", full)["ok"]                                       # the same query again changes nothing
+    assert execute("paie", base.format(month="2026-04-01", more=""))["ok"]   # another month shares no rows
+    _, rows, _ = run_unvalidated("paie", "SELECT MAX(p.gross_amount) FROM payslips p JOIN payroll_runs r USING (run_id) "
+                                         "WHERE r.period_month = '2026-05-01'", max_rows=1)
+    r = execute("paie", base.format(month="2026-05-01", more=f" AND p.gross_amount < {rows[0][0]}"))
+    assert not r["ok"] and "ne diffère d'un calcul précédent" in r["errors"][0]
+    assert last_log()[0] == "refused"
+
+
+def test_every_cost_centre_has_enough_people_on_every_pay_run(sources):   # why accounting needs no rule of its own
+    _, rows, _ = run_unvalidated("paie", "SELECT MIN(n) FROM (SELECT COUNT(DISTINCT employee_id) AS n FROM payslips "
+                                         "GROUP BY run_id, cost_center_code) x", max_rows=1)
+    assert rows[0][0] >= settings.min_group_size
 
 
 def test_a_warning_comes_with_the_rows(sources):   # step 21: the query still runs

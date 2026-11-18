@@ -1574,3 +1574,40 @@ Because the score would then measure fixes made from the test's own answers, the
 
 No: it's the check's last resort working. After one retry the figures still had no support, so they stay visibly marked for the reader. The score only looks at what the question asked, so it stays right, while the reader knows these two side figures aren't verified.
 </details>
+
+## Step 24: before a real deployment
+
+**1.** With API keys on, why is the request's `user` field ignored?
+
+<details><summary>Answer</summary>
+
+Because the client writes it: anyone could claim another name and read that person's memories and conversations, or plant a memory that goes into their prompt. The key proves who is calling, so the user comes from the key. A gateway like Open WebUI is the exception, and its end users are stored as `webui/alice`, so a gateway can't impersonate a direct user `alice`.
+</details>
+
+**2.** `SUM(net)` for everyone, then `SUM(net) WHERE employee_id <> 'X'`. Each covers hundreds of people. What's the problem, and which two defences stop it?
+
+<details><summary>Answer</summary>
+
+The difference of the two totals is X's pay. The **identifier rule** refuses the second query outright. The **overlap guard** catches variants without an identifier, such as a hire-date filter moved by one day: the rows of the two queries differ by few people.
+</details>
+
+**3.** The guard compares rows rather than people. Why does that matter for "gross pay in April" followed by "gross pay in May"?
+
+<details><summary>Answer</summary>
+
+Nearly the same people are paid in both months, so comparing **people** would show a tiny difference and refuse a normal comparison. Their payslip **rows** are entirely different, so the two queries share nothing and pass. A difference of rows is what a subtraction can actually isolate.
+</details>
+
+**4.** Why does `WHERE absence_code = 'ACC'` escape the sickness rule, when an accident is also sensitive?
+
+<details><summary>Answer</summary>
+
+The rule was scoped to sickness, and the course's own question S09 asks how long an accident at work lasted, for what is effectively one case. It's a deliberate, documented boundary: treating accidents as sickness would refuse a question the agent is required to answer. A real deployment should have that decision made by whoever is responsible for the data.
+</details>
+
+**5.** Why do chart links stay open when everything else under the API needs a key?
+
+<details><summary>Answer</summary>
+
+Clients display them through a Markdown image, and an image tag can't send an `Authorization` header. The link itself carries a random 16-hex id, which acts as the secret, and old files are deleted after 30 days. The cost: anyone who obtains the link sees the chart, so charts must never show what the privacy rule protects, and they only draw results that passed it.
+</details>

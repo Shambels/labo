@@ -149,6 +149,9 @@ uv run pytest
 uv run python scripts/run_t2sql_eval.py experiments/t2sql/final.toml             # 33 dev questions, ~11 min
 ```
 
+Beyond this machine, set `API_KEYS=name:key,...` in `.env` first (see `.env.example`): every `/v1` call then needs
+`Authorization: Bearer <key>`, and the server refuses to listen beyond loopback without keys.
+
 In Open WebUI, add `http://127.0.0.1:9000/v1` as an OpenAI connection: the steps unfold live in a fold-out, charts
 show as images, and the queries that ran are listed under every answer.
 

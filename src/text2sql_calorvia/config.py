@@ -44,6 +44,11 @@ class Settings(BaseSettings):
     agent_public_url: str = "http://localhost:9000"   # how a client reaches the endpoint (chart links)
     charts_dir: Path = Path("data/charts")
     max_memories: int = 30            # memories put in the prompt, newest first
+    # Before a real deployment (step 24, D72)
+    api_keys: str = ""                # "name:key,name2:key2"; empty = local mode, loopback only
+    trusted_gateways: str = ""        # names whose key may say which end user is asking (Open WebUI's header)
+    chart_max_age_days: int = 30      # older chart files are deleted when a new chart is drawn
+    overlap_max_rows: int = 200_000   # payroll: rows read to compare what two queries cover
 
     # The course PostgreSQL (5432): every query of the agent is logged there
     postgres_url: str

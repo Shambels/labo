@@ -7,6 +7,8 @@ Two chatbots for the fictional company **Calorvia SA**, built one after the othe
 | **A. RAG** | 393 documents from a shared drive (DOCX, PDF, scans, XLSX, images, HTML, PPTX…) in French, Dutch and English | `enonces/calorvia_rag/laboratoire_calorvia_enonce.md` |
 | **B. Text-to-SQL** | 3 relational databases: the old ERP (SQL Server), accounting and payroll (PostgreSQL) | `enonces/calorvia_t2sql/projet_text2sql_enonce.md` |
 | **C. Improvements** | Both chatbots: what the two reports left open | This roadmap |
+| **D. Role-based access** | Who may see which tables, rows and documents | This roadmap |
+| **E. RAG experiments** | Ideas left open by the RAG report | This roadmap |
 
 Companion file: `QUIZ.md` (one quiz per step, answers collapsed).
 
@@ -88,6 +90,10 @@ Companion file: `QUIZ.md` (one quiz per step, answers collapsed).
 | D69 | Joins that multiply rows | A **warning**, returned with the query's rows, when a joined table references a table already in the query and `COUNT(*)`, or `SUM`/`AVG` of an earlier table's column, reads the multiplied rows (`joins.py`, from the catalog's foreign keys). Not for `COUNT(*)` grouped by the parent | Counting lines can be what was asked, so it can't be a refusal; the model reads the warning and corrects itself (C02) |
 | D70 | Rows in the cards | A table of at most 30 rows, keyed by a code and with several code columns, shows its rows (`mapping_rows`). Only values the card already lists | The separate value lists were read as pairs (X05). Tables keyed by a number (salespeople, suppliers) are records: showing rows would link their identities |
 | D71 | Small figures | Below 1 000, only figures that say what they are: a whole number followed by what it counts, and percentages. Checked against **query results** (cells, row counts, column totals, days between dates, reconciliations) and the client's messages, not the prompt or the cards. Percentages may be a ratio or a change between two result numbers. Same path as D54: one retry, then flagged | A bare small number may be a year or an account; and the prompt and cards hold so many small numbers that "found somewhere" would prove nothing |
+| D72 | Who is calling | `API_KEYS=name:key,...`: `/v1` needs a bearer key, and the user is the key's name; the `user` field is then ignored and conversations are private to it. `TRUSTED_GATEWAYS` lets a shared key (Open WebUI) name its end user, as `gateway/user`. Without keys: local mode, and the server refuses to listen beyond loopback. Chart links stay open, with random ids | Memory was tied to whatever the client claimed. An image tag can't send a key |
+| D73 | Payroll beyond one query | Identifiers only in joins or `COUNT(DISTINCT)`; sickness (`absence_code`, `absence_hours`) follows the salary rules unless the query keeps only other codes; the server remembers the rows behind each aggregate and refuses one that differs from an earlier one by 1–4 people | Differencing was the known gap. Comparing **rows**, not people, lets different months pass, since they share none |
+| D74 | Role-based access | Permissions follow **roles**, not individuals. Enforced by the data layers: one read-only database login per role, row-level security keyed on that login, an `allowed_roles` filter inside the Qdrant search. Denied by default. The payroll rules stay on top | The model must have no way to reach forbidden data. Rewriting its SQL would break D45 and can miss a subquery; a login can't be spoofed by a query |
+| D75 | The roles (was O9) | Ten roles, listed under Phase D: `direction`, `finance`, `rh`, `commercial`, `achats`, `operations`, `qualite`, `responsable_site` (one per site), `it`, `employe` | Your choices: `finance` reads the CODIR minutes; `rh` has no accounting; site managers see absences as aggregates; `commercial` is company-wide; quality is a role of its own |
 | D9 | Porting strategy | Port each hospital_rag module **in the step that needs it** (step 0: config, db, logs; step 3: evaluation; step 4: ETL and RAG) | Nothing unused or untested sits in the repo |
 
 ### Open decisions (to settle with you when we reach them)
@@ -524,12 +530,66 @@ What the two reports left open, none of it started. Order: fix the exposure firs
 - **How far to trust it.** Not comparable with phase B's 13/18 (15/18 by hand): different questions. The set was written by the author of the fixes, knowing them (step 19), so 91 % is an optimistic estimate; the trainer's reserve questions would be the independent test. The set has now been read: it can't measure anything further.
 - **Nothing was changed after reading these answers.**
 
-### ⬜ Step 24. Before any real deployment
-- Authentication on the endpoint, and a verified user behind the learned memory (today, whatever the client says).
-- Clean up old chart files.
-- Payroll: limit comparisons between queries (the remaining differencing limit), one-person cost centres in accounting, a rule for sickness absences.
+### ✅ Step 24. Before any real deployment
+- **Authentication and verified users** (D72). Checked on the live endpoint: no key and a wrong key get 401, the right key 200; a request claiming `user: someone-else` was saved under the key's name.
+- **Old charts:** files named like a chart and older than 30 days (`CHART_MAX_AGE_DAYS`) are deleted when a new chart is drawn. Their old answers lose the image.
+- **Payroll** (D73): filtering out one person (`employee_id <> …`) is refused; so is a second query whose rows differ from an earlier one by 1–4 people, in the trial one more day on a hire-date filter. Sickness can be counted over 5 people or more, never listed per person. S09 (an accident at work) still works.
+- **Accounting cost centres:** no rule needed today: every cost centre has at least 5 people on every pay run, and a test now checks it.
+- **Checked:** of the 90 distinct payroll queries that had succeeded, replayed in order through all the gates, 88 pass. The two refused: a per-code breakdown including sickness, and a count of sick days that differs by a few people from an earlier one. Both are what the rules intend, and the agent can answer without them. The 60 attacks of step 17: same result, 59 refused and the harmless `SELECT 1`.
+- **No regression** (run 22, dev, commit `dcf3b82`): **31/33**, same misses (S02, S03), no leak. Its one refused query is a mistyped column in S04, corrected at once. The sealed set was **not** run again: its 29/32 describes the agent before this step.
+- **Limits:** a refusal against an answer still says something; the memory of past queries is bounded and lost on restart, so waiting or restarting escapes it; hours worked aren't treated as health data; keys are plain values in `.env`, with no rotation or rate limit; there is no TLS, so anything beyond loopback needs a reverse proxy.
+- **Tests: 26 new** (484 in all).
 
-### ⬜ Step 25. RAG experiments (one run each, judged on the targeted types)
+---
+
+## Phase D: role-based access
+
+Design: D74. Requires step 24's API keys (the key gives the user, the user gives the role). None of it is started.
+
+### The roles (D75)
+
+Every role also gets the documents of `employe`. Salaries stay aggregated over at least 5 people for every role, `direction` and `rh` included.
+
+| Role | ERP | Accounting | Payroll | Documents | Rows |
+|---|---|---|---|---|---|
+| `direction` | all | all | all | every indexed folder | all |
+| `finance` | sales and purchase invoices, customers, suppliers, articles, sites | all | pay runs, payslips, pay lines, pay elements, cost centres | `01_Finance`, `00_Direction/CODIR` | all |
+| `rh` | salespeople only | none | all | `02_RH`, including `Confidentiel` | all |
+| `commercial` | sales orders and invoices, customers, salespeople, articles, prices, shipments | none | none | `05_Commercial`, `04_Qualite/Reclamations` | all |
+| `achats` | purchase orders, invoices and receipts, suppliers, articles, stock | none | none | `06_Achats` | all |
+| `operations` | production, bills of materials, stock, articles, receipts, shipments | none | none | `03_Production` | all |
+| `qualite` | production, receipts, stock movements, articles, suppliers, shipments | none | none | `04_Qualite` | all |
+| `responsable_site` (one per site: Gand, Seneffe, Namur, Herstal) | production, stock, receipts, shipments, purchase orders | none | contracts, departments, timesheets (absences as aggregates only) | `03_Production/<site>` where it exists, `03_Production/Procedures` | own site |
+| `it` | none | none | none | `07_IT` | – |
+| `employe` (default) | none | none | none | `09_Communication`, `10_RSE`, `02_RH/Politiques`, `02_RH/Notes_de_service`, `02_RH/Formation`, `02_RH/Organigrammes` | – |
+
+Left to `direction` alone: `08_Juridique` and `00_Direction`, apart from the CODIR minutes that `finance` also reads. `02_RH/Confidentiel` is shared by `direction` and `rh` only. The annual reviews stay out of the index for everyone (D12).
+
+### ⬜ Step 25. Policy file and role logins
+- The approved roles in one versioned policy file; a script generates the logins and grants (PostgreSQL, SQL Server), outside the course files. The key's user maps to a role; the API passes it to the MCP server in a signed, short-lived token, never through the model.
+- `connect(source, role)`; tests sending forbidden statements directly under each login, as `test_sources.py` does.
+
+### ⬜ Step 26. Everything the model sees, per role
+- Cache schema, foreign keys, table cards and `find_values` per role. Filter the prompt's table index and metrics. The query log records user and role.
+- A forbidden table reads as unavailable: the answer doesn't confirm that it exists.
+
+### ⬜ Step 27. Row-level security
+- PostgreSQL RLS and SQL Server security policies, on `current_user` against a mapping table. Tables without a site column (invoice lines, payslip lines) are reached through their parent.
+- Site codes differ between sources (`GENT` in payroll, `GND` in the ERP and accounting): one mapping.
+
+### ⬜ Step 28. Documents
+- `allowed_roles` in the registry and in each chunk's payload, from the policy file; a filter inside every search prefetch, like `status_filter`; no rule means invisible.
+- Identical files kept once (D11): permissions computed over every copy. Per-role workbook stores for the RAG's SQL tools; `image_bytes` checks the role; a login on `app/chat.py`.
+
+### ⬜ Step 29. Closing the gaps and proving it
+- Signed, expiring chart links. Marker values planted per role must never reach another role's answers.
+- The evaluation run once per role, and the access matrix in the report.
+
+---
+
+## Phase E: RAG experiments
+
+### ⬜ Step 30. RAG experiments (one run each, judged on the targeted types)
 - CODIR actions and decisions in PostgreSQL, for `action_tracking`.
 - Rerank each chunk against the question in the chunk's language (Q024).
 - A glossary for query translation ("chariots élévateurs" → "heftrucks").
@@ -589,3 +649,7 @@ What the two reports left open, none of it started. Order: fix the exposure firs
 | 2026-11-18 | 22 | Branch `improve/step-22-grounding`: counts and percentages below 1 000 checked against query results (D71); no false alarm in 86 stored answers after two evidence fixes; dev 31/33 (run 19) |
 | 2026-11-18 | – | Step 22 merged, pushed |
 | 2026-11-18 | 23 | Branch `improve/step-23-final`: dev 31/33, sealed set run once, 29/32 (one confidently wrong: N08) |
+| 2026-11-18 | – | Step 23 merged, pushed |
+| 2026-11-18 | 24 | Branch `improve/step-24-deployment`: API keys and verified users (D72), chart cleanup, payroll identifiers, sickness rule, overlap between queries (D73); dev 31/33 (run 22) |
+| 2026-11-18 | – | Phase D (role-based access, steps 25–29) added, roles proposed for approval; the RAG experiments moved to Phase E (step 30) |
+| 2026-11-18 | – | Roles approved (D75). Step 24 merged, pushed |
