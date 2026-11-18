@@ -16,6 +16,7 @@ from decimal import Decimal
 import psycopg
 import pymssql
 
+from text2sql_calorvia import overlap
 from text2sql_calorvia.config import settings
 from text2sql_calorvia.sources import SOURCES, connect, load_sql
 from text2sql_calorvia.validation import validate
@@ -114,6 +115,22 @@ def _db_message(error):
     return str(error).splitlines()[0]
 
 
+def _overlap_refusal(source, population):
+    """A refusal if these rows differ from an earlier aggregate's by too few people (overlap.py, D73)."""
+    table, sql = population
+    _, rows, truncated = run_unvalidated(source, sql, max_rows=settings.overlap_max_rows)
+    if truncated:
+        return "Règle de confidentialité : trop de lignes pour vérifier ce calcul. Restreignez la période."
+    groups = {}
+    for *key, row_id, person in rows:
+        groups.setdefault(tuple(key), {})[row_id] = person
+    people = overlap.guard.admit(table, list(groups.values()), settings.min_group_size)
+    if people is None:
+        return None
+    return (f"Règle de confidentialité : ce calcul ne diffère d'un calcul précédent que par {people} personne(s) "
+            f"(minimum {settings.min_group_size}) : la comparaison montrerait leur montant. Élargissez le périmètre.")
+
+
 def execute(source, sql, question=None, max_rows=None, session_id=None, tool="execute_sql"):
     """Validate, check the payroll rule, run, log. Returns a dict for the model, never raises on a bad query."""
     max_rows = max_rows or settings.max_rows
@@ -133,6 +150,9 @@ def execute(source, sql, question=None, max_rows=None, session_id=None, tool="ex
                 message = (f"Règle de confidentialité : un groupe du résultat ne compte que {smallest} personne(s) "
                            f"(minimum {settings.min_group_size}). Élargissez les groupes ou retirez le filtre "
                            "qui isole des personnes.")
+                log_finish(log_id, "refused", validation.sql, message, ms())
+                return {"ok": False, "source": source, "errors": [message]}
+            if (message := _overlap_refusal(source, validation.population)):
                 log_finish(log_id, "refused", validation.sql, message, ms())
                 return {"ok": False, "source": source, "errors": [message]}
         columns, rows, truncated = run_unvalidated(source, validation.sql, max_rows)

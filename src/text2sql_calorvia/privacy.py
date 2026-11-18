@@ -13,14 +13,21 @@ may contain is listed, everything else is refused (step 17: a list of forbidden 
 5. Before running the query, `group_size_query` counts, for every table a salary is read from, the distinct people
    behind each group, ignoring HAVING and the rows whose aggregated amount is NULL or 0. The query is refused if one
    group has fewer than `min_group_size` people.
+6. Identifiers of people and of their rows (staff number, name, payslip...) only join tables or sit inside
+   COUNT(DISTINCT ...): `WHERE employee_id <> 'X'` would make a difference of two totals one person's pay (D73).
+7. `population_query` lists the rows behind each group; overlap.py refuses a query whose rows differ from an earlier
+   query's by fewer than `min_group_size` people.
+
+Sickness is health data and follows the same rules (D73): a query reading `timesheets.absence_code` or `absence_hours`,
+unless it is restricted to absence codes other than sickness (an accident at work, a training day: S09 asks for one).
 
 The one individual figure a business question needs (a salesperson's commission, derived from their ERP sales)
 has its own narrow tool instead of an exception in this rule.
 
-Known limits: two allowed queries can still be compared (groups differing by one person, or a refusal against an
-answer, tell something about that person); payroll is the only source checked (the accounting's monthly SAL entries
-per cost centre are already aggregates, but a cost centre of one person would show that person's cost); absences
-(sickness) are health data and are not covered by this rule.
+Known limits: a refusal against an answer still tells something; the memory of past queries is bounded and lost on a
+restart; hours worked are not treated as health data; accident codes are readable per person by aggregate rules only
+when the query is not restricted to them. Payroll is the only source checked: the accounting's SAL entries per cost
+centre are aggregates, and every cost centre has at least 5 people on every pay run (tested, not enforced).
 """
 import sqlglot
 from sqlglot import exp
@@ -35,8 +42,17 @@ SENSITIVE = {
 PERSONAL = {
     "employees": {"last_name", "first_name", "birth_date", "postal_code", "city", "work_email", "exit_reason"},
 }
-# Salary tables that carry the person directly; payslip_lines reaches it through its payslip
-PERSON_TABLES = {"payslips", "salary_history"}
+# Health data (D73): read like a salary, unless the query keeps only absence codes other than sickness
+HEALTH = {"timesheets": {"absence_code", "absence_hours"}}
+HEALTH_CODES = {"MAL", "MAL_MUT"}
+TEXT_COLUMNS = {"absence_code"}
+# Tables that carry the person directly; payslip_lines reaches it through its payslip
+PERSON_TABLES = {"payslips", "salary_history", "timesheets"}
+ROW_KEYS = {"payslips": "payslip_id", "salary_history": "salary_id", "payslip_lines": "line_id",
+            "timesheets": "timesheet_id"}
+# Columns that point at one person or one of their rows
+IDENTIFIERS = {"employee_id", "last_name", "first_name", "work_email", "birth_date", "manager_id", "head_employee_id",
+               "payslip_id", "line_id", "salary_id", "timesheet_id", "contract_id"}
 ALLOWED_AGGREGATES = (exp.Sum, exp.Avg, exp.Count)
 # What an aggregate's argument may be made of: no CASE, comparison or function that could select rows
 PLAIN_ARGUMENT = (exp.Column, exp.Identifier, exp.Literal, exp.Star, exp.Distinct, exp.Paren, exp.Cast, exp.DataType,
@@ -61,15 +77,34 @@ def _base_tables(select):
     return tables
 
 
+def _without_sickness(select) -> bool:
+    """The query keeps only absence codes that are not sickness (`absence_code = 'ACC'`, `IN ('CONG', 'FORM')`)."""
+    where = select.args.get("where")
+    for condition in conjuncts(where.this) if where is not None else []:
+        if isinstance(condition, exp.EQ):
+            column, values = condition.left, [condition.right]
+        elif isinstance(condition, exp.In):
+            column, values = condition.this, condition.expressions
+        else:
+            continue
+        if isinstance(column, exp.Column) and column.name.lower() == "absence_code" and values \
+                and all(isinstance(v, exp.Literal) and v.is_string and v.this not in HEALTH_CODES for v in values):
+            return True
+    return False
+
+
 def sensitive_columns(tree):
-    """The salary columns a (qualified) query reads, as (column node, table name)."""
+    """The salary and health columns a (qualified) query reads, as (column node, table name)."""
     found = []
     for column in tree.find_all(exp.Column):
         select = column.find_ancestor(exp.Select)
         if select is None:
             continue
         table = _base_tables(select).get(column.table.lower())
-        if table in SENSITIVE and column.name.lower() in SENSITIVE[table]:
+        name = column.name.lower()
+        if table in SENSITIVE and name in SENSITIVE[table]:
+            found.append((column, table))
+        elif table in HEALTH and name in HEALTH[table] and not _without_sickness(select):
             found.append((column, table))
     return found
 
@@ -88,6 +123,26 @@ def _check_row_references(tree):
     if tree.find(exp.TableColumn) is not None or star is not None:
         raise PrivacyError("Règle de confidentialité de la paie : une ligne entière (alias de table utilisé comme "
                            "valeur, row_to_json, p.*) n'est pas permise. Nommez les colonnes.")
+
+
+def _check_identifiers(tree):
+    """Identifiers may link tables (a = b) or be counted; a filter or a group on them singles people out."""
+    links = set()
+    conditions = [j.args["on"] for j in tree.args.get("joins") or [] if j.args.get("on") is not None]
+    if tree.args.get("where") is not None:
+        conditions.append(tree.args["where"].this)
+    for condition in (c for top in conditions for c in conjuncts(top)):
+        if isinstance(condition, exp.EQ) and isinstance(condition.left, exp.Column) \
+                and isinstance(condition.right, exp.Column):
+            links |= {id(condition.left), id(condition.right)}
+    for column in tree.find_all(exp.Column):
+        if column.name.lower() not in IDENTIFIERS or id(column) in links:
+            continue
+        count = column.find_ancestor(exp.Count)
+        if count is None or not isinstance(count.this, exp.Distinct):
+            raise PrivacyError(f"Règle de confidentialité : {column.name} désigne une personne ou une de ses lignes. "
+                               "Dans une requête sur les salaires ou la maladie, il sert seulement aux jointures "
+                               f"(a = b) ou dans COUNT(DISTINCT ...). Montant {RULE}")
 
 
 def _check_functions(tree):
@@ -139,15 +194,21 @@ def check(tree):
                            "montant par personne. Utilisez GROUP BY.")
     if tree.find(exp.Filter) is not None:
         raise PrivacyError(f"Règle de confidentialité : pas de FILTER sur une requête de salaires. Montant {RULE}")
+    group = tree.args.get("group")
+    if group is not None and (any(group.args.get(k) for k in ("rollup", "cube", "grouping_sets"))
+                              or group.find(exp.Rollup, exp.Cube, exp.GroupingSets) is not None):
+        raise PrivacyError(f"Règle de confidentialité : pas de ROLLUP, CUBE ni GROUPING SETS. Montant {RULE}")
     _check_functions(tree)
     _check_aggregate_arguments(tree)
     for column, table in found:
         if column.find_ancestor(exp.Where) is None and column.find_ancestor(exp.AggFunc) is None:
             raise PrivacyError(
-                f"Règle de confidentialité : {table}.{column.name} est un montant individuel. Il ne peut "
+                f"Règle de confidentialité : {table}.{column.name} est "
+                f"{'une donnée de santé individuelle' if table in HEALTH else 'un montant individuel'}. Il ne peut "
                 f"apparaître qu'{RULE} Pour la commission d'un commercial, utilisez l'outil get_sales_commission.")
     if tree.args.get("where") is not None:
         _check_filter(tree.args["where"], {id(column) for column, _ in found})
+    _check_identifiers(tree)
     if tree.args.get("group") is None and not any(e.find(exp.AggFunc) for e in tree.expressions):
         raise PrivacyError("Règle de confidentialité : une requête filtrée sur un salaire ne renvoie pas de lignes "
                            f"individuelles. Montant {RULE}")
@@ -187,7 +248,7 @@ def group_size_query(tree, dialect):
     for column, table in sensitive_columns(tree):
         alias = column.table.lower()
         count = f"COUNT(DISTINCT {_person_of(tree, alias, table, tables)})"
-        if column.find_ancestor(exp.AggFunc) is not None:
+        if column.find_ancestor(exp.AggFunc) is not None and column.name.lower() not in TEXT_COLUMNS:
             count += f" FILTER (WHERE {alias}.{column.name} <> 0)"
         if count not in counts:
             counts.append(count)
@@ -197,3 +258,22 @@ def group_size_query(tree, dialect):
         inner.set(key, None)
     inner.set("expressions", [exp.alias_(sqlglot.parse_one(people, read="postgres"), "n_people")])
     return sqlglot.select("MIN(n_people)").from_(inner.subquery("g")).sql(dialect)
+
+
+def population_query(tree, dialect):
+    """The rows behind each group of `tree`, for overlap.py: (table, SQL returning group values, row id, person)."""
+    tables = _base_tables(tree)
+    found = sensitive_columns(tree)
+    column, table = next(((c, t) for c, t in found if c.find_ancestor(exp.AggFunc) is not None), found[0])
+    alias = column.table.lower()
+    group = tree.args.get("group")
+    keys = [e.copy() for e in group.expressions] if group is not None else []
+    inner = tree.copy()
+    for key in ("group", "having", "order", "limit", "offset"):
+        inner.set(key, None)
+    inner.set("distinct", exp.Distinct())
+    inner.set("expressions", [
+        *(exp.alias_(e, f"g{i}") for i, e in enumerate(keys)),
+        exp.alias_(exp.column(ROW_KEYS[table], table=alias), "row_id"),
+        exp.alias_(sqlglot.parse_one(_person_of(tree, alias, table, tables), read="postgres"), "person_id")])
+    return table, inner.sql(dialect)

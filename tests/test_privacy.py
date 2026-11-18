@@ -8,11 +8,13 @@ from text2sql_calorvia import privacy
 SCHEMA = {"public": {
     "payslips": {"payslip_id": "int", "employee_id": "text", "run_id": "int", "contract_id": "int",
                  "gross_amount": "numeric", "net_amount": "numeric"},
-    "payslip_lines": {"payslip_id": "int", "element_code": "text", "amount": "numeric"},
+    "payslip_lines": {"line_id": "int", "payslip_id": "int", "element_code": "text", "amount": "numeric"},
     "contracts": {"contract_id": "int", "employee_id": "text", "department_code": "text"},
     "departments": {"department_code": "text", "site_code": "text"},
     "employees": {"employee_id": "text", "last_name": "text"},
-    "salary_history": {"employee_id": "text", "monthly_gross": "numeric", "hourly_rate": "numeric"},
+    "salary_history": {"salary_id": "int", "employee_id": "text", "monthly_gross": "numeric", "hourly_rate": "numeric"},
+    "timesheets": {"timesheet_id": "int", "employee_id": "text", "work_date": "date", "absence_code": "text",
+                   "absence_hours": "numeric", "work_location": "text"},
 }}
 
 
@@ -155,13 +157,12 @@ def people_counted(sql):
 
 
 def test_people_are_counted_on_the_table_the_salary_comes_from():
-    sql = people_counted("SELECT AVG(s.monthly_gross) FROM payslips p JOIN salary_history s ON s.employee_id = 'X'")
+    sql = people_counted("SELECT AVG(s.monthly_gross) FROM payslips p CROSS JOIN salary_history s")
     assert "COUNT(DISTINCT s.employee_id)" in sql and "p.employee_id" not in sql
 
 
 def test_every_salary_table_of_a_query_is_counted():
-    sql = people_counted("SELECT SUM(p.net_amount), SUM(q.net_amount) FROM payslips p "
-                         "JOIN payslips q ON q.employee_id = 'X'")
+    sql = people_counted("SELECT SUM(p.net_amount), SUM(q.net_amount) FROM payslips p CROSS JOIN payslips q")
     assert "LEAST(" in sql and "DISTINCT p.employee_id" in sql and "DISTINCT q.employee_id" in sql
 
 
@@ -171,9 +172,9 @@ def test_rows_adding_nothing_to_an_aggregate_are_not_people():
 
 
 def test_having_cannot_hide_a_group_of_one():
-    sql = people_counted("SELECT p.employee_id, COUNT(*) FROM payslips p WHERE p.net_amount > 0 "
-                         "GROUP BY p.employee_id HAVING SUM(p.net_amount) > 1000000")
-    assert "HAVING" not in sql and "GROUP BY p.employee_id" in sql
+    sql = people_counted("SELECT p.run_id, COUNT(*) FROM payslips p WHERE p.net_amount > 0 "
+                         "GROUP BY p.run_id HAVING SUM(p.net_amount) > 1000000")
+    assert "HAVING" not in sql and "GROUP BY p.run_id" in sql
 
 
 def test_payslip_lines_count_the_people_of_their_payslip():
@@ -181,9 +182,57 @@ def test_payslip_lines_count_the_people_of_their_payslip():
     assert "COUNT(DISTINCT p.employee_id)" in sql
 
 
-@pytest.mark.parametrize("join", ["ON l.payslip_id = 1", "ON l.payslip_id = p.payslip_id OR l.payslip_id = 1"])
-def test_payslip_lines_must_really_be_tied_to_their_payslip(join):
-    tree = qualified(f"SELECT SUM(l.amount) FROM payslips p JOIN payslip_lines l {join}")
+def test_payslip_lines_must_be_joined_to_their_payslip():
+    tree = qualified("SELECT SUM(l.amount) FROM payslips p CROSS JOIN payslip_lines l")
     assert privacy.check(tree) is True
     with pytest.raises(privacy.PrivacyError, match="jointe à payslips"):
         privacy.group_size_query(tree, "postgres")
+
+
+# Step 24 (D73): identifiers, sickness, what two queries cover
+@pytest.mark.parametrize("sql", [
+    "SELECT SUM(p.net_amount) FROM payslips p WHERE p.employee_id <> 'X'",
+    "SELECT SUM(p.net_amount) FROM payslips p WHERE p.employee_id NOT IN ('X', 'Y')",
+    "SELECT SUM(p.net_amount) FROM payslips p WHERE p.payslip_id > 10",
+    "SELECT e.last_name, SUM(p.net_amount) FROM payslips p JOIN employees e ON e.employee_id = p.employee_id "
+    "GROUP BY e.last_name",
+    "SELECT SUM(p.net_amount) FROM payslips p JOIN employees e ON e.employee_id = p.employee_id AND e.last_name <> 'X'",
+    "SELECT AVG(s.monthly_gross) FROM payslips p JOIN salary_history s ON s.employee_id = 'X'",
+    "SELECT SUM(l.amount) FROM payslips p JOIN payslip_lines l ON l.payslip_id = 1",
+    "SELECT COUNT(*) FROM timesheets t WHERE t.absence_code = 'MAL' AND t.employee_id = 'X'",
+])
+def test_identifiers_only_link_tables_or_are_counted(sql):
+    with pytest.raises(privacy.PrivacyError, match="désigne une personne"):
+        privacy.check(qualified(sql))
+
+
+def test_rollups_are_refused():
+    with pytest.raises(privacy.PrivacyError, match="ROLLUP"):
+        privacy.check(qualified("SELECT p.run_id, SUM(p.net_amount) FROM payslips p GROUP BY ROLLUP (p.run_id)"))
+
+
+@pytest.mark.parametrize("sql", [
+    "SELECT t.employee_id, t.work_date FROM timesheets t WHERE t.absence_code = 'MAL'",
+    "SELECT t.employee_id FROM timesheets t WHERE t.absence_code IN ('MAL', 'CONG')",
+    "SELECT e.last_name, t.absence_code FROM timesheets t JOIN employees e ON e.employee_id = t.employee_id",
+    "SELECT t.work_date FROM timesheets t WHERE t.absence_hours > 0",
+])
+def test_sickness_is_not_listed_per_person(sql):
+    with pytest.raises(privacy.PrivacyError, match="Règle de confidentialité"):
+        privacy.check(qualified(sql))
+
+
+def test_sickness_can_be_counted_and_other_absences_read():
+    assert "COUNT(DISTINCT t.employee_id)" in people_counted(
+        "SELECT COUNT(*) FROM timesheets t WHERE t.absence_code IN ('MAL', 'MAL_MUT')")
+    assert privacy.check(qualified("SELECT t.work_date FROM timesheets t WHERE t.absence_code = 'ACC'")) is False
+    assert privacy.check(qualified("SELECT t.work_date FROM timesheets t WHERE t.work_location = 'TELE'")) is False
+
+
+def test_the_population_query_lists_rows_and_people_per_group():
+    tree = qualified("SELECT p.run_id, SUM(p.net_amount) FROM payslips p WHERE p.net_amount > 0 GROUP BY p.run_id "
+                     "HAVING SUM(p.net_amount) > 0 ORDER BY 2 LIMIT 3")
+    assert privacy.check(tree)
+    table, sql = privacy.population_query(tree, "postgres")
+    assert table == "payslips" and sql.startswith("SELECT DISTINCT p.run_id AS g0, p.payslip_id AS row_id")
+    assert "p.employee_id AS person_id" in sql and not any(w in sql for w in ("GROUP BY", "HAVING", "LIMIT"))

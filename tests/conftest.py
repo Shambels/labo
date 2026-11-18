@@ -33,3 +33,10 @@ def sources():
         pytest.skip(f"sources not running: {', '.join(down)}")
     if not _log_up():
         pytest.skip("the logging PostgreSQL (5432) is not running")
+
+
+@pytest.fixture(autouse=True)
+def forget_payroll_queries():
+    """The server's memory of payroll aggregates (overlap.py) must not carry from one test to the next."""
+    from text2sql_calorvia.overlap import guard
+    guard.clear()

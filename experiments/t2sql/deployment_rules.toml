@@ -1,0 +1,7 @@
+# experiments/t2sql/deployment_rules.toml — step 24 (D72, D73): API keys (not used by the evaluation, which calls the
+# agent directly), and the stricter payroll rules: identifiers, sickness, overlap between queries. Regression against
+# phase_c (run 20).
+name = "deployment_rules"
+
+[agent]
+use_ontology = true
