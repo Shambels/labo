@@ -1685,3 +1685,40 @@ It can't compute it, so the offer would be both useless and a hint about data ou
 
 From fixed sentences of the prompt: examples such as "facturé dans l'ERP ou comptabilisé". The filtering handled the generated lists, and the tests checked those. Reading real answers showed what the tests hadn't thought of; a test now checks the whole prompt and tool text per role.
 </details>
+
+## Step 27: row-level security
+
+**1.** Why enforce "only my site" in the database rather than add `WHERE site = ...` to the agent's SQL?
+
+<details><summary>Answer</summary>
+
+A rewrite must find every table in every subquery, CTE and join, and it would break D45 (what runs is what the model wrote). A row policy applies to each read of the table, whatever the query looks like, and depends on the login, which the query can't change.
+</details>
+
+**2.** Enabling row-level security on a PostgreSQL table denies everything without a policy. How did the other logins keep their rows?
+
+<details><summary>Answer</summary>
+
+A permissive policy `everyone_else` lets any login whose name isn't a site login through; the `site_rows` policy applies only to the site logins. Permissive policies are combined with OR. Giving the mapping-table subquery only to `site_rows` also means other logins don't need access to that table.
+</details>
+
+**3.** Why does a timesheet's site come from the contract running on its date, not the employee's current contract?
+
+<details><summary>Answer</summary>
+
+Two people changed department. Their past days belong to the site where they worked then. Using the current contract would move history from one manager to another.
+</details>
+
+**4.** Why must cards and value search be built per site role, when the query path is already limited?
+
+<details><summary>Answer</summary>
+
+They were built once as `agent_ro`, with all sites' example values, code lists and row counts. Same lesson as step 25: every route by which data reaches the model has to follow the limit.
+</details>
+
+**5.** Adding the `access_control` schema broke `agent_ro`'s catalog at first. Why?
+
+<details><summary>Answer</summary>
+
+The catalog listed every user schema, so it found `role_site` and tried to count its rows without permission. Security objects live beside the data but aren't part of what the agent should describe, so the catalog now skips that schema.
+</details>
