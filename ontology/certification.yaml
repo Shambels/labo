@@ -327,43 +327,56 @@ metrics:
 # answer left out: a word the model takes for clear (it has a metric for it) never triggers a prompt rule.
 # `patterns` find the word in the question (lower case, no accents). `names` are how a reading is written: found in
 # the question they settle the reading (no note); found in the answer they mean the answer already covers it.
+# `source` is where a reading is computed: a role that can't read it isn't offered it (step 26).
 business_words:
   - word: chiffre d'affaires
     patterns: ["\\bchiffres? d'affaires\\b"]
     readings:
       - label: chiffre d'affaires net facturé (ERP)
+        source: erp
         names: [factur, erp]
       - label: chiffre d'affaires comptabilisé (comptes 70)
+        source: compta
         names: [comptabilis, comptable, comptabilite, journal, comptes 70]
   - word: résultat
     patterns: ["\\bresultat\\b"]
     readings:
       - label: résultat net
+        source: compta
         names: [resultat net]
       - label: EBITDA
+        source: compta
         names: [ebitda]
       - label: résultat d'exploitation
+        source: compta
         names: ["resultat d'exploitation", resultat operationnel]
   - word: effectif
     patterns: ["\\beffectifs?\\b", "combien de personnes travaillent"]
     readings:
       - label: personnes sous contrat à une date
+        source: paie
         names: [sous contrat]
       - label: personnes payées sur la paie du mois
+        source: paie
         names: [fiche de paie, fiches de paie, paie du mois, payees]
       - label: équivalents temps plein
+        source: paie
         names: [temps plein, etp]
   - word: coût du personnel
     patterns: ["\\bcout du personnel\\b", "\\bcoute (le|notre) personnel\\b"]
     readings:
       - label: charges de rémunération en comptabilité (comptes 62)
+        source: compta
         names: [comptes 62, compte 62, comptabilis, comptable, comptabilite]
       - label: brut et ONSS patronale de la paie
+        source: paie
         names: [brut, onss, paie]
   - word: meilleurs produits
     patterns: ["\\bmeilleurs? produits?\\b"]
     readings:
       - label: classement par chiffre d'affaires
+        source: erp
         names: ["chiffre d'affaires"]
       - label: classement par unités vendues
+        source: erp
         names: [unites, quantite]

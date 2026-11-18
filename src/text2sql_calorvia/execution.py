@@ -37,9 +37,10 @@ def create_log_table():
         conn.execute(load_sql("log/schema"))
 
 
-def log_start(tool, source, question, sql, session_id=None):
+def log_start(tool, source, question, sql, session_id=None, user=None, role=None):
     with log_connect() as conn:
-        return conn.execute(load_sql("log/start"), (tool, source, question, sql, session_id)).fetchone()[0]
+        return conn.execute(load_sql("log/start"),
+                            (tool, source, question, sql, session_id, user, role)).fetchone()[0]
 
 
 def log_finish(log_id, status, sql_executed=None, error=None, duration_ms=None, row_count=None, truncated=None):
@@ -131,14 +132,14 @@ def _overlap_refusal(source, population, role=None):
             f"(minimum {settings.min_group_size}) : la comparaison montrerait leur montant. Élargissez le périmètre.")
 
 
-def execute(source, sql, question=None, max_rows=None, session_id=None, tool="execute_sql", role=None):
+def execute(source, sql, question=None, max_rows=None, session_id=None, tool="execute_sql", role=None, user=None):
     """Validate, check the payroll rule, run, log. Returns a dict for the model, never raises on a bad query."""
     max_rows = max_rows or settings.max_rows
-    log_id = log_start(tool, source, question, sql, session_id)
+    log_id = log_start(tool, source, question, sql, session_id, user, role)
     start = time.perf_counter()
     ms = lambda: round((time.perf_counter() - start) * 1000, 1)  # noqa: E731
 
-    validation = validate(source, sql, max_rows)
+    validation = validate(source, sql, max_rows, role)
     if not validation.ok:
         log_finish(log_id, "refused", error=" | ".join(validation.errors), duration_ms=ms())
         return {"ok": False, "source": source, "errors": validation.errors}

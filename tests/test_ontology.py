@@ -50,4 +50,4 @@ def test_a_question_without_such_a_word_gets_no_note():
 def test_every_reading_of_a_business_word_is_usable():
     for word in ontology.load()["business_words"]:
         assert len(word["readings"]) >= 2 and word["patterns"]
-        assert all(r["label"] and r["names"] for r in word["readings"])
+        assert all(r["label"] and r["names"] and r["source"] in {"erp", "compta", "paie"} for r in word["readings"])

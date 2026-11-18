@@ -25,7 +25,7 @@ def _bind(sql, *params):
     return sql % tuple(f"'{p}'" for p in params)
 
 
-def get_sales_commission(staff_number, month, question=None, session_id=None, role=None):
+def get_sales_commission(staff_number, month, question=None, session_id=None, role=None, user=None):
     """The commission on a salesperson's payslip for a month ('2026-03'), with the sales it was computed on.
 
     staff_number: as the ERP writes it (10405) or as payroll does (M10405).
@@ -34,7 +34,8 @@ def get_sales_commission(staff_number, month, question=None, session_id=None, ro
     digits = match.group(1) if match else None
     if not digits or not re.fullmatch(r"\d{4}-\d{2}", str(month)):
         return {"ok": False, "errors": ["Paramètres attendus : un matricule (10405 ou M10405) et un mois AAAA-MM."]}
-    log_id = log_start("get_sales_commission", "erp+paie", question, f"staff_number={digits} month={month}", session_id)
+    log_id = log_start("get_sales_commission", "erp+paie", question, f"staff_number={digits} month={month}", session_id,
+                       user, role)
     start = time.perf_counter()
     _, seller, _ = run_unvalidated("erp", _bind(ERP_SALESPERSON, digits), max_rows=1, role=role)
     if not seller:

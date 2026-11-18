@@ -14,6 +14,7 @@ import json
 import time
 from functools import cache
 from pathlib import Path
+from typing import NamedTuple
 
 import yaml
 
@@ -24,6 +25,11 @@ LOGIN_PREFIX = "agent_r_"
 DEFAULT_ROLE = "employe"
 TOKEN_SECONDS = 900              # one question, including a long cross-source one
 ROW_SECURITY_READY = False       # step 27: until then the roles limited to a site are refused
+
+
+class Identity(NamedTuple):
+    role: str
+    user: str
 
 
 class AccessDenied(ValueError):
@@ -92,6 +98,20 @@ def allowed_tables(role: str | None, source: str) -> set[str] | None:
     return None if tables == "*" else {t.lower() for t in tables}
 
 
+def readable_sources(role: str | None) -> list[str]:
+    """The sources a role can read, in the order of the policy's databases (None = every source)."""
+    names = ["erp", "compta", "paie"]
+    return names if role is None else [s for s in names if tables_of(role, s)]
+
+
+def scope_of(role: str | None) -> dict[str, set[str] | None] | None:
+    """{source: lower-case tables, or None for all of them} for a role; None = no limit (local mode)."""
+    if role is None:
+        return None
+    return {s: None if tables_of(role, s) == "*" else {t.lower() for t in tables_of(role, s)}
+            for s in readable_sources(role)}
+
+
 def role_of(user: str) -> str:
     """USER_ROLES=alice:finance,webui/bob:rh. Nobody listed gets the default role, which reads no database."""
     assigned = dict(item.strip().split(":", 1) for item in settings.user_roles.split(",") if item.strip())
@@ -109,21 +129,30 @@ def issue_token(role: str, user: str, now: float | None = None) -> str:
     return f"{body}.{_derived('role-token:' + body)}"
 
 
-def read_token(token: str, now: float | None = None) -> str:
-    """The role a token names. Raises AccessDenied if it is forged, altered or expired."""
+def read_identity(token: str, now: float | None = None) -> Identity:
+    """Who a token speaks for. Raises AccessDenied if it is forged, altered or expired."""
     body, _, signature = str(token).partition(".")
     if not hmac.compare_digest(signature, _derived("role-token:" + body)):
         raise AccessDenied("Accès refusé.")
     data = json.loads(base64.urlsafe_b64decode(body + "=" * (-len(body) % 4)))
     if data["exp"] < (now or time.time()) or data["role"] not in roles():
         raise AccessDenied("Accès refusé.")
-    return data["role"]
+    return Identity(data["role"], data["user"])
 
 
-def caller_role(token: str | None) -> str | None:
-    """What an MCP call runs as. None = agent_ro, only while no API keys are set (local mode)."""
+def read_token(token: str, now: float | None = None) -> str:
+    return read_identity(token, now).role
+
+
+def caller(token: str | None) -> Identity | None:
+    """Who an MCP call runs as. None = agent_ro, only while no API keys are set (local mode)."""
     if token:
-        return read_token(token)
+        return read_identity(token)
     if settings.api_keys:
         raise AccessDenied("Accès refusé.")
     return None
+
+
+def caller_role(token: str | None) -> str | None:
+    identity = caller(token)
+    return identity.role if identity else None

@@ -575,9 +575,14 @@ Left to `direction` alone: `08_Juridique` and `00_Direction`, apart from the COD
 - **Limits, for step 26:** the prompt still lists every table and metric, validation errors can name other tables, and refusals confirm that a source exists. **Don't assign roles to real users before step 29.** `get_sales_commission` needs both the ERP's salespeople and payroll, so it works for `direction` and `rh`, not `finance`.
 - **Tests: 56 new** (540 in all).
 
-### ⬜ Step 26. Everything the model sees, per role
-- Cache schema and foreign keys per role, so validation sees only the role's tables (cards and value search were filtered in step 25). Filter the prompt's table index and metrics. The query log records user and role.
-- A forbidden table reads as unavailable: the answer doesn't confirm that it exists.
+### ✅ Step 26. Everything the model sees, per role
+- **Validation** works on the role's tables only: a forbidden table reads like one that doesn't exist, close-name hints come from the role's tables, and a source it can't read gets the same message as an invented one.
+- **Prompt and tools:** table index and metrics limited to the role (a metric needs every table it uses); sentences naming other sources rewritten; `reconcile` removed with fewer than two sources, `get_sales_commission` without both the ERP and payroll. Without a role the prompt is unchanged.
+- **Cards** no longer show foreign keys to tables the role can't read. **Other readings** (D68) offer only what the role can compute. **The query log** records user and role.
+- **Checked live** with three identities. `commercial` gets the ERP revenue with no mention of accounting, and answers that it doesn't have the draft entries; a user with no role is told no data is available; `finance` still sees both readings. The first live run still named other sources, from the fixed prompt sentences: these were then rewritten.
+- **No regression** (run 24, dev, local mode, commit `a393c2a`): **31/33**, same misses (S02, S03).
+- **Limits:** the description of a source lists all its subjects (`commercial` can read that the ERP covers purchases), and certified definitions or column comments of a table it can read may name another. Site roles stay refused until step 27, where cards and value search must also follow rows.
+- **Tests: 13 new** (553 in all).
 
 ### ⬜ Step 27. Row-level security
 - PostgreSQL RLS and SQL Server security policies, on `current_user` against a mapping table. Tables without a site column (invoice lines, payslip lines) are reached through their parent.
@@ -660,3 +665,5 @@ Left to `direction` alone: `08_Juridique` and `00_Direction`, apart from the COD
 | 2026-11-18 | – | Phase D (role-based access, steps 25–29) added, roles proposed for approval; the RAG experiments moved to Phase E (step 30) |
 | 2026-11-18 | – | Roles approved (D75). Step 24 merged, pushed |
 | 2026-11-18 | 25 | Branch `access/step-25-roles`: policy file, one login per role and source, signed role token through the agent; a card leak found live and closed; dev 31/33 (run 23) |
+| 2026-11-18 | – | Step 25 merged, pushed |
+| 2026-11-18 | 26 | Branch `access/step-26-role-view`: validation, prompt, tools, cards, readings and query log follow the role; dev 31/33 (run 24) |

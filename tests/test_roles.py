@@ -10,11 +10,13 @@ from mcp.client import Client
 from text2sql_calorvia import access
 from langchain_core.messages import AIMessage
 
-from text2sql_calorvia.agent import Agent, tool_schema
+from text2sql_calorvia import ontology
+from text2sql_calorvia.agent import Agent, RECONCILE_TOOL, scoped_tools, system_prompt, tool_schema
 from text2sql_calorvia.catalog import describe
-from text2sql_calorvia.execution import execute, run_unvalidated
+from text2sql_calorvia.execution import execute, log_connect, run_unvalidated
 from text2sql_calorvia.mcp_server import server
 from text2sql_calorvia.sources import SOURCES, connect
+from text2sql_calorvia.validation import validate
 
 DB_ERRORS = (psycopg.Error, pymssql.Error)
 ACTIVE = [r for r, d in access.roles().items() if not d["site"]]
@@ -210,3 +212,86 @@ def test_a_role_sees_only_its_sources_tables_cards_and_values(logins):
     found = tool("find_values", source="erp", value="Kompra", access_token=commercial)
     assert found["matches"] == []       # a supplier: commercial doesn't read suppliers or purchases
     assert tool("find_values", source="erp", value="Distrinergie", access_token=commercial)["matches"]
+
+
+# Step 26: what the model and the messages reveal
+def test_a_forbidden_table_looks_like_one_that_does_not_exist(sources):
+    forbidden = validate("erp", "SELECT COUNT(*) FROM ACH_FACT", role="commercial")
+    assert not forbidden.ok and forbidden.errors[0].startswith("Table inconnue dans erp : ACH_FACT.")
+    assert "ACH_CDE" not in forbidden.errors[0] and "ACH_RECEP" not in forbidden.errors[0]
+    assert "ACH_FACT" not in validate("erp", "SELECT COUNT(*) FROM ACH_FAC", role="commercial").errors[0]
+
+
+def test_no_message_points_to_a_source_the_role_cannot_read(sources):
+    error = validate("erp", "SELECT COUNT(*) FROM ecriture", role="commercial").errors[0]
+    assert "compta" not in error
+    assert validate("compta", "SELECT 1", role="commercial").errors == ["Source inconnue : compta. Sources : erp."]
+    assert validate("compta", "SELECT 1", role="employe").errors == ["Source inconnue : compta. Sources : aucune."]
+    assert "compta" in validate("erp", "SELECT COUNT(*) FROM ecriture", role="finance").errors[0]
+
+
+def test_validation_accepts_the_tables_of_the_role(sources):
+    assert validate("erp", "SELECT COUNT(*) FROM VTE_FACT", role="commercial").ok
+    assert validate("paie", "SELECT COUNT(*) FROM timesheets", role="rh").ok
+
+
+def test_the_prompt_shows_only_what_the_role_reads():
+    scope = access.scope_of("commercial")
+    prompt = system_prompt([{"source": "erp", "engine": "e", "dialect": "d", "description": "ERP"}], scope=scope)
+    assert "Net invoiced revenue" in prompt and "erp.VTE_FACT" in prompt and "Votre périmètre" in prompt
+    for hidden in ("Booked revenue", "EBITDA", "Headcount on a date", "compta.ecriture", "paie.contracts", "erp.ACH_FACT"):
+        assert hidden not in prompt
+
+
+def test_without_a_role_the_prompt_has_no_scope_section():
+    assert "Votre périmètre" not in system_prompt([])
+    assert system_prompt([], scope=None) == system_prompt([])
+
+
+def test_a_metric_needs_every_table_it_uses():
+    assert "Units sold net of returns" not in ontology.glossary({"erp": {"vte_fact"}})
+    assert "Units sold net of returns" in ontology.glossary({"erp": {"vte_fact", "vte_fact_lig"}})
+
+
+def test_a_reading_the_role_cannot_compute_is_not_offered():
+    question, answer = "Quel est le chiffre d'affaires de mai ?", "10 €"
+    assert "comptabilisé" in ontology.other_readings(question, answer, access.scope_of("finance"))
+    assert ontology.other_readings(question, answer, access.scope_of("commercial")) == ""
+
+
+def test_a_card_names_no_table_the_role_cannot_read(logins):
+    card = tool("get_table_card", source="erp", table="VTE_CDE", access_token=access.issue_token("achats", "a"))
+    assert "Table inconnue" in card["error"]
+    keys = tool("get_table_card", source="erp", table="ART_ARTICLE",
+                access_token=access.issue_token("commercial", "c"))["keys"]
+    assert not any("FRN_FOURNISSEUR" in k for k in keys)
+    assert any("FRN_FOURNISSEUR" in k for k in tool("get_table_card", source="erp", table="ART_ARTICLE")["keys"])
+
+
+def test_the_log_records_who_asked(logins):
+    result = execute("compta", "SELECT COUNT(*) FROM budget", role="finance", user="ana")
+    with log_connect() as db:
+        row = db.execute("SELECT user_name, role FROM t2sql_query_log WHERE id = %s", (result["log_id"],)).fetchone()
+    assert row == ("ana", "finance")
+
+
+@pytest.mark.parametrize("role, hidden", [("commercial", ["compta", "paie", "comptabilis", "- Paie :"]),
+                                          ("employe", ["compta", "T-SQL", "comptabilis", "- Paie :"]),
+                                          ("rh", ["compta", "comptabilis"])])
+def test_the_prompt_names_no_source_the_role_cannot_read(role, hidden):
+    scope = access.scope_of(role)
+    sources = [{"source": s, "engine": "e", "dialect": "d", "description": ""} for s in scope]
+    prompt = system_prompt(sources, memories="", scope=scope).lower()
+    assert not [word for word in hidden if word.lower() in prompt]
+
+
+def test_the_tools_name_no_source_the_role_cannot_read():
+    async def schemas():
+        async with Client(server) as client:
+            return [tool_schema(t) for t in (await client.list_tools()).tools] + [RECONCILE_TOOL]
+    tools = scoped_tools(anyio.run(schemas), access.scope_of("commercial"))
+    names, text = {t["function"]["name"] for t in tools}, str(tools).lower()
+    assert "reconcile" not in names and "get_sales_commission" not in names and "execute_sql" in names
+    assert "compta" not in text and "paie" not in text
+    both = {t["function"]["name"] for t in scoped_tools(anyio.run(schemas), access.scope_of("rh"))}
+    assert {"reconcile", "get_sales_commission"} <= both
