@@ -87,6 +87,7 @@ Companion file: `QUIZ.md` (one quiz per step, answers collapsed).
 | D68 | Ambiguous business words | `business_words` in `ontology/certification.yaml`: five words, each with its readings. When a query ran, the question doesn't settle the reading and the answer leaves some out, the `finish` node writes them under the answer | The model doesn't find a word ambiguous when it has a metric for it, so the prompt rule rarely fires (A03). Same principle as the footer (D53): what must always happen is written by code |
 | D69 | Joins that multiply rows | A **warning**, returned with the query's rows, when a joined table references a table already in the query and `COUNT(*)`, or `SUM`/`AVG` of an earlier table's column, reads the multiplied rows (`joins.py`, from the catalog's foreign keys). Not for `COUNT(*)` grouped by the parent | Counting lines can be what was asked, so it can't be a refusal; the model reads the warning and corrects itself (C02) |
 | D70 | Rows in the cards | A table of at most 30 rows, keyed by a code and with several code columns, shows its rows (`mapping_rows`). Only values the card already lists | The separate value lists were read as pairs (X05). Tables keyed by a number (salespeople, suppliers) are records: showing rows would link their identities |
+| D71 | Small figures | Below 1 000, only figures that say what they are: a whole number followed by what it counts, and percentages. Checked against **query results** (cells, row counts, column totals, days between dates, reconciliations) and the client's messages, not the prompt or the cards. Percentages may be a ratio or a change between two result numbers. Same path as D54: one retry, then flagged | A bare small number may be a year or an account; and the prompt and cards hold so many small numbers that "found somewhere" would prove nothing |
 | D9 | Porting strategy | Port each hospital_rag module **in the step that needs it** (step 0: config, db, logs; step 3: evaluation; step 4: ETL and RAG) | Nothing unused or untested sits in the repo |
 
 ### Open decisions (to settle with you when we reach them)
@@ -486,9 +487,18 @@ What the two reports left open, none of it started. Order: fix the exposure firs
 - **Limit:** the sealed set contains counts after a join, by design. The warning was specified from C02 before that set was written, but its author knew those questions when building it.
 - **Tests: 20 new** (453 in all).
 
-### ⬜ Step 22. Grounding check
-- Check figures below 1 000, aware of units, so that counts are covered without flagging years, days and account numbers (219 written for 203).
-- Accept or verify more than a sum or difference of two found numbers; move the remaining arithmetic out of the model.
+### ✅ Step 22. Grounding check
+- **The check** (`grounding.py`, D71). Replayed on 86 stored answers with queries (runs 11, 12, 16, 18): the first version flagged correct totals of grouped results (15 people, 609 people) and a gap between two dates, so column totals and date gaps became evidence. It then flags **one** case, in two runs: S11's "23 factures", a number no query had produced. The model read it in a table card. It was right, but presented as a result.
+- **Results (dev, 33 questions):**
+
+  | run | change | right | confidently wrong | queries | time |
+  |---|---|---:|---:|---:|---:|
+  | 18 | reference (step 21) | 31 | 2 | 35 | 9.4 min |
+  | 19 | small figures | 31 | 2 | 36 | 9.6 min |
+
+- **Reading:** the only change of behaviour is the intended one: S11 is sent back once and runs a fourth query that counts the invoices. No answer ended with a warning, and no verdict moved.
+- **Limits:** a number that is in the results but answers something else passes, which is why it could not have caught C02 (47 was a real result) or may not catch a figure taken from the wrong row. Counts are recognised through a list of nouns. With more than 40 numbers in the results, percentages are not checked and sums of two are not accepted. The model still does arithmetic; this step verifies it, it does not move it elsewhere.
+- **Tests: 5 new** (458 in all).
 
 ### ⬜ Step 23. Final measure of phase C
 - Dev regression, then the step 19 test set, **once** (`run_t2sql_eval.py experiments/t2sql/final.toml --final`, or the config then in force). Report the before and after in `RAPPORT_T2SQL.md`.
@@ -554,3 +564,5 @@ What the two reports left open, none of it started. Order: fix the exposure firs
 | 2026-11-18 | 20 | Branch `improve/step-20-business-words`: 3 metrics certified, 5 business words with their readings written by code (D68); dev 31/33 (runs 14, 16); P06, A02, A03 fixed by their mechanism |
 | 2026-11-18 | – | Step 20 merged, pushed |
 | 2026-11-18 | 21 | Branch `improve/step-21-sql-checks`: join warning from the foreign keys (D69), rows of small code tables in their cards (D70); dev 31/33 (runs 17, 18); C02 now corrects itself |
+| 2026-11-18 | – | Step 21 merged, pushed |
+| 2026-11-18 | 22 | Branch `improve/step-22-grounding`: counts and percentages below 1 000 checked against query results (D71); no false alarm in 86 stored answers after two evidence fixes; dev 31/33 (run 19) |

@@ -1,0 +1,6 @@
+# experiments/t2sql/small_figures.toml — step 22 (D71): counts and percentages below 1 000 checked against query
+# results. Compared with mapping_rows (run 18).
+name = "small_figures"
+
+[agent]
+use_ontology = true

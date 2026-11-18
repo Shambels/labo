@@ -34,7 +34,7 @@ from langgraph.graph import END, START, StateGraph
 from langgraph.graph.message import add_messages
 from mcp.client import Client
 
-from text2sql_calorvia import charts, memory, ontology
+from text2sql_calorvia import charts, grounding, memory, ontology
 from text2sql_calorvia.config import settings
 from text2sql_calorvia.reconcile import KEY_TYPES, reconcile
 
@@ -343,6 +343,20 @@ class Agent:
         reply = await self.llm.ainvoke(fit(state["messages"] + pending + [instruction]))
         return {"messages": pending + [instruction, reply]}
 
+    @staticmethod
+    def _evidence(state: AgentState) -> set[float]:
+        """The numbers small figures may come from (D71): query results, reconciliations, what the client's messages
+        hold; not the prompt or the table cards, which are full of small numbers."""
+        known = set()
+        for result in state.get("results", {}).values():
+            known |= grounding.result_numbers(result)
+        for i, message in enumerate(state["messages"]):
+            if isinstance(message, ToolMessage) and message.name in {"reconcile", "get_sales_commission"}:
+                known |= grounding.tool_numbers(str(message.content))
+            elif 0 < i < state["history_len"]:
+                known |= {abs(v) for _, v in numbers(str(message.content))}
+        return known
+
     async def _check(self, state: AgentState) -> dict:
         answer = own_text(state["messages"][-1].content)
         # The conversation as the client sent it, and tool results; never the agent's own instructions (this check's
@@ -350,6 +364,9 @@ class Agent:
         corpus = "\n".join(str(m.content) for i, m in enumerate(state["messages"])
                            if i < state["history_len"] or isinstance(m, ToolMessage))
         missing = ungrounded(answer, corpus)
+        if any(step["tool"] in {"execute_sql", "get_sales_commission"} and step.get("ok") for step in state.get("steps", [])):
+            missing += grounding.unsupported(answer, self._evidence(state),
+                                             (settings.min_group_size, settings.rows_to_model))
         if not missing:
             return {"unverified": []}
         if not state.get("grounding_retry"):
