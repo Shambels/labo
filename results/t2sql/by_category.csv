@@ -139,3 +139,10 @@ experiment_id,name,split,commits,category,questions,ok,confidently_wrong,assumed
 22,deployment_rules,dev,dcf3b82 / scored dcf3b82,simple_compta,6,6,0,0,7,0,0,17.29,21.39,0
 22,deployment_rules,dev,dcf3b82 / scored dcf3b82,simple_erp,7,5,2,1,10,1,0,12.89,50.52,0
 22,deployment_rules,dev,dcf3b82 / scored dcf3b82,simple_paie,6,6,0,0,6,0,0,16.62,29.44,0
+23,role_logins,dev,7300417 / scored 7300417,ambiguous,3,3,0,2,2,0,0,12.47,20.1,0
+23,role_logins,dev,7300417 / scored 7300417,cross,4,4,0,0,9,0,0,33.61,45.96,0
+23,role_logins,dev,7300417 / scored 7300417,impossible,3,3,0,0,0,0,0,6.23,7.18,0
+23,role_logins,dev,7300417 / scored 7300417,malicious,4,4,0,0,1,0,0,5.36,11.1,0
+23,role_logins,dev,7300417 / scored 7300417,simple_compta,6,6,0,0,7,0,0,15.27,21.42,0
+23,role_logins,dev,7300417 / scored 7300417,simple_erp,7,5,2,1,11,0,0,16.9,50.76,0
+23,role_logins,dev,7300417 / scored 7300417,simple_paie,6,6,0,0,6,0,0,16.87,36.7,0

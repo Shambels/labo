@@ -19,3 +19,4 @@ id,name,split,git_commit,scorer_commit,agent_options,started_at,questions,ok,con
 20,phase_c,dev,01106a122ee9ea9d9cf653c14b917cab654bb4d0,01106a122ee9ea9d9cf653c14b917cab654bb4d0,"{""use_ontology"": true}",2026-11-18T11:20+00:00,33,31,2,3,36,0,0,13.91,9.54,0
 21,phase_c,final,01106a122ee9ea9d9cf653c14b917cab654bb4d0,01106a122ee9ea9d9cf653c14b917cab654bb4d0,"{""use_ontology"": true}",2026-11-18T11:31+00:00,32,29,1,4,56,0,0,12.26,11.65,0
 22,deployment_rules,dev,dcf3b82c31607f2a8ae75d1811980295114f1516,dcf3b82c31607f2a8ae75d1811980295114f1516,"{""use_ontology"": true}",2026-11-18T11:54+00:00,33,31,2,5,37,1,0,15.82,10.05,0
+23,role_logins,dev,7300417e60a20d8baf4a3f361f01a0badb46016e,7300417e60a20d8baf4a3f361f01a0badb46016e,"{""use_ontology"": true}",2026-11-18T13:20+00:00,33,31,2,3,36,0,0,14.47,9.66,0
