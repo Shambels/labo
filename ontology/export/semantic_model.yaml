@@ -269,6 +269,25 @@ datasets:
     ai_context:
       synonyms:
       - Net result (résultat net)
+  - name: operating_result_résultat_d_exploitation
+    expression:
+      dialects:
+      - dialect: ANSI_SQL
+        expression: SUM(l.credit - l.debit)
+    custom_extensions:
+    - vendor_name: NVIDIA_AUTO_ONTOLOGY
+      data: '{"entity": "sql_attribute", "id": "c2d78902-337d-443f-abc8-e0ec685ef5d9", "ossie_expression": "SUM(l.credit -
+        l.debit)", "sql": "SELECT SUM(l.credit - l.debit) AS resultat_exploitation\nFROM public.ligne_ecriture l JOIN public.ecriture
+        e ON e.id_ecriture = l.id_ecriture\nWHERE e.statut = ''VALIDEE''\n  AND left(l.numero_compte, 2) IN (''60'',''61'',''62'',''63'',''64'',''70'',''71'',''72'',''73'',''74'')",
+        "sql_column_is": ["cd36a3c6-6696-4c94-bb19-c1c6ae421667", "b39889b0-efc6-49c6-b47e-4d906d65b94c", "476f02d5-6f6e-4428-92b0-cbc326bc21a0",
+        "466b82cc-468f-400f-9b19-c5a810f61a40", "3bb3cf6d-11f7-4926-bc93-d36974d6254d", "3ecceed6-241e-48a5-8d64-c42b487833c9"],
+        "sql_source": "manual", "term_id": "594ff843-0371-4977-8014-5e283b2864e9"}'
+    description: 'Produits d''exploitation moins charges d''exploitation : comptes 60 à 64 et 70 à 74 (crédit moins débit),
+      écritures VALIDEE. C''est l''EBITDA moins les amortissements et provisions (63). Exclut 65 (charges financières), 66,
+      67 (impôts) et 69. Filtrer la période sur ecriture.code_periode.'
+    ai_context:
+      synonyms:
+      - Operating result (résultat d'exploitation)
   - name: numero_compte
     expression:
       dialects:
@@ -1336,6 +1355,21 @@ datasets:
         expression: hire_date
     datatype: Date
     description: The date the employee was formally hired, stored in YYYY-MM-DD format.
+  - name: people_hired_embauches_engagements
+    expression:
+      dialects:
+      - dialect: ANSI_SQL
+        expression: COUNT(*)
+    custom_extensions:
+    - vendor_name: NVIDIA_AUTO_ONTOLOGY
+      data: '{"entity": "sql_attribute", "id": "c46fe581-3ec9-4a0d-960f-28d6aee4c180", "ossie_expression": "COUNT(*)", "sql":
+        "SELECT COUNT(*) AS embauches FROM public.employees\nWHERE hire_date >= DATE ''2026-01-01'' AND hire_date < DATE ''2026-06-01''",
+        "sql_column_is": ["453aeada-f1f2-47d6-a0db-5b22e6b711f1"], "sql_source": "manual", "term_id": "dcfdd3db-44aa-4866-a824-34ab03d9db0f"}'
+    description: 'Personnes entrées dans l''entreprise sur une période : employees.hire_date, une ligne par personne. Ne pas
+      compter contracts.start_date : un contrat commence aussi à chaque changement de contrat d''une personne déjà présente.'
+    ai_context:
+      synonyms:
+      - People hired (embauches, engagements)
   - name: manager_id
     expression:
       dialects:
@@ -3470,6 +3504,21 @@ datasets:
         expression: timesheet_id
     datatype: Integer
     description: Unique identifier for each daily employee work record.
+  - name: sickness_days_jours_de_maladie
+    expression:
+      dialects:
+      - dialect: ANSI_SQL
+        expression: COUNT(*)
+    custom_extensions:
+    - vendor_name: NVIDIA_AUTO_ONTOLOGY
+      data: '{"entity": "sql_attribute", "id": "125334de-9509-4a0c-9ba7-3d944062492a", "ossie_expression": "COUNT(*)", "sql":
+        "SELECT COUNT(*) AS jours_maladie FROM public.timesheets WHERE absence_code IN (''MAL'', ''MAL_MUT'')", "sql_column_is":
+        ["10bab1d5-2fe7-4abe-9cd8-cfde020198ec"], "sql_source": "manual", "term_id": "08ae34af-e177-40a0-b5cd-8e3fbe0e4786"}'
+    description: 'Lignes de prestation d''absence pour maladie, une ligne par jour : absence_code MAL (salaire garanti) ET
+      MAL_MUT (au-delà du salaire garanti).'
+    ai_context:
+      synonyms:
+      - Sickness days (jours de maladie)
   - name: telework_days_jours_de_télétravail
     expression:
       dialects:
@@ -4810,26 +4859,42 @@ custom_extensions:
     = ''VALIDEE'' AND left(l.numero_compte, 1) IN (''6'', ''7'') AND l.numero_compte <> ''693000''", "sql_column_is": ["cd36a3c6-6696-4c94-bb19-c1c6ae421667",
     "b39889b0-efc6-49c6-b47e-4d906d65b94c", "476f02d5-6f6e-4428-92b0-cbc326bc21a0", "466b82cc-468f-400f-9b19-c5a810f61a40",
     "3bb3cf6d-11f7-4926-bc93-d36974d6254d", "3ecceed6-241e-48a5-8d64-c42b487833c9"], "term_id": "594ff843-0371-4977-8014-5e283b2864e9"},
-    {"description": "Lignes de prestation avec work_location = ''TELE'' (une ligne par jour).", "id": "5d3038b5-5320-420b-b62d-0d89ea3563fb",
-    "name": "Telework days (jours de télétravail)", "sql": "SELECT COUNT(*) AS jours_teletravail FROM public.timesheets WHERE
-    work_location = ''TELE''", "sql_column_is": ["a934760f-d2f8-4218-bb87-a701452a9683"], "term_id": "08ae34af-e177-40a0-b5cd-8e3fbe0e4786"},
-    {"description": "Quantités facturées moins les quantités des avoirs de motif RETOUR (pas REGUL_TARIF ni les autres).",
-    "id": "0d29cab8-9200-4c0b-bfd5-24f888f35577", "name": "Units sold net of returns (unités vendues)", "sql": "SELECT SUM(CASE
-    WHEN f.fac_type = ''F'' THEN l.fl_qte WHEN f.fac_motif = ''RETOUR'' THEN -l.fl_qte ELSE 0 END) AS unites\nFROM dbo.vte_fact_lig
-    l JOIN dbo.vte_fact f ON f.fac_id = l.fac_id", "sql_column_is": ["e6c9dddd-df5c-40bc-b021-25555d657f64", "05eeb2f8-7d51-4894-8381-751af8e99f23",
-    "3e3ef47b-da82-4edf-9151-b6ecc8ab7da0", "d724c020-7581-4608-9c21-0f7c37ebb31a", "1c39e754-e1ef-4c4b-a0e3-45a8f274bc9a"],
-    "term_id": "545b7f98-2cb5-4830-8cbf-c28d53b1a8ea"}], "sql": [], "table": []}, "terms": [{"columns_attributes": [{"column_id":
-    "954d7e62-5ef9-4e6a-a2d0-d02b14fbebf4", "description": "Identifies the specific category of employee absence, serving
-    as a unique reference for timesheet entries.", "id": "63201332-4059-4864-aa46-356fa4c096d1", "name": "Absence Code"},
-    {"column_id": "17700191-9b8b-4348-a827-ebe7e6ea257a", "description": "Provides the human-readable business name corresponding
-    to a specific absence code for clear identification.", "id": "641b15cd-107e-44e6-9211-ef575706a8d8", "name": "Label"},
-    {"column_id": "afdfeac7-0c7b-4ef3-a124-3fb3d5bcb95d", "description": "Indicates whether the employer covers the salary
-    costs associated with a specific type of employee absence.", "id": "c1f89e80-7d93-434b-a857-b13ec6146432", "name": "Paid
-    By Employer"}, {"column_id": "4aabf766-df6c-4318-91d3-cf18c47a8869", "description": "Indicates whether meal vouchers remain
-    valid or payable during a specific category of employee absence.", "id": "c6ff3d11-1a60-4f8e-b8e8-92bd4f511432", "name":
-    "Meal Voucher"}], "description": "Definitions for different categories of employee absences, including whether they are
-    paid by the employer and if meal vouchers apply.", "id": "e84d0934-09c6-4437-9757-2f3469e7f177", "name": "Absence Type",
-    "represents": ["e694dc28-7925-4bcc-b5ef-0997a91d8ab1"]}, {"columns_attributes": [{"column_id": "c93c51e7-b6f5-4075-ba3f-c32983ee29f1",
+    {"description": "Produits d''exploitation moins charges d''exploitation : comptes 60 à 64 et 70 à 74 (crédit moins débit),
+    écritures VALIDEE. C''est l''EBITDA moins les amortissements et provisions (63). Exclut 65 (charges financières), 66,
+    67 (impôts) et 69. Filtrer la période sur ecriture.code_periode.", "id": "c2d78902-337d-443f-abc8-e0ec685ef5d9", "name":
+    "Operating result (résultat d''exploitation)", "sql": "SELECT SUM(l.credit - l.debit) AS resultat_exploitation\nFROM public.ligne_ecriture
+    l JOIN public.ecriture e ON e.id_ecriture = l.id_ecriture\nWHERE e.statut = ''VALIDEE''\n  AND left(l.numero_compte, 2)
+    IN (''60'',''61'',''62'',''63'',''64'',''70'',''71'',''72'',''73'',''74'')", "sql_column_is": ["cd36a3c6-6696-4c94-bb19-c1c6ae421667",
+    "b39889b0-efc6-49c6-b47e-4d906d65b94c", "476f02d5-6f6e-4428-92b0-cbc326bc21a0", "466b82cc-468f-400f-9b19-c5a810f61a40",
+    "3bb3cf6d-11f7-4926-bc93-d36974d6254d", "3ecceed6-241e-48a5-8d64-c42b487833c9"], "term_id": "594ff843-0371-4977-8014-5e283b2864e9"},
+    {"description": "Personnes entrées dans l''entreprise sur une période : employees.hire_date, une ligne par personne. Ne
+    pas compter contracts.start_date : un contrat commence aussi à chaque changement de contrat d''une personne déjà présente.",
+    "id": "c46fe581-3ec9-4a0d-960f-28d6aee4c180", "name": "People hired (embauches, engagements)", "sql": "SELECT COUNT(*)
+    AS embauches FROM public.employees\nWHERE hire_date >= DATE ''2026-01-01'' AND hire_date < DATE ''2026-06-01''", "sql_column_is":
+    ["453aeada-f1f2-47d6-a0db-5b22e6b711f1"], "term_id": "dcfdd3db-44aa-4866-a824-34ab03d9db0f"}, {"description": "Lignes
+    de prestation d''absence pour maladie, une ligne par jour : absence_code MAL (salaire garanti) ET MAL_MUT (au-delà du
+    salaire garanti).", "id": "125334de-9509-4a0c-9ba7-3d944062492a", "name": "Sickness days (jours de maladie)", "sql": "SELECT
+    COUNT(*) AS jours_maladie FROM public.timesheets WHERE absence_code IN (''MAL'', ''MAL_MUT'')", "sql_column_is": ["10bab1d5-2fe7-4abe-9cd8-cfde020198ec"],
+    "term_id": "08ae34af-e177-40a0-b5cd-8e3fbe0e4786"}, {"description": "Lignes de prestation avec work_location = ''TELE''
+    (une ligne par jour).", "id": "5d3038b5-5320-420b-b62d-0d89ea3563fb", "name": "Telework days (jours de télétravail)",
+    "sql": "SELECT COUNT(*) AS jours_teletravail FROM public.timesheets WHERE work_location = ''TELE''", "sql_column_is":
+    ["a934760f-d2f8-4218-bb87-a701452a9683"], "term_id": "08ae34af-e177-40a0-b5cd-8e3fbe0e4786"}, {"description": "Quantités
+    facturées moins les quantités des avoirs de motif RETOUR (pas REGUL_TARIF ni les autres).", "id": "0d29cab8-9200-4c0b-bfd5-24f888f35577",
+    "name": "Units sold net of returns (unités vendues)", "sql": "SELECT SUM(CASE WHEN f.fac_type = ''F'' THEN l.fl_qte WHEN
+    f.fac_motif = ''RETOUR'' THEN -l.fl_qte ELSE 0 END) AS unites\nFROM dbo.vte_fact_lig l JOIN dbo.vte_fact f ON f.fac_id
+    = l.fac_id", "sql_column_is": ["e6c9dddd-df5c-40bc-b021-25555d657f64", "05eeb2f8-7d51-4894-8381-751af8e99f23", "3e3ef47b-da82-4edf-9151-b6ecc8ab7da0",
+    "d724c020-7581-4608-9c21-0f7c37ebb31a", "1c39e754-e1ef-4c4b-a0e3-45a8f274bc9a"], "term_id": "545b7f98-2cb5-4830-8cbf-c28d53b1a8ea"}],
+    "sql": [], "table": []}, "terms": [{"columns_attributes": [{"column_id": "954d7e62-5ef9-4e6a-a2d0-d02b14fbebf4", "description":
+    "Identifies the specific category of employee absence, serving as a unique reference for timesheet entries.", "id": "63201332-4059-4864-aa46-356fa4c096d1",
+    "name": "Absence Code"}, {"column_id": "17700191-9b8b-4348-a827-ebe7e6ea257a", "description": "Provides the human-readable
+    business name corresponding to a specific absence code for clear identification.", "id": "641b15cd-107e-44e6-9211-ef575706a8d8",
+    "name": "Label"}, {"column_id": "afdfeac7-0c7b-4ef3-a124-3fb3d5bcb95d", "description": "Indicates whether the employer
+    covers the salary costs associated with a specific type of employee absence.", "id": "c1f89e80-7d93-434b-a857-b13ec6146432",
+    "name": "Paid By Employer"}, {"column_id": "4aabf766-df6c-4318-91d3-cf18c47a8869", "description": "Indicates whether meal
+    vouchers remain valid or payable during a specific category of employee absence.", "id": "c6ff3d11-1a60-4f8e-b8e8-92bd4f511432",
+    "name": "Meal Voucher"}], "description": "Definitions for different categories of employee absences, including whether
+    they are paid by the employer and if meal vouchers apply.", "id": "e84d0934-09c6-4437-9757-2f3469e7f177", "name": "Absence
+    Type", "represents": ["e694dc28-7925-4bcc-b5ef-0997a91d8ab1"]}, {"columns_attributes": [{"column_id": "c93c51e7-b6f5-4075-ba3f-c32983ee29f1",
     "description": "Identifies the user account or automated process responsible for creating or modifying the entry.", "id":
     "0c6ee681-fd73-4824-916b-fc5a76b00171", "name": "User"}, {"column_id": "5836b741-d497-46ca-aea4-716f17fb79c9", "description":
     "Specifies the due date for settling the financial obligation, formatted as YYYY-MM-DD.", "id": "0fb7ac44-899a-4929-ba81-0f837d31fab3",

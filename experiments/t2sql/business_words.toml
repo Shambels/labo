@@ -1,0 +1,6 @@
+# experiments/t2sql/business_words.toml — step 20 (D68): the code names the other readings of an ambiguous business
+# word under the answer. Compared with more_metrics (run 14).
+name = "business_words"
+
+[agent]
+use_ontology = true

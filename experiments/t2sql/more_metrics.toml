@@ -1,0 +1,6 @@
+# experiments/t2sql/more_metrics.toml — step 20: three more certified metrics (operating result, people hired, sickness
+# days). Compared with privacy_allowlist (run 13).
+name = "more_metrics"
+
+[agent]
+use_ontology = true

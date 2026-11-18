@@ -293,3 +293,77 @@ metrics:
     description: Lignes de prestation avec work_location = 'TELE' (une ligne par jour).
     expression: |
       SELECT COUNT(*) AS jours_teletravail FROM public.timesheets WHERE work_location = 'TELE'
+  - database: compta
+    table: ligne_ecriture
+    name: Operating result (résultat d'exploitation)
+    description: >-
+      Produits d'exploitation moins charges d'exploitation : comptes 60 à 64 et 70 à 74 (crédit moins débit), écritures
+      VALIDEE. C'est l'EBITDA moins les amortissements et provisions (63). Exclut 65 (charges financières), 66, 67
+      (impôts) et 69. Filtrer la période sur ecriture.code_periode.
+    expression: |
+      SELECT SUM(l.credit - l.debit) AS resultat_exploitation
+      FROM public.ligne_ecriture l JOIN public.ecriture e ON e.id_ecriture = l.id_ecriture
+      WHERE e.statut = 'VALIDEE'
+        AND left(l.numero_compte, 2) IN ('60','61','62','63','64','70','71','72','73','74')
+  - database: paie
+    table: employees
+    name: People hired (embauches, engagements)
+    description: >-
+      Personnes entrées dans l'entreprise sur une période : employees.hire_date, une ligne par personne. Ne pas compter
+      contracts.start_date : un contrat commence aussi à chaque changement de contrat d'une personne déjà présente.
+    expression: |
+      SELECT COUNT(*) AS embauches FROM public.employees
+      WHERE hire_date >= DATE '2026-01-01' AND hire_date < DATE '2026-06-01'
+  - database: paie
+    table: timesheets
+    name: Sickness days (jours de maladie)
+    description: >-
+      Lignes de prestation d'absence pour maladie, une ligne par jour : absence_code MAL (salaire garanti) ET MAL_MUT
+      (au-delà du salaire garanti).
+    expression: |
+      SELECT COUNT(*) AS jours_maladie FROM public.timesheets WHERE absence_code IN ('MAL', 'MAL_MUT')
+
+# Business words that cover several readings (step 20, D68). The agent's code, not the model, names the readings an
+# answer left out: a word the model takes for clear (it has a metric for it) never triggers a prompt rule.
+# `patterns` find the word in the question (lower case, no accents). `names` are how a reading is written: found in
+# the question they settle the reading (no note); found in the answer they mean the answer already covers it.
+business_words:
+  - word: chiffre d'affaires
+    patterns: ["\\bchiffres? d'affaires\\b"]
+    readings:
+      - label: chiffre d'affaires net facturé (ERP)
+        names: [factur, erp]
+      - label: chiffre d'affaires comptabilisé (comptes 70)
+        names: [comptabilis, comptable, comptabilite, journal, comptes 70]
+  - word: résultat
+    patterns: ["\\bresultat\\b"]
+    readings:
+      - label: résultat net
+        names: [resultat net]
+      - label: EBITDA
+        names: [ebitda]
+      - label: résultat d'exploitation
+        names: ["resultat d'exploitation", resultat operationnel]
+  - word: effectif
+    patterns: ["\\beffectifs?\\b", "combien de personnes travaillent"]
+    readings:
+      - label: personnes sous contrat à une date
+        names: [sous contrat]
+      - label: personnes payées sur la paie du mois
+        names: [fiche de paie, fiches de paie, paie du mois, payees]
+      - label: équivalents temps plein
+        names: [temps plein, etp]
+  - word: coût du personnel
+    patterns: ["\\bcout du personnel\\b", "\\bcoute (le|notre) personnel\\b"]
+    readings:
+      - label: charges de rémunération en comptabilité (comptes 62)
+        names: [comptes 62, compte 62, comptabilis, comptable, comptabilite]
+      - label: brut et ONSS patronale de la paie
+        names: [brut, onss, paie]
+  - word: meilleurs produits
+    patterns: ["\\bmeilleurs? produits?\\b"]
+    readings:
+      - label: classement par chiffre d'affaires
+        names: ["chiffre d'affaires"]
+      - label: classement par unités vendues
+        names: [unites, quantite]

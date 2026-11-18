@@ -1426,3 +1426,40 @@ A fix that only recognises one word would pass a test using that word: another w
 
 It catches an expected value that doesn't match its query: a typo or a stale number. It doesn't catch a query that answers the **wrong question**: if the reference misreads the question, both agree and the agent is marked wrong for being right. Only reading the question against the query finds that, and a sealed set makes such reading rarer, which is another limit to keep in mind when analysing step 23's misses.
 </details>
+
+## Step 20: business words
+
+**1.** The prompt already said to name other readings when a word is ambiguous. Why did that not fix A03, and why does code fix it?
+
+<details><summary>Answer</summary>
+
+The rule fires only if the model **perceives** an ambiguity, and it doesn't: it has a certified metric for "résultat", so the word looks settled. Code doesn't need that judgement: the word is in a list, the question doesn't settle it, the answer leaves readings out, so the note is written. It is the footer's principle (D53): what must always happen shouldn't depend on the model.
+</details>
+
+**2.** What are the three conditions under which no note is added, and what would go wrong without each?
+
+<details><summary>Answer</summary>
+
+**No query ran:** the agent asked for clarification or refused, and a note would sit under a question or a refusal. **The question settles the reading** ("résultat net", "dans l'ERP"): the note would offer what the user explicitly didn't ask. **The answer already names every reading:** the note would repeat it. The check on stored answers showed the note firing on only one dev answer.
+</details>
+
+**3.** Run 14 went from 30 to 31 right. Why is that not evidence for the three new metrics?
+
+<details><summary>Answer</summary>
+
+The question that flipped, X05, is about a pay element's account, which none of them defines: a change in the prompt reshuffled its path, a known effect, and ±1–2 is the noise on 33 questions. The evidence is that P06 now uses `hire_date` and gives 30, for the reason the metric targets.
+</details>
+
+**4.** Why was run 15 thrown away when the uncommitted file had nothing to do with the agent?
+
+<details><summary>Answer</summary>
+
+Because the rule is mechanical: a run from a dirty tree can't be reproduced from its commit alone, and deciding case by case that a change "doesn't matter" is how that guarantee erodes. The fix was cheap: the same commit from a clean separate checkout, leaving the other work untouched.
+</details>
+
+**5.** Is the operating result of March 2026 consistent with EBITDA? Show the check.
+
+<details><summary>Answer</summary>
+
+Yes. Class 63 (depreciation and provisions, as credit minus debit) is −97 332,45 €, and 1 278 366,78 − 97 332,45 = 1 181 034,33 €, the operating result. Checking a new definition against one already certified catches a wrong account range before the agent uses it.
+</details>

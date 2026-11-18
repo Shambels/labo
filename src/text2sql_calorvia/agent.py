@@ -372,6 +372,8 @@ class Agent:
                     "que je n'ai pas obtenu des données. Pouvez-vous reformuler la question ?")
         elif missing:
             text += f"\n\n⚠️ Nombre(s) non retrouvé(s) dans les résultats des requêtes, à vérifier : {', '.join(missing)}"
+        if ran and self.use_ontology:
+            text += ontology.other_readings(state.get("question", ""), text)   # D68: written by code, like the footer
         images = "".join(f"\n\n![{c['title']}]({charts.chart_url(c['id'])})" for c in state.get("charts", []))
         return {"answer": text + images + footer(steps, state["session_id"])}
 

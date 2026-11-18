@@ -187,6 +187,8 @@ results are in `results/t2sql/experiments.csv` and `by_category.csv`.
 | 10 | `662c424` | step 15: charts, memory (off), k€-aware check; *without* `offer_readings` | 29 | 3 | 41/41 | 0 | 10.2 min | 3.7 |
 | 11 | `c2df3b4` | `offer_readings` again, on run 10 = **final** | 30 | 3 | 39/39 | 0 | 10.1 min | 3.4 |
 | 13 | `b9332f8` | stricter payroll rule (D65), after delivery; same agent and prompt | 30 | 3 | 39/39 | 0 | 10.3 min | 3.4 |
+| 14 | `54bedea` | Phase C: operating result, people hired, sickness days certified | 31 | 2 | 40/40 | 0 | 9.9 min | 3.3 |
+| 16 | `3e0f861` | Phase C: other readings of business words written by code (D68) | 31 | 2 | 40/40 | 0 | 9.7 min | 3.3 |
 
 How to read the table:
 - **The ontology:** +1 to +2 right answers, which is the noise level (runs 2 and 4 are one configuration). What it
@@ -412,10 +414,8 @@ the sales reading (runs 10, 11).
 
 ## Known limits
 
-- **An ambiguous business word is answered with one reading, silently.** "Le résultat" is answered as the net
-  result, with no word about the operating result (A03), and a prompt rule did not change that. The fix would be in
-  the ontology: mark the business words that map to several certified metrics, and have code (not the model) add the
-  other readings.
+- **Ambiguous business words are covered only when listed.** Since Phase C (D68), code names the other readings of
+  five words under the answer. A word outside that list can still be answered with one reading, silently.
 - **The grounding check stops below 1 000.** Counts and small figures are not checked: a count of 219 was written
   for 203 in one cross-source answer. Lowering the threshold would flag dates, years and account numbers. A check
   aware of units would be the next step.
