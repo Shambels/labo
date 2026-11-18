@@ -1,0 +1,17 @@
+# Publishes the course's three source databases on this machine only (step 18, D66). The course file stays untouched:
+#
+#   docker compose -f enonces/calorvia_t2sql/sources_calorvia/docker/docker-compose.yml \
+#     -f docker-compose.sources-local.yaml --env-file .env up -d
+#
+# Trino (ontology/docker-compose.yaml, option rejected in D47) reaches the sources through the Docker gateway, so it
+# needs them started without this file.
+services:
+  erp-sqlserver:
+    ports: !override
+      - "127.0.0.1:14330:1433"
+  compta-postgres:
+    ports: !override
+      - "127.0.0.1:5433:5432"
+  paie-postgres:
+    ports: !override
+      - "127.0.0.1:5434:5432"
