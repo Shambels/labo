@@ -424,12 +424,11 @@ the sales reading (runs 10, 11).
   small numbers (without a counted noun) are not checked.
 - **The model still does some arithmetic itself.** The prompt asks for gaps and percentages to be computed in SQL or
   with `reconcile`; the check accepts a sum or difference of two found numbers, nothing more complex.
-- **Payroll privacy has known gaps** (`privacy.py`):
-  - comparing two allowed queries (groups differing by one person, a refusal against an answer) can tell something
-    about one person;
-  - the accounting's cost centres can hold one person's pay;
-  - sickness absences are not covered by the rule.
-  The rule stops the direct question, not a determined analyst.
+- **Payroll privacy has remaining gaps** (`privacy.py`, `overlap.py`, D73):
+  - a refusal, compared with an answer, still says something about a group;
+  - the server's memory of earlier aggregates is bounded and lost on a restart;
+  - hours worked are not treated as health data.
+  The rule makes extraction hard; it does not make it impossible for a determined analyst.
 - **Answers are not streamed token by token.** The check needs the whole answer before showing it, so the client sees
   the steps live, then the answer at once (10–40 s typical, up to 2–3 minutes on cross-source questions).
 - **Scores move ±1–2 questions** whenever the prompt changes, at temperature 0, on a set of 33. A difference smaller
@@ -439,10 +438,8 @@ the sales reading (runs 10, 11).
   prompt anyway.
 - **Context:** 32k tokens, 50 rows shown to the model per query. A question that needs the model to *read* hundreds
   of rows (rather than have them reconciled or charted) is out of reach.
-- **Not deployed:**
-  - there is no authentication on the endpoint, which listens on 127.0.0.1 only;
-  - the user a memory belongs to is whatever the client says (the `user` field or Open WebUI's header);
-  - chart files are never cleaned up.
+- **Deployment:** API keys and verified users exist (D72), but keys are plain values with no rotation or rate limit,
+  chart links are open (random ids), and there is no TLS: beyond loopback the endpoint needs a reverse proxy.
 
 ## Corrected after delivery
 
@@ -479,3 +476,6 @@ The three misses of the sealed set:
 
 **Limits of this figure.** The set is not comparable with phase B's test set, and it was written by the author of the
 fixes, who knew its questions while making them. It is an optimistic estimate; an independent set is the next test.
+
+After this measure, step 24 added API keys, chart cleanup and stricter payroll rules (D72, D73). The dev set stayed at
+31/33 (run 22, commit `dcf3b82`); the sealed set was not run again.

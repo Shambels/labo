@@ -88,6 +88,8 @@ Companion file: `QUIZ.md` (one quiz per step, answers collapsed).
 | D69 | Joins that multiply rows | A **warning**, returned with the query's rows, when a joined table references a table already in the query and `COUNT(*)`, or `SUM`/`AVG` of an earlier table's column, reads the multiplied rows (`joins.py`, from the catalog's foreign keys). Not for `COUNT(*)` grouped by the parent | Counting lines can be what was asked, so it can't be a refusal; the model reads the warning and corrects itself (C02) |
 | D70 | Rows in the cards | A table of at most 30 rows, keyed by a code and with several code columns, shows its rows (`mapping_rows`). Only values the card already lists | The separate value lists were read as pairs (X05). Tables keyed by a number (salespeople, suppliers) are records: showing rows would link their identities |
 | D71 | Small figures | Below 1 000, only figures that say what they are: a whole number followed by what it counts, and percentages. Checked against **query results** (cells, row counts, column totals, days between dates, reconciliations) and the client's messages, not the prompt or the cards. Percentages may be a ratio or a change between two result numbers. Same path as D54: one retry, then flagged | A bare small number may be a year or an account; and the prompt and cards hold so many small numbers that "found somewhere" would prove nothing |
+| D72 | Who is calling | `API_KEYS=name:key,...`: `/v1` needs a bearer key, and the user is the key's name; the `user` field is then ignored and conversations are private to it. `TRUSTED_GATEWAYS` lets a shared key (Open WebUI) name its end user, as `gateway/user`. Without keys: local mode, and the server refuses to listen beyond loopback. Chart links stay open, with random ids | Memory was tied to whatever the client claimed. An image tag can't send a key |
+| D73 | Payroll beyond one query | Identifiers only in joins or `COUNT(DISTINCT)`; sickness (`absence_code`, `absence_hours`) follows the salary rules unless the query keeps only other codes; the server remembers the rows behind each aggregate and refuses one that differs from an earlier one by 1–4 people | Differencing was the known gap. Comparing **rows**, not people, lets different months pass, since they share none |
 | D9 | Porting strategy | Port each hospital_rag module **in the step that needs it** (step 0: config, db, logs; step 3: evaluation; step 4: ETL and RAG) | Nothing unused or untested sits in the repo |
 
 ### Open decisions (to settle with you when we reach them)
@@ -524,10 +526,15 @@ What the two reports left open, none of it started. Order: fix the exposure firs
 - **How far to trust it.** Not comparable with phase B's 13/18 (15/18 by hand): different questions. The set was written by the author of the fixes, knowing them (step 19), so 91 % is an optimistic estimate; the trainer's reserve questions would be the independent test. The set has now been read: it can't measure anything further.
 - **Nothing was changed after reading these answers.**
 
-### ⬜ Step 24. Before any real deployment
-- Authentication on the endpoint, and a verified user behind the learned memory (today, whatever the client says).
-- Clean up old chart files.
-- Payroll: limit comparisons between queries (the remaining differencing limit), one-person cost centres in accounting, a rule for sickness absences.
+### ✅ Step 24. Before any real deployment
+- **Authentication and verified users** (D72). Checked on the live endpoint: no key and a wrong key get 401, the right key 200; a request claiming `user: someone-else` was saved under the key's name.
+- **Old charts:** files named like a chart and older than 30 days (`CHART_MAX_AGE_DAYS`) are deleted when a new chart is drawn. Their old answers lose the image.
+- **Payroll** (D73): filtering out one person (`employee_id <> …`) is refused; so is a second query whose rows differ from an earlier one by 1–4 people, in the trial one more day on a hire-date filter. Sickness can be counted over 5 people or more, never listed per person. S09 (an accident at work) still works.
+- **Accounting cost centres:** no rule needed today: every cost centre has at least 5 people on every pay run, and a test now checks it.
+- **Checked:** of the 90 distinct payroll queries that had succeeded, replayed in order through all the gates, 88 pass. The two refused: a per-code breakdown including sickness, and a count of sick days that differs by a few people from an earlier one. Both are what the rules intend, and the agent can answer without them. The 60 attacks of step 17: same result, 59 refused and the harmless `SELECT 1`.
+- **No regression** (run 22, dev, commit `dcf3b82`): **31/33**, same misses (S02, S03), no leak. Its one refused query is a mistyped column in S04, corrected at once. The sealed set was **not** run again: its 29/32 describes the agent before this step.
+- **Limits:** a refusal against an answer still says something; the memory of past queries is bounded and lost on restart, so waiting or restarting escapes it; hours worked aren't treated as health data; keys are plain values in `.env`, with no rotation or rate limit; there is no TLS, so anything beyond loopback needs a reverse proxy.
+- **Tests: 26 new** (484 in all).
 
 ### ⬜ Step 25. RAG experiments (one run each, judged on the targeted types)
 - CODIR actions and decisions in PostgreSQL, for `action_tracking`.
@@ -589,3 +596,5 @@ What the two reports left open, none of it started. Order: fix the exposure firs
 | 2026-11-18 | 22 | Branch `improve/step-22-grounding`: counts and percentages below 1 000 checked against query results (D71); no false alarm in 86 stored answers after two evidence fixes; dev 31/33 (run 19) |
 | 2026-11-18 | – | Step 22 merged, pushed |
 | 2026-11-18 | 23 | Branch `improve/step-23-final`: dev 31/33, sealed set run once, 29/32 (one confidently wrong: N08) |
+| 2026-11-18 | – | Step 23 merged, pushed |
+| 2026-11-18 | 24 | Branch `improve/step-24-deployment`: API keys and verified users (D72), chart cleanup, payroll identifiers, sickness rule, overlap between queries (D73); dev 31/33 (run 22) |
