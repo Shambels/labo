@@ -159,6 +159,8 @@ def for_model(qid: str, output: dict) -> dict:
     shown = output["rows"][:settings.rows_to_model]
     view = {"id": qid, "source": output["source"], "sql": output["sql"], "columns": output["columns"], "rows": shown,
             "row_count": output["row_count"], "truncated": output["truncated"]}
+    if output.get("warnings"):
+        view["warnings"] = output["warnings"]
     if len(shown) < output["row_count"]:
         view["note"] = (f"{len(shown)} premières lignes sur {output['row_count']} : les autres sont gardées sous "
                         f"{qid} pour reconcile. Pour un total ou un classement, agrégez en SQL (SUM, GROUP BY, TOP/LIMIT).")
@@ -304,7 +306,7 @@ class Agent:
                     qid = f"q{len(results) + 1}"
                     results[qid] = {k: output.get(k) for k in ("source", "sql", "columns", "rows", "row_count", "truncated")}
                     step.update(id=qid, sql=output["sql"], source=output["source"], row_count=output["row_count"],
-                                truncated=output["truncated"])
+                                truncated=output["truncated"], warnings=output.get("warnings", []))
                     output = for_model(qid, output)
             steps.append(step)
             messages.append(ToolMessage(as_tool_text(output), tool_call_id=call["id"], name=name))

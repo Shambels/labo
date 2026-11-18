@@ -1,4 +1,5 @@
 """The MCP server through a real MCP client (in memory), plus the cards and value search it serves."""
+import pytest
 import anyio
 
 from mcp.client import Client
@@ -63,6 +64,22 @@ def test_table_card_of_payroll_protects_people(sources):
     assert "examples" not in names["last_name"] and "examples" not in names["birth_date"]
     payslips = {c["name"]: c for c in get_table_card("paie", "payslips")["columns"]}
     assert "examples" not in payslips["gross_amount"] and "privacy" in payslips["gross_amount"]
+
+
+def test_a_small_code_table_shows_which_values_go_together(sources):   # step 21, D70
+    mapping = get_table_card("paie", "pay_elements")["mapping_rows"]
+    row = next(r for r in mapping["rows"] if r[mapping["columns"].index("element_code")] == "IND_TELE")
+    assert row[mapping["columns"].index("gl_account")] == "623100"
+
+
+@pytest.mark.parametrize("source, table", [("paie", "employees"), ("paie", "payslips"), ("erp", "VTE_FACT"),
+                                           ("erp", "VDR_VENDEUR"), ("erp", "FRN_FOURNISSEUR")])
+def test_large_or_personal_tables_show_no_rows(sources, source, table):
+    assert "mapping_rows" not in get_table_card(source, table)
+
+
+def test_rows_of_a_small_table_hold_no_person(sources):
+    assert "head_employee_id" not in get_table_card("paie", "departments")["mapping_rows"]["columns"]
 
 
 def test_find_values(sources):

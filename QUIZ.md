@@ -1463,3 +1463,40 @@ Because the rule is mechanical: a run from a dirty tree can't be reproduced from
 
 Yes. Class 63 (depreciation and provisions, as credit minus debit) is −97 332,45 €, and 1 278 366,78 − 97 332,45 = 1 181 034,33 €, the operating result. Checking a new definition against one already certified catches a wrong account range before the agent uses it.
 </details>
+
+## Step 21: join warning and mapping rows
+
+**1.** `FROM ecriture e JOIN ligne_ecriture l` warns on `COUNT(*)`, but `FROM ligne_ecriture l JOIN ecriture e` does not. Same rows: why the difference?
+
+<details><summary>Answer</summary>
+
+The rows are the same, but the query's shape suggests what is being counted. Starting from `ecriture` and joining its children means the lines were added to entries, so `COUNT(*)` no longer counts the table the query started from. Starting from the lines and joining their parent adds no rows and counts lines, as written. It is a heuristic, which is one reason the result is a warning and not a refusal.
+</details>
+
+**2.** Why is this a warning rather than a refusal, and why is the query still run?
+
+<details><summary>Answer</summary>
+
+Because the query is valid and may be exactly what was asked ("combien de lignes ?"). A refusal would block those, and would count against the budget of failed queries. Returned with the rows, the warning costs nothing when wrong, and when right the model has both the number and the reason to rewrite it, as C02 did.
+</details>
+
+**3.** Why does the rule skip `COUNT(*)` when the query groups by a column of the parent?
+
+<details><summary>Answer</summary>
+
+`SELECT e.code_journal, COUNT(*) ... GROUP BY e.code_journal` or "factures par client" count the children of each parent, the usual meaning. Warning there would be noise on a common and correct query. The cost is a miss when someone really meant to count parents per group.
+</details>
+
+**4.** The warning fired on 1 of 300 past queries and never in the dev runs. How can you tell it is useful, and what does the score say?
+
+<details><summary>Answer</summary>
+
+The score says nothing: no dev question has this problem. The evidence is targeted: the one query it fires on is the known failure, so there are no false alarms in the log, and on C02 the agent corrects itself from 47 to 12. A precise check that protects against a rare error can't show up in a total of 33 questions.
+</details>
+
+**5.** Why are `pay_elements` rows shown but not `VDR_VENDEUR` rows, when both tables are small and the card lists both tables' values?
+
+<details><summary>Answer</summary>
+
+`pay_elements` is keyed by a code: it is a mapping, and its value is the pairing. `VDR_VENDEUR` is keyed by a number and describes people: separate lists of names, staff numbers and e-mails become, as rows, a record linking each person's identifiers. The first draft did include it; the listing of affected tables showed that, and the key condition was added.
+</details>

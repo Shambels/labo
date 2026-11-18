@@ -143,4 +143,5 @@ def execute(source, sql, question=None, max_rows=None, session_id=None, tool="ex
                 "errors": [f"Erreur à l'exécution : {message}"]}
     log_finish(log_id, "ok", validation.sql, None, ms(), len(rows), truncated)
     return {"ok": True, "source": source, "sql": validation.sql, "columns": columns, "rows": rows,
-            "row_count": len(rows), "truncated": truncated, "log_id": log_id}
+            "row_count": len(rows), "truncated": truncated, "log_id": log_id,
+            **({"warnings": validation.warnings} if validation.warnings else {})}

@@ -74,11 +74,11 @@ def sensitive_columns(tree):
     return found
 
 
-def _conjuncts(condition):
+def conjuncts(condition):
     """The conditions joined by AND at the top of `condition`."""
     condition = condition.unnest()
     if isinstance(condition, exp.And):
-        return _conjuncts(condition.left) + _conjuncts(condition.right)
+        return conjuncts(condition.left) + conjuncts(condition.right)
     return [condition]
 
 
@@ -114,7 +114,7 @@ def _check_aggregate_arguments(tree):
 
 
 def _check_filter(where, salary_columns):
-    for condition in _conjuncts(where.this):
+    for condition in conjuncts(where.this):
         columns = list(condition.find_all(exp.Column))
         if not any(id(c) in salary_columns for c in columns):
             continue
@@ -161,7 +161,7 @@ def _person_of(tree, alias, table, tables):
     conditions = [join.args["on"] for join in tree.args.get("joins") or [] if join.args.get("on") is not None]
     if tree.args.get("where") is not None:
         conditions.append(tree.args["where"].this)
-    for condition in (c for top in conditions for c in _conjuncts(top)):
+    for condition in (c for top in conditions for c in conjuncts(top)):
         if not isinstance(condition, exp.EQ):
             continue
         sides = [condition.left, condition.right]

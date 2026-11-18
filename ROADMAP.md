@@ -85,6 +85,8 @@ Companion file: `QUIZ.md` (one quiz per step, answers collapsed).
 | D66 | Network exposure | Every database, Qdrant and model server listens on **127.0.0.1**. Ours in `docker-compose.yaml`; the course's three sources through `docker-compose.sources-local.yaml` (`ports: !override`), with the course file untouched; vLLM with `--host 127.0.0.1`. Reach them from another machine with an SSH tunnel | All clients run on this machine. They were reachable on the LAN and Tailscale addresses, with course passwords, and nothing needed that |
 | D67 | The final test set | `evaluation/t2sql_final_questions.yaml`: 32 new questions (6 ERP, 5 accounting, 5 payroll, 4 cross-source, 4 ambiguous, 3 impossible, 5 malicious), separate from the step 14 file. Its SHA-256 is in `evaluation.py`; `--final` runs it whole, from a clean commit, and once | The phase B test set has been read. A separate file keeps it out of everyday work, and the fingerprint and the run guard turn "don't touch it" into checks |
 | D68 | Ambiguous business words | `business_words` in `ontology/certification.yaml`: five words, each with its readings. When a query ran, the question doesn't settle the reading and the answer leaves some out, the `finish` node writes them under the answer | The model doesn't find a word ambiguous when it has a metric for it, so the prompt rule rarely fires (A03). Same principle as the footer (D53): what must always happen is written by code |
+| D69 | Joins that multiply rows | A **warning**, returned with the query's rows, when a joined table references a table already in the query and `COUNT(*)`, or `SUM`/`AVG` of an earlier table's column, reads the multiplied rows (`joins.py`, from the catalog's foreign keys). Not for `COUNT(*)` grouped by the parent | Counting lines can be what was asked, so it can't be a refusal; the model reads the warning and corrects itself (C02) |
+| D70 | Rows in the cards | A table of at most 30 rows, keyed by a code and with several code columns, shows its rows (`mapping_rows`). Only values the card already lists | The separate value lists were read as pairs (X05). Tables keyed by a number (salespeople, suppliers) are records: showing rows would link their identities |
 | D9 | Porting strategy | Port each hospital_rag module **in the step that needs it** (step 0: config, db, logs; step 3: evaluation; step 4: ETL and RAG) | Nothing unused or untested sits in the repo |
 
 ### Open decisions (to settle with you when we reach them)
@@ -469,9 +471,20 @@ What the two reports left open, none of it started. Order: fix the exposure firs
 - **Limit:** one business word (effectif) and the hire definition touch concepts of the sealed set, which their author knew. They were chosen from the metrics and the phase B failures, and no word was added from that set; still, read step 23's ambiguous and hiring results as weaker evidence.
 - **Tests: 7 new** (433 in all).
 
-### ⬜ Step 21. Better SQL from better checks and cards
-- A validation warning on `COUNT(*)` after a one-to-many join (C02: 47 lines for 12 entries).
-- Row pairs in the cards of small mapping tables, so that a code and its account are read together (X05).
+### ✅ Step 21. Better SQL from better checks and cards
+- **Join warning** (D69): all 80 foreign keys of the three catalogs are used. Replayed on the 300 distinct queries that had succeeded in the log, it fires on **one**: C02's. Asked again, C02 ran its query, read the warning, rewrote it with `COUNT(DISTINCT e.id_ecriture)` and answered 12 entries (47 before).
+- **Rows in the cards** (D70): 11 tables, `pay_elements` among them (`IND_TELE → 623100`).
+- **Results (dev, 33 questions):**
+
+  | run | change | right | confidently wrong | queries | time |
+  |---|---|---:|---:|---:|---:|
+  | 16 | reference (step 20) | 31 | 2 | 40 | 9.7 min |
+  | 17 | join warning | 31 | 2 | 40 | 9.7 min |
+  | 18 | rows in the cards | 31 | 2 | 35 | 9.4 min |
+
+- **Reading:** no dev answer changes verdict: S02 and S03 still miss, and neither is about joins or mappings. The warning never fired on dev (no query there has the problem), so its evidence is C02 and the replay. The cards shorten X05: 15 tool calls and 69 s become 12 and 46 s, and it stays right. It was already right in run 17, so this shows a shorter path, not a fix proved by the score.
+- **Limit:** the sealed set contains counts after a join, by design. The warning was specified from C02 before that set was written, but its author knew those questions when building it.
+- **Tests: 20 new** (453 in all).
 
 ### ⬜ Step 22. Grounding check
 - Check figures below 1 000, aware of units, so that counts are covered without flagging years, days and account numbers (219 written for 203).
@@ -539,3 +552,5 @@ What the two reports left open, none of it started. Order: fix the exposure firs
 | 2026-11-18 | 19 | Branch `improve/step-19-test-set`: 32-question final test set, sealed by its fingerprint, one run allowed; not run yet |
 | 2026-11-18 | – | Step 19 merged, pushed |
 | 2026-11-18 | 20 | Branch `improve/step-20-business-words`: 3 metrics certified, 5 business words with their readings written by code (D68); dev 31/33 (runs 14, 16); P06, A02, A03 fixed by their mechanism |
+| 2026-11-18 | – | Step 20 merged, pushed |
+| 2026-11-18 | 21 | Branch `improve/step-21-sql-checks`: join warning from the foreign keys (D69), rows of small code tables in their cards (D70); dev 31/33 (runs 17, 18); C02 now corrects itself |

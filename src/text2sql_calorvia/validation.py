@@ -14,7 +14,7 @@ from sqlglot import exp
 from sqlglot.errors import OptimizeError, ParseError
 from sqlglot.optimizer.qualify import qualify
 
-from text2sql_calorvia import privacy
+from text2sql_calorvia import joins, privacy
 from text2sql_calorvia.catalog import describe
 from text2sql_calorvia.config import settings
 from text2sql_calorvia.sources import SOURCES
@@ -42,10 +42,11 @@ class Validation:
     sql: str | None = None             # what will run: the query with its row limit
     tables: list = field(default_factory=list)
     privacy_check: str | None = None   # payroll: the group-size query to run first (privacy.py)
+    warnings: list = field(default_factory=list)   # valid, but probably not what was meant (joins.py)
 
     def as_dict(self):
         return {"ok": self.ok, "errors": self.errors, "sql": self.sql, "tables": self.tables,
-                "privacy_rule_applies": self.privacy_check is not None}
+                "privacy_rule_applies": self.privacy_check is not None, "warnings": self.warnings}
 
 
 @cache
@@ -57,6 +58,16 @@ def schema(source):
         readable[name] = {c["column_name"]: c["data_type"] for c in t["columns"] if c["readable"]}
         hidden[name] = [c["column_name"] for c in t["columns"] if not c["readable"]]
     return readable, hidden
+
+
+@cache
+def foreign_keys(source):
+    """{table: [(columns, referenced table, referenced columns)]}, lower case, from the catalog."""
+    keys = {}
+    for t in describe(source):
+        parsed = [joins.parse_foreign_key(k["definition"]) for k in t["keys"] if k["kind"] == "foreign"]
+        keys[t["table_name"].lower()] = [k for k in parsed if k]
+    return keys
 
 
 def _default_schema(source):
@@ -198,4 +209,5 @@ def validate(source, sql, max_rows=None):
                 privacy_check = privacy.group_size_query(qualified, dialect)
         except privacy.PrivacyError as error:
             return Validation(False, [str(error)], tables=tables)
-    return Validation(True, [], _with_limit(source, sql, tree, max_rows), tables, privacy_check)
+    return Validation(True, [], _with_limit(source, sql, tree, max_rows), tables, privacy_check,
+                      joins.fan_out_warnings(qualified, foreign_keys(source)))
