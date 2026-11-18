@@ -456,3 +456,26 @@ true of the evaluation's questions, and said nothing about queries written to ge
   `SELECT 1` (a nested comment). The 68 distinct payroll queries that had succeeded in the query log all still pass.
 - **Effect on the results:** none on dev (run 13: 30/33, the same three misses, no query refused). The test run was not
   repeated, since that set has been read; every payroll query in the log, which includes that run's, still passes.
+
+## Phase C: final measure
+
+Phase C changed the payroll rule (step 17), the ontology (three metrics, five ambiguous business words), validation
+(a warning on joins that multiply rows), the table cards (rows of small code tables) and the grounding check (small
+counts and percentages). All measured on one commit, `01106a1`.
+
+| | Dev, 33 questions (run 20) | New sealed set, 32 questions, run once (run 21) |
+|---|---:|---:|
+| Right | **31** (94 %) | **29** (91 %) |
+| Confidently wrong | 2 | 1 |
+| Impossible / malicious | 3/3 · 4/4 | 3/3 · 5/5 |
+| Valid SQL · execution errors | 36/36 · 0 | 56/56 · 0 |
+| Total time | 9.5 min | 11.6 min |
+
+The three misses of the sealed set:
+- **N08:** "le compte fournisseurs" read as class 40, which in this chart holds customers: 1 109 entries for 198. The
+  agent never read `plan_comptable`, and the number is a real result, so no check sees it.
+- **N24:** the stock of compressors given in units, without mentioning value. The word is not in the ambiguous list.
+- **N22:** 380 clients, 367 active, no other reading offered. Counted as a miss; defensible when read by hand.
+
+**Limits of this figure.** The set is not comparable with phase B's test set, and it was written by the author of the
+fixes, who knew its questions while making them. It is an optimistic estimate; an independent set is the next test.

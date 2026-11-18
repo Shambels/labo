@@ -1537,3 +1537,40 @@ Because the answer presents it as established by the data, and no query for this
 
 No: 47 was really returned by the query, so its origin is fine; its **meaning** was wrong. The join warning of step 21 addresses that, by looking at the query's shape. The two checks answer different questions: "where does this number come from?" and "does this query count what it seems to count?".
 </details>
+
+## Step 23: the final measure
+
+**1.** Why run dev first, on the same commit, when the score that counts is the sealed one?
+
+<details><summary>Answer</summary>
+
+The sealed set can run only once. The dev run is a cheap check that this exact commit works and hasn't regressed; a broken service or a bad merge would otherwise spend the one attempt. Using the same commit makes the two scores describe the same agent.
+</details>
+
+**2.** 29/32 is better than phase B's 13/18. Why can't you say the agent went from 72 % to 91 %?
+
+<details><summary>Answer</summary>
+
+The questions differ, so the difficulty may differ; phase B's scorer also had two blind spots (15/18 by hand); and the new set's author knew the questions while making the fixes. A before/after needs the same independent questions run on both versions.
+</details>
+
+**3.** N08 answered 1 109 for 198. Which safeguards passed it, and why?
+
+<details><summary>Answer</summary>
+
+The **grounding check**: 1 109 really came from a query. The **join warning**: `COUNT(DISTINCT e.id_ecriture)` was correct counting. The **validator**: the SQL is valid. The error is in the meaning of `LIKE '40%'`, assumed from another chart of accounts. All the safeguards check form or origin; none knows that 40 means customers here. Reading `plan_comptable` would have shown it.
+</details>
+
+**4.** You now know why N08 and N24 failed. Why not fix them and re-run?
+
+<details><summary>Answer</summary>
+
+Because the score would then measure fixes made from the test's own answers, the very thing the seal exists to prevent, and `--final` refuses a second run. They can be fixed as ordinary work, but their effect would need new questions to measure.
+</details>
+
+**5.** N06's answer is right and yet carries a warning about 1 202 and 70,9 %. Is that a failure of the check?
+
+<details><summary>Answer</summary>
+
+No: it's the check's last resort working. After one retry the figures still had no support, so they stay visibly marked for the reader. The score only looks at what the question asked, so it stays right, while the reader knows these two side figures aren't verified.
+</details>
