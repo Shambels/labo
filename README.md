@@ -229,7 +229,7 @@ Graph, budgets and the grounding check: `src/text2sql_calorvia/agent.py`; prompt
 ## Phase B: charts and memory (step 15)
 
 - **Charts:** ask for a chart ("fais-moi un graphique du CA par mois"); the agent draws the query result with
-  matplotlib, the endpoint serves it from `/charts/<id>.png`, and the answer carries it as a Markdown image (Open WebUI
+  matplotlib, the endpoint serves it from a signed `/charts/<id>.png` link that expires after 24 hours, and the answer carries it as a Markdown image (Open WebUI
   displays it). Set `AGENT_PUBLIC_URL` if the client reaches the endpoint by another address than localhost:9000.
 - **Conversations** are saved in PostgreSQL (`t2sql_conversations`, `t2sql_messages`) and read back with
   `GET /v1/conversations?user=<user>` and `GET /v1/conversations/<id>`. A client may name the conversation with an

@@ -2,8 +2,8 @@
 
 The model names a result (q1, q2...) and its columns; the rows come from the agent's state, as for reconcile, so
 the chart shows exactly what the query returned and nothing the privacy rule kept out. Open WebUI displays Markdown
-images, so the answer carries ![title](http://…/charts/<id>.png): the link is added by the agent's finish node,
-not written by the model.
+images, so the answer carries ![title](http://…/charts/<id>.png?exp=…&sig=…): the link is added by the agent's finish
+node, not written by the model. Step 29: the link is signed and expires, and the model never sees it again.
 """
 import re
 import time
@@ -16,11 +16,14 @@ matplotlib.use("Agg")   # no display: render to files
 import matplotlib.pyplot as plt  # noqa: E402
 from matplotlib.ticker import FuncFormatter  # noqa: E402
 
+from text2sql_calorvia import access  # noqa: E402
 from text2sql_calorvia.config import settings  # noqa: E402
 
 KINDS = ("bar", "line", "pie")
 MAX_POINTS = 60
 CHART_FILE = re.compile(r"[0-9a-f]{16}\.png")
+CHART_LINK = re.compile(r"(/charts/([0-9a-f]{16})\.png)(?:\?[^)\s]*)?")
+CHART_IMAGE = re.compile(r"\s*!\[[^\n]*?\]\([^)\s]*/charts/[0-9a-f]{16}\.png[^)\s]*\)")
 PALETTE = ["#2563eb", "#f97316", "#16a34a", "#9333ea", "#dc2626", "#0891b2"]
 
 
@@ -103,5 +106,21 @@ def cleanup(directory: Path, max_age_days: int | None = None, now: float | None 
     return removed
 
 
-def chart_url(chart_id: str) -> str:
-    return f"{settings.agent_public_url.rstrip('/')}/charts/{chart_id}.png"
+def _signed_query(chart_id: str, now: float | None = None) -> str:
+    expires = int((now or time.time()) + settings.chart_link_hours * 3600)
+    return f"?exp={expires}&sig={access.sign_chart(chart_id, expires)}"
+
+
+def chart_url(chart_id: str, now: float | None = None) -> str:
+    return f"{settings.agent_public_url.rstrip('/')}/charts/{chart_id}.png{_signed_query(chart_id, now)}"
+
+
+def refresh_links(text: str, chart_ids: set[str], now: float | None = None) -> str:
+    """New expiry for the links of these charts. Only ids the agent drew for this answer: any other id in the text
+    could have been typed by the user, or repeated by the model, to obtain a valid link to someone else's chart."""
+    return CHART_LINK.sub(lambda m: m[1] + _signed_query(m[2], now) if m[2] in chart_ids else m[0], text)
+
+
+def without_images(text: str) -> str:
+    """An earlier answer without its chart links: the model has no use for them, and they are credentials."""
+    return CHART_IMAGE.sub("", text)

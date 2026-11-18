@@ -294,7 +294,8 @@ def ungrounded(answer: str, corpus: str, minimum: float = 1000, max_pairs_of: in
 
 def previous_answer(text: str) -> str:
     """An earlier answer as the model sees it again: the queries as a short note, not the footer's layout,
-    which the model otherwise copies (invented footer and figure included)."""
+    which the model otherwise copies (invented footer and figure included). Chart links are left out (step 29)."""
+    text = charts.without_images(text)
     head, _, tail = text.partition("\n---\n**Comment ce résultat a été obtenu**")
     if not tail:
         return text

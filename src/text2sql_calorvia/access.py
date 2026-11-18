@@ -126,6 +126,17 @@ def read_token(token: str, now: float | None = None) -> str:
     return read_identity(token, now).role
 
 
+def sign_chart(chart_id: str, expires: int) -> str:
+    return _derived(f"chart-link:{chart_id}:{expires}")
+
+
+def chart_link_valid(chart_id: str, expires: str, signature: str, now: float | None = None) -> bool:
+    """An image tag can't send a key, so the link itself proves that the agent gave it out, until it expires."""
+    if not expires.isascii() or not expires.isdigit() or int(expires) < (now or time.time()):
+        return False
+    return hmac.compare_digest(signature.encode(), sign_chart(chart_id, int(expires)).encode())
+
+
 def caller(token: str | None) -> Identity | None:
     """Who an MCP call runs as. None = agent_ro, only while no API keys are set (local mode)."""
     if token:
