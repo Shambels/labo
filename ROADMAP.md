@@ -84,6 +84,7 @@ Companion file: `QUIZ.md` (one quiz per step, answers collapsed).
 | D65 | Payroll rule as an allowlist (revises D43) | A query reading a salary may only be one plain SELECT returning aggregates: SUM/AVG/COUNT over columns and constants, salary filters as constant comparisons joined by AND, no whole-row reference. People are counted per salary column, on that column's table, without HAVING, ignoring rows whose amount is NULL or 0 | The first rule listed forbidden forms, and a review got individual pay through it four ways (step 17). What is allowed can be listed; what is dangerous cannot |
 | D66 | Network exposure | Every database, Qdrant and model server listens on **127.0.0.1**. Ours in `docker-compose.yaml`; the course's three sources through `docker-compose.sources-local.yaml` (`ports: !override`), with the course file untouched; vLLM with `--host 127.0.0.1`. Reach them from another machine with an SSH tunnel | All clients run on this machine. They were reachable on the LAN and Tailscale addresses, with course passwords, and nothing needed that |
 | D67 | The final test set | `evaluation/t2sql_final_questions.yaml`: 32 new questions (6 ERP, 5 accounting, 5 payroll, 4 cross-source, 4 ambiguous, 3 impossible, 5 malicious), separate from the step 14 file. Its SHA-256 is in `evaluation.py`; `--final` runs it whole, from a clean commit, and once | The phase B test set has been read. A separate file keeps it out of everyday work, and the fingerprint and the run guard turn "don't touch it" into checks |
+| D68 | Ambiguous business words | `business_words` in `ontology/certification.yaml`: five words, each with its readings. When a query ran, the question doesn't settle the reading and the answer leaves some out, the `finish` node writes them under the answer | The model doesn't find a word ambiguous when it has a metric for it, so the prompt rule rarely fires (A03). Same principle as the footer (D53): what must always happen is written by code |
 | D9 | Porting strategy | Port each hospital_rag module **in the step that needs it** (step 0: config, db, logs; step 3: evaluation; step 4: ETL and RAG) | Nothing unused or untested sits in the repo |
 
 ### Open decisions (to settle with you when we reach them)
@@ -452,9 +453,21 @@ What the two reports left open, none of it started. Order: fix the exposure firs
 - **Limit:** the set was written by the same assistant that will make the fixes, so it is held out from the agent, not from its author. Fixes must therefore stay general, and the step 23 score is weaker evidence than a set written by someone else. Your trainer's reserve questions would be the stronger test.
 - **Tests: 23 new** (426 in all).
 
-### ⬜ Step 20. Ontology: ambiguous and missing business words
-- Mark the business words that map to several certified metrics, and have **code**, not the model, add the other readings (A02, A03: "le résultat", "travaillent").
-- Certify "embauche" as `hire_date` (P06). Certify sickness days (P03 drifts with the prompt).
+### ✅ Step 20. Ontology: ambiguous and missing business words
+- **Three metrics certified** (11 in all), each checked on the data: operating result (March 2026: 1 181 034,33 € = EBITDA 1 278 366,78 € − class 63), people hired (`hire_date`, January–May 2026: 30), sickness days (`MAL` + `MAL_MUT`, March 2026: 563). Applied to auto-ontology, export regenerated.
+- **Five business words** (D68): chiffre d'affaires, résultat, effectif, coût du personnel, meilleurs produits. They come from the certified metrics and the analysed failures (A01–A05).
+- **Results (dev, 33 questions):**
+
+  | run | change | right | confidently wrong | time | misses |
+  |---|---|---:|---:|---:|---|
+  | 13 | reference (after step 17) | 30 | 3 | 10.3 min | S02, S03, X05 |
+  | 14 | three metrics | 31 | 2 | 9.9 min | S02, S03 |
+  | 16 | business words | 31 | 2 | 9.7 min | S02, S03 |
+
+- **Reading:** the score doesn't prove the fix. X05 passing in run 14 is not a target of the change, and ±1–2 is the noise. The evidence is the mechanism, checked by hand (nothing stored, and these are questions already read): P06 now gives 30 from `hire_date` (38 before); A02 gives 609 under contract and names the paid-people and full-time-equivalent readings (one silent reading before); A03 gives the net result, offers the operating result, and the code adds EBITDA. On run 14's stored dev answers the note fires on A03 only, so it adds no noise to clear questions.
+- **Run 15 is void:** it started while `src/rag_calorvia/etl/chunk.py` had an uncommitted edit made outside this work, so it was stopped, flagged dirty and left out. Run 16 is the same commit from a clean checkout.
+- **Limit:** one business word (effectif) and the hire definition touch concepts of the sealed set, which their author knew. They were chosen from the metrics and the phase B failures, and no word was added from that set; still, read step 23's ambiguous and hiring results as weaker evidence.
+- **Tests: 7 new** (433 in all).
 
 ### ⬜ Step 21. Better SQL from better checks and cards
 - A validation warning on `COUNT(*)` after a one-to-many join (C02: 47 lines for 12 entries).
@@ -524,3 +537,5 @@ What the two reports left open, none of it started. Order: fix the exposure firs
 | 2026-11-18 | 18 | Branch `improve/step-18-network`: databases and Qdrant bound to 127.0.0.1 (D66), data unchanged, README commands updated; vLLM servers still to restart |
 | 2026-11-18 | – | Step 18 merged, pushed; embedder and reranker restarted on 127.0.0.1 |
 | 2026-11-18 | 19 | Branch `improve/step-19-test-set`: 32-question final test set, sealed by its fingerprint, one run allowed; not run yet |
+| 2026-11-18 | – | Step 19 merged, pushed |
+| 2026-11-18 | 20 | Branch `improve/step-20-business-words`: 3 metrics certified, 5 business words with their readings written by code (D68); dev 31/33 (runs 14, 16); P06, A02, A03 fixed by their mechanism |
