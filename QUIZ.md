@@ -1352,3 +1352,40 @@ Because the four attacks have many relatives: `ARRAY_AGG(name)`, `COUNT(CASE ...
 
 It shows the stricter rule **did not cost** the agent anything on those questions: nothing was refused. It says nothing about security: run 11 also scored 30/33 and had no leak, with the bug present, because the evaluation's questions never tried these queries. Security is shown by the attack tests. The test set has been read (step 16), so a new score on it would no longer be held-out; replaying the logged queries answers the only question that mattered, whether its payroll queries still pass.
 </details>
+
+## Step 18: network exposure
+
+**1.** What is the difference between publishing a port as `5432:5432` and as `127.0.0.1:5432:5432`?
+
+<details><summary>Answer</summary>
+
+The first listens on every interface of the host, so the LAN and Tailscale addresses reach the container too. The second listens on the loopback interface only: programs on this machine connect as before, and other machines have nothing to connect to. The application's `localhost` URLs don't change.
+</details>
+
+**2.** Why use a second compose file with `ports: !override`, and what would happen without `!override`?
+
+<details><summary>Answer</summary>
+
+The course's file stays untouched (it is course material, outside Git). Compose **merges** lists from several files: without `!override` the new entry would be added to the old `14330:1433`, and the two would ask for the same host port. `!override` replaces the list.
+</details>
+
+**3.** The sources were recreated with `--no-deps`, and their data survived. Why did the data survive, and what does `--no-deps` avoid?
+
+<details><summary>Answer</summary>
+
+The data lives in **named volumes**, which outlive containers; PostgreSQL's init scripts run only on an empty data folder. `--no-deps` leaves out the one-shot `erp-restore` service, which isn't needed. Row counts taken before and after are the proof, rather than the theory.
+</details>
+
+**4.** Why does Trino stop working with these sources bound to loopback, when auto-ontology keeps working?
+
+<details><summary>Answer</summary>
+
+Inside a container on a Docker network, `127.0.0.1` is the container itself: Trino reaches the host through the gateway address (`host.docker.internal`), and a port bound to the host's loopback isn't listening there. auto-ontology runs with **host networking** (D48), so its `localhost` is the host's.
+</details>
+
+**5.** A port scan from this machine against its own LAN address shows the port closed. What does that prove, and what doesn't it?
+
+<details><summary>Answer</summary>
+
+It proves nothing listens on that address, which is the property we changed, so another machine cannot connect to it either. It does not test the network path or the firewall; before the change, the same local test showed the port open but could not tell whether a firewall would have stopped an outside client.
+</details>

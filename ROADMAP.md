@@ -82,6 +82,7 @@ Companion file: `QUIZ.md` (one quiz per step, answers collapsed).
 | D63 | Learned memory | Only on explicit request (`remember`), per user, never personal payroll data; in the prompt as **data below the rules**; `forget` deactivates; **off in evaluations** | A memory is a prompt injection that survives the conversation; the rules that matter are enforced by the server anyway. An evaluation must not depend on what was remembered |
 | D64 | Final configuration and report | `experiments/t2sql/final.toml`: with ontology, the fixes of D60, the step 15 tools, **and `offer_readings`** (reverses D60's rejection). Report in `RAPPORT_T2SQL.md` (`RAPPORT.md` is phase A's); exports in `results/t2sql/` | `offer_readings` scored 31 and 30/33 in two runs against 29 and 29 without it, and its second run fixed A03 by its own mechanism (the other readings named). One repo for both phases (D40), so one report each |
 | D65 | Payroll rule as an allowlist (revises D43) | A query reading a salary may only be one plain SELECT returning aggregates: SUM/AVG/COUNT over columns and constants, salary filters as constant comparisons joined by AND, no whole-row reference. People are counted per salary column, on that column's table, without HAVING, ignoring rows whose amount is NULL or 0 | The first rule listed forbidden forms, and a review got individual pay through it four ways (step 17). What is allowed can be listed; what is dangerous cannot |
+| D66 | Network exposure | Every database, Qdrant and model server listens on **127.0.0.1**. Ours in `docker-compose.yaml`; the course's three sources through `docker-compose.sources-local.yaml` (`ports: !override`), with the course file untouched; vLLM with `--host 127.0.0.1`. Reach them from another machine with an SSH tunnel | All clients run on this machine. They were reachable on the LAN and Tailscale addresses, with course passwords, and nothing needed that |
 | D9 | Porting strategy | Port each hospital_rag module **in the step that needs it** (step 0: config, db, logs; step 3: evaluation; step 4: ETL and RAG) | Nothing unused or untested sits in the repo |
 
 ### Open decisions (to settle with you when we reach them)
@@ -436,9 +437,12 @@ Deliberately more open than phase A: the steps below are a skeleton we will refi
 
 What the two reports left open, none of it started. Order: fix the exposure first, then the agent's failures, then measure them once on a **new** test set (the phase B one has been read). One change at a time, as before.
 
-### ⬜ Step 18. Network exposure
-- Bind our `docker-compose.yaml` services (PostgreSQL 5432, Qdrant 6333) to `127.0.0.1`. The course databases (5433, 5434, 14330) and the model servers 8001, 8002 also listen on every interface: decide how to restrict them without editing course files, and test what is reachable from outside.
-- Correct the comment in `docker-compose.yaml` (the ERP is on 14330, not 1433).
+### 🔄 Step 18. Network exposure
+- **Before:** from this machine's LAN and Tailscale addresses, ports 5432, 5433, 5434, 14330, 6333, 8001 and 8002 all accepted connections. No client other than this machine was connected.
+- **Done (D66):** PostgreSQL, Qdrant and the three sources recreated on `127.0.0.1`: their five ports are now closed on both addresses and open on loopback. Same data after the recreate (10 185 invoices, 20 562 entries, 7 298 payslips, 393 documents, 12 runs, 381 answers, 1 319 log rows, 6 collections with 10 210 points). 403 tests pass, 12/12 starter questions. The comment on the ERP port is corrected.
+- **Left, for you:** the embedder (8001) and reranker (8002) run in your terminals and still listen everywhere. The README's commands now have `--host 127.0.0.1`; restart them with those commands, then this step is done.
+- **Not tested:** a connection from another machine, and the firewall rules (they need root). Binding to loopback does not depend on either. auto-ontology's connection to the recreated databases was not exercised; the chatbots don't use it at run time.
+- **Side effect:** Trino (rejected in D47, stopped) reaches the sources through the Docker gateway, so it needs them started without the override.
 
 ### ⬜ Step 19. A new text-to-SQL test set
 - Write it **before** steps 20–22 and leave it unread until step 23: new questions with reference SQL, for each category, including the failure kinds seen so far.
@@ -511,3 +515,5 @@ What the two reports left open, none of it started. Order: fix the exposure firs
 | 2026-11-18 | 16 | Branch `t2sql/step-16-delivery`: `offer_readings` re-tested and kept (D64); test set run once, 13/18 scored, 15/18 by hand; `RAPPORT_T2SQL.md`, `results/t2sql/`, README quick start |
 | 2026-11-18 | – | Step 16 merged, tagged `t2sql/v1.0`, pushed. Phase B done |
 | 2026-11-18 | 17 | Branch `t2sql/step-17-privacy`: individual pay reachable past the payroll rule (whole rows, CASE/FILTER in aggregates, people counted on the wrong table, names by salary threshold); rule rewritten as an allowlist (D65); 47 new tests; dev regression 30/33 = run 11. Phase C added to this roadmap |
+| 2026-11-18 | – | Step 17 merged into `main`, pushed. The tag `t2sql/v1.1` was pushed by mistake on the commit **before** the merge (`65a21e7`, without the fix): to be corrected |
+| 2026-11-18 | 18 | Branch `improve/step-18-network`: databases and Qdrant bound to 127.0.0.1 (D66), data unchanged, README commands updated; vLLM servers still to restart |
