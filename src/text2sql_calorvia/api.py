@@ -26,7 +26,7 @@ from fastapi import Depends, FastAPI, Header, HTTPException
 from fastapi.responses import FileResponse, StreamingResponse
 from pydantic import BaseModel
 
-from text2sql_calorvia import auth, memory
+from text2sql_calorvia import access, auth, memory
 from text2sql_calorvia.agent import Agent, default_agent
 from text2sql_calorvia.config import settings
 
@@ -153,6 +153,8 @@ def create_app(agent: Agent | None = None, api_keys: str | None = None, gateways
         if not may_read(who, user, conversation_id):   # someone else's id: this becomes a new conversation
             conversation_id = completion_id
         marker = f"\n\n<!-- calorvia:conversation={conversation_id} -->"
+        # With keys, the agent works under the user's role (Phase D); in local mode, as agent_ro
+        extra = {"access_token": access.issue_token(access.role_of(user), user)} if who.name else {}
 
         def save(answer: str, steps: list[dict]):
             try:
@@ -161,7 +163,7 @@ def create_app(agent: Agent | None = None, api_keys: str | None = None, gateways
                 print(f"conversation not saved: {type(error).__name__}: {error}", flush=True)
 
         if not request.stream:
-            result = await get_agent().ask(messages, session_id, user, conversation_id)
+            result = await get_agent().ask(messages, session_id, user, conversation_id, **extra)
             save(result["answer"], result["steps"])
             return {"id": completion_id, "object": "chat.completion", "created": created,
                     "model": settings.agent_model_name,
@@ -179,7 +181,7 @@ def create_app(agent: Agent | None = None, api_keys: str | None = None, gateways
             yield chunk({"role": "assistant", "content": ""})
             opened, shown, steps = False, 0, []
             try:
-                async for node, change in get_agent().stream(messages, session_id, user, conversation_id):
+                async for node, change in get_agent().stream(messages, session_id, user, conversation_id, **extra):
                     if node == "tools":
                         steps = change["steps"]
                         if not opened:

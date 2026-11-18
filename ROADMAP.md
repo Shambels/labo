@@ -565,12 +565,18 @@ Every role also gets the documents of `employe`. Salaries stay aggregated over a
 
 Left to `direction` alone: `08_Juridique` and `00_Direction`, apart from the CODIR minutes that `finance` also reads. `02_RH/Confidentiel` is shared by `direction` and `rh` only. The annual reviews stay out of the index for everyone (D12).
 
-### ⬜ Step 25. Policy file and role logins
-- The approved roles in one versioned policy file; a script generates the logins and grants (PostgreSQL, SQL Server), outside the course files. The key's user maps to a role; the API passes it to the MCP server in a signed, short-lived token, never through the model.
-- `connect(source, role)`; tests sending forbidden statements directly under each login, as `test_sources.py` does.
+### ✅ Step 25. Policy file and role logins
+- **Policy** in `policy/roles.yaml`; `scripts/apply_roles.py` creates one read-only login per role and source (idempotent, `--dry-run`), the only code using the admin accounts. A login never gets more than `agent_ro`: `*` and column grants are copied from its privileges, so the hidden payroll columns stay hidden. Label tables (`PAR_CODE`, `SOC_SITE`) go to every role reading the ERP.
+- **The path of a role:** `USER_ROLES` gives the user's role (nobody listed: `employe`, which reads no database); the endpoint signs a 15-minute token; the agent passes it to the MCP server beside the tool's arguments, hidden from the model; the query runs under that role's login. With `API_KEYS` set, a call without a valid token is refused. Passwords and the signing key are derived from `AGENT_RO_PASSWORD`.
+- **Site managers are refused for now:** their logins exist, but they would see every site until step 27.
+- **Checked directly on the databases, past validation:** every active role against every table of each source, allowed and forbidden; writes refused; hidden columns refused.
+- **Checked live with two roles.** Two bugs appeared that the unit tests had missed: `Agent.ask` didn't accept the token (the tests used a fake agent), and **`commercial`, refused the accounting query, read "12 écritures" in a table card**. Cards, table lists, source lists and value search now follow the role, ahead of step 26. It now answers that the information isn't available, and `finance` still gets 12.
+- **No regression** (run 23, dev, local mode, no role): **31/33**, same misses (S02, S03). The evaluation doesn't exercise the roles: that is step 29.
+- **Limits, for step 26:** the prompt still lists every table and metric, validation errors can name other tables, and refusals confirm that a source exists. **Don't assign roles to real users before step 29.** `get_sales_commission` needs both the ERP's salespeople and payroll, so it works for `direction` and `rh`, not `finance`.
+- **Tests: 56 new** (540 in all).
 
 ### ⬜ Step 26. Everything the model sees, per role
-- Cache schema, foreign keys, table cards and `find_values` per role. Filter the prompt's table index and metrics. The query log records user and role.
+- Cache schema and foreign keys per role, so validation sees only the role's tables (cards and value search were filtered in step 25). Filter the prompt's table index and metrics. The query log records user and role.
 - A forbidden table reads as unavailable: the answer doesn't confirm that it exists.
 
 ### ⬜ Step 27. Row-level security
@@ -653,3 +659,4 @@ Left to `direction` alone: `08_Juridique` and `00_Direction`, apart from the COD
 | 2026-11-18 | 24 | Branch `improve/step-24-deployment`: API keys and verified users (D72), chart cleanup, payroll identifiers, sickness rule, overlap between queries (D73); dev 31/33 (run 22) |
 | 2026-11-18 | – | Phase D (role-based access, steps 25–29) added, roles proposed for approval; the RAG experiments moved to Phase E (step 30) |
 | 2026-11-18 | – | Roles approved (D75). Step 24 merged, pushed |
+| 2026-11-18 | 25 | Branch `access/step-25-roles`: policy file, one login per role and source, signed role token through the agent; a card leak found live and closed; dev 31/33 (run 23) |

@@ -50,10 +50,11 @@ def index(source):
     return entries
 
 
-def find_values(source, value, table=None, column=None, limit=20):
+def find_values(source, value, table=None, column=None, limit=20, allowed_tables=None):
     """Matches of `value` in a source (optionally one table / column), best first.
 
     Exact > starts with > contains (also letters and digits only) > every word found > close spelling.
+    allowed_tables: lower-case names the caller's role may read (None = all).
     """
     wanted, wanted_compact = normalize(value), compact(value)
     if not wanted:
@@ -61,7 +62,8 @@ def find_values(source, value, table=None, column=None, limit=20):
     words = [w for w in re.split(r"[^a-z0-9]+", wanted) if len(w) >= 3]
     hits = []
     for tbl, col, raw, norm, comp in index(source):
-        if (table and tbl.lower() != table.lower()) or (column and col.lower() != column.lower()):
+        if (table and tbl.lower() != table.lower()) or (column and col.lower() != column.lower()) \
+                or (allowed_tables is not None and tbl.lower() not in allowed_tables):
             continue
         if norm == wanted or (wanted_compact and comp == wanted_compact):
             rank = 0
@@ -79,7 +81,8 @@ def find_values(source, value, table=None, column=None, limit=20):
         # Typos: close values, then each word on its own (a first and a last name sit in two columns)
         candidates = {}
         for tbl, col, raw, norm, _ in index(source):
-            if (table and tbl.lower() != table.lower()) or (column and col.lower() != column.lower()):
+            if (table and tbl.lower() != table.lower()) or (column and col.lower() != column.lower()) \
+                    or (allowed_tables is not None and tbl.lower() not in allowed_tables):
                 continue
             candidates.setdefault(norm, []).append((tbl, col, raw))
         for norm in difflib.get_close_matches(wanted, list(candidates), n=limit, cutoff=0.75):

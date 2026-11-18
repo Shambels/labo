@@ -1,0 +1,6 @@
+# experiments/t2sql/role_logins.toml — step 25 (D74): role logins and tokens. The evaluation runs in local mode, without
+# a role: this checks that the normal path did not change. Regression against deployment_rules (run 22).
+name = "role_logins"
+
+[agent]
+use_ontology = true

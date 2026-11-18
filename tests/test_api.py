@@ -15,14 +15,14 @@ class FakeAgent:
     def __init__(self):
         self.received, self.who = None, None
 
-    async def stream(self, messages, session_id=None, user="default", conversation_id=None):
-        self.received, self.who = messages, (user, conversation_id)
+    async def stream(self, messages, session_id=None, user="default", conversation_id=None, access_token=None):
+        self.received, self.who, self.token = messages, (user, conversation_id), access_token
         yield "agent", {}
         yield "tools", {"steps": [STEP]}
         yield "finish", {"answer": "CA : 5 €"}
 
-    async def ask(self, messages, session_id=None, user="default", conversation_id=None):
-        self.received, self.who = messages, (user, conversation_id)
+    async def ask(self, messages, session_id=None, user="default", conversation_id=None, access_token=None):
+        self.received, self.who, self.token = messages, (user, conversation_id), access_token
         return {"answer": "CA : 5 €", "steps": [STEP]}
 
 
@@ -211,3 +211,17 @@ def test_the_server_refuses_to_listen_openly_without_keys(monkeypatch):
 def test_a_malformed_key_list_is_refused():
     with pytest.raises(ValueError, match="name:key"):
         create_app(FakeAgent(), api_keys="just-a-key")
+
+
+def test_the_agent_gets_the_role_of_the_key_and_none_in_local_mode(monkeypatch):
+    from text2sql_calorvia import access
+    monkeypatch.setattr("text2sql_calorvia.memory.conversation_owner", lambda _: None)
+    monkeypatch.setattr(access.settings, "user_roles", "alice:finance")
+    http, agent = keyed()
+    http.post("/v1/chat/completions", json=BODY, headers=bearer("key-a"))
+    assert access.read_token(agent.token) == "finance"
+    http.post("/v1/chat/completions", json=BODY, headers=bearer("key-b"))
+    assert access.read_token(agent.token) == access.DEFAULT_ROLE       # nobody gets data by default
+    local, agent = client()
+    local.post("/v1/chat/completions", json=BODY)
+    assert agent.token is None

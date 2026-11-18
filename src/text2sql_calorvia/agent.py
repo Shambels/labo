@@ -40,7 +40,7 @@ from text2sql_calorvia.reconcile import KEY_TYPES, reconcile
 
 PROMPT = Path(__file__).resolve().parents[2] / "prompts" / "agent.txt"
 ONTOLOGY_PROMPT = PROMPT.with_name("agent_ontology.txt")   # the ontology's part, left out when use_ontology is off
-INJECTED = {"question", "session_id", "max_rows"}   # filled by the agent (query log, row budget), never by the model
+INJECTED = {"question", "session_id", "max_rows", "access_token"}   # filled by the agent (query log, row budget), never by the model
 SQL_TOOLS = {"execute_sql", "validate_sql"}
 ENGINE = {"erp": "SQL Server", "compta": "PostgreSQL", "paie": "PostgreSQL"}
 
@@ -106,6 +106,7 @@ class AgentState(TypedDict, total=False):
     charts: list[dict]           # {id, title} drawn for this answer (step 15)
     user: str                    # whose memory (step 15)
     conversation_id: str | None
+    access_token: str | None     # the caller's role, signed by the endpoint (access.py); never shown to the model
     answer: str
 
 
@@ -288,6 +289,8 @@ class Agent:
                 step.update(ok=False, stage="repeat", errors=output["errors"])
                 sql_errors += 1
             else:
+                if state.get("access_token"):
+                    args["access_token"] = state["access_token"]
                 if name in {"execute_sql", "get_sales_commission"}:
                     args.update(question=state["question"], session_id=state["session_id"])
                 if name == "execute_sql":
@@ -423,7 +426,7 @@ class Agent:
 
     # --- running ----------------------------------------------------------------------------------------------------
     async def stream(self, messages: list[dict], session_id: str | None = None, user: str = "default",
-                     conversation_id: str | None = None):
+                     conversation_id: str | None = None, access_token: str | None = None):
         """Run the graph on an OpenAI-style conversation; yields (node, state update) as each node finishes.
         `user` selects the memory; `conversation_id` records where a memory was learned."""
         question = next(m["content"] for m in reversed(messages) if m["role"] == "user")
@@ -435,14 +438,16 @@ class Agent:
             if self.use_memory:
                 tools += [REMEMBER_TOOL, FORGET_TOOL]
                 remembered = memory.prompt_section(memory.memories(user))
-            sources = structured(await client.call_tool("list_sources", {}))
+            sources = structured(await client.call_tool(
+                "list_sources", {"access_token": access_token} if access_token else {}))
             history = [SystemMessage(system_prompt(sources, self.use_ontology, remembered))] + [
                 HumanMessage(m["content"]) if m["role"] == "user" else AIMessage(previous_answer(m["content"]))
                 for m in messages if m["role"] in ("user", "assistant")]
             state = {"messages": history, "question": question, "session_id": session_id,
                      "results": {}, "steps": [], "tool_calls": 0, "sql_errors": 0,
                      "history_len": len(history), "grounding_retry": False, "unverified": [],
-                     "charts": [], "user": user, "conversation_id": conversation_id}
+                     "charts": [], "user": user, "conversation_id": conversation_id,
+                     "access_token": access_token}
             config = {"configurable": {"client": client, "tools": tools},
                       "recursion_limit": 4 * settings.max_tool_calls + 10}
             async for update in self.graph.astream(state, config, stream_mode="updates"):
@@ -450,10 +455,10 @@ class Agent:
                     yield node, change
 
     async def ask(self, messages: list[dict], session_id: str | None = None, user: str = "default",
-                  conversation_id: str | None = None) -> dict:
+                  conversation_id: str | None = None, access_token: str | None = None) -> dict:
         """Run to the end; returns {"answer", "steps", "results"} (results: every row of q1, q2...)."""
         steps, answer, results = [], "", {}
-        async for node, change in self.stream(messages, session_id, user, conversation_id):
+        async for node, change in self.stream(messages, session_id, user, conversation_id, access_token):
             if node == "tools":
                 steps, results = change["steps"], change["results"]
             if node == "finish":

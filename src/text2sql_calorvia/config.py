@@ -47,6 +47,7 @@ class Settings(BaseSettings):
     # Before a real deployment (step 24, D72)
     api_keys: str = ""                # "name:key,name2:key2"; empty = local mode, loopback only
     trusted_gateways: str = ""        # names whose key may say which end user is asking (Open WebUI's header)
+    user_roles: str = ""              # "alice:finance,webui/bob:rh"; anyone else gets the default role (Phase D)
     chart_max_age_days: int = 30      # older chart files are deleted when a new chart is drawn
     overlap_max_rows: int = 200_000   # payroll: rows read to compare what two queries cover
 

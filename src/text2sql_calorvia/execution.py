@@ -16,7 +16,7 @@ from decimal import Decimal
 import psycopg
 import pymssql
 
-from text2sql_calorvia import overlap
+from text2sql_calorvia import access, overlap
 from text2sql_calorvia.config import settings
 from text2sql_calorvia.sources import SOURCES, connect, load_sql
 from text2sql_calorvia.validation import validate
@@ -59,12 +59,12 @@ def to_json(value):
     return value
 
 
-def run_unvalidated(source, sql, max_rows=None, timeout_s=None):
+def run_unvalidated(source, sql, max_rows=None, timeout_s=None, role=None):
     """Run one statement in a read-only, rolled-back transaction with a timeout. Returns (columns, rows, truncated)."""
     max_rows = max_rows or settings.max_rows
     timeout_s = timeout_s or settings.query_timeout_s
     engine = SOURCES[source].engine
-    conn = connect(source, query_timeout_s=int(timeout_s) if engine == "sqlserver" else 0)
+    conn = connect(source, query_timeout_s=int(timeout_s) if engine == "sqlserver" else 0, role=role)
     timer = None
     try:
         if engine == "postgres":
@@ -115,10 +115,10 @@ def _db_message(error):
     return str(error).splitlines()[0]
 
 
-def _overlap_refusal(source, population):
+def _overlap_refusal(source, population, role=None):
     """A refusal if these rows differ from an earlier aggregate's by too few people (overlap.py, D73)."""
     table, sql = population
-    _, rows, truncated = run_unvalidated(source, sql, max_rows=settings.overlap_max_rows)
+    _, rows, truncated = run_unvalidated(source, sql, max_rows=settings.overlap_max_rows, role=role)
     if truncated:
         return "Règle de confidentialité : trop de lignes pour vérifier ce calcul. Restreignez la période."
     groups = {}
@@ -131,7 +131,7 @@ def _overlap_refusal(source, population):
             f"(minimum {settings.min_group_size}) : la comparaison montrerait leur montant. Élargissez le périmètre.")
 
 
-def execute(source, sql, question=None, max_rows=None, session_id=None, tool="execute_sql"):
+def execute(source, sql, question=None, max_rows=None, session_id=None, tool="execute_sql", role=None):
     """Validate, check the payroll rule, run, log. Returns a dict for the model, never raises on a bad query."""
     max_rows = max_rows or settings.max_rows
     log_id = log_start(tool, source, question, sql, session_id)
@@ -144,7 +144,7 @@ def execute(source, sql, question=None, max_rows=None, session_id=None, tool="ex
         return {"ok": False, "source": source, "errors": validation.errors}
     try:
         if validation.privacy_check:
-            _, rows, _ = run_unvalidated(source, validation.privacy_check, max_rows=1)
+            _, rows, _ = run_unvalidated(source, validation.privacy_check, max_rows=1, role=role)
             smallest = rows[0][0] if rows else None
             if smallest is not None and smallest < settings.min_group_size:
                 message = (f"Règle de confidentialité : un groupe du résultat ne compte que {smallest} personne(s) "
@@ -152,10 +152,13 @@ def execute(source, sql, question=None, max_rows=None, session_id=None, tool="ex
                            "qui isole des personnes.")
                 log_finish(log_id, "refused", validation.sql, message, ms())
                 return {"ok": False, "source": source, "errors": [message]}
-            if (message := _overlap_refusal(source, validation.population)):
+            if (message := _overlap_refusal(source, validation.population, role)):
                 log_finish(log_id, "refused", validation.sql, message, ms())
                 return {"ok": False, "source": source, "errors": [message]}
-        columns, rows, truncated = run_unvalidated(source, validation.sql, max_rows)
+        columns, rows, truncated = run_unvalidated(source, validation.sql, max_rows, role=role)
+    except access.AccessDenied as error:
+        log_finish(log_id, "refused", validation.sql, str(error), ms())
+        return {"ok": False, "source": source, "errors": [str(error)]}
     except (QueryTimeout, *DB_ERRORS) as error:
         message = str(error) if isinstance(error, QueryTimeout) else _db_message(error)
         log_finish(log_id, "error", validation.sql, message, ms())

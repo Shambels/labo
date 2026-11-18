@@ -1611,3 +1611,40 @@ The rule was scoped to sickness, and the course's own question S09 asks how long
 
 Clients display them through a Markdown image, and an image tag can't send an `Authorization` header. The link itself carries a random 16-hex id, which acts as the secret, and old files are deleted after 30 days. The cost: anyone who obtains the link sees the chart, so charts must never show what the privacy rule protects, and they only draw results that passed it.
 </details>
+
+## Step 25: role logins
+
+**1.** Why give each role its own database login rather than check the tables in the validator?
+
+<details><summary>Answer</summary>
+
+The validator is code reading SQL, and it can have blind spots (step 17 found some). A login's grants are enforced by the database whatever query arrives, including one that gets past validation. The tests prove this by sending queries straight to the database under each login.
+</details>
+
+**2.** How does the role reach the MCP server without the model being able to change it?
+
+<details><summary>Answer</summary>
+
+The endpoint derives the role from the API key's user and signs a short-lived token. The agent adds it to each tool call itself, like `session_id`; it is removed from the tool schemas, so the model neither sees nor sets it. A changed token fails its signature.
+</details>
+
+**3.** `commercial` was refused an accounting query and still answered "12 écritures". How, and what does it teach?
+
+<details><summary>Answer</summary>
+
+The table card lists code values with their counts, and cards were still built as `agent_ro` for everyone. Protecting the query path isn't enough: every route by which data reaches the model has to follow the role. Only an end-to-end test with the real model showed it.
+</details>
+
+**4.** Why did the unit tests miss that `Agent.ask` refused the token?
+
+<details><summary>Answer</summary>
+
+The API tests use a fake agent, whose signature had been updated by hand along with the call. They agreed with each other, not with the real class. A test now runs the real agent, with a scripted model and the real MCP server, under two roles.
+</details>
+
+**5.** Why are the site managers' logins created but refused?
+
+<details><summary>Answer</summary>
+
+Their table grants exist, but nothing limits their rows yet: a Gand manager would read every site. Refusing is the safe state until row-level security exists (step 27), so a half-built permission can't be used.
+</details>
