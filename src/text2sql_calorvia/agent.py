@@ -158,13 +158,17 @@ def scoped_tools(tools: list[dict], scope: dict) -> list[dict]:
     return json.loads(kept)
 
 
-def system_prompt(sources: list[dict], use_ontology: bool = True, memories: str = "", scope: dict | None = None) -> str:
+def system_prompt(sources: list[dict], use_ontology: bool = True, memories: str = "", scope: dict | None = None,
+                  site: str | None = None) -> str:
     """scope (access.scope_of): the role's tables. Without one, the prompt is the same as before roles existed."""
     index = ontology.table_index(scope) if use_ontology else ""
     section = (ONTOLOGY_PROMPT.read_text(encoding="utf-8").format(tables=index, metrics=ontology.glossary(scope))
                if index else "")
     if scope is not None:
-        memories = ROLE_RULE + ("" if scope else "Votre rôle ne donne accès à aucune donnée chiffrée.\n\n") + memories
+        limits = "" if scope else "Votre rôle ne donne accès à aucune donnée chiffrée.\n\n"
+        if site:
+            limits += f"Les données visibles sont celles du site de {site} : tout total porte sur ce site seul.\n\n"
+        memories = ROLE_RULE + limits + memories
     text = PROMPT.read_text(encoding="utf-8").format(ontology=section, memory=memories,
         sources="\n".join(f"- {s['source']} ({s['engine']}, dialecte {s['dialect']}) : {s['description']}"
                           for s in sources),
@@ -484,7 +488,8 @@ class Agent:
         `user` selects the memory; `conversation_id` records where a memory was learned."""
         question = next(m["content"] for m in reversed(messages) if m["role"] == "user")
         session_id = session_id or uuid.uuid4().hex
-        scope = access.scope_of(access.read_token(access_token)) if access_token else None
+        role = access.read_token(access_token) if access_token else None
+        scope = access.scope_of(role)
         async with Client(self.mcp_target) as client:
             mcp_tools = (await client.list_tools()).tools
             tools = [tool_schema(t) for t in mcp_tools] + [RECONCILE_TOOL, CHART_TOOL]
@@ -496,7 +501,7 @@ class Agent:
                 remembered = memory.prompt_section(memory.memories(user))
             sources = structured(await client.call_tool(
                 "list_sources", {"access_token": access_token} if access_token else {}))
-            history = [SystemMessage(system_prompt(sources, self.use_ontology, remembered, scope))] + [
+            history = [SystemMessage(system_prompt(sources, self.use_ontology, remembered, scope, access.site_label(role)))] + [
                 HumanMessage(m["content"]) if m["role"] == "user" else AIMessage(previous_answer(m["content"]))
                 for m in messages if m["role"] in ("user", "assistant")]
             state = {"messages": history, "question": question, "session_id": session_id,

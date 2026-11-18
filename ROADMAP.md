@@ -94,6 +94,7 @@ Companion file: `QUIZ.md` (one quiz per step, answers collapsed).
 | D73 | Payroll beyond one query | Identifiers only in joins or `COUNT(DISTINCT)`; sickness (`absence_code`, `absence_hours`) follows the salary rules unless the query keeps only other codes; the server remembers the rows behind each aggregate and refuses one that differs from an earlier one by 1–4 people | Differencing was the known gap. Comparing **rows**, not people, lets different months pass, since they share none |
 | D74 | Role-based access | Permissions follow **roles**, not individuals. Enforced by the data layers: one read-only database login per role, row-level security keyed on that login, an `allowed_roles` filter inside the Qdrant search. Denied by default. The payroll rules stay on top | The model must have no way to reach forbidden data. Rewriting its SQL would break D45 and can miss a subquery; a login can't be spoofed by a query |
 | D75 | The roles (was O9) | Ten roles, listed under Phase D: `direction`, `finance`, `rh`, `commercial`, `achats`, `operations`, `qualite`, `responsable_site` (one per site), `it`, `employe` | Your choices: `finance` reads the CODIR minutes; `rh` has no accounting; site managers see absences as aggregates; `commercial` is company-wide; quality is a role of its own |
+| D76 | Row limits | PostgreSQL row-level security on `departments`, `contracts`, `timesheets`, SQL Server security policies on six ERP tables and two line tables, in a schema `access_control` holding the login-to-site mapping. A day of timesheet belongs to the site of the contract running that day. Every login other than the site roles keeps all rows | The database applies the limit to every query shape, and it follows the login, which a query can't change |
 | D9 | Porting strategy | Port each hospital_rag module **in the step that needs it** (step 0: config, db, logs; step 3: evaluation; step 4: ETL and RAG) | Nothing unused or untested sits in the repo |
 
 ### Open decisions (to settle with you when we reach them)
@@ -584,9 +585,15 @@ Left to `direction` alone: `08_Juridique` and `00_Direction`, apart from the COD
 - **Limits:** the description of a source lists all its subjects (`commercial` can read that the ERP covers purchases), and certified definitions or column comments of a table it can read may name another. Site roles stay refused until step 27, where cards and value search must also follow rows.
 - **Tests: 13 new** (553 in all).
 
-### ⬜ Step 27. Row-level security
-- PostgreSQL RLS and SQL Server security policies, on `current_user` against a mapping table. Tables without a site column (invoice lines, payslip lines) are reached through their parent.
-- Site codes differ between sources (`GENT` in payroll, `GND` in the ERP and accounting): one mapping.
+### ✅ Step 27. Row-level security
+- **Applied by `scripts/apply_roles.py`** (idempotent; rerun it after restoring a source). Site codes are mapped in `policy/roles.yaml` (`GENT` in payroll, `GND` in the ERP). The site roles are now active. The catalog queries skip `access_control`, or `agent_ro` would fail on it.
+- **What a site role is shown follows its rows:** table lists, card counts, code values, examples and value search are built per site role; the prompt names its site.
+- **Checked on the databases:** for each of the four sites, the rows of every limited table equal the same count computed as `agent_ro`; other roles keep every row. A site login can't change role, disable row security, drop a policy, turn `row_security` off, impersonate `dbo` or edit the mapping.
+- **Cost:** counting all of `timesheets` under a site login takes about 0.6 s (0.05 s without the limit); filtered queries about 0.04 s.
+- **Checked live:** the Gand manager gets 190 people and 242 sickness days for March, and no figure for Seneffe; Herstal gets 6 people. The payroll rules still apply inside a site.
+- **No regression** (run 25, dev, commit `ae0b1cd`): **31/33**, same misses (S02, S03).
+- **Limits:** other sites remain visible in the label table `SOC_SITE`; individual timesheet rows other than absences stay readable by the manager of that site.
+- **Tests: 64 new** (617 in all).
 
 ### ⬜ Step 28. Documents
 - `allowed_roles` in the registry and in each chunk's payload, from the policy file; a filter inside every search prefetch, like `status_filter`; no rule means invisible.
@@ -667,3 +674,5 @@ Left to `direction` alone: `08_Juridique` and `00_Direction`, apart from the COD
 | 2026-11-18 | 25 | Branch `access/step-25-roles`: policy file, one login per role and source, signed role token through the agent; a card leak found live and closed; dev 31/33 (run 23) |
 | 2026-11-18 | – | Step 25 merged, pushed |
 | 2026-11-18 | 26 | Branch `access/step-26-role-view`: validation, prompt, tools, cards, readings and query log follow the role; dev 31/33 (run 24) |
+| 2026-11-18 | – | Step 26 merged, pushed |
+| 2026-11-18 | 27 | Branch `access/step-27-rows`: row-level security for the four site roles (D76), site views of cards and values; dev 31/33 (run 25) |

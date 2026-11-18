@@ -1,0 +1,6 @@
+# experiments/t2sql/row_security.toml — step 27: row-level security for the site roles. The evaluation reads as agent_ro,
+# which must keep seeing every row. Regression against role_view (run 24).
+name = "row_security"
+
+[agent]
+use_ontology = true

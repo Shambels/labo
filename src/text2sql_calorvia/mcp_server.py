@@ -53,17 +53,18 @@ def _unknown_source(source, role=None):
 
 
 def _scope(access_token, source):
-    """(tables the caller may see or None for all, None), or (None, a refusal). Cards and value lists hold real data."""
+    """(tables the caller may see or None for all, role if limited to some rows, None), or (None, None, a refusal).
+    Cards and value lists hold real data."""
     identity, refused = _caller(access_token)
     if refused:
-        return None, refused
+        return None, None, refused
     role = identity.role if identity else None
     if source not in cards.SOURCES or source not in access.readable_sources(role):
-        return None, _unknown_source(source, role)
+        return None, None, _unknown_source(source, role)
     try:
-        return access.allowed_tables(role, source), None
+        return access.allowed_tables(role, source), access.row_limited(role), None
     except access.AccessDenied as error:
-        return None, {"ok": False, "error": str(error)}
+        return None, None, {"ok": False, "error": str(error)}
 
 
 def _visible_card(card, allowed):
@@ -89,22 +90,22 @@ def list_sources(access_token: str | None = None) -> list[dict[str, Any]]:
 @server.tool(annotations=READ_ONLY)
 def list_tables(source: str, access_token: str | None = None) -> list[dict[str, Any]]:
     """Les tables d'une source (erp, compta ou paie) avec leur nombre de lignes et leur description."""
-    allowed, refused = _scope(access_token, source)
+    allowed, limited, refused = _scope(access_token, source)
     if refused:
         return [refused]
-    return [t for t in cards.list_tables(source) if allowed is None or t["table"].lower() in allowed]
+    return cards.list_tables(source, limited, allowed)
 
 
 @server.tool(annotations=READ_ONLY)
 def get_table_card(source: str, table: str, access_token: str | None = None) -> dict[str, Any]:
     """La fiche d'une table : description, colonnes et types, clés, nombre de lignes, exemples de valeurs,
     valeurs des colonnes de codes avec leur libellé, colonnes non lisibles. À lire avant d'écrire une requête."""
-    allowed, refused = _scope(access_token, source)
+    allowed, limited, refused = _scope(access_token, source)
     if refused:
         return refused
     if allowed is not None and table.lower() not in allowed:     # as cards.py says for a table that doesn't exist
         return {"error": f"Table inconnue dans {source} : {table}. Voir list_tables."}
-    return _visible_card(cards.get_table_card(source, table), allowed)
+    return _visible_card(cards.get_table_card(source, table, limited), allowed)
 
 
 @server.tool(annotations=READ_ONLY)
@@ -112,10 +113,10 @@ def find_values(source: str, value: str, table: str | None = None, column: str |
                 limit: int = 20, access_token: str | None = None) -> dict[str, Any]:
     """Où apparaît une valeur (nom de client, fournisseur, article, numéro de facture, de lot, de TVA...) et
     comment elle s'écrit exactement. Insensible à la casse, aux accents et à la ponctuation ; tolère les fautes."""
-    allowed, refused = _scope(access_token, source)
+    allowed, limited, refused = _scope(access_token, source)
     if refused:
         return refused
-    return values.find_values(source, value, table, column, min(max(limit, 1), 100), allowed)
+    return values.find_values(source, value, table, column, min(max(limit, 1), 100), allowed, limited)
 
 
 @server.tool(annotations=READ_ONLY)

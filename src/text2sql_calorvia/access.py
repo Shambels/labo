@@ -24,7 +24,6 @@ POLICY = Path(__file__).resolve().parents[2] / "policy" / "roles.yaml"
 LOGIN_PREFIX = "agent_r_"
 DEFAULT_ROLE = "employe"
 TOKEN_SECONDS = 900              # one question, including a long cross-source one
-ROW_SECURITY_READY = False       # step 27: until then the roles limited to a site are refused
 
 
 class Identity(NamedTuple):
@@ -51,9 +50,9 @@ def roles() -> dict[str, dict]:
         if not sites:
             expanded[name] = {**role, "site": None}
             continue
-        for key, code in sites.items():
+        for key, site in sites.items():
             documents = role.get("documents", []) + role.get("site_documents", {}).get(key, [])
-            expanded[f"{name}_{key}"] = {**role, "site": code, "documents": documents}
+            expanded[f"{name}_{key}"] = {**role, "site": site, "documents": documents}
     return expanded
 
 
@@ -83,8 +82,6 @@ def password(role: str) -> str:
 def check_usable(role: str, source: str) -> None:
     if role not in roles():
         raise AccessDenied("Rôle inconnu.")
-    if roles()[role]["site"] and not ROW_SECURITY_READY:
-        raise AccessDenied("Ce rôle n'est pas encore activé.")
     if not tables_of(role, source):
         raise AccessDenied(f"La source {source} n'est pas disponible pour votre rôle.")
 
@@ -96,6 +93,16 @@ def allowed_tables(role: str | None, source: str) -> set[str] | None:
     check_usable(role, source)
     tables = tables_of(role, source)
     return None if tables == "*" else {t.lower() for t in tables}
+
+
+def row_limited(role: str | None) -> str | None:
+    """The role, if the database shows it only some rows: what is built for it can't be shared with other roles."""
+    return role if role is not None and roles()[role]["site"] else None
+
+
+def site_label(role: str | None) -> str | None:
+    site = roles()[role]["site"] if role is not None else None
+    return site["label"] if site else None
 
 
 def readable_sources(role: str | None) -> list[str]:

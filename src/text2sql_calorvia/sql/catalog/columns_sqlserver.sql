@@ -18,5 +18,5 @@ JOIN sys.schemas s ON s.schema_id = o.schema_id
 JOIN sys.types t ON t.user_type_id = c.user_type_id
 LEFT JOIN sys.extended_properties ep
        ON ep.class = 1 AND ep.major_id = c.object_id AND ep.minor_id = c.column_id AND ep.name = 'MS_Description'
-WHERE o.type IN ('U', 'V') AND o.is_ms_shipped = 0
+WHERE o.type IN ('U', 'V') AND o.is_ms_shipped = 0 AND s.name <> 'access_control'
 ORDER BY 1, 2, c.column_id

@@ -6,5 +6,5 @@ FROM pg_constraint con
 JOIN pg_class c ON c.oid = con.conrelid
 JOIN pg_namespace n ON n.oid = c.relnamespace
 WHERE con.contype IN ('p', 'u', 'f')
-  AND n.nspname NOT IN ('pg_catalog', 'information_schema')
+  AND n.nspname NOT IN ('pg_catalog', 'information_schema', 'access_control')
 ORDER BY 1, 2, 3, 4

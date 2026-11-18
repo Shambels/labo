@@ -5,5 +5,5 @@ SELECT n.nspname AS table_schema, c.relname AS table_name,
 FROM pg_class c
 JOIN pg_namespace n ON n.oid = c.relnamespace
 WHERE c.relkind IN ('r', 'p', 'v')
-  AND n.nspname NOT IN ('pg_catalog', 'information_schema') AND n.nspname NOT LIKE 'pg_toast%'
+  AND n.nspname NOT IN ('pg_catalog', 'information_schema', 'access_control') AND n.nspname NOT LIKE 'pg_toast%'
 ORDER BY 1, 2

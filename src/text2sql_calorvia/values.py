@@ -31,12 +31,14 @@ def compact(text):
 
 
 @cache
-def index(source):
-    """[(table, column, value, normalized, compact)] for every distinct value of every readable text column."""
+def index(source, role=None, only=None):
+    """[(table, column, value, normalized, compact)] for every distinct value of every readable text column.
+
+    role and only (a frozenset of lower-case tables): for a role limited to some rows, which gets its own index."""
     engine = SOURCES[source].engine
     entries = []
     for t in describe(source):
-        if not t["rows"]:
+        if not t["rows"] or (only is not None and t["table_name"].lower() not in only):
             continue
         skip = privacy.SENSITIVE.get(t["table_name"], set()) if source == "paie" else set()
         for c in t["columns"]:
@@ -45,12 +47,12 @@ def index(source):
                 continue
             col = f'"{name}"' if engine == "postgres" else f"[{name}]"
             sql = f"SELECT DISTINCT {col} FROM {quote(engine, t['table_schema'], t['table_name'])} WHERE {col} IS NOT NULL"
-            _, rows, _ = run_unvalidated(source, sql, max_rows=MAX_VALUES_PER_COLUMN)
+            _, rows, _ = run_unvalidated(source, sql, max_rows=MAX_VALUES_PER_COLUMN, role=role)
             entries += [(t["table_name"], name, r[0], normalize(r[0]), compact(r[0])) for r in rows]
     return entries
 
 
-def find_values(source, value, table=None, column=None, limit=20, allowed_tables=None):
+def find_values(source, value, table=None, column=None, limit=20, allowed_tables=None, role=None):
     """Matches of `value` in a source (optionally one table / column), best first.
 
     Exact > starts with > contains (also letters and digits only) > every word found > close spelling.
@@ -61,7 +63,8 @@ def find_values(source, value, table=None, column=None, limit=20, allowed_tables
         return {"matches": [], "note": "Valeur vide."}
     words = [w for w in re.split(r"[^a-z0-9]+", wanted) if len(w) >= 3]
     hits = []
-    for tbl, col, raw, norm, comp in index(source):
+    entries = index(source, role, frozenset(allowed_tables)) if role else index(source)
+    for tbl, col, raw, norm, comp in entries:
         if (table and tbl.lower() != table.lower()) or (column and col.lower() != column.lower()) \
                 or (allowed_tables is not None and tbl.lower() not in allowed_tables):
             continue
@@ -80,7 +83,7 @@ def find_values(source, value, table=None, column=None, limit=20, allowed_tables
     if not hits:
         # Typos: close values, then each word on its own (a first and a last name sit in two columns)
         candidates = {}
-        for tbl, col, raw, norm, _ in index(source):
+        for tbl, col, raw, norm, _ in entries:
             if (table and tbl.lower() != table.lower()) or (column and col.lower() != column.lower()) \
                     or (allowed_tables is not None and tbl.lower() not in allowed_tables):
                 continue

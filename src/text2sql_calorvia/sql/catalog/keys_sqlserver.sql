@@ -9,6 +9,7 @@ SELECT s.name AS table_schema, t.name AS table_name,
 FROM sys.key_constraints k
 JOIN sys.tables t ON t.object_id = k.parent_object_id
 JOIN sys.schemas s ON s.schema_id = t.schema_id
+WHERE s.name <> 'access_control'
 UNION ALL
 SELECT s.name, t.name, 'foreign',
        'FOREIGN KEY (' + STRING_AGG(pc.name, ', ') WITHIN GROUP (ORDER BY fkc.constraint_column_id)
