@@ -515,5 +515,5 @@ What the two reports left open, none of it started. Order: fix the exposure firs
 | 2026-11-18 | 16 | Branch `t2sql/step-16-delivery`: `offer_readings` re-tested and kept (D64); test set run once, 13/18 scored, 15/18 by hand; `RAPPORT_T2SQL.md`, `results/t2sql/`, README quick start |
 | 2026-11-18 | – | Step 16 merged, tagged `t2sql/v1.0`, pushed. Phase B done |
 | 2026-11-18 | 17 | Branch `t2sql/step-17-privacy`: individual pay reachable past the payroll rule (whole rows, CASE/FILTER in aggregates, people counted on the wrong table, names by salary threshold); rule rewritten as an allowlist (D65); 47 new tests; dev regression 30/33 = run 11. Phase C added to this roadmap |
-| 2026-11-18 | – | Step 17 merged into `main`, pushed. The tag `t2sql/v1.1` was pushed by mistake on the commit **before** the merge (`65a21e7`, without the fix): to be corrected |
+| 2026-11-18 | – | Step 17 merged into `main`, pushed, tagged `t2sql/v1.1`. The tag first went out by mistake on the commit before the merge (`65a21e7`, without the fix); moved to the merge commit `dacdd9f` by a force-push of that tag, at your request |
 | 2026-11-18 | 18 | Branch `improve/step-18-network`: databases and Qdrant bound to 127.0.0.1 (D66), data unchanged, README commands updated; vLLM servers still to restart |
