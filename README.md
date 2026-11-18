@@ -240,6 +240,7 @@ uv run python scripts/t2sql_report.py 2 3                                       
 ```
 
 The set is `evaluation/t2sql_questions.yaml` (51 questions; the 18 test questions are run once, with `--test`, at the end).
+`evaluation/t2sql_final_questions.yaml` is a second, sealed test set for Phase C: 32 questions, run once with `--final`.
 Numbers, names, yes/no conclusions and leaks are checked by code (`src/text2sql_calorvia/evaluation.py`); behaviour
 (answered, offered another reading, asked, said it doesn't know, refused) by the LLM judge backed by two rules.
 

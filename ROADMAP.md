@@ -83,6 +83,7 @@ Companion file: `QUIZ.md` (one quiz per step, answers collapsed).
 | D64 | Final configuration and report | `experiments/t2sql/final.toml`: with ontology, the fixes of D60, the step 15 tools, **and `offer_readings`** (reverses D60's rejection). Report in `RAPPORT_T2SQL.md` (`RAPPORT.md` is phase A's); exports in `results/t2sql/` | `offer_readings` scored 31 and 30/33 in two runs against 29 and 29 without it, and its second run fixed A03 by its own mechanism (the other readings named). One repo for both phases (D40), so one report each |
 | D65 | Payroll rule as an allowlist (revises D43) | A query reading a salary may only be one plain SELECT returning aggregates: SUM/AVG/COUNT over columns and constants, salary filters as constant comparisons joined by AND, no whole-row reference. People are counted per salary column, on that column's table, without HAVING, ignoring rows whose amount is NULL or 0 | The first rule listed forbidden forms, and a review got individual pay through it four ways (step 17). What is allowed can be listed; what is dangerous cannot |
 | D66 | Network exposure | Every database, Qdrant and model server listens on **127.0.0.1**. Ours in `docker-compose.yaml`; the course's three sources through `docker-compose.sources-local.yaml` (`ports: !override`), with the course file untouched; vLLM with `--host 127.0.0.1`. Reach them from another machine with an SSH tunnel | All clients run on this machine. They were reachable on the LAN and Tailscale addresses, with course passwords, and nothing needed that |
+| D67 | The final test set | `evaluation/t2sql_final_questions.yaml`: 32 new questions (6 ERP, 5 accounting, 5 payroll, 4 cross-source, 4 ambiguous, 3 impossible, 5 malicious), separate from the step 14 file. Its SHA-256 is in `evaluation.py`; `--final` runs it whole, from a clean commit, and once | The phase B test set has been read. A separate file keeps it out of everyday work, and the fingerprint and the run guard turn "don't touch it" into checks |
 | D9 | Porting strategy | Port each hospital_rag module **in the step that needs it** (step 0: config, db, logs; step 3: evaluation; step 4: ETL and RAG) | Nothing unused or untested sits in the repo |
 
 ### Open decisions (to settle with you when we reach them)
@@ -437,15 +438,19 @@ Deliberately more open than phase A: the steps below are a skeleton we will refi
 
 What the two reports left open, none of it started. Order: fix the exposure first, then the agent's failures, then measure them once on a **new** test set (the phase B one has been read). One change at a time, as before.
 
-### 🔄 Step 18. Network exposure
+### ✅ Step 18. Network exposure
 - **Before:** from this machine's LAN and Tailscale addresses, ports 5432, 5433, 5434, 14330, 6333, 8001 and 8002 all accepted connections. No client other than this machine was connected.
 - **Done (D66):** PostgreSQL, Qdrant and the three sources recreated on `127.0.0.1`: their five ports are now closed on both addresses and open on loopback. Same data after the recreate (10 185 invoices, 20 562 entries, 7 298 payslips, 393 documents, 12 runs, 381 answers, 1 319 log rows, 6 collections with 10 210 points). 403 tests pass, 12/12 starter questions. The comment on the ERP port is corrected.
-- **Left, for you:** the embedder (8001) and reranker (8002) run in your terminals and still listen everywhere. The README's commands now have `--host 127.0.0.1`; restart them with those commands, then this step is done.
+- **Model servers:** the embedder (8001) and reranker (8002) restarted with `--host 127.0.0.1` (the README's commands): closed on both addresses too.
 - **Not tested:** a connection from another machine, and the firewall rules (they need root). Binding to loopback does not depend on either. auto-ontology's connection to the recreated databases was not exercised; the chatbots don't use it at run time.
 - **Side effect:** Trino (rejected in D47, stopped) reaches the sources through the Docker gateway, so it needs them started without the override.
 
-### ⬜ Step 19. A new text-to-SQL test set
-- Write it **before** steps 20–22 and leave it unread until step 23: new questions with reference SQL, for each category, including the failure kinds seen so far.
+### ✅ Step 19. A new text-to-SQL test set
+- **The set** (D67): 32 questions, none from the step 14 set, each answer checked by a reference query that the tests run. It includes the failure kinds seen so far (counting rows after a join, a business word with another name, an approved budget version, ambiguous words) and attempts against the payroll rule. It has **not** been run on the agent.
+- **Sealed:** `load_final_questions` refuses a file that doesn't match its SHA-256; `run_t2sql_eval.py --final` refuses `-q`, a dirty tree and a second run.
+- **The rule for steps 20–22:** design from dev failures and the phase B analyses only; never open this file, and no fix may name one of its questions.
+- **Limit:** the set was written by the same assistant that will make the fixes, so it is held out from the agent, not from its author. Fixes must therefore stay general, and the step 23 score is weaker evidence than a set written by someone else. Your trainer's reserve questions would be the stronger test.
+- **Tests: 23 new** (426 in all).
 
 ### ⬜ Step 20. Ontology: ambiguous and missing business words
 - Mark the business words that map to several certified metrics, and have **code**, not the model, add the other readings (A02, A03: "le résultat", "travaillent").
@@ -460,7 +465,7 @@ What the two reports left open, none of it started. Order: fix the exposure firs
 - Accept or verify more than a sum or difference of two found numbers; move the remaining arithmetic out of the model.
 
 ### ⬜ Step 23. Final measure of phase C
-- Dev regression, then the step 19 test set, **once**. Report the before and after in `RAPPORT_T2SQL.md`.
+- Dev regression, then the step 19 test set, **once** (`run_t2sql_eval.py experiments/t2sql/final.toml --final`, or the config then in force). Report the before and after in `RAPPORT_T2SQL.md`.
 
 ### ⬜ Step 24. Before any real deployment
 - Authentication on the endpoint, and a verified user behind the learned memory (today, whatever the client says).
@@ -517,3 +522,5 @@ What the two reports left open, none of it started. Order: fix the exposure firs
 | 2026-11-18 | 17 | Branch `t2sql/step-17-privacy`: individual pay reachable past the payroll rule (whole rows, CASE/FILTER in aggregates, people counted on the wrong table, names by salary threshold); rule rewritten as an allowlist (D65); 47 new tests; dev regression 30/33 = run 11. Phase C added to this roadmap |
 | 2026-11-18 | – | Step 17 merged into `main`, pushed, tagged `t2sql/v1.1`. The tag first went out by mistake on the commit before the merge (`65a21e7`, without the fix); moved to the merge commit `dacdd9f` by a force-push of that tag, at your request |
 | 2026-11-18 | 18 | Branch `improve/step-18-network`: databases and Qdrant bound to 127.0.0.1 (D66), data unchanged, README commands updated; vLLM servers still to restart |
+| 2026-11-18 | – | Step 18 merged, pushed; embedder and reranker restarted on 127.0.0.1 |
+| 2026-11-18 | 19 | Branch `improve/step-19-test-set`: 32-question final test set, sealed by its fingerprint, one run allowed; not run yet |

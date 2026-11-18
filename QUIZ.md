@@ -1389,3 +1389,40 @@ Inside a container on a Docker network, `127.0.0.1` is the container itself: Tri
 
 It proves nothing listens on that address, which is the property we changed, so another machine cannot connect to it either. It does not test the network path or the firewall; before the change, the same local test showed the port open but could not tell whether a firewall would have stopped an outside client.
 </details>
+
+## Step 19: the sealed test set
+
+**1.** Why write a new test set before making the fixes of steps 20–22, rather than after?
+
+<details><summary>Answer</summary>
+
+Written afterwards, its questions could be shaped, even unintentionally, by what the fixes handle well. Fixing the questions first means the fixes can't have been chosen to suit them. The old set can't serve: its answers were read in step 16, and any fix made since has been influenced by them.
+</details>
+
+**2.** What do the SHA-256 and the `--final` guard each protect against? What can neither protect against?
+
+<details><summary>Answer</summary>
+
+The **fingerprint** detects an edited question or answer after the fact (the change must also touch `evaluation.py`, visibly). The **guard** stops a partial run, a run from uncommitted code, and a second attempt, which would turn the test set into a tuning set. Neither controls what someone **knows**: whoever wrote or read the questions can still bias the fixes. That is why the roadmap records that the author of the set also makes the fixes.
+</details>
+
+**3.** N05 and N08 ask for a number of invoices and of entries. Why do their notes mention 628 and 317?
+
+<details><summary>Answer</summary>
+
+Those are the numbers of **lines** the same joins return. After a one-to-many join `COUNT(*)` counts lines, and `COUNT(DISTINCT parent id)` counts documents (592 and 198). It is the failure kind of C02, tested on new tables.
+</details>
+
+**4.** N12 says "recrutements", where the phase B failure P06 said "engagées". Why not reuse that word, and why is 17 the answer rather than 20?
+
+<details><summary>Answer</summary>
+
+A fix that only recognises one word would pass a test using that word: another wording checks the concept. 17 people have a `hire_date` in 2025, while 20 contracts started that year, since contracts also start for people already employed; a recruitment is a person joining.
+</details>
+
+**5.** Each reference query is run by the tests. What error does that catch, and what error does it not catch?
+
+<details><summary>Answer</summary>
+
+It catches an expected value that doesn't match its query: a typo or a stale number. It doesn't catch a query that answers the **wrong question**: if the reference misreads the question, both agree and the agent is marked wrong for being right. Only reading the question against the query finds that, and a sealed set makes such reading rarer, which is another limit to keep in mind when analysing step 23's misses.
+</details>
