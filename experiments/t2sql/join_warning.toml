@@ -1,0 +1,6 @@
+# experiments/t2sql/join_warning.toml — step 21 (D69): a warning when a join multiplies what COUNT(*), SUM or AVG reads.
+# Compared with business_words (run 16).
+name = "join_warning"
+
+[agent]
+use_ontology = true

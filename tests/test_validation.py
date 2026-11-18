@@ -82,3 +82,33 @@ def test_count_star_reads_no_column_and_passes_on_a_partly_hidden_table(sources)
     # Found by step 14's evaluation (P01): COUNT(*) was refused as a SELECT * on employees
     assert validate("paie", "SELECT exit_reason, COUNT(*) FROM employees GROUP BY exit_reason").ok
     assert validate("paie", "SELECT COUNT(*) FROM employees WHERE exit_date IS NOT NULL").ok
+
+
+# Step 21 (D69): joins that multiply what is counted or summed
+ENTRY_LINES = "FROM ecriture e JOIN ligne_ecriture l ON l.id_ecriture = e.id_ecriture"
+
+
+@pytest.mark.parametrize("source, sql, word", [
+    ("compta", f"SELECT COUNT(*), SUM(l.debit) {ENTRY_LINES} WHERE e.statut = 'BROUILLARD'", "COUNT(DISTINCT e.id_ecriture)"),
+    ("compta", f"SELECT COUNT(1) {ENTRY_LINES}", "COUNT(DISTINCT e.id_ecriture)"),
+    ("compta", "SELECT COUNT(*) FROM ecriture e, ligne_ecriture l WHERE l.id_ecriture = e.id_ecriture", "COUNT(DISTINCT"),
+    ("erp", "SELECT SUM(f.FAC_MT_HT) FROM VTE_FACT f JOIN VTE_FACT_LIG l ON l.FAC_ID = f.FAC_ID", "f.fac_mt_ht"),
+    ("paie", "SELECT COUNT(*) FROM payslips p JOIN payslip_lines l USING (payslip_id)", "COUNT(DISTINCT p.payslip_id)"),
+])
+def test_a_join_that_multiplies_rows_gets_a_warning(sources, source, sql, word):
+    result = validate(source, sql)
+    assert result.ok and any(word in w for w in result.warnings)
+    assert result.as_dict()["warnings"] == result.warnings
+
+
+@pytest.mark.parametrize("source, sql", [
+    ("compta", f"SELECT COUNT(DISTINCT e.id_ecriture), SUM(l.debit) {ENTRY_LINES}"),
+    ("compta", "SELECT COUNT(*) FROM ligne_ecriture l JOIN ecriture e ON e.id_ecriture = l.id_ecriture"),   # lines
+    ("compta", f"SELECT e.code_journal, COUNT(*) {ENTRY_LINES} GROUP BY e.code_journal"),                   # per parent
+    ("erp", "SELECT SUM(l.FL_MT_HT) FROM VTE_FACT f JOIN VTE_FACT_LIG l ON l.FAC_ID = f.FAC_ID"),
+    ("paie", "SELECT COUNT(*) FROM payslips p JOIN payroll_runs r ON r.run_id = p.run_id"),
+    ("erp", "SELECT COUNT(*) FROM VTE_FACT"),
+])
+def test_a_join_that_does_not_multiply_gets_no_warning(sources, source, sql):
+    result = validate(source, sql)
+    assert result.ok and result.warnings == []

@@ -139,6 +139,13 @@ def test_individual_pay_cannot_be_reached_by_a_detour(sources, sql):   # step 17
     assert last_log()[0] == "refused"
 
 
+def test_a_warning_comes_with_the_rows(sources):   # step 21: the query still runs
+    r = execute("compta", "SELECT COUNT(*) FROM ecriture e JOIN ligne_ecriture l ON l.id_ecriture = e.id_ecriture "
+                          "WHERE e.statut = 'BROUILLARD'")
+    assert r["ok"] and r["rows"] == [[47]] and "COUNT(DISTINCT e.id_ecriture)" in r["warnings"][0]
+    assert "warnings" not in execute("compta", "SELECT COUNT(*) FROM ecriture")
+
+
 def test_sales_commission_tool(sources):
     from text2sql_calorvia.commission import get_sales_commission
     r = get_sales_commission("10405", "2026-03")

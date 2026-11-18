@@ -183,6 +183,16 @@ def test_the_system_prompt_carries_the_ontology(sources):
     assert {t["function"]["name"] for t in llm.tools} >= {"execute_sql", "reconcile", "get_table_card"}
 
 
+def test_the_model_reads_the_warning_of_a_query(sources):
+    sql = "SELECT COUNT(*) FROM ecriture e JOIN ligne_ecriture l ON l.id_ecriture = e.id_ecriture"
+    seen = []
+    def reply(messages):
+        seen.append(last_tool_result(messages))
+        return AIMessage("Voici le résultat.")
+    run(ScriptedLLM(AIMessage("", tool_calls=[call("execute_sql", source="compta", sql=sql)]), reply))
+    assert "COUNT(DISTINCT e.id_ecriture)" in seen[0]
+
+
 def test_the_other_readings_come_before_the_footer_when_a_query_ran(sources):
     llm = ScriptedLLM(AIMessage("", tool_calls=[call("execute_sql", source="erp", sql=MARCH)]),
                       AIMessage("Le chiffre d'affaires net facturé de mars 2026 est celui de l'ERP."))
