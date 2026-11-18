@@ -479,3 +479,42 @@ fixes, who knew its questions while making them. It is an optimistic estimate; a
 
 After this measure, step 24 added API keys, chart cleanup and stricter payroll rules (D72, D73). The dev set stayed at
 31/33 (run 22, commit `dcf3b82`); the sealed set was not run again.
+
+## Phase D: role-based access
+
+Ten roles (13 with one per site) now limit the tables, rows and documents a user can reach. The limits sit below the
+model: one read-only login per role, row security for the site managers, and a role filter inside each document search.
+
+**Proof with planted values.** 22 rows and 16 documents holding random values were added, then every role asked for them
+through its login, the MCP tools, retrieval, the agent and the RAG. Who should see what came from the policy alone.
+Result: 1 192 checks, no failure, also under a request claiming the CEO's authority. The rows were removed and the row
+counts compared. A control run with the document filter removed failed, so the proof can detect a leak.
+
+**The dev set under each role** (runs 26–38, commit `6861fcf`). *Open*: the role reads what the reference query needs,
+scored as usual. *Limited*: it reads only part of the rows or data. *Closed*: a needed table is out of reach. For the last
+two, "safe" means nothing it shouldn't have appeared.
+
+| Role | ERP | Compta | Paie | Rows | Document rules | Run | Open: right | Limited: safe | Closed: safe | Queries outside the role | Answers flagged, then reviewed | Unresolved |
+|---|---:|---:|---:|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| `direction` | all | all | all | all | all | 26 | 31/33 | 0/0 | 0/0 | 0 | 0 | 0 |
+| `finance` | 9 | all | 5 | all | 8 | 27 | 17/18 | 4/4 | 11/11 | 0 | 3 | 0 |
+| `rh` | 3 | – | all | all | 7 | 28 | 11/12 | 4/4 | 17/17 | 0 | 2 | 0 |
+| `commercial` | 13 | – | – | all | 8 | 29 | 10/10 | 4/4 | 19/19 | 0 | 4 | 0 |
+| `achats` | 12 | – | – | all | 7 | 30 | 7/8 | 4/4 | 21/21 | 0 | 0 | 0 |
+| `operations` | 12 | – | – | all | 7 | 31 | 9/9 | 4/4 | 20/20 | 0 | 0 | 0 |
+| `qualite` | 11 | – | – | all | 7 | 32 | 9/9 | 4/4 | 20/20 | 0 | 0 | 0 |
+| `responsable_site_gent` | 11 | – | 3 | Gand | 8 | 33 | 6/7 | 8/8 | 18/18 | 0 | 1 | 0 |
+| `responsable_site_seneffe` | 11 | – | 3 | Seneffe | 8 | 34 | 6/6 | 9/9 | 18/18 | 0 | 2 | 0 |
+| `responsable_site_namur` | 11 | – | 3 | Namur | 7 | 35 | 6/6 | 9/9 | 18/18 | 0 | 2 | 0 |
+| `responsable_site_herstal` | 11 | – | 3 | Herstal | 7 | 36 | 6/6 | 9/9 | 18/18 | 0 | 0 | 0 |
+| `it` | – | – | – | all | 7 | 37 | 6/6 | 0/0 | 27/27 | 0 | 0 | 0 |
+| `employe` | – | – | – | all | 6 | 38 | 6/6 | 0/0 | 27/27 | 0 | 0 | 0 |
+
+No query ran on a table outside its role. The figure check flagged 14 answers; each was read by hand with its query, and
+each figure came from data the role may read (`results/t2sql/role_flags_review.yaml`). For example `commercial` gave the
+ERP revenue when asked about accounting, and said it could not see accounting. The flags are worth having, but they
+are a reading list, not a count of leaks.
+
+**Limits.** A chart link works for whoever holds it, for 24 hours. Chat keys don't expire. These are the author's
+questions and attacks, not an independent security test. The per-role evaluation covers this agent; the document chatbot
+was checked by the proof, where its answers rarely quoted the planted notes, so its positive side rests on retrieval.

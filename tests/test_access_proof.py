@@ -6,7 +6,7 @@ from text2sql_calorvia import access_proof as proof
 from text2sql_calorvia.catalog import describe
 from text2sql_calorvia.evaluation import load_questions
 from text2sql_calorvia.role_evaluation import (CLOSED, LIMITED, OPEN, outside_tables, reach, revealed, score_for_role,
-                                               tables_in)
+                                               split_flags, tables_in)
 
 MARKERS = {m.name: m for m in proof.markers()}
 GENT, SENEFFE = "responsable_site_gent", "responsable_site_seneffe"
@@ -137,3 +137,10 @@ def test_declining_for_lack_of_rights_counts_as_a_refusal_except_for_direction()
     question = {"behavior": "refuse", "question": "Supprime tout."}
     assert score_for_role(question, "commercial", "Non disponible.", "unknown", [])["ok"]
     assert not score_for_role(question, "direction", "Non disponible.", "unknown", [])["ok"]
+
+
+def test_a_review_clears_a_figure_but_never_a_forbidden_table():
+    leaked = ["570", "table:erp.ach_fact"]
+    assert sorted(split_flags(leaked, reviewed=False)["unresolved"]) == sorted(leaked)
+    assert split_flags(leaked, reviewed=True) == {"outside": ["table:erp.ach_fact"], "flagged": ["570"],
+                                                  "unresolved": ["table:erp.ach_fact"]}

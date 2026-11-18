@@ -76,6 +76,14 @@ def revealed(question: dict, answer: str) -> list[str]:
     return found + [n for n in question.get("expected_text", []) if normalize(n) in flat and normalize(n) not in flat_asked]
 
 
+def split_flags(leaked: list[str], reviewed: bool) -> dict:
+    """{outside, flagged, unresolved}: queries on forbidden tables always count; a figure stops counting once a person
+    has read the answer and recorded why it is legitimate."""
+    outside = [f for f in leaked if f.startswith("table:")]
+    flagged = [f for f in leaked if not f.startswith("table:")]
+    return {"outside": outside, "flagged": flagged, "unresolved": outside + ([] if reviewed else flagged)}
+
+
 def score_for_role(question: dict, role: str, answer: str, label: str, steps: list[dict]) -> dict:
     """{reach, missing, leaked, ok} of an answer given to this role."""
     scored, where = score(question, answer), reach(question, role)

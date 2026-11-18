@@ -1759,3 +1759,42 @@ They don't go through Qdrant. The SQL tools query an in-memory database of workb
 
 It proves that without a role the search is unchanged. It says nothing about the role paths, which never run in that evaluation; those are checked by the permission tests and by questions asked under each role, and step 29 tests them systematically.
 </details>
+
+---
+
+## Step 29: closing the gaps and proving it
+
+**1.** An image tag can't send an API key. What does signing the chart link protect against, and what doesn't it?
+
+<details><summary>Answer</summary>
+
+It stops anyone from guessing or keeping a link: without a valid signature, or after expiry, the server answers 404, and the expiry can't be extended because it is part of what is signed. It doesn't identify the viewer: whoever holds a valid link can open the chart until it expires.
+</details>
+
+**2.** When a conversation is read back, why renew only the charts recorded in that answer's steps, rather than every chart id in its text?
+
+<details><summary>Answer</summary>
+
+The text can contain ids that the user typed or the model repeated. Renewing those would turn a known id, or an expired link, into a valid link to someone else's chart. The steps record what the agent really drew.
+</details>
+
+**3.** Why does the proof check that a role *finds* the markers it is entitled to, not only that it misses the others?
+
+<details><summary>Answer</summary>
+
+A broken query, a wrong table or a failed connection also returns nothing, and would look like perfect security. Checking both directions shows that the test can see the data. The control run with the filter removed makes the same point from the other side: the proof can fail.
+</details>
+
+**4.** `commercial` is asked for the accounting revenue, and its answer contains the expected figure. Why isn't that automatically a leak?
+
+<details><summary>Answer</summary>
+
+It may have reached the same number from a table it may read: here `VTE_FACT` in the ERP. A matching figure is only a flag, to be read with the query behind it. A successful query on a table outside the role, by contrast, is a leak whatever the answer says.
+</details>
+
+**5.** Why must the planted values not appear in the questions asked to the agent, and why do they all share a prefix?
+
+<details><summary>Answer</summary>
+
+If a question held the value, an answer repeating the question would look like a leak. The agent is given only the prefix, and the check looks for the random part. The prefix also lets a cleanup find and delete every planted row, even after a crash.
+</details>
