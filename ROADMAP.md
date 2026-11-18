@@ -95,6 +95,7 @@ Companion file: `QUIZ.md` (one quiz per step, answers collapsed).
 | D74 | Role-based access | Permissions follow **roles**, not individuals. Enforced by the data layers: one read-only database login per role, row-level security keyed on that login, an `allowed_roles` filter inside the Qdrant search. Denied by default. The payroll rules stay on top | The model must have no way to reach forbidden data. Rewriting its SQL would break D45 and can miss a subquery; a login can't be spoofed by a query |
 | D75 | The roles (was O9) | Ten roles, listed under Phase D: `direction`, `finance`, `rh`, `commercial`, `achats`, `operations`, `qualite`, `responsable_site` (one per site), `it`, `employe` | Your choices: `finance` reads the CODIR minutes; `rh` has no accounting; site managers see absences as aggregates; `commercial` is company-wide; quality is a role of its own |
 | D76 | Row limits | PostgreSQL row-level security on `departments`, `contracts`, `timesheets`, SQL Server security policies on six ERP tables and two line tables, in a schema `access_control` holding the login-to-site mapping. A day of timesheet belongs to the site of the contract running that day. Every login other than the site roles keeps all rows | The database applies the limit to every query shape, and it follows the login, which a query can't change |
+| D77 | Document permissions | `allowed_roles` on every chunk, computed from `policy/roles.yaml` and required inside each search prefetch; no value means no role. A role reading **any** copy of a file reads the document kept for it. Written with `set_payload`: no re-embedding. The registry doesn't store it: the policy file stays the one source | `finance` reads the CODIR annexes, one of which is kept under `06_Achats`: requiring every copy would also have cost `achats` its own file |
 | D9 | Porting strategy | Port each hospital_rag module **in the step that needs it** (step 0: config, db, logs; step 3: evaluation; step 4: ETL and RAG) | Nothing unused or untested sits in the repo |
 
 ### Open decisions (to settle with you when we reach them)
@@ -595,9 +596,13 @@ Left to `direction` alone: `08_Juridique` and `00_Direction`, apart from the COD
 - **Limits:** other sites remain visible in the label table `SOC_SITE`; individual timesheet rows other than absences stay readable by the manager of that site.
 - **Tests: 64 new** (617 in all).
 
-### ⬜ Step 28. Documents
-- `allowed_roles` in the registry and in each chunk's payload, from the policy file; a filter inside every search prefetch, like `status_filter`; no rule means invisible.
-- Identical files kept once (D11): permissions computed over every copy. Per-role workbook stores for the RAG's SQL tools; `image_bytes` checks the role; a login on `app/chat.py`.
+### ✅ Step 28. Documents
+- **Index:** `scripts/apply_document_roles.py` wrote `allowed_roles` on all 6 collections, nothing re-embedded; no chunk is left without a value. A new index writes it too. Rerun the script after changing the documents of the policy.
+- **Search:** the role is a required condition inside every prefetch (D77). **Workbook SQL:** one store per role. **Images:** `image_bytes` checks the role. **Chat:** with `API_KEYS` set, `app/chat.py` asks for a key, uses that user's role and final configuration; `.streamlit/config.toml` keeps it on 127.0.0.1.
+- **Checked:** for all 13 roles and 10 searches, every result is allowed. Live: `rh` finds the E3 minimum in the salary grid, `commercial` answers "Je ne sais pas"; `finance` finds the 2026 revenue budget, `commercial` doesn't; the Gand manager gets nothing from Seneffe's folder.
+- **No regression** (run 134, commit `e3a0df7`, retrieval only, no role): recall@5 **0.939**, hit@5 0.959, trap rate 0.353, the same as run 56 on each of the 122 scored questions. The 15 searches compared before and after the payload update are identical.
+- **Limits:** a document's path can name a folder the role has no rule for, when it reads the file through a copy. The chat keeps one key per person, with no expiry. Generation was not rescored: only retrieval changed.
+- **Tests: 43 new** (669 in all).
 
 ### ⬜ Step 29. Closing the gaps and proving it
 - Signed, expiring chart links. Marker values planted per role must never reach another role's answers.
@@ -676,3 +681,5 @@ Left to `direction` alone: `08_Juridique` and `00_Direction`, apart from the COD
 | 2026-11-18 | 26 | Branch `access/step-26-role-view`: validation, prompt, tools, cards, readings and query log follow the role; dev 31/33 (run 24) |
 | 2026-11-18 | – | Step 26 merged, pushed |
 | 2026-11-18 | 27 | Branch `access/step-27-rows`: row-level security for the four site roles (D76), site views of cards and values; dev 31/33 (run 25) |
+| 2026-11-18 | – | Step 27 and the RAG search refactor merged, pushed |
+| 2026-11-18 | 28 | Branch `access/step-28-documents`: `allowed_roles` on every chunk, role filter in the search, per-role workbook stores, image check, login on the chat (D77) |
