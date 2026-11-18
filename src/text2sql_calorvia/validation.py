@@ -14,7 +14,7 @@ from sqlglot import exp
 from sqlglot.errors import OptimizeError, ParseError
 from sqlglot.optimizer.qualify import qualify
 
-from text2sql_calorvia import joins, privacy
+from text2sql_calorvia import access, joins, privacy
 from text2sql_calorvia.catalog import describe
 from text2sql_calorvia.config import settings
 from text2sql_calorvia.sources import SOURCES
@@ -59,6 +59,16 @@ def schema(source):
         readable[name] = {c["column_name"]: c["data_type"] for c in t["columns"] if c["readable"]}
         hidden[name] = [c["column_name"] for c in t["columns"] if not c["readable"]]
     return readable, hidden
+
+
+def role_schema(source, role=None):
+    """schema(), limited to what a role may read: to the validator, other tables simply don't exist."""
+    readable, hidden = schema(source)
+    allowed = access.allowed_tables(role, source)
+    if allowed is None:
+        return readable, hidden
+    return ({t: c for t, c in readable.items() if t.lower() in allowed},
+            {t: c for t, c in hidden.items() if t.lower() in allowed})
 
 
 @cache
@@ -106,9 +116,9 @@ def _check_read_only(tree):
     return sorted(set(errors), key=errors.index)
 
 
-def _check_tables(source, tree):
+def _check_tables(source, tree, role=None):
     """Every table exists in this source (CTE names aside). Suggest close names, or the source that has it."""
-    readable, _ = schema(source)
+    readable, _ = role_schema(source, role)
     by_lower = {t.lower(): t for t in readable}
     ctes = {cte.alias_or_name.lower() for cte in tree.find_all(exp.CTE)}
     errors, used = [], []
@@ -122,7 +132,8 @@ def _check_tables(source, tree):
             used.append(by_lower[name.lower()])
             continue
         hint = difflib.get_close_matches(name.lower(), by_lower, n=3, cutoff=0.6)
-        elsewhere = [s for s in SOURCES if s != source and name.lower() in {t.lower() for t in schema(s)[0]}]
+        elsewhere = [s for s in access.readable_sources(role) if s != source
+                     and name.lower() in {t.lower() for t in role_schema(s, role)[0]}]
         message = f"Table inconnue dans {source} : {name}."
         if elsewhere:
             message += f" Elle est dans la source {elsewhere[0]} : pas de jointure entre sources, interrogez-les séparément."
@@ -132,9 +143,9 @@ def _check_tables(source, tree):
     return errors, sorted(set(used))
 
 
-def _qualify(source, tree, tables):
+def _qualify(source, tree, tables, role=None):
     """Resolve every column against the readable schema; a readable message when one doesn't exist."""
-    readable, hidden = schema(source)
+    readable, hidden = role_schema(source, role)
     mapping = {_default_schema(source): {t: cols for t, cols in readable.items()}}
     try:
         return qualify(tree.copy(), schema=mapping, dialect=SOURCES[source].dialect,
@@ -176,9 +187,15 @@ def _with_limit(source, sql, tree, max_rows):
     return sql
 
 
-def validate(source, sql, max_rows=None):
-    if source not in SOURCES:
-        return Validation(False, [f"Source inconnue : {source}. Sources : {', '.join(SOURCES)}."])
+def validate(source, sql, max_rows=None, role=None):
+    visible = access.readable_sources(role) if role is not None else list(SOURCES)
+    if source not in SOURCES or source not in visible:   # the same answer for a source that exists and one that doesn't
+        return Validation(False, [f"Source inconnue : {source}. Sources : {', '.join(visible) or 'aucune'}."])
+    if role is not None:
+        try:
+            access.check_usable(role, source)
+        except access.AccessDenied as error:
+            return Validation(False, [str(error)])
     if not sql or not sql.strip():
         return Validation(False, ["Requête vide."])
     max_rows = max_rows or settings.max_rows
@@ -189,10 +206,10 @@ def validate(source, sql, max_rows=None):
     errors = _check_read_only(tree)
     if errors:
         return Validation(False, errors)
-    errors, tables = _check_tables(source, tree)
+    errors, tables = _check_tables(source, tree, role)
     if errors:
         return Validation(False, errors, tables=tables)
-    _, hidden = schema(source)
+    _, hidden = role_schema(source, role)
     # COUNT(*) reads no column: only a star that selects columns (SELECT *, t.*) can reach the hidden ones.
     # Found by step 14's evaluation: "SELECT exit_reason, COUNT(*) FROM employees" was refused as a SELECT *
     star = any(not isinstance(s.parent, exp.Count) for s in tree.find_all(exp.Star))
@@ -200,7 +217,7 @@ def validate(source, sql, max_rows=None):
         partly = [t for t in tables if hidden.get(t)]
         return Validation(False, [f"SELECT * refusé sur {', '.join(partly)} : certaines colonnes sont des données "
                                   "personnelles non lisibles. Nommez les colonnes (get_table_card)."], tables=tables)
-    qualified, errors = _qualify(source, tree, tables)
+    qualified, errors = _qualify(source, tree, tables, role)
     if errors:
         return Validation(False, errors, tables=tables)
     privacy_check = population = None

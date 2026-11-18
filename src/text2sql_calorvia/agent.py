@@ -34,7 +34,7 @@ from langgraph.graph import END, START, StateGraph
 from langgraph.graph.message import add_messages
 from mcp.client import Client
 
-from text2sql_calorvia import charts, grounding, memory, ontology
+from text2sql_calorvia import access, charts, grounding, memory, ontology
 from text2sql_calorvia.config import settings
 from text2sql_calorvia.reconcile import KEY_TYPES, reconcile
 
@@ -107,18 +107,71 @@ class AgentState(TypedDict, total=False):
     user: str                    # whose memory (step 15)
     conversation_id: str | None
     access_token: str | None     # the caller's role, signed by the endpoint (access.py); never shown to the model
+    scope: dict | None           # what that role can read (access.scope_of); None in local mode
     answer: str
 
 
-def system_prompt(sources: list[dict], use_ontology: bool = True, memories: str = "") -> str:
-    section = (ONTOLOGY_PROMPT.read_text(encoding="utf-8").format(tables=ontology.table_index(), metrics=ontology.glossary())
-               if use_ontology else "")
-    return PROMPT.read_text(encoding="utf-8").format(ontology=section, memory=memories,
+ROLE_RULE = ("# Votre périmètre\nVous ne voyez que les sources et les tables de ce message, selon le rôle de "
+             "l'utilisateur. Si l'information demandée n'y figure pas, dites simplement que vous ne disposez pas de "
+             "cette information : ne citez aucune base, table ou indicateur qui pourrait la contenir, et ne devinez "
+             "pas.\n\n")
+
+
+def scoped_prompt(text: str, scope: dict) -> str:
+    """The prompt's sentences that name a source, rewritten for what the role can read."""
+    dialects = {"erp": "T-SQL pour erp", "compta": "PostgreSQL pour compta", "paie": "PostgreSQL pour paie"}
+    edits = {
+        "dans le dialecte de la source : T-SQL pour erp, PostgreSQL pour compta et paie.":
+            "dans le dialecte de la source : " + ", ".join(v for k, v in dialects.items() if k in scope) + "."
+            if scope else "dans le dialecte de la source.",
+        " (ventes facturées dans l'ERP, ventes comptabilisées au journal VEN)": "",
+        "Ne retenez jamais un montant individuel de la paie ni une donnée personnelle.":
+            "Ne retenez jamais une donnée personnelle.",
+    }
+    if not {"erp", "compta"} <= set(scope):
+        edits[" (par exemple « le chiffre d'affaires » : facturé dans l'ERP ou comptabilisé ?)"] = ""
+    if len(scope) < 2:
+        edits[" Quand deux sources mesurent la même chose, un écart est une information à expliquer, pas une erreur à "
+              "cacher."] = ""
+    for old, new in edits.items():
+        text = text.replace(old, new)
+    lines = text.split("\n")
+    if len(scope) < 2:
+        lines = ["4. Ne recopiez jamais des lignes à la main." if line.startswith("4. Plusieurs bases") else line
+                 for line in lines]
+    if "paie" not in scope:
+        lines = [line for line in lines if not line.startswith("- Paie :")]
+    return "\n".join(lines)
+
+
+def scoped_tools(tools: list[dict], scope: dict) -> list[dict]:
+    """The tools a role can use, their descriptions naming no source it can't read."""
+    dropped = set()
+    if len(scope) < 2:
+        dropped.add("reconcile")
+    if not {"erp", "paie"} <= set(scope):
+        dropped.add("get_sales_commission")
+    kept = json.dumps([t for t in tools if t["function"]["name"] not in dropped], ensure_ascii=False)
+    for old, new in (("(erp, compta ou paie)", "(voir list_sources)"), ("règle de confidentialité de la paie", "règles de confidentialité"),
+                     ('ca_erp', 'montant_a'), ('ca_compta', 'montant_b')):
+        kept = kept.replace(old, new)
+    return json.loads(kept)
+
+
+def system_prompt(sources: list[dict], use_ontology: bool = True, memories: str = "", scope: dict | None = None) -> str:
+    """scope (access.scope_of): the role's tables. Without one, the prompt is the same as before roles existed."""
+    index = ontology.table_index(scope) if use_ontology else ""
+    section = (ONTOLOGY_PROMPT.read_text(encoding="utf-8").format(tables=index, metrics=ontology.glossary(scope))
+               if index else "")
+    if scope is not None:
+        memories = ROLE_RULE + ("" if scope else "Votre rôle ne donne accès à aucune donnée chiffrée.\n\n") + memories
+    text = PROMPT.read_text(encoding="utf-8").format(ontology=section, memory=memories,
         sources="\n".join(f"- {s['source']} ({s['engine']}, dialecte {s['dialect']}) : {s['description']}"
                           for s in sources),
         data_until=settings.data_until,
         max_sql_errors=settings.max_sql_errors, min_group_size=settings.min_group_size,
         rows_to_model=settings.rows_to_model)
+    return scoped_prompt(text, scope) if scope is not None else text
 
 
 def tool_schema(tool) -> dict:
@@ -395,7 +448,7 @@ class Agent:
         elif missing:
             text += f"\n\n⚠️ Nombre(s) non retrouvé(s) dans les résultats des requêtes, à vérifier : {', '.join(missing)}"
         if ran and self.use_ontology:
-            text += ontology.other_readings(state.get("question", ""), text)   # D68: written by code, like the footer
+            text += ontology.other_readings(state.get("question", ""), text, state.get("scope"))   # D68, by code
         images = "".join(f"\n\n![{c['title']}]({charts.chart_url(c['id'])})" for c in state.get("charts", []))
         return {"answer": text + images + footer(steps, state["session_id"])}
 
@@ -431,23 +484,26 @@ class Agent:
         `user` selects the memory; `conversation_id` records where a memory was learned."""
         question = next(m["content"] for m in reversed(messages) if m["role"] == "user")
         session_id = session_id or uuid.uuid4().hex
+        scope = access.scope_of(access.read_token(access_token)) if access_token else None
         async with Client(self.mcp_target) as client:
             mcp_tools = (await client.list_tools()).tools
             tools = [tool_schema(t) for t in mcp_tools] + [RECONCILE_TOOL, CHART_TOOL]
+            if scope is not None:
+                tools = scoped_tools(tools, scope)
             remembered = ""
             if self.use_memory:
                 tools += [REMEMBER_TOOL, FORGET_TOOL]
                 remembered = memory.prompt_section(memory.memories(user))
             sources = structured(await client.call_tool(
                 "list_sources", {"access_token": access_token} if access_token else {}))
-            history = [SystemMessage(system_prompt(sources, self.use_ontology, remembered))] + [
+            history = [SystemMessage(system_prompt(sources, self.use_ontology, remembered, scope))] + [
                 HumanMessage(m["content"]) if m["role"] == "user" else AIMessage(previous_answer(m["content"]))
                 for m in messages if m["role"] in ("user", "assistant")]
             state = {"messages": history, "question": question, "session_id": session_id,
                      "results": {}, "steps": [], "tool_calls": 0, "sql_errors": 0,
                      "history_len": len(history), "grounding_retry": False, "unverified": [],
                      "charts": [], "user": user, "conversation_id": conversation_id,
-                     "access_token": access_token}
+                     "access_token": access_token, "scope": scope}
             config = {"configurable": {"client": client, "tools": tools},
                       "recursion_limit": 4 * settings.max_tool_calls + 10}
             async for update in self.graph.astream(state, config, stream_mode="updates"):

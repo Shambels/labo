@@ -16,3 +16,6 @@ CREATE TABLE IF NOT EXISTS t2sql_query_log (
     session_id    text                      -- the conversation, from step 13
 );
 CREATE INDEX IF NOT EXISTS t2sql_query_log_logged_at ON t2sql_query_log (logged_at);
+-- Who asked, from Phase D (step 26): empty in local mode
+ALTER TABLE t2sql_query_log ADD COLUMN IF NOT EXISTS user_name text;
+ALTER TABLE t2sql_query_log ADD COLUMN IF NOT EXISTS role text;

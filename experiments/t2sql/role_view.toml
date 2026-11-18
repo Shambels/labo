@@ -1,0 +1,6 @@
+# experiments/t2sql/role_view.toml — step 26: validation, prompt, tools and log follow the role. The evaluation runs
+# without a role, where the prompt must stay as it was. Regression against role_logins (run 23).
+name = "role_view"
+
+[agent]
+use_ontology = true
