@@ -183,6 +183,19 @@ def test_the_system_prompt_carries_the_ontology(sources):
     assert {t["function"]["name"] for t in llm.tools} >= {"execute_sql", "reconcile", "get_table_card"}
 
 
+def test_the_other_readings_come_before_the_footer_when_a_query_ran(sources):
+    llm = ScriptedLLM(AIMessage("", tool_calls=[call("execute_sql", source="erp", sql=MARCH)]),
+                      AIMessage("Le chiffre d'affaires net facturé de mars 2026 est celui de l'ERP."))
+    answer = run(llm, "Quel est le chiffre d'affaires de mars 2026 ?")["answer"]
+    assert "comptabilisé (comptes 70)" in answer
+    assert answer.index("peut aussi se lire") < answer.index("Comment ce résultat a été obtenu")
+
+
+def test_no_other_readings_when_no_query_ran(sources):
+    llm = ScriptedLLM(AIMessage("Voulez-vous le chiffre d'affaires facturé ou comptabilisé ?"))
+    assert "peut aussi se lire" not in run(llm, "Quel est le chiffre d'affaires de mars ?")["answer"]
+
+
 def test_agent_module_exposes_a_default_agent():
     assert callable(agent_module.default_agent)
 

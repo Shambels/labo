@@ -322,3 +322,48 @@ metrics:
       (au-delà du salaire garanti).
     expression: |
       SELECT COUNT(*) AS jours_maladie FROM public.timesheets WHERE absence_code IN ('MAL', 'MAL_MUT')
+
+# Business words that cover several readings (step 20, D68). The agent's code, not the model, names the readings an
+# answer left out: a word the model takes for clear (it has a metric for it) never triggers a prompt rule.
+# `patterns` find the word in the question (lower case, no accents). `names` are how a reading is written: found in
+# the question they settle the reading (no note); found in the answer they mean the answer already covers it.
+business_words:
+  - word: chiffre d'affaires
+    patterns: ["\\bchiffres? d'affaires\\b"]
+    readings:
+      - label: chiffre d'affaires net facturé (ERP)
+        names: [factur, erp]
+      - label: chiffre d'affaires comptabilisé (comptes 70)
+        names: [comptabilis, comptable, comptabilite, journal, comptes 70]
+  - word: résultat
+    patterns: ["\\bresultat\\b"]
+    readings:
+      - label: résultat net
+        names: [resultat net]
+      - label: EBITDA
+        names: [ebitda]
+      - label: résultat d'exploitation
+        names: ["resultat d'exploitation", resultat operationnel]
+  - word: effectif
+    patterns: ["\\beffectifs?\\b", "combien de personnes travaillent"]
+    readings:
+      - label: personnes sous contrat à une date
+        names: [sous contrat]
+      - label: personnes payées sur la paie du mois
+        names: [fiche de paie, fiches de paie, paie du mois, payees]
+      - label: équivalents temps plein
+        names: [temps plein, etp]
+  - word: coût du personnel
+    patterns: ["\\bcout du personnel\\b", "\\bcoute (le|notre) personnel\\b"]
+    readings:
+      - label: charges de rémunération en comptabilité (comptes 62)
+        names: [comptes 62, compte 62, comptabilis, comptable, comptabilite]
+      - label: brut et ONSS patronale de la paie
+        names: [brut, onss, paie]
+  - word: meilleurs produits
+    patterns: ["\\bmeilleurs? produits?\\b"]
+    readings:
+      - label: classement par chiffre d'affaires
+        names: ["chiffre d'affaires"]
+      - label: classement par unités vendues
+        names: [unites, quantite]
