@@ -11,11 +11,17 @@ is the request's `user` field, or Open WebUI's X-OpenWebUI-User-Id header, else 
 on loopback. Step 29: an image tag can't send a key, so a chart link is signed and expires; reading a conversation back
 renews the links of the charts drawn in it.
 
+Step 31: one endpoint for the databases, the documents, or both. The model chosen is the toggle: `calorvia-sql` (the
+agent, also under its old name `calorvia-agent`), `calorvia-docs` (the RAG of phase A, unchanged), `calorvia-both` (the
+agent with `search_documents`). A client may instead send `"sources": ["sql", "docs"]`. Images of the documents are
+served from signed /images/ links, like charts.
+
 Streaming sends the agent's steps as they happen (tool calls, queries, failures) inside a collapsed <details>
 block, then the answer. Open WebUI renders <details> as a fold-out; when a client sends the conversation back, those
 blocks are removed from earlier answers so the steps do not fill the model's context. The answers keep their
 "how this was obtained" section: a follow-up question ("et pour avril ?") can reuse the queries shown there.
 """
+import asyncio
 import json
 import re
 import time
@@ -24,16 +30,19 @@ from typing import Any
 
 import uvicorn
 from fastapi import Depends, FastAPI, Header, HTTPException
-from fastapi.responses import FileResponse, StreamingResponse
+from fastapi.responses import FileResponse, Response, StreamingResponse
 from pydantic import BaseModel
 
-from text2sql_calorvia import access, auth, charts, memory
+from text2sql_calorvia import access, auth, charts, documents, memory
 from text2sql_calorvia.agent import Agent, default_agent
 from text2sql_calorvia.config import settings
 
 DETAILS = re.compile(r"<details>.*?</details>\s*", re.S)
 MARKER = re.compile(r"\s*<!-- calorvia:conversation=([\w-]+) -->")
 CHART_ID = re.compile(r"[0-9a-f]{16}")
+SOURCES = {"sql", "docs"}
+MODELS = {"calorvia-sql": {"sql"}, "calorvia-docs": {"docs"}, "calorvia-both": {"sql", "docs"}}
+ALIASES = {settings.agent_model_name: "calorvia-sql"}   # the name of steps 13–29: clients configured with it still work
 
 
 class Message(BaseModel):
@@ -46,6 +55,7 @@ class ChatRequest(BaseModel):
     messages: list[Message]
     stream: bool = False
     user: str | None = None
+    sources: list[str] | None = None   # step 31: overrides the model's sources
 
 
 def text_of(content) -> str:
@@ -78,6 +88,30 @@ def conversation_id_of(messages: list[Message], header: str | None) -> str | Non
     return None
 
 
+def sources_of(request: ChatRequest) -> set[str]:
+    """What this request searches: its `sources` field, else its model."""
+    if request.sources is not None:
+        wanted = set(request.sources)
+        if not wanted or not wanted <= SOURCES:
+            raise HTTPException(400, f"sources: a non-empty list among {sorted(SOURCES)}.")
+        return wanted
+    model = ALIASES.get(request.model, request.model)
+    if model not in MODELS:
+        raise HTTPException(404, f"Unknown model {request.model!r}: {', '.join(MODELS)}.")
+    return MODELS[model]
+
+
+async def documents_only(question: str, role: str | None):
+    """The RAG of phase A, as the same (node, change) events as the agent: the search, then the answer."""
+    context = await asyncio.to_thread(documents.retrieve_context, question, role)
+    step = {"tool": "search_documents", "args": {"query": question}, "ok": True,
+            "extracts": [f"D{n}" for n in range(1, len(context) + 1)]}
+    yield "tools", {"steps": [step]}
+    result = await asyncio.to_thread(documents.write_answer, question, context, role)
+    shown = [{"tool": "show_images", "args": {}, "ok": True, "images": result["images"]}] if result["images"] else []
+    yield "finish", {"answer": result["answer"], "steps": [step, *shown]}
+
+
 def describe_step(step: dict) -> str:
     """One line per tool call, for the progress block."""
     a, tool = step["args"], step["tool"]
@@ -91,6 +125,8 @@ def describe_step(step: dict) -> str:
         return f"{mark} `{a.get('source')}` fiche {a.get('table')}"
     if tool == "find_values":
         return f"{mark} `{a.get('source')}` recherche « {a.get('value')} »"
+    if tool == "search_documents":
+        return f"{mark} documents « {a.get('query')} » — {len(step.get('extracts', []))} extrait(s)"
     if tool == "make_chart":
         return f"{mark} graphique « {a.get('title')} » ({a.get('result')})"
     if tool in ("remember", "forget"):
@@ -100,10 +136,17 @@ def describe_step(step: dict) -> str:
     return f"{mark} {tool} " + json.dumps(a, ensure_ascii=False)[:200]
 
 
-def with_fresh_chart_links(message: dict) -> dict:
-    """A stored answer, its links valid again: only for the charts its own steps drew."""
-    drawn = {s["result"]["chart"] for s in message.get("steps") or [] if s.get("tool") == "make_chart" and s.get("ok")}
-    return {**message, "content": charts.refresh_links(message["content"], drawn)} if drawn else message
+def with_fresh_links(message: dict) -> dict:
+    """A stored answer, its links valid again: only for the charts its own steps drew and the images they showed."""
+    steps = message.get("steps") or []
+    drawn = {s["result"]["chart"] for s in steps if s.get("tool") == "make_chart" and s.get("ok")}
+    shown = [i for s in steps if s.get("tool") == "show_images" for i in s.get("images", [])]
+    content = message["content"]
+    if drawn:
+        content = charts.refresh_links(content, drawn)
+    if shown:
+        content = documents.refresh_links(content, shown)
+    return {**message, "content": content}
 
 
 def create_app(agent: Agent | None = None, api_keys: str | None = None, gateways: str | None = None) -> FastAPI:
@@ -123,8 +166,8 @@ def create_app(agent: Agent | None = None, api_keys: str | None = None, gateways
 
     @app.get("/v1/models", dependencies=[Depends(caller)])
     def models():
-        return {"object": "list", "data": [{"id": settings.agent_model_name, "object": "model",
-                                            "created": 0, "owned_by": "calorvia"}]}
+        return {"object": "list", "data": [{"id": name, "object": "model", "created": 0, "owned_by": "calorvia"}
+                                           for name in MODELS]}
 
     @app.get("/charts/{name}")
     def chart(name: str, exp: str = "", sig: str = ""):
@@ -134,6 +177,18 @@ def create_app(agent: Agent | None = None, api_keys: str | None = None, gateways
         if not CHART_ID.fullmatch(chart_id) or not access.chart_link_valid(chart_id, exp, sig) or not path.exists():
             raise HTTPException(404, "Unknown chart.")
         return FileResponse(path, media_type="image/png", headers={"Cache-Control": "private, no-store"})
+
+    @app.get("/images/{name}")
+    def image(name: str):
+        """An image or scanned page of a document the answer cited (step 31); the same 404 for any bad link."""
+        found = access.read_image_token(name.removesuffix(".jpg"))
+        if found is None:
+            raise HTTPException(404, "Unknown image.")
+        try:
+            data = documents.image_jpeg(*found)
+        except (OSError, ValueError, PermissionError):
+            raise HTTPException(404, "Unknown image.")
+        return Response(data, media_type="image/jpeg", headers={"Cache-Control": "private, no-store"})
 
     @app.get("/v1/conversations")
     def list_conversations(user: str = "default", limit: int = 50, who: auth.Caller = Depends(caller),
@@ -148,12 +203,13 @@ def create_app(agent: Agent | None = None, api_keys: str | None = None, gateways
         messages = memory.conversation(conversation_id) if may_read(who, user, conversation_id) else []
         if not messages:
             raise HTTPException(404, "Unknown conversation.")
-        return {"id": conversation_id, "messages": [with_fresh_chart_links(m) for m in messages]}
+        return {"id": conversation_id, "messages": [with_fresh_links(m) for m in messages]}
 
     @app.post("/v1/chat/completions")
     async def chat(request: ChatRequest, x_conversation_id: str | None = Header(default=None),
                    x_openwebui_user_id: str | None = Header(default=None), who: auth.Caller = Depends(caller)):
         messages = conversation(request.messages)
+        wanted = sources_of(request)
         completion_id, created = f"chatcmpl-{uuid.uuid4().hex}", int(time.time())
         session_id = completion_id
         user = auth.user_of(who, request.user, x_openwebui_user_id)
@@ -163,6 +219,15 @@ def create_app(agent: Agent | None = None, api_keys: str | None = None, gateways
         marker = f"\n\n<!-- calorvia:conversation={conversation_id} -->"
         # With keys, the agent works under the user's role (Phase D); in local mode, as agent_ro
         extra = {"access_token": access.issue_token(access.role_of(user), user)} if who.name else {}
+        role = access.role_of(user) if who.name else None   # the documents' filter: the same role as the databases
+        if wanted == {"sql", "docs"}:
+            extra["use_documents"] = True
+
+        def run():
+            """The (node, change) events of this request: the RAG alone, or the agent."""
+            if wanted == {"docs"}:
+                return documents_only(messages[-1]["content"], role)
+            return get_agent().stream(messages, session_id, user, conversation_id, **extra)
 
         def save(answer: str, steps: list[dict]):
             try:
@@ -171,17 +236,23 @@ def create_app(agent: Agent | None = None, api_keys: str | None = None, gateways
                 print(f"conversation not saved: {type(error).__name__}: {error}", flush=True)
 
         if not request.stream:
-            result = await get_agent().ask(messages, session_id, user, conversation_id, **extra)
+            if wanted == {"docs"}:
+                result = {"answer": "", "steps": []}
+                async for node, change in run():
+                    if node == "finish":
+                        result = change
+            else:
+                result = await get_agent().ask(messages, session_id, user, conversation_id, **extra)
             save(result["answer"], result["steps"])
             return {"id": completion_id, "object": "chat.completion", "created": created,
-                    "model": settings.agent_model_name,
+                    "model": request.model,
                     "choices": [{"index": 0, "finish_reason": "stop",
                                  "message": {"role": "assistant", "content": result["answer"] + marker}}],
                     "usage": {"prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0}}
 
         def chunk(delta: dict, finish: str | None = None) -> str:
             body = {"id": completion_id, "object": "chat.completion.chunk", "created": created,
-                    "model": settings.agent_model_name,
+                    "model": request.model,
                     "choices": [{"index": 0, "delta": delta, "finish_reason": finish}]}
             return f"data: {json.dumps(body, ensure_ascii=False)}\n\n"
 
@@ -189,7 +260,7 @@ def create_app(agent: Agent | None = None, api_keys: str | None = None, gateways
             yield chunk({"role": "assistant", "content": ""})
             opened, shown, steps = False, 0, []
             try:
-                async for node, change in get_agent().stream(messages, session_id, user, conversation_id, **extra):
+                async for node, change in run():
                     if node == "tools":
                         steps = change["steps"]
                         if not opened:
@@ -203,7 +274,7 @@ def create_app(agent: Agent | None = None, api_keys: str | None = None, gateways
                             yield chunk({"content": "\n</details>\n\n"})
                             opened = False
                         yield chunk({"content": change["answer"] + marker})
-                        save(change["answer"], steps)
+                        save(change["answer"], change.get("steps", steps))
             except Exception as error:   # the client gets a readable end, not a cut stream
                 if opened:
                     yield chunk({"content": "\n</details>\n\n"})

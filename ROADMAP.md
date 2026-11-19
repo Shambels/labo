@@ -97,6 +97,7 @@ Companion file: `QUIZ.md` (one quiz per step, answers collapsed).
 | D76 | Row limits | PostgreSQL row-level security on `departments`, `contracts`, `timesheets`, SQL Server security policies on six ERP tables and two line tables, in a schema `access_control` holding the login-to-site mapping. A day of timesheet belongs to the site of the contract running that day. Every login other than the site roles keeps all rows | The database applies the limit to every query shape, and it follows the login, which a query can't change |
 | D77 | Document permissions | `allowed_roles` on every chunk, computed from `policy/roles.yaml` and required inside each search prefetch; no value means no role. A role reading **any** copy of a file reads the document kept for it. Written with `set_payload`: no re-embedding. The registry doesn't store it: the policy file stays the one source | `finance` reads the CODIR annexes, one of which is kept under `06_Achats`: requiring every copy would also have cost `achats` its own file |
 | D78 | Proving access | Random marker rows planted per kind of data, expected readers computed from the policy alone, checked in both directions, then removed with row counts compared. Evaluation per role: a query on a table outside the role is always a leak; a matching figure is only a flag, read by hand and recorded. Chart links signed, valid 24 hours | Trusting the unit tests; judging leaks from figures alone, since a role can reach the same number from its own tables |
+| D79 | One chat | The agent's endpoint serves three models, the model being the toggle: `calorvia-sql` (the agent; `calorvia-agent` kept as an alias), `calorvia-docs` (the RAG of phase A, called directly), `calorvia-both` (the agent with `search_documents`, retrieval only). A `sources` field may replace the model. Extracts are numbered D1, D2… per question and are evidence for the grounding check; cited images are served from signed, expiring links. Same role for documents and databases | A RAG answer pasted next to an agent answer can't compare the two sources; giving the agent the documents can. Documents-only stays the measured system of phase A instead of a new, unmeasured agent |
 | D9 | Porting strategy | Port each hospital_rag module **in the step that needs it** (step 0: config, db, logs; step 3: evaluation; step 4: ETL and RAG) | Nothing unused or untested sits in the repo |
 
 ### Open decisions (to settle with you when we reach them)
@@ -626,6 +627,19 @@ Left to `direction` alone: `08_Juridique` and `00_Direction`, apart from the COD
 
 ---
 
+## Phase F: one chat
+
+### ✅ Step 31. One chat for the databases, the documents, or both
+- **Endpoint** (`api.py`, D79): `/v1/models` lists `calorvia-sql`, `calorvia-docs`, `calorvia-both`; an unknown model is a 404, a bad `sources` list a 400. The documents-only route yields the same events as the agent, so streaming, saving and the conversation marker are shared.
+- **Agent** (`agent.py`, `documents.py`, `prompts/agent_documents.txt`): `search_documents` runs the final configuration's retrieval in a thread, under the role of the token. An extract found again keeps its id. The check counts the extracts' numbers; its retry names documents when they are on. The footer lists the cited extracts, and names the query log only when a query ran.
+- **Images:** `/images/<token>.jpg`, the path, page and expiry signed together; reading a conversation back renews only the images its steps showed. **Streamlit:** a "Chercher dans" toggle; Documents runs the RAG in the app as before, the other two ask the endpoint.
+- **Live:** documents-only cites the approved budget (156,0 M€). Asked the Distrinergie price rise and the Q1 invoicing, "both" searched the documents, then ran one ERP query: 2 % from the signed amendment [D5], 4 236 043,60 € HT, scan shown. Asked budget vs actual, it used the `budget` table in accounting, without the documents.
+- **No regression** (run 39, commit `2a260bf`): dev **31/33**, as runs 14–25.
+- **Limits:** "both" is not evaluated: no question set needs both sources yet. Its answers are written by the agent's prompt, not the RAG's, and the RAG's workbook SQL tools are not offered. Documents-only ignores the conversation, as the RAG always did. The embedder, reranker and 32k generator must run together.
+- **Tests: 23 new** (751 in all).
+
+---
+
 ## Progress log
 
 | Date | Step | What happened |
@@ -690,3 +704,4 @@ Left to `direction` alone: `08_Juridique` and `00_Direction`, apart from the COD
 | 2026-11-18 | 28 | Branch `access/step-28-documents`: `allowed_roles` on every chunk, role filter in the search, per-role workbook stores, image check, login on the chat (D77) |
 | 2026-11-18 | – | Step 28 merged, pushed |
 | 2026-11-18 | 29 | Branch `access/step-29-proof`: signed chart links, access proof 1 192 checks with no failure, evaluation under all 13 roles with no query outside a role (runs 26–38, D78) |
+| 2026-11-19 | 31 | Branch `unified/step-31-one-chat`: three models on the endpoint (D79), `search_documents` in the agent, documents-only = the RAG, signed image links, toggle in Streamlit; dev 31/33 (run 39) |

@@ -1798,3 +1798,49 @@ It may have reached the same number from a table it may read: here `VTE_FACT` in
 
 If a question held the value, an answer repeating the question would look like a leak. The agent is given only the prefix, and the check looks for the random part. The prefix also lets a cleanup find and delete every planted row, even after a crash.
 </details>
+
+---
+
+## Step 31: one chat for the databases and the documents
+
+**1.** In "both" mode the documents are a tool of the agent, rather than the RAG's full answer pasted next to the agent's. What does that give, and what does it cost?
+
+<details><summary>Answer</summary>
+
+One model sees the extracts and the query results together, so it can compare them (the 2 % in the Distrinergie amendment, then the invoices of the quarter) and it decides whether a question needs the documents at all. Every figure goes through the same grounding check. The cost: the RAG's own generation, measured in phase A, is not what runs. The agent's prompt and model write the answer, so phase A's scores don't carry over to this mode, and the RAG's workbook SQL tools aren't available in it.
+</details>
+
+**2.** Why does "documents only" call the RAG directly instead of the agent with only `search_documents`?
+
+<details><summary>Answer</summary>
+
+So the answers stay those of the configuration evaluated in phase A (`status_filter`, judged at 0.823 on the test set). An agent with one tool would be a new system, with a different prompt and no measure. It is also faster: one search and one generation, no agent loop.
+</details>
+
+**3.** A second search returns an extract the model already received. Why does it keep its id (D2) instead of getting the next one?
+
+<details><summary>Answer</summary>
+
+The model may already have cited it as [D2]. Renumbering would make the same text answer to two ids, and a citation in the answer could point to the wrong document in the footer. Numbering by content keeps a citation stable for the whole question.
+</details>
+
+**4.** The grounding check (D54, D71) used to accept only query results as evidence. What changes when a figure comes from a document, and why is the retry message changed too?
+
+<details><summary>Answer</summary>
+
+The extracts are tool messages, so their numbers join the corpus that large figures are checked against, and they are added to the evidence for counts and percentages. Without that, "2 500 000 € in the budget" would be flagged as invented. The retry message says where a figure may come from; telling the model "run the query" for a figure it read in a document would send it to the databases looking for something that isn't there.
+</details>
+
+**5.** The image link holds the document's path. Why sign it, and why is the role not checked again when the image is served?
+
+<details><summary>Answer</summary>
+
+An image tag can't send an API key, so the link itself must prove that the endpoint gave it out: without the signature anyone could ask for any path of the corpus. The role was checked when the extract was found (the search only returns chunks the role may read), and the signature covers the path, the page and the expiry, so the link can't be changed to another image or kept forever. As with charts, whoever holds a valid link can open it until it expires.
+</details>
+
+**6.** In `api.py`, `documents_only` yields the same `("tools", ...)` then `("finish", ...)` events as `Agent.stream`. What does that buy?
+
+<details><summary>Answer</summary>
+
+The streaming code, the step fold-out, the conversation marker and the saving of the turn work unchanged for both routes: `run()` only picks which generator to read. One code path for the client means one behaviour to test.
+</details>

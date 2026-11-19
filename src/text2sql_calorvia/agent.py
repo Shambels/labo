@@ -18,9 +18,12 @@
   answered "not run" and the model must answer without tools, with what it has or "je ne sais pas".
 - **local tools** (step 15): `make_chart` draws a result as a PNG served by the endpoint, added under the answer by
   finish; `remember` / `forget` keep what the user asks to retain (memory.py), shown in the next prompts as data.
+- **search_documents** (step 31, "both" mode only): the RAG's retrieval as a tool (documents.py). Its extracts are
+  numbered D1, D2... across the question's searches, count as evidence for the check, and are listed under the answer.
 - **finish**: appends every executed query (source, SQL as run, rows) to the answer. Transparency is done by code,
   not asked of the model: the CFO sees exactly what ran, also when the model forgets to say it.
 """
+import asyncio
 import json
 import re
 import uuid
@@ -34,12 +37,13 @@ from langgraph.graph import END, START, StateGraph
 from langgraph.graph.message import add_messages
 from mcp.client import Client
 
-from text2sql_calorvia import access, charts, grounding, memory, ontology
+from text2sql_calorvia import access, charts, documents, grounding, memory, ontology
 from text2sql_calorvia.config import settings
 from text2sql_calorvia.reconcile import KEY_TYPES, reconcile
 
 PROMPT = Path(__file__).resolve().parents[2] / "prompts" / "agent.txt"
 ONTOLOGY_PROMPT = PROMPT.with_name("agent_ontology.txt")   # the ontology's part, left out when use_ontology is off
+DOCUMENTS_PROMPT = PROMPT.with_name("agent_documents.txt")  # step 31: added when the documents are searched too
 INJECTED = {"question", "session_id", "max_rows", "access_token"}   # filled by the agent (query log, row budget), never by the model
 SQL_TOOLS = {"execute_sql", "validate_sql"}
 ENGINE = {"erp": "SQL Server", "compta": "PostgreSQL", "paie": "PostgreSQL"}
@@ -89,7 +93,17 @@ FORGET_TOOL = {"type": "function", "function": {
     "description": "Oublie un élément retenu, quand l'utilisateur le demande. id : le numéro entre crochets.",
     "parameters": {"type": "object", "required": ["id"], "properties": {"id": {"type": "integer"}}}}}
 
+DOCUMENTS_TOOL = {"type": "function", "function": {
+    "name": "search_documents",
+    "description": ("Cherche dans les documents de l'entreprise (procédures, politiques, contrats, PV de réunion, "
+                    "notes, fiches produits, tarifs, rapports, classeurs) et renvoie les extraits les plus pertinents, "
+                    "numérotés D1, D2... Pour ce qui est écrit ou décidé ; les chiffres de gestion (ventes, comptes, "
+                    "paie) viennent des bases."),
+    "parameters": {"type": "object", "required": ["query"], "properties": {
+        "query": {"type": "string", "description": "la recherche, en français, formulée comme une question précise"}}}}}
+
 LOCAL_TOOLS = {"reconcile", "make_chart", "remember", "forget"}
+EVIDENCE_TOOLS = {"execute_sql", "get_sales_commission", "search_documents"}   # a figure may come from these
 
 
 class AgentState(TypedDict, total=False):
@@ -108,6 +122,9 @@ class AgentState(TypedDict, total=False):
     conversation_id: str | None
     access_token: str | None     # the caller's role, signed by the endpoint (access.py); never shown to the model
     scope: dict | None           # what that role can read (access.scope_of); None in local mode
+    role: str | None             # the same role, for the documents (step 31); None in local mode
+    documents: bool              # search_documents offered ("both" mode)
+    extracts: list[dict]         # every extract found for this question, D1, D2...
     answer: str
 
 
@@ -159,7 +176,7 @@ def scoped_tools(tools: list[dict], scope: dict) -> list[dict]:
 
 
 def system_prompt(sources: list[dict], use_ontology: bool = True, memories: str = "", scope: dict | None = None,
-                  site: str | None = None) -> str:
+                  site: str | None = None, use_documents: bool = False) -> str:
     """scope (access.scope_of): the role's tables. Without one, the prompt is the same as before roles existed."""
     index = ontology.table_index(scope) if use_ontology else ""
     section = (ONTOLOGY_PROMPT.read_text(encoding="utf-8").format(tables=index, metrics=ontology.glossary(scope))
@@ -175,7 +192,8 @@ def system_prompt(sources: list[dict], use_ontology: bool = True, memories: str 
         data_until=settings.data_until,
         max_sql_errors=settings.max_sql_errors, min_group_size=settings.min_group_size,
         rows_to_model=settings.rows_to_model)
-    return scoped_prompt(text, scope) if scope is not None else text
+    text = scoped_prompt(text, scope) if scope is not None else text
+    return text + "\n\n" + DOCUMENTS_PROMPT.read_text(encoding="utf-8").strip() if use_documents else text
 
 
 def tool_schema(tool) -> dict:
@@ -295,7 +313,7 @@ def ungrounded(answer: str, corpus: str, minimum: float = 1000, max_pairs_of: in
 def previous_answer(text: str) -> str:
     """An earlier answer as the model sees it again: the queries as a short note, not the footer's layout,
     which the model otherwise copies (invented footer and figure included). Chart links are left out (step 29)."""
-    text = charts.without_images(text)
+    text = documents.without_images(charts.without_images(text))
     head, _, tail = text.partition("\n---\n**Comment ce résultat a été obtenu**")
     if not tail:
         return text
@@ -324,11 +342,17 @@ class Agent:
         client: Client = config["configurable"]["client"]
         results, steps = dict(state.get("results", {})), list(state.get("steps", []))
         sql_errors, messages, drawn = state.get("sql_errors", 0), [], list(state.get("charts", []))
+        extracts = list(state.get("extracts", []))
         calls = state["messages"][-1].tool_calls
         for call in calls:
             name, args = call["name"], dict(call["args"])
             step = {"tool": name, "args": dict(args)}   # what the model asked, before the agent adds its own fields
-            if name in LOCAL_TOOLS:
+            if name == "search_documents" and state.get("documents"):
+                found = await asyncio.to_thread(documents.search, str(args.get("query", "")), state.get("role"))
+                shown = documents.number_extracts(found, extracts)
+                step.update(ok=True, extracts=[e["id"] for e in shown])
+                output = documents.for_model(shown)
+            elif name in LOCAL_TOOLS:
                 try:
                     output = self._local_tool(name, args, state, results, drawn)
                     step["ok"] = True
@@ -372,7 +396,7 @@ class Agent:
             steps.append(step)
             messages.append(ToolMessage(as_tool_text(output), tool_call_id=call["id"], name=name))
         return {"messages": messages, "results": results, "steps": steps, "sql_errors": sql_errors,
-                "tool_calls": state.get("tool_calls", 0) + len(calls), "charts": drawn}
+                "tool_calls": state.get("tool_calls", 0) + len(calls), "charts": drawn, "extracts": extracts}
 
     def _local_tool(self, name: str, args: dict, state: AgentState, results: dict, drawn: list) -> dict:
         """The tools that run in the agent: they read the state (results by id) or the memory tables."""
@@ -414,6 +438,8 @@ class Agent:
         for i, message in enumerate(state["messages"]):
             if isinstance(message, ToolMessage) and message.name in {"reconcile", "get_sales_commission"}:
                 known |= grounding.tool_numbers(str(message.content))
+            elif isinstance(message, ToolMessage) and message.name == "search_documents":
+                known |= {abs(v) for _, v in numbers(str(message.content))}
             elif 0 < i < state["history_len"]:
                 known |= {abs(v) for _, v in numbers(str(message.content))}
         return known
@@ -425,15 +451,17 @@ class Agent:
         corpus = "\n".join(str(m.content) for i, m in enumerate(state["messages"])
                            if i < state["history_len"] or isinstance(m, ToolMessage))
         missing = ungrounded(answer, corpus)
-        if any(step["tool"] in {"execute_sql", "get_sales_commission"} and step.get("ok") for step in state.get("steps", [])):
+        if any(step["tool"] in EVIDENCE_TOOLS and step.get("ok") for step in state.get("steps", [])):
             missing += grounding.unsupported(answer, self._evidence(state),
                                              (settings.min_group_size, settings.rows_to_model))
         if not missing:
             return {"unverified": []}
         if not state.get("grounding_retry"):
+            evidence, fix = (("une requête exécutée ou d'un extrait de document trouvé", "cherchez-le")
+                             if state.get("documents") else ("une requête exécutée", "exécutez-la"))
             return {"grounding_retry": True, "messages": [HumanMessage(
                 f"Vérification automatique : {', '.join(missing)} ne figure(nt) dans aucun résultat d'outil de cette "
-                "question. Chaque chiffre doit venir d'une requête exécutée pour cette question : exécutez-la, ou "
+                f"question. Chaque chiffre doit venir d'{evidence} pour cette question : {fix}, ou "
                 "retirez ce chiffre de la réponse. Les réponses précédentes de la conversation ne sont pas des résultats. "
                 "Rédigez ensuite la réponse comme si c'était la première : l'utilisateur ne voit pas cette vérification, "
                 "ne la mentionnez pas.")]}
@@ -444,18 +472,24 @@ class Agent:
         return "agent" if isinstance(last, HumanMessage) else "finish"
 
     async def _finish(self, state: AgentState) -> dict:
-        steps, missing = state.get("steps", []), state.get("unverified") or []
+        steps, missing = list(state.get("steps", [])), state.get("unverified") or []
         text = own_text(state["messages"][-1].content)
         ran = any(s["tool"] in {"execute_sql", "get_sales_commission"} and s.get("ok") for s in steps)
-        if missing and not ran:
+        read = any(s["tool"] == "search_documents" and s.get("extracts") for s in steps)
+        if missing and not (ran or read):
             text = ("Je ne sais pas : je n'ai exécuté aucune requête qui donne ce chiffre, et je ne donne pas de chiffre "
                     "que je n'ai pas obtenu des données. Pouvez-vous reformuler la question ?")
         elif missing:
-            text += f"\n\n⚠️ Nombre(s) non retrouvé(s) dans les résultats des requêtes, à vérifier : {', '.join(missing)}"
+            where = "des requêtes ou les extraits" if read else "des requêtes"
+            text += f"\n\n⚠️ Nombre(s) non retrouvé(s) dans les résultats {where}, à vérifier : {', '.join(missing)}"
         if ran and self.use_ontology:
             text += ontology.other_readings(state.get("question", ""), text, state.get("scope"))   # D68, by code
         images = "".join(f"\n\n![{c['title']}]({charts.chart_url(c['id'])})" for c in state.get("charts", []))
-        return {"answer": text + images + footer(steps, state["session_id"])}
+        extracts = documents.cited(text, state.get("extracts", [])) if read else []
+        pictures, shown = documents.image_tags(extracts)
+        if shown:   # recorded with the steps, so that reading the conversation back renews these links only
+            steps.append({"tool": "show_images", "args": {}, "ok": True, "images": shown})
+        return {"answer": text + images + pictures + footer(steps, state["session_id"], text, extracts), "steps": steps}
 
     # --- graph ------------------------------------------------------------------------------------------------------
     def _route(self, state: AgentState) -> str:
@@ -484,7 +518,8 @@ class Agent:
 
     # --- running ----------------------------------------------------------------------------------------------------
     async def stream(self, messages: list[dict], session_id: str | None = None, user: str = "default",
-                     conversation_id: str | None = None, access_token: str | None = None):
+                     conversation_id: str | None = None, access_token: str | None = None,
+                     use_documents: bool = False):
         """Run the graph on an OpenAI-style conversation; yields (node, state update) as each node finishes.
         `user` selects the memory; `conversation_id` records where a memory was learned."""
         question = next(m["content"] for m in reversed(messages) if m["role"] == "user")
@@ -494,6 +529,8 @@ class Agent:
         async with Client(self.mcp_target) as client:
             mcp_tools = (await client.list_tools()).tools
             tools = [tool_schema(t) for t in mcp_tools] + [RECONCILE_TOOL, CHART_TOOL]
+            if use_documents:
+                tools.append(DOCUMENTS_TOOL)
             if scope is not None:
                 tools = scoped_tools(tools, scope)
             remembered = ""
@@ -502,14 +539,16 @@ class Agent:
                 remembered = memory.prompt_section(memory.memories(user))
             sources = structured(await client.call_tool(
                 "list_sources", {"access_token": access_token} if access_token else {}))
-            history = [SystemMessage(system_prompt(sources, self.use_ontology, remembered, scope, access.site_label(role)))] + [
+            history = [SystemMessage(system_prompt(sources, self.use_ontology, remembered, scope, access.site_label(role),
+                                         use_documents))] + [
                 HumanMessage(m["content"]) if m["role"] == "user" else AIMessage(previous_answer(m["content"]))
                 for m in messages if m["role"] in ("user", "assistant")]
             state = {"messages": history, "question": question, "session_id": session_id,
                      "results": {}, "steps": [], "tool_calls": 0, "sql_errors": 0,
                      "history_len": len(history), "grounding_retry": False, "unverified": [],
                      "charts": [], "user": user, "conversation_id": conversation_id,
-                     "access_token": access_token, "scope": scope}
+                     "access_token": access_token, "scope": scope,
+                     "role": role, "documents": use_documents, "extracts": []}
             config = {"configurable": {"client": client, "tools": tools},
                       "recursion_limit": 4 * settings.max_tool_calls + 10}
             async for update in self.graph.astream(state, config, stream_mode="updates"):
@@ -517,19 +556,20 @@ class Agent:
                     yield node, change
 
     async def ask(self, messages: list[dict], session_id: str | None = None, user: str = "default",
-                  conversation_id: str | None = None, access_token: str | None = None) -> dict:
+                  conversation_id: str | None = None, access_token: str | None = None,
+                  use_documents: bool = False) -> dict:
         """Run to the end; returns {"answer", "steps", "results"} (results: every row of q1, q2...)."""
         steps, answer, results = [], "", {}
-        async for node, change in self.stream(messages, session_id, user, conversation_id, access_token):
+        async for node, change in self.stream(messages, session_id, user, conversation_id, access_token, use_documents):
             if node == "tools":
                 steps, results = change["steps"], change["results"]
             if node == "finish":
-                answer = change["answer"]
+                answer, steps = change["answer"], change["steps"]
         return {"answer": answer, "steps": steps, "results": results}
 
 
-def footer(steps: list[dict], session_id: str) -> str:
-    """The executed queries and reconciliations under the answer, for the reader to check."""
+def footer(steps: list[dict], session_id: str, answer: str = "", extracts: list[dict] = ()) -> str:
+    """The executed queries, reconciliations and cited documents under the answer, for the reader to check."""
     lines = []
     for s in steps:
         if s["tool"] == "execute_sql" and s.get("ok"):
@@ -547,12 +587,14 @@ def footer(steps: list[dict], session_id: str) -> str:
             a = s["args"]
             lines.append(f"Rapprochement en Python : {a['left']}.{a['left_key']} ↔ {a['right']}.{a['right_key']} "
                          f"(clé {a.get('key_type', 'exact')})")
+    logged = bool(lines)
+    lines += documents.footer_lines(answer, list(extracts))
     if not lines:
         return ""
     failed = sum(1 for s in steps if s["tool"] in SQL_TOOLS and not s.get("ok"))
     note = f" · {failed} requête(s) refusée(s) ou en erreur, corrigée(s) en cours de route" if failed else ""
-    return (f"\n\n---\n**Comment ce résultat a été obtenu** (journal `t2sql_query_log`, session `{session_id}`{note})\n\n"
-            + "\n\n".join(lines))
+    where = f" (journal `t2sql_query_log`, session `{session_id}`{note})" if logged else ""
+    return f"\n\n---\n**Comment ce résultat a été obtenu**{where}\n\n" + "\n\n".join(lines)
 
 
 @cache
