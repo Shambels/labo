@@ -139,8 +139,9 @@ def run_experiment(config, allow_dirty=False):
     return experiment_id
 
 
-def judge_experiment(experiment_id, judge_model=None, force=False, types=None):
-    """Judge the stored answers of an experiment on the 31-question sample, or on every dev question of `types`.
+def judge_experiment(experiment_id, judge_model=None, force=False, types=None, question_ids=None):
+    """Judge the stored answers of an experiment on the 31-question sample, on every dev question of `types`, or on
+    the questions `question_ids` (step 30: the questions whose evidence is in a table, across types).
 
     The sample (2 per type) compares configurations broadly; a change aimed at a few types (Excel) is judged on all
     their questions, where 2 per type would let one wording swing a mean by 0.4. Resumes an interrupted pass.
@@ -161,7 +162,8 @@ def judge_experiment(experiment_id, judge_model=None, force=False, types=None):
         if split == "test":  # the final evaluation: every held-out question is judged, no sample
             sample = questions
         else:
-            sample = [q for q in questions if q["type"] in types] if types else judge_sample(questions)
+            sample = ([q for q in questions if q["id"] in set(question_ids)] if question_ids
+                      else [q for q in questions if q["type"] in types] if types else judge_sample(questions))
         if all(answers.get(q["id"], (None, None))[1] is None for q in sample):
             raise ValueError(f"experiment {experiment_id} ({name}) has no generated answers: nothing to judge")
 

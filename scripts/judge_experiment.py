@@ -7,6 +7,7 @@ Usage:
   uv run python scripts/judge_experiment.py baseline
   uv run python scripts/judge_experiment.py 12 13 --judge-model qwen3.8-27b
   uv run python scripts/judge_experiment.py 30 33 --types excel_lookup excel_reasoning version_trap
+  uv run python scripts/judge_experiment.py 150 155 --questions Q001 Q093
 """
 import argparse
 import sys
@@ -20,6 +21,7 @@ parser.add_argument("experiments", nargs="+", help="experiment ids or names")
 parser.add_argument("--judge-model", help="served name of another judge (default: JUDGE_MODEL)")
 parser.add_argument("--force", action="store_true", help="judge again the questions already judged")
 parser.add_argument("--types", nargs="+", help="judge every dev question of these types instead of the 31-question sample")
+parser.add_argument("--questions", nargs="+", help="judge these dev questions (ids) instead of the sample")
 args = parser.parse_args()
 setup_logging()
 
@@ -28,4 +30,5 @@ with db.connect() as conn:
 for given, experiment_id in zip(args.experiments, ids):
     if experiment_id is None:
         sys.exit(f"no finished experiment named {given!r}")
-    judge_experiment(experiment_id, judge_model=args.judge_model, force=args.force, types=args.types)
+    judge_experiment(experiment_id, judge_model=args.judge_model, force=args.force, types=args.types,
+                     question_ids=args.questions)
