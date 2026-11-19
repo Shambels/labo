@@ -187,3 +187,39 @@ def test_translate_question_can_be_limited_to_the_languages_needed(monkeypatch):
     monkeypatch.setattr(translate_module, "get_llm", lambda: LLM)
     config = {"search": {"translate": ["nl", "en"]}, "generation": {"model": "m"}}
     assert translate_module.translate_question("q", config, ["nl", "de"]) == {"fr": "q", "nl": "vraag"}
+
+
+# --- step 30f: Docling tables as Markdown ------------------------------------------------------------------------------
+def report_with_a_table():
+    """Q093's case: a two-column table whose first row is read as the header."""
+    from docling_core.types.doc import DoclingDocument, TableCell, TableData
+    rows = [["Simulation d'hameçonnage (mai)", "Taux de clic : 4 %"], ["Incidents", "Aucun incident majeur"]]
+    cells = [TableCell(text=text, start_row_offset_idx=r, end_row_offset_idx=r + 1, start_col_offset_idx=c,
+                       end_col_offset_idx=c + 1, column_header=(r == 0))
+             for r, row in enumerate(rows) for c, text in enumerate(row)]
+    doc = DoclingDocument(name="rapport")
+    doc.add_table(data=TableData(num_rows=2, num_cols=2, table_cells=cells))
+    return doc
+
+
+def table_text(config):
+    from docling_core.transforms.chunker.hybrid_chunker import HybridChunker
+    from docling_core.transforms.chunker.tokenizer.huggingface import HuggingFaceTokenizer
+    from rag_calorvia.etl.chunk import MarkdownTables, get_tokenizer, markdown_tables
+    tokenizer = HuggingFaceTokenizer(tokenizer=get_tokenizer("bge-m3"), max_tokens=256)
+    chunker = HybridChunker(tokenizer=tokenizer,
+                            **({"serializer_provider": MarkdownTables()} if markdown_tables(config) else {}))
+    return "\n".join(c.text for c in chunker.chunk(report_with_a_table()))
+
+
+def test_markdown_tables_keep_the_row_read_as_header():
+    # Docling's default: the first row became the column names, its label is gone, its value is read as a header
+    assert table_text({"chunking": {}}) == "Incidents, Taux de clic : 4 % = Aucun incident majeur"
+    markdown = table_text({"chunking": {"tables": "markdown"}})
+    assert "| Simulation d'hameçonnage (mai) | Taux de clic : 4 % |" in markdown
+    assert "| Incidents | Aucun incident majeur |" in markdown and "  |" not in markdown            # compact
+
+
+def test_markdown_tables_get_their_own_index():
+    assert collection_name({**CONFIG, "chunking": {**CONFIG["chunking"], "tables": "markdown"}}) == \
+        "calorvia__bge-m3__256__md-tables"

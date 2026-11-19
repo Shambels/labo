@@ -2,11 +2,18 @@
 
 Each chunk = context line + Docling headings + text. The context line says which document the chunk comes from
 (type, date, file, folder): a row of a CODIR action table is useless if it doesn't say which meeting it is from.
+
+Step 30: [chunking] tables = "markdown" writes the tables of Docling documents as compact Markdown tables instead of
+Docling's default "row, column = value" sentences. Those sentences take their column names from the row Docling reads
+as the header: when it reads the first data row as the header (Q093's two-column report table), every sentence repeats
+that row's value and the row label is lost. A Markdown table keeps every row as written.
 """
 from functools import cache
 
+from docling_core.transforms.chunker.hierarchical_chunker import ChunkingDocSerializer, ChunkingSerializerProvider
 from docling_core.transforms.chunker.hybrid_chunker import HybridChunker
 from docling_core.transforms.chunker.tokenizer.huggingface import HuggingFaceTokenizer
+from docling_core.transforms.serializer.markdown import MarkdownParams, MarkdownTableSerializer
 from transformers import AutoTokenizer
 
 from rag_calorvia import db
@@ -25,6 +32,18 @@ PAYLOAD_FIELDS = ["department", "doc_type", "doc_label", "doc_date", "date_end",
                   "version", "status", "source_type", "format"]
 
 ACCESS_FIELD = "allowed_roles"  # the roles that may read a chunk (D77); not part of the index fingerprint
+
+class MarkdownTables(ChunkingSerializerProvider):
+    """Docling's chunking serializer, with tables as compact Markdown (no padding: it would spend the token budget)."""
+
+    def get_serializer(self, doc):
+        return ChunkingDocSerializer(doc=doc, table_serializer=MarkdownTableSerializer(),
+                                     params=MarkdownParams(compact_tables=True))
+
+
+def markdown_tables(config):
+    return config["chunking"].get("tables", "docling") == "markdown"
+
 
 DEFAULT_LANGUAGE = "fr"  # most of the corpus; used when neither the chunk nor its document has a reliable language
 
@@ -173,7 +192,8 @@ def chunk_document(document, config):
         return chunk_workbook(document, config, line, budget, tokenizer)
     if document["source_type"] in ("image", "scan"):  # only reached with [chunking] vision = true
         return vision_chunks(document, line, vision_budget, tokenizer)
-    chunker = HybridChunker(tokenizer=HuggingFaceTokenizer(tokenizer=tokenizer, max_tokens=budget))
+    chunker = HybridChunker(tokenizer=HuggingFaceTokenizer(tokenizer=tokenizer, max_tokens=budget),
+                            **({"serializer_provider": MarkdownTables()} if markdown_tables(config) else {}))
     converted = load_conversion(document["path"])
     payload = document_payload(document)
     chunks = []
