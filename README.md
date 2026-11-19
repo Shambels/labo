@@ -141,6 +141,19 @@ One page for both chatbots, reading the same tables as `scripts/report.py` and `
 
 Stored answers quote every document: with `API_KEYS` set, the page asks for a key whose role is `direction` or `it`.
 
+## The quiz game
+
+```bash
+uv run streamlit run app/quiz.py --server.port 8503     # no server needed
+```
+
+Every question of `QUIZ.md` (open: write your answer, reveal the model answer, grade yourself), multiple-choice
+versions of the long ones (`quiz/choices.yaml`; you can still answer them in your own words), and a **Code &
+pipeline** phase (`quiz/code.yaml`): put the stages in order, match files to their jobs, read a snippet. XP and levels,
+streaks, badges, a score per phase (🏅 at 80 % with every question tried), **Redo failed** (questions last answered
+wrong or partly), and a **pipeline map** of the app coloured by what you know, with "practice this part". Progress is
+saved after each answer in `data/quiz/progress.json`. A new step's quiz in `QUIZ.md` appears in the game by itself.
+
 ## Phase B in five steps
 
 From a fresh clone, with the course material copied into `enonces/` and `.env` filled in (see `.env.example`):
