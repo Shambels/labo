@@ -1925,3 +1925,17 @@ The default serializer writes each cell as "row header, column header = value", 
 
 The change only touches table text, and the questions it can affect cut across types (CODIR actions, decisions, factual reports). The sample has 2 per type, mostly not about tables; whole types would judge many questions the change cannot touch and dilute the effect. Selecting by where the evidence sits targets exactly what changed.
 </details>
+
+**12.** Translating the 147 non-French chunks once at indexing puts every multilingual answer first, yet two French questions are lost. Why can a change to Dutch and English chunks hurt a French question?
+
+<details><summary>Answer</summary>
+
+All chunks compete for the same five places. Read in English, the 2025 results press release scored low against French questions; read in French, it is a fair candidate for anything about "2025" and takes a place. The CSR report was 5th, the last place: one new competitor was enough. Improving the scoring of some chunks always reshuffles the others.
+</details>
+
+**13.** Why does the generator still read the original Dutch text when the search uses the French translation?
+
+<details><summary>Answer</summary>
+
+So that the answer quotes the document as written: figures, names and terms come from the source, not from a translation that could have altered them, and the citation points to what the reader will find in the file. The translation only decides which chunks are found and in what order; an error in it can cost a ranking, not a wrong figure in an answer.
+</details>
