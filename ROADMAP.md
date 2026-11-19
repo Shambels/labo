@@ -619,12 +619,12 @@ Left to `direction` alone: `08_Juridique` and `00_Direction`, apart from the COD
 
 ## Phase E: RAG experiments
 
-### 🔶 Step 30. RAG experiments (one run each, judged on the targeted types)
-- CODIR actions and decisions in PostgreSQL, for `action_tracking`.
+### ✅ Step 30. RAG experiments (one run each, judged on the targeted types)
+- ⏭️ CODIR actions and decisions in PostgreSQL, for `action_tracking` (not done: recall 1.000 since 30f).
 - ✅ Rerank each chunk against the question in the chunk's language (Q024).
 - ✅ A glossary for query translation ("chariots élévateurs" → "heftrucks").
-- Docling chunks with the SQL tools, to separate the reader's effect from the tools'.
-- ✅ Markdown table serialization (Q093). A study of ColPali-style search on page images.
+- ⏭️ Docling chunks with the SQL tools, to separate the reader's effect from the tools' (not done: a decomposition of step 6's gain, no score expected).
+- ✅ Markdown table serialization (Q093). ⏭️ A study of ColPali-style search on page images (not done: no GPU memory left beside the three servers).
 - **Branch `rag/step-30-experiments`.** Retrieval only, 127 dev questions, each run one change on top of the previous; reference `status_filter__retrieval` (run 134). New index with BM25 per chunk language on the final chunking (1 985 chunks, roles on every chunk).
 
   | Run | Experiment | Change | recall@5 | MRR@5 | `multilingual` recall / MRR | trap rate | latency |
@@ -659,6 +659,7 @@ Left to `direction` alone: `08_Juridique` and `00_Direction`, apart from the COD
 - **Cost of 146:** +2.1 s per question (the translation call). One question gained in recall, four better ranked, on 7 `multilingual` questions: small numbers. **Not judged yet**: the judge needs the generator stopped (Gemma on 8003).
 - The glossary was built from the corpus's Dutch and English vocabulary, but the idea came from Q024's failure in step 5: the dev set inspired it, and the test set was already used in step 9, so no unbiased measure exists for this change.
 
+- **Report:** `RAPPORT.md`, section "Step 30: after the final evaluation". **Tests:** 765 in all at the last run.
 ---
 
 ## Phase F: one chat
@@ -745,3 +746,4 @@ Left to `direction` alone: `08_Juridique` and `00_Direction`, apart from the COD
 | 2026-11-19 | 30 | Markdown tables: retrieval 0.951 (run 154), judged on 39 table questions 0.767 → 0.790, faithfulness 0.769 → 0.827 (runs 155/156); Q093 read right |
 | 2026-11-19 | 30 | Chunks translated to French at indexing (run 158): multilingual MRR 1.000, trap rate 0.294, no question-time cost; recall 0.930 (Q144, Q087 lost behind a translated English press release) |
 | 2026-11-19 | 30 | Combined run judged (160): in use + Markdown tables wins (0.802 on 47 questions); `markdown_tables` made the configuration in use (D80) |
+| 2026-11-19 | 30 | Step 30 closed: report section written, merged into `main`, pushed |
