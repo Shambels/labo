@@ -618,12 +618,29 @@ Left to `direction` alone: `08_Juridique` and `00_Direction`, apart from the COD
 
 ## Phase E: RAG experiments
 
-### ⬜ Step 30. RAG experiments (one run each, judged on the targeted types)
+### 🔶 Step 30. RAG experiments (one run each, judged on the targeted types)
 - CODIR actions and decisions in PostgreSQL, for `action_tracking`.
-- Rerank each chunk against the question in the chunk's language (Q024).
-- A glossary for query translation ("chariots élévateurs" → "heftrucks").
+- ✅ Rerank each chunk against the question in the chunk's language (Q024).
+- ✅ A glossary for query translation ("chariots élévateurs" → "heftrucks").
 - Docling chunks with the SQL tools, to separate the reader's effect from the tools'.
 - Markdown table serialization (Q093). A study of ColPali-style search on page images.
+- **Branch `rag/step-30-experiments`.** Retrieval only, 127 dev questions, each run one change on top of the previous; reference `status_filter__retrieval` (run 134). New index with BM25 per chunk language on the final chunking (1 985 chunks, roles on every chunk).
+
+  | Run | Experiment | Change | recall@5 | MRR@5 | `multilingual` recall / MRR | trap rate | latency |
+  |---|---|---|---|---|---|---|---|
+  | 134 | `status_filter` | final configuration | 0.939 | 0.871 | 0.929 / 0.655 | 0.353 | 0.19 s |
+  | 142 | `per_language_final` | BM25 per chunk language | 0.939 | 0.871 | 0.929 / 0.655 | 0.353 | 0.21 s |
+  | 143 | `translate_final` | + question in nl/en, 6 searches fused | 0.889 | 0.832 | 0.929 / 0.726 | | 2.46 s |
+  | 144 | `rerank_by_language` | + rerank each chunk in its language | 0.885 | 0.820 | 0.714 / 0.512 | | 2.46 s |
+  | 145 | `translation_glossary` | + glossary in the translation prompt | 0.902 | 0.837 | **1.000** / 0.798 | 0.235 | 2.30 s |
+  | 146 | `rerank_translations_only` | + search on the French question alone | **0.947** | **0.881** | 0.929 / 0.798 | 0.353 | 2.27 s |
+
+- **Translation in the search hurts French questions** (143): 7 lost, none gained (Q018, Q049, Q056, Q066, Q147, Q157, Q158). Six result lists fused by RRF favour chunks found by every version; French evidence ranked 17th leaves the 30 candidates (Q049). The translation also errs ("conseil" → "comité"). Step 5b saw the same cost on the baseline.
+- **Reranking in the chunk's language is only as good as the translation** (144): Q024 and Q112 are lost. Q024's contract chunks are among the candidates, but scored against "reachstackers" none reaches the top 5.
+- **The glossary fixes the translation** (145): "heftrucks", "interventietijd"; Q024 reaches recall 1.0 (4 contract chunks in the top 5), the first time in the project. The search's cost on French questions remains.
+- **Translations for the reranker only** (146): the candidates are the final configuration's, so no French question can lose. Recall +0.008 (Q087 found), MRR +0.010: Q024, Q062, Q112 now rank first, Q086 rises; Q003 falls from 1st to 4th, still found. Q024's recall stays 0.5: its second evidence chunk is not among the French question's candidates.
+- **Cost:** +2.1 s per question (the translation call). One question gained in recall, four better ranked, on 7 `multilingual` questions: small numbers. **Not judged yet**: the judge needs the generator stopped (Gemma on 8003).
+- The glossary was built from the corpus's Dutch and English vocabulary, but the idea came from Q024's failure in step 5: the dev set inspired it, and the test set was already used in step 9, so no unbiased measure exists for this change.
 
 ---
 
@@ -705,3 +722,5 @@ Left to `direction` alone: `08_Juridique` and `00_Direction`, apart from the COD
 | 2026-11-18 | – | Step 28 merged, pushed |
 | 2026-11-18 | 29 | Branch `access/step-29-proof`: signed chart links, access proof 1 192 checks with no failure, evaluation under all 13 roles with no query outside a role (runs 26–38, D78) |
 | 2026-11-19 | 31 | Branch `unified/step-31-one-chat`: three models on the endpoint (D79), `search_documents` in the agent, documents-only = the RAG, signed image links, toggle in Streamlit; dev 31/33 (run 39) |
+| 2026-11-19 | 31 | Step 31 merged, pushed |
+| 2026-11-19 | 30 | Branch `rag/step-30-experiments`: per-language rerank and translation glossary; translation in the search costs 7 French questions; translations for the reranker only: recall@5 0.947, MRR 0.881 (run 146), +2.1 s; not judged yet |

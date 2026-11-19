@@ -1844,3 +1844,42 @@ An image tag can't send an API key, so the link itself must prove that the endpo
 
 The streaming code, the step fold-out, the conversation marker and the saving of the turn work unchanged for both routes: `run()` only picks which generator to read. One code path for the client means one behaviour to test.
 </details>
+
+---
+
+## Step 30: RAG experiments (reranking in the chunk's language, glossary)
+
+**1.** Run 143 adds the Dutch and English versions of the question to the search and loses seven questions, all on French documents. Where exactly were they lost, and why there?
+
+<details><summary>Answer</summary>
+
+In the search, before the reranker. Six result lists (dense and BM25 for three versions) are fused by RRF, which favours chunks found by several lists. A French chunk found only by the French searches sinks below chunks the translations also found, and can leave the 30 candidates (Q049: from 17th to out). The reranker can't bring back a chunk it never sees.
+</details>
+
+**2.** Reranking each chunk against the question in its own language was meant to fix Q024, and run 144 made it worse. Why, and what does that say about the idea?
+
+<details><summary>Answer</summary>
+
+The Dutch version said "reachstackers" where the contract says "heftrucks": the Dutch chunks were compared with a wrong question, so they scored lower than against the French one. The idea depends on the translation being right; with the glossary (145) the same mechanism puts four of the contract's chunks in the top 5.
+</details>
+
+**3.** In run 146 the translations are used only to rerank. Why can no French question lose recall compared with the final configuration?
+
+<details><summary>Answer</summary>
+
+The search is the final configuration's (French question only), so the 30 candidates are the same, and a French chunk is still scored against the French question, with the same score. Only non-French chunks get a new score; they can push a French chunk down only by beating it, which is what the reranker is for. Q003 fell from 1st to 4th that way, but stayed in the top 5.
+</details>
+
+**4.** The reranker merges scores obtained with different queries into one ranking. What assumption does that make?
+
+<details><summary>Answer</summary>
+
+That a cross-encoder's score means the same thing whatever the phrasing of the question: a Dutch chunk scored 0.8 against the Dutch question is as relevant as a French chunk scored 0.8 against the French one. It holds only approximately (each phrasing has its own score distribution), which is why the merged ranking has to be measured, not assumed.
+</details>
+
+**5.** Run 146 gains 0.008 recall and 0.010 MRR, for 2.1 s more per question. What would you need before keeping it in the final configuration?
+
+<details><summary>Answer</summary>
+
+A judged run on the targeted questions, since better ranks don't always mean better answers, and an honest look at the numbers: one question gained in recall and four in rank, out of 7 multilingual questions, with the idea taken from a dev-set failure (Q024) and no unused test set left to confirm it. Then a decision on whether 2 s per question is worth it for a corpus that is about 5 % Dutch or English.
+</details>
