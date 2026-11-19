@@ -1911,3 +1911,17 @@ The generator has changed since run 56: 32k context and an 8-bit KV cache for ph
 
 The window was set on the dev questions as worded. Q024 reworded put the Dutch contract 8th in the French ranking: a window of 5 translated nothing and missed it. A threshold fitted exactly to the dev set's phrasings is fragile; 10 costs 0.13 s on average and leaves a margin for questions the set doesn't hold.
 </details>
+
+**10.** Docling's default turns Q093's table into "Incidents, Taux de clic : 4 % = Aucun incident majeur". Explain how the row label disappears.
+
+<details><summary>Answer</summary>
+
+The default serializer writes each cell as "row header, column header = value", the column headers taken from the row Docling reads as the table's header. In a two-column table without a real header, it read the first data row as the header: "Simulation d'hameçonnage (mai)" and "Taux de clic : 4 %" became column names, so the first one names nothing anymore and the second is repeated as a column name in every other row. A Markdown table writes the rows as they are.
+</details>
+
+**11.** The Markdown tables were judged on 39 questions chosen by their evidence being inside a table cell, not on the 31-question sample or on whole types. Why?
+
+<details><summary>Answer</summary>
+
+The change only touches table text, and the questions it can affect cut across types (CODIR actions, decisions, factual reports). The sample has 2 per type, mostly not about tables; whole types would judge many questions the change cannot touch and dilute the effect. Selecting by where the evidence sits targets exactly what changed.
+</details>
