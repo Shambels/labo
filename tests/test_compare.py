@@ -29,6 +29,19 @@ def test_the_best_run_respects_the_metric_direction_and_ties():
     assert compare.best_run({"a": 1.0, "b": None}, ["a", "b"], "recall@5") is None    # one value is no comparison
 
 
+@pytest.mark.parametrize("metric, better", [
+    ("recall@5", "higher"), ("correctness", "higher"), ("answer_in_french", "higher"),
+    ("trap_hit@5", "lower"), ("search_ms", "lower"), ("translate_ms", "lower"), ("generate_ms", "lower"),
+    ("redundancy@5", "lower"), ("completion_tokens", None), ("refusal", None), ("documents@5", None)])
+def test_each_metric_has_its_direction(metric, better):
+    assert compare.direction(metric) == better
+
+
+def test_a_duration_is_best_when_lowest_and_a_descriptive_metric_has_no_best():
+    assert compare.best_run({"a": 190.0, "b": 650.0}, ["a", "b"], "rerank_ms") == "a"
+    assert compare.best_run({"a": 36.0, "b": 52.0}, ["a", "b"], "completion_tokens") is None
+
+
 def test_only_the_questions_that_changed_are_listed():
     assert compare.question_diffs(SCORES, "recall@5", QUESTIONS) == [
         {"question": "Q2", "type": "multilingual", "a": 0.5, "b": 1.0}]
