@@ -1883,3 +1883,17 @@ That a cross-encoder's score means the same thing whatever the phrasing of the q
 
 A judged run on the targeted questions, since better ranks don't always mean better answers, and an honest look at the numbers: one question gained in recall and four in rank, out of 7 multilingual questions, with the idea taken from a dev-set failure (Q024) and no unused test set left to confirm it. Then a decision on whether 2 s per question is worth it for a corpus that is about 5 % Dutch or English.
 </details>
+
+**6.** Run 148 translates only when a non-French chunk is in the French reranking's top 5. Why the top 5 and not "any non-French candidate among the 30"?
+
+<details><summary>Answer</summary>
+
+Measured before choosing: 55 of 127 questions have a non-French candidate somewhere among the 30, only 19 in the French top 5, and every question the translations improved is among those 19. The French reranker, even with the wrong language, already places a relevant Dutch or English chunk near the top; translation only fixes its exact rank. A wider window would translate three times as often for no measured gain, and would let irrelevant non-French chunks be rescored into the top 5, as happened to Q039 in run 146.
+</details>
+
+**7.** Q039's MRR drops from 1.0 to 0.5 in run 148, yet nothing was translated for it. What happened, and what does it teach about reading small differences?
+
+<details><summary>Answer</summary>
+
+Its two copies of the same minutes score 0.97737 and 0.97733; the reranker runs in fp16 and its scores vary in the fourth decimal between calls, so the tie flipped. A difference of one question at one rank can be noise of the measuring instrument itself: check the scores before attributing it to the change.
+</details>
