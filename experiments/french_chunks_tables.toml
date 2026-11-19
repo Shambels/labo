@@ -7,8 +7,8 @@ max_tokens = 256
 context_line = true         # "[PV du CODIR du 13 octobre 2025 · PV_CODIR_2025-10-13 · 00_Direction/CODIR/2025]"
 excel = "openpyxl"           # the only change: rows, tables, notes and Excel formats instead of Docling's conversion
 vision = true
-translate_to = "fr"
-tables = "markdown"          # the only change from french_chunks         # the only change from status_filter: nl/en chunks get a French search text
+translate_to = "fr"            # Dutch and English chunks get a French search text (step 30g)
+tables = "markdown"            # the only change from french_chunks: Docling tables as compact Markdown (step 30f)
 vision_max_tokens = 1024     # the only change: 45 of 65 images/pages were cut at 256 tokens, 1 at 1024 (Q056: a name and its manager in two chunks)
 
 [embedder]

@@ -36,4 +36,4 @@ max_tokens = 512
 tables = true                # find_tables, describe_table, run_sql on an in-memory SQLite of every indexed workbook table
 
 [sparse]
-language = "per_chunk"         # the only change: each chunk's BM25 with its language's stemmer (step 5a)
+language = "per_chunk"         # the only change from status_filter: each chunk's BM25 with its language's stemmer (step 5a)
