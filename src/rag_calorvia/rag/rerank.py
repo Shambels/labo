@@ -12,6 +12,7 @@ from functools import cache
 import requests
 
 from rag_calorvia.config import settings
+from rag_calorvia.etl.translate import search_text
 
 NO_RERANKER = "none"  # [reranker] model = "none": keep the search order, to measure what the reranker brings
 
@@ -68,14 +69,14 @@ def rerank(question, chunks, config, versions=None, translate=None):
     # The full chunk text, context line and headings included: they tell the reranker which document and which date
     window = config["reranker"].get("translate_window")
     if translate is not None and window:
-        scored = sorted(score(model, question, [chunk["text"] for chunk in chunks]), key=lambda p: p[1], reverse=True)
+        scored = sorted(score(model, question, [search_text(chunk) for chunk in chunks]), key=lambda p: p[1], reverse=True)
         if any(language_of(chunks[i]) != "fr" for i, _ in scored[:window]):
             versions = translate(sorted({language_of(c) for c in chunks} - {"fr"}))
             others = [i for i, _ in scored if query_for(chunks[i], {**versions, "fr": question}) != question]
             scored = [(i, s) for i, s in scored if i not in set(others)]
             scored += score_in_languages(model, question, chunks, versions, others)
     elif config["reranker"].get("query_language", "question") != "chunk" or not versions or len(versions) < 2:
-        scored = score(model, question, [chunk["text"] for chunk in chunks])
+        scored = score(model, question, [search_text(chunk) for chunk in chunks])
     else:
         scored = score_in_languages(model, question, chunks, versions, range(len(chunks)))
     scored.sort(key=lambda pair: pair[1], reverse=True)

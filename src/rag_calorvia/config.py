@@ -24,6 +24,7 @@ class Settings(BaseSettings):
     eval_path: Path = Path("data/calorvia_eval.json")         # symlink to the eval set in enonces/
     conversions_path: Path = Path("data/conversions")         # Docling output cache (step 4)
     vision_path: Path = Path("data/vision")                   # VLM transcription cache (step 7)
+    translations_path: Path = Path("data/translations")       # French versions of nl/en chunks (step 30g)
     reports_path: Path = Path("data/reports")
     models_path: Path  # holds embedder/{name}, reranker/{name} and docling/
     docling_device: str = "cuda"  # where Docling runs its PDF layout and table models: cuda or cpu

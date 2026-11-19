@@ -21,6 +21,7 @@ from rag_calorvia.config import settings
 from rag_calorvia.etl.convert import load_conversion
 from rag_calorvia.etl.excel import workbook_pieces
 from rag_calorvia.etl.metadata import detect_language
+from rag_calorvia.etl.translate import translates_chunks, with_french
 from rag_calorvia.etl.vision import targets_of, transcription
 from rag_calorvia.rag.permissions import allowed_roles
 
@@ -214,5 +215,8 @@ def chunk_corpus(config):
         documents = db.load_indexable_documents(conn)
         if uses_vision(config):
             documents += [d for d in db.load_vision_documents(conn) if d["source_type"] in ("image", "scan")]
-    return [{**chunk, ACCESS_FIELD: allowed_roles(document["path"])}
-            for document in documents for chunk in chunk_document(document, config)]
+    chunks = [{**chunk, ACCESS_FIELD: allowed_roles(document["path"])}
+              for document in documents for chunk in chunk_document(document, config)]
+    if translates_chunks(config):   # step 30g: a French search text for the nl/en chunks, from the cache only
+        chunks = [with_french(chunk, config) for chunk in chunks]
+    return chunks

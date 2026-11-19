@@ -9,6 +9,7 @@ from qdrant_client import QdrantClient, models
 
 from rag_calorvia.config import settings
 from rag_calorvia.etl.chunk import ACCESS_FIELD, chunk_corpus
+from rag_calorvia.etl.translate import search_text
 
 logger = logging.getLogger(__name__)
 
@@ -64,7 +65,10 @@ def bm25(text, language="fr"):
 
 
 def sparse_language(chunk, config):
-    """The stemmer language of a chunk: French for all (baseline), or the chunk's own ([sparse] language = "per_chunk")."""
+    """The stemmer language of a chunk: French for all (baseline), or the chunk's own ([sparse] language = "per_chunk").
+    A chunk with a French search text (step 30g) is stemmed in French whatever its language."""
+    if "search_text" in chunk:
+        return "fr"
     return chunk["language"] if config.get("sparse", {}).get("language") == "per_chunk" else "fr"
 
 
@@ -83,6 +87,8 @@ def collection_name(config):
         name += "__excel-openpyxl"
     if chunking.get("tables", "docling") == "markdown":   # step 30
         name += "__md-tables"
+    if chunking.get("translate_to") == "fr":   # step 30g
+        name += "__fr-chunks"
     if chunking.get("vision", False):
         name += "__vision"
         if chunking.get("vision_max_tokens", chunking["max_tokens"]) != chunking["max_tokens"]:
@@ -95,6 +101,8 @@ def fingerprint(chunks):
     digest = hashlib.sha256()
     for chunk in chunks:
         digest.update(f"{chunk['document']}\x00{chunk['chunk_index']}\x00{chunk['text']}\x00".encode())
+        if "search_text" in chunk:   # step 30g: a changed translation changes the index
+            digest.update(f"{chunk['search_text']}\x00".encode())
     return digest.hexdigest()[:16]
 
 
@@ -126,7 +134,7 @@ def index_corpus(config, force=False):
                        name, count, stored, len(chunks), current)
 
     start = time.time()
-    vectors = embed([chunk["text"] for chunk in chunks], config["embedder"]["model"])
+    vectors = embed([search_text(chunk) for chunk in chunks], config["embedder"]["model"])
 
     if qdrant.collection_exists(name):
         qdrant.delete_collection(name)
@@ -148,7 +156,7 @@ def index_corpus(config, force=False):
             points=[
                 models.PointStruct(
                     id=i,
-                    vector={"dense": vectors[i], "sparse": bm25(chunks[i]["text"], sparse_language(chunks[i], config))},
+                    vector={"dense": vectors[i], "sparse": bm25(search_text(chunks[i]), sparse_language(chunks[i], config))},
                     payload={**chunks[i], "index_fingerprint": current},
                 )
                 for i in range(batch_start, min(batch_start + UPSERT_BATCH, len(chunks)))

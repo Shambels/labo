@@ -223,3 +223,51 @@ def test_markdown_tables_keep_the_row_read_as_header():
 def test_markdown_tables_get_their_own_index():
     assert collection_name({**CONFIG, "chunking": {**CONFIG["chunking"], "tables": "markdown"}}) == \
         "calorvia__bge-m3__256__md-tables"
+
+
+# --- step 30g: nl/en chunks searched in French ------------------------------------------------------------------------
+FR_CONFIG = {"chunking": {"context_line": True, "translate_to": "fr"}, "generation": {"model": "m"}}
+DUTCH = {"document": "contract.pdf", "chunk_index": 4, "language": "nl",
+         "text": "[Contrat · Onderhoudscontract heftrucks]\n4. Prijs\n18 400 euro excl. btw per jaar."}
+
+
+@pytest.fixture
+def cache(tmp_path, monkeypatch):
+    from rag_calorvia.etl import translate
+    monkeypatch.setattr(translate.settings, "translations_path", tmp_path)
+
+    def store(body, french):
+        import json
+        path = translate.cache_path(body, "m", translate.prompt())
+        path.write_text(json.dumps({"translation": french}), encoding="utf-8")
+    return store
+
+
+def test_a_dutch_chunk_is_searched_in_french_and_read_in_dutch(cache):
+    from rag_calorvia.etl.translate import search_text, with_french
+    cache("4. Prijs\n18 400 euro excl. btw per jaar.", "4. Prix\n18 400 euros HT par an.")
+    chunk = with_french(DUTCH, FR_CONFIG)
+    assert chunk["search_text"] == "[Contrat · Onderhoudscontract heftrucks]\n4. Prix\n18 400 euros HT par an."
+    assert chunk["text"] == DUTCH["text"] and search_text(chunk) == chunk["search_text"]   # the generator's text
+
+
+def test_french_chunks_are_left_alone_and_a_missing_translation_stops_the_index(cache):
+    from rag_calorvia.etl.translate import MissingTranslation, search_text, with_french
+    french = {**DUTCH, "language": "fr"}
+    assert with_french(french, FR_CONFIG) is french and search_text(french) == french["text"]
+    with pytest.raises(MissingTranslation):
+        with_french(DUTCH, FR_CONFIG)
+
+
+def test_a_translated_chunk_is_stemmed_in_french_and_indexed_apart():
+    per_chunk = {**CONFIG, "sparse": {"language": "per_chunk"}}
+    assert sparse_language({"language": "nl", "search_text": "x"}, per_chunk) == "fr"
+    assert sparse_language({"language": "nl"}, per_chunk) == "nl"
+    assert collection_name({**CONFIG, "chunking": {**CONFIG["chunking"], "translate_to": "fr"}}) == \
+        "calorvia__bge-m3__256__fr-chunks"
+
+
+def test_the_reranker_reads_the_french_search_text(calls):
+    chunks = [{"text": "z", "search_text": "b", "language": "nl"}, {"text": "a", "language": "fr"}]
+    ranked = rerank_module.rerank(VERSIONS["fr"], chunks, RERANK)
+    assert calls == [(VERSIONS["fr"], ["b", "a"])] and ranked[0]["text"] == "z"   # scored on b, returned as written
