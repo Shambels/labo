@@ -23,6 +23,7 @@ from dotenv import dotenv_values
 from mcp.client import Client
 from qdrant_client import models
 
+from rag_calorvia.config import settings as rag_settings
 from rag_calorvia.etl import index as rag_index
 from rag_calorvia.rag import pipeline, search as rag_search
 from rag_calorvia.rag.permissions import roles_for
@@ -36,7 +37,7 @@ from text2sql_calorvia.policy import may_read
 from text2sql_calorvia.sources import SOURCES
 
 OUT = Path("results/access_proof.json")
-RAG_CONFIG = Path("experiments/status_filter.toml")
+RAG_CONFIG = rag_settings.final_config
 TABLES = sorted({(m.source, m.table, m.column) for m in proof.markers()})
 
 

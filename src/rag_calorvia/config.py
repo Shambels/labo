@@ -27,6 +27,9 @@ class Settings(BaseSettings):
     reports_path: Path = Path("data/reports")
     models_path: Path  # holds embedder/{name}, reranker/{name} and docling/
     docling_device: str = "cuda"  # where Docling runs its PDF layout and table models: cuda or cpu
+    # The configuration the chat, the agent's endpoint and the access proof use. Step 9's final evaluation was
+    # status_filter; step 30 added translation on demand for the reranker (runs 148, 150)
+    final_config: Path = Path("experiments/translate_on_demand.toml")
 
     @property
     def docling_models_path(self):

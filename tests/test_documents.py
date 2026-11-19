@@ -8,6 +8,7 @@ from qdrant_client import models
 from qdrant_client.http.exceptions import ResponseHandlingException, UnexpectedResponse
 from streamlit.testing.v1 import AppTest
 
+from rag_calorvia.config import settings
 from rag_calorvia.etl.chunk import ACCESS_FIELD
 from rag_calorvia.etl.index import collection_name, get_qdrant
 from rag_calorvia.rag import images, permissions, tables
@@ -15,7 +16,7 @@ from rag_calorvia.rag.pipeline import question_filter
 from rag_calorvia.rag.search import search
 from text2sql_calorvia import policy
 
-CONFIG = tomllib.loads(Path("experiments/status_filter.toml").read_text())
+CONFIG = tomllib.loads(settings.final_config.read_text())
 SPARSE = {**CONFIG, "search": {**CONFIG["search"], "method": "sparse"}}
 QUESTIONS = ["budget 2026", "décision du CODIR", "grille salariale", "contrat d'assurance", "politique de télétravail",
              "maintenance Gent", "rappel Aeris 12", "tarif", "sécurité informatique", "communiqué de presse"]

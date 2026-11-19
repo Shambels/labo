@@ -2,8 +2,10 @@
 
 Two chatbots for **Calorvia SA**, a fictional Belgian heat-pump manufacturer:
 
-1. **`rag_calorvia`**: a RAG over 393 documents from the company's shared drive. Done: final configuration
-   `experiments/status_filter.toml`, results and analysis in `RAPPORT.md`, exports in `results/`.
+1. **`rag_calorvia`**: a RAG over 393 documents from the company's shared drive. Done: final evaluation of
+   `experiments/status_filter.toml` (step 9), results and analysis in `RAPPORT.md`, exports in `results/`. The
+   configuration in use is `experiments/translate_on_demand.toml` (step 30: status_filter, plus the question translated
+   for the reranker when a Dutch or English chunk is in its top 5); `FINAL_CONFIG` in `.env` changes it.
 2. **`text2sql_calorvia`**: a text-to-SQL agent over three business databases (phase B). Done: LangGraph agent
    behind an OpenAI-compatible endpoint, read-only MCP server, certified ontology; results and analysis in
    `RAPPORT_T2SQL.md`, exports in `results/t2sql/`. To run it: [Phase B in five steps](#phase-b-in-five-steps).
@@ -172,7 +174,7 @@ The model you pick is the toggle:
 | Model | Searches | Runs |
 |---|---|---|
 | `calorvia-sql` (also `calorvia-agent`) | the three databases | the agent, as in phase B |
-| `calorvia-docs` | the documents | the RAG of phase A (`status_filter`), unchanged |
+| `calorvia-docs` | the documents | the RAG of phase A, with its configuration in use (`translate_on_demand`) |
 | `calorvia-both` | both | the agent with a `search_documents` tool: it picks the source per question, and can compare |
 
 A client may send `"sources": ["sql", "docs"]` instead of choosing a model. Extracts are cited `[D1]`, `[D2]`; the cited
