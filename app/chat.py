@@ -1,6 +1,11 @@
-"""Chat with the Calorvia RAG: the answer, its sources, the images it relies on, and the SQL it ran.
+"""Chat with Calorvia: the documents (the RAG), the databases (the agent), or both (step 31).
 
-    uv run streamlit run app/chat.py          # needs the embedder, the reranker and the generator
+    uv run streamlit run app/chat.py          # documents: the embedder, the reranker and the generator
+                                              # databases or both: also the MCP server and the agent's endpoint (9000)
+
+"Documents" runs the RAG here, with its extracts, images and workbook SQL shown under each answer. "Bases de données"
+and "Les deux" ask the agent's endpoint (models calorvia-sql and calorvia-both) with the same key: its answer carries
+the queries that ran and the documents it cites.
 
 The configuration is the final one (experiments/status_filter.toml); another can be chosen in the sidebar.
 With API_KEYS set, the chat asks for a key and answers only from the documents of the user's role (D77); the settings
@@ -10,10 +15,14 @@ import tomllib
 from pathlib import Path
 
 import streamlit as st
+from openai import OpenAI, OpenAIError
 
 from rag_calorvia.rag.images import answer_images, image_bytes
 from rag_calorvia.rag.permissions import identify
 from rag_calorvia.rag.pipeline import answer
+from text2sql_calorvia.config import settings as agent_settings
+
+MODES = {"Documents": None, "Bases de données": "calorvia-sql", "Les deux": "calorvia-both"}
 
 st.set_page_config(page_title="Assistant Calorvia", page_icon="💬", layout="wide")
 
@@ -24,7 +33,7 @@ if st.session_state.identity is None:
     with st.form("login"):
         key = st.text_input("Clé d'accès", type="password")
         if st.form_submit_button("Entrer"):
-            st.session_state.identity = identify(key)
+            st.session_state.identity, st.session_state.key = identify(key), key
             if st.session_state.identity is None:
                 st.error("Clé invalide.")
             else:
@@ -32,12 +41,15 @@ if st.session_state.identity is None:
     st.stop()
 user, role = st.session_state.identity
 
+mode = st.sidebar.radio("Chercher dans", list(MODES), help="Documents : procédures, contrats, PV, tarifs... "
+                        "Bases de données : ventes, comptabilité, paie. Les deux : l'agent choisit, et peut comparer.")
 configs = sorted(Path("experiments").glob("*.toml"))
 default = next((i for i, p in enumerate(configs) if p.stem == "status_filter"), 0)
-if role is None:
+if role is None and mode == "Documents":
     config_path = st.sidebar.selectbox("Configuration", configs, index=default, format_func=lambda p: p.stem)
 else:
     config_path = configs[default]
+if role is not None:
     st.sidebar.write(f"Connecté : {user} ({role})")
     if st.sidebar.button("Se déconnecter"):
         st.session_state.clear()
@@ -47,7 +59,7 @@ with open(config_path, "rb") as f:
 st.sidebar.caption("Les extraits, les images et les requêtes SQL sont affichés sous chaque réponse : "
                    "vérifiez une valeur lue dans une image avant de la réutiliser.")
 
-st.title("Assistant documentaire Calorvia")
+st.title("Assistant Calorvia")
 
 if "history" not in st.session_state:
     st.session_state.history = []
@@ -59,6 +71,10 @@ def show(turn):
         st.write(turn["question"])
     with st.chat_message("assistant"):
         result = turn["result"]
+        if turn.get("mode", "Documents") != "Documents":
+            st.caption(turn["mode"])
+            st.markdown(result["answer"])    # the endpoint's Markdown: queries, cited documents, charts and images
+            return
         st.write(result["answer"])
         for path, page in answer_images(result["answer"], result["context"]):
             caption = path + (f", page {page + 1}" if page is not None else "")
@@ -77,8 +93,24 @@ def show(turn):
 for turn in st.session_state.history:
     show(turn)
 
-if question := st.chat_input("Votre question sur les documents de Calorvia"):
+def ask_agent(question, model):
+    """The agent's endpoint, with the conversation so far (an earlier answer carries the conversation's id)."""
+    client = OpenAI(base_url=f"http://{agent_settings.agent_host}:{agent_settings.agent_port}/v1",
+                    api_key=st.session_state.get("key") or "local", timeout=600)
+    messages = [m for t in st.session_state.history
+                for m in ({"role": "user", "content": t["question"]}, {"role": "assistant", "content": t["result"]["answer"]})]
+    reply = client.chat.completions.create(model=model, messages=messages + [{"role": "user", "content": question}])
+    return {"answer": reply.choices[0].message.content}
+
+
+if question := st.chat_input("Votre question sur Calorvia"):
     with st.spinner("Recherche et rédaction de la réponse…"):
-        turn = {"question": question, "result": answer(question, config, role)}
+        try:
+            result = answer(question, config, role) if MODES[mode] is None else ask_agent(question, MODES[mode])
+        except OpenAIError as error:
+            st.error(f"L'agent ne répond pas ({type(error).__name__}) : lancez le serveur MCP et "
+                     "`uv run python -m text2sql_calorvia.api`.")
+            st.stop()
+    turn = {"question": question, "result": result, "mode": mode}
     st.session_state.history.append(turn)
     show(turn)

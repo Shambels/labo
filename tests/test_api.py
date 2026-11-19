@@ -42,9 +42,9 @@ def client(agent=None):
     return TestClient(create_app(agent)), agent
 
 
-def test_models_lists_the_agent():
+def test_models_lists_the_three_modes():
     http, _ = client()
-    assert http.get("/v1/models").json()["data"][0]["id"] == settings.agent_model_name
+    assert [m["id"] for m in http.get("/v1/models").json()["data"]] == ["calorvia-sql", "calorvia-docs", "calorvia-both"]
 
 
 def test_a_completion_has_the_openai_format():

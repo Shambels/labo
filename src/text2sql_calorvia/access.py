@@ -137,6 +137,34 @@ def chart_link_valid(chart_id: str, expires: str, signature: str, now: float | N
     return hmac.compare_digest(signature.encode(), sign_chart(chart_id, int(expires)).encode())
 
 
+def image_token(path: str, page: int | None, expires: int) -> str:
+    """A document image link (step 31): the path, the page and the expiry, signed together. Like a chart link, it
+    proves the agent gave it out; the role was checked when the extract was found."""
+    body = _encode(json.dumps({"path": path, "page": page, "exp": expires}).encode())
+    return f"{body}.{_derived('image-link:' + body)}"
+
+
+def image_of(token: str) -> tuple[str, int | None, int] | None:
+    """(path, page, expires) of a token, unchecked: only to recognise which image a stored link shows."""
+    try:
+        body = token.partition(".")[0]
+        data = json.loads(base64.urlsafe_b64decode(body + "=" * (-len(body) % 4)))
+        return str(data["path"]), data["page"], int(data["exp"])
+    except (ValueError, KeyError, TypeError):
+        return None
+
+
+def read_image_token(token: str, now: float | None = None) -> tuple[str, int | None] | None:
+    """(path, page) of a valid, unexpired link; None otherwise."""
+    body, _, signature = token.partition(".")
+    if not hmac.compare_digest(signature.encode(), _derived("image-link:" + body).encode()):
+        return None
+    found = image_of(token)
+    if found is None or found[2] < (now or time.time()):
+        return None
+    return found[0], found[1]
+
+
 def caller(token: str | None) -> Identity | None:
     """Who an MCP call runs as. None = agent_ro, only while no API keys are set (local mode)."""
     if token:
