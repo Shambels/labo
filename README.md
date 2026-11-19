@@ -124,6 +124,23 @@ files the inventory finds itself. Query the registry with `SELECT * FROM documen
 
 Everything runs **from the repository root**: the paths in `config.py` are relative to it.
 
+## Comparing experiments
+
+```bash
+uv run streamlit run app/experiments.py --server.port 8502   # needs only PostgreSQL (5432)
+```
+
+One page for both chatbots, reading the same tables as `scripts/report.py` and `scripts/t2sql_report.py`:
+
+- **RAG:** choose runs (★ marks the configuration in use), metrics (retrieval or judged) and the grouping (question
+  type, evidence format, or all); the best value of each row is marked ▲ (lower is better for `trap_hit`). Judged
+  metrics are compared on the questions scored in every chosen run, since each run was judged on its own set.
+- **Text-to-SQL agent:** right answers and confidently wrong ones per category.
+- For both: the questions whose result changed (with the expected answer and each run's answer) and the settings that
+  differ between the runs' stored configurations.
+
+Stored answers quote every document: with `API_KEYS` set, the page asks for a key whose role is `direction` or `it`.
+
 ## Phase B in five steps
 
 From a fresh clone, with the course material copied into `enonces/` and `.env` filled in (see `.env.example`):
