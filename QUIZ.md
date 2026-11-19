@@ -1904,3 +1904,10 @@ Its two copies of the same minutes score 0.97737 and 0.97733; the reranker runs 
 
 The generator has changed since run 56: 32k context and an 8-bit KV cache for phase B. Answers from two servers differ for reasons that have nothing to do with retrieval. Generating both on the same server leaves the retrieval change as the only difference, and the control gets its own name so run 56 stays the reported final run.
 </details>
+
+**9.** The dev set showed no difference between a window of 5 and of 10. Why choose 10?
+
+<details><summary>Answer</summary>
+
+The window was set on the dev questions as worded. Q024 reworded put the Dutch contract 8th in the French ranking: a window of 5 translated nothing and missed it. A threshold fitted exactly to the dev set's phrasings is fragile; 10 costs 0.13 s on average and leaves a margin for questions the set doesn't hold.
+</details>
