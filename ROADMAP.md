@@ -747,3 +747,4 @@ Left to `direction` alone: `08_Juridique` and `00_Direction`, apart from the COD
 | 2026-11-19 | 30 | Chunks translated to French at indexing (run 158): multilingual MRR 1.000, trap rate 0.294, no question-time cost; recall 0.930 (Q144, Q087 lost behind a translated English press release) |
 | 2026-11-19 | 30 | Combined run judged (160): in use + Markdown tables wins (0.802 on 47 questions); `markdown_tables` made the configuration in use (D80) |
 | 2026-11-19 | 30 | Step 30 closed: report section written, merged into `main`, pushed |
+| 2026-11-19 | – | Step 30's configuration comments cleaned (values unchanged); `app/experiments.py`, a page comparing RAG and text-to-SQL runs (metrics per group, changed questions, settings that differ), 7 tests |
