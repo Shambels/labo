@@ -144,7 +144,46 @@ def test_translated_search_false_keeps_the_translations_for_the_reranker_only(mo
     monkeypatch.setattr(pipeline, "translate_question", lambda q, c: VERSIONS)
     monkeypatch.setattr(pipeline, "reference_date", lambda q, c: None)
     monkeypatch.setattr(pipeline, "search", lambda q, c, query_filter, versions: seen.setdefault("search", versions) and [])
-    monkeypatch.setattr(pipeline, "rerank", lambda q, chunks, c, versions: seen.setdefault("rerank", versions) and [])
-    config = {"search": {"translated_search": False}}
+    monkeypatch.setattr(pipeline, "rerank", lambda q, chunks, c, versions, translate: seen.setdefault("rerank", versions) and [])
+    config = {"search": {"translated_search": False}, "reranker": {}}
     pipeline.retrieve(VERSIONS["fr"], config)
     assert seen == {"search": {"fr": VERSIONS["fr"]}, "rerank": VERSIONS}
+
+
+ON_DEMAND = {"reranker": {"model": "bge-reranker", "query_language": "chunk", "translate_window": 2},
+             "search": {"top_k": 2}}
+
+
+def test_on_demand_no_translation_when_the_french_top_is_all_french(calls):
+    asked = []
+    chunks = [{"text": "a", "language": "fr"}, {"text": "b", "language": "fr"}, {"text": "c", "language": "nl"}]
+    ranked = rerank_module.rerank(VERSIONS["fr"], chunks, ON_DEMAND, translate=lambda langs: asked.append(langs))
+    assert asked == [] and len(calls) == 1 and [c["text"] for c in ranked] == ["b", "a"]   # c (0.1) is 3rd
+
+
+def test_on_demand_translates_the_languages_present_and_rescores_only_the_others(calls):
+    asked = []
+
+    def translate(languages):
+        asked.append(languages)
+        return VERSIONS
+    ranked = rerank_module.rerank(VERSIONS["fr"], CHUNKS, ON_DEMAND, translate=translate)   # b (nl, 0.9) is 1st
+    assert asked == [["de", "nl"]]
+    assert calls[1:] == [(VERSIONS["nl"], ["b", "d"])]           # German has no version: it keeps its French score
+    assert [(c["text"], c["rerank_score"]) for c in ranked] == [("b", 0.9), ("d", 0.6)]
+
+
+def test_translate_question_can_be_limited_to_the_languages_needed(monkeypatch):
+    from rag_calorvia.rag import translate as translate_module
+
+    class LLM:
+        class chat:
+            class completions:
+                @staticmethod
+                def create(**kwargs):
+                    class Message:
+                        content = '{"nl": "vraag", "en": "question"}'
+                    return type("R", (), {"choices": [type("C", (), {"message": Message})]})
+    monkeypatch.setattr(translate_module, "get_llm", lambda: LLM)
+    config = {"search": {"translate": ["nl", "en"]}, "generation": {"model": "m"}}
+    assert translate_module.translate_question("q", config, ["nl", "de"]) == {"fr": "q", "nl": "vraag"}

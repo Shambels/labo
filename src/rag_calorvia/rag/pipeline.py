@@ -51,9 +51,18 @@ def retrieve(question, config, role=None):
     serve the reranker only, the search runs on the French question, so the candidates stay those of the untranslated
     configuration.
     """
+    on_demand = bool(config["reranker"].get("translate_window"))   # step 30d: translate later, only if needed
     start = time.perf_counter()
-    versions = translate_question(question, config)  # {'fr': question} when [search] translate is off
+    versions = {"fr": question} if on_demand else translate_question(question, config)  # {'fr'} when translate is off
     translate_ms = elapsed_ms(start)
+    made = {}
+
+    def translate(languages):
+        """Called by the reranker when a non-French chunk is in its French top N; timed apart."""
+        begin = time.perf_counter()
+        made["versions"] = translate_question(question, config, languages)
+        made["ms"] = elapsed_ms(begin)
+        return made["versions"]
 
     start = time.perf_counter()
     reference = reference_date(question, config)  # None when [search] reference_date is off
@@ -65,10 +74,13 @@ def retrieve(question, config, role=None):
     search_ms = elapsed_ms(start)
 
     start = time.perf_counter()
-    chunks = rerank(question, candidates, config, versions)
+    chunks = rerank(question, candidates, config, versions, translate if on_demand else None)
     rerank_ms = elapsed_ms(start)
     timings = {"search_ms": search_ms, "rerank_ms": rerank_ms}
-    if len(versions) > 1:
+    if made:
+        versions = made["versions"]
+        timings = {"translate_ms": made["ms"], **timings, "rerank_ms": rerank_ms - made["ms"]}
+    elif len(versions) > 1:
         timings = {"translate_ms": translate_ms, **timings}
     if config["search"].get("reference_date", False):
         timings = {"reference_ms": reference_ms, **timings}

@@ -39,10 +39,13 @@ def translation_prompt(config):
     return TRANSLATION_PROMPT + "\n\n" + Path(glossary).read_text(encoding="utf-8").strip()
 
 
-def translate_question(question, config):
-    """{'fr': question, 'nl': ..., 'en': ...} for the languages of [search] translate. On a malformed answer, only
-    the French question: a failed translation must never cost the search its original question."""
+def translate_question(question, config, only=None):
+    """{'fr': question, 'nl': ..., 'en': ...} for the languages of [search] translate (`only`: those of them that are
+    needed, step 30d). On a malformed answer, only the French question: a failed translation must never cost the
+    search its original question."""
     languages = config["search"].get("translate", [])
+    if only is not None:
+        languages = [language for language in languages if language in only]
     if not languages:
         return {"fr": question}
     response = get_llm().chat.completions.create(

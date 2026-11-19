@@ -38,22 +38,45 @@ def query_for(chunk, versions):
     return versions.get(chunk.get("language"), versions["fr"])
 
 
-def rerank(question, chunks, config, versions=None):
-    """The [search] top_k chunks the reranker finds most relevant, best first, with their rerank_score."""
+def language_of(chunk):
+    return chunk.get("language") or "fr"
+
+
+def score_in_languages(model, question, chunks, versions, indexes):
+    """[(index, score)] of these chunks, each against the version of the question in its language."""
+    versions = {**versions, "fr": question}
+    groups = {}
+    for i in indexes:
+        groups.setdefault(query_for(chunks[i], versions), []).append(i)
+    scored = []
+    for query, members in groups.items():   # one call per language present
+        scored += [(members[j], s) for j, s in score(model, query, [chunks[i]["text"] for i in members])]
+    return scored
+
+
+def rerank(question, chunks, config, versions=None, translate=None):
+    """The [search] top_k chunks the reranker finds most relevant, best first, with their rerank_score.
+
+    translate (step 30d, with [reranker] translate_window = N): a function {languages} -> versions, called only when
+    a non-French chunk is in the French ranking's top N. Then the non-French candidates are scored again against the
+    question in their language; the French ones keep their score. Otherwise no translation is made at all.
+    """
     model = config["reranker"]["model"]
     top_k = config["search"]["top_k"]
     if model == NO_RERANKER or not chunks:
         return chunks[:top_k]
     # The full chunk text, context line and headings included: they tell the reranker which document and which date
-    if config["reranker"].get("query_language", "question") != "chunk" or not versions or len(versions) < 2:
+    window = config["reranker"].get("translate_window")
+    if translate is not None and window:
+        scored = sorted(score(model, question, [chunk["text"] for chunk in chunks]), key=lambda p: p[1], reverse=True)
+        if any(language_of(chunks[i]) != "fr" for i, _ in scored[:window]):
+            versions = translate(sorted({language_of(c) for c in chunks} - {"fr"}))
+            others = [i for i, _ in scored if query_for(chunks[i], {**versions, "fr": question}) != question]
+            scored = [(i, s) for i, s in scored if i not in set(others)]
+            scored += score_in_languages(model, question, chunks, versions, others)
+    elif config["reranker"].get("query_language", "question") != "chunk" or not versions or len(versions) < 2:
         scored = score(model, question, [chunk["text"] for chunk in chunks])
     else:
-        versions = {**versions, "fr": question}
-        groups = {}
-        for i, chunk in enumerate(chunks):
-            groups.setdefault(query_for(chunk, versions), []).append(i)
-        scored = []
-        for query, indexes in groups.items():   # one call per language present among the candidates
-            scored += [(indexes[j], s) for j, s in score(model, query, [chunks[i]["text"] for i in indexes])]
+        scored = score_in_languages(model, question, chunks, versions, range(len(chunks)))
     scored.sort(key=lambda pair: pair[1], reverse=True)
     return [{**chunks[i], "rerank_score": s} for i, s in scored[:top_k]]
