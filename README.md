@@ -8,6 +8,9 @@ Two chatbots for **Calorvia SA**, a fictional Belgian heat-pump manufacturer:
    behind an OpenAI-compatible endpoint, read-only MCP server, certified ontology; results and analysis in
    `RAPPORT_T2SQL.md`, exports in `results/t2sql/`. To run it: [Phase B in five steps](#phase-b-in-five-steps).
 
+Both answer from **one chat** (step 31): the endpoint serves `calorvia-sql`, `calorvia-docs` and `calorvia-both`, and the
+Streamlit chat has the same toggle. See [One chat for both](#one-chat-for-both-step-31).
+
 `ROADMAP.md` tracks the steps and decisions; `QUIZ.md` holds a quiz per step.
 
 ## Requirements
@@ -137,7 +140,7 @@ docker logs -f calorvia-erp-restore      # wait for "GESPRO restored." (under a 
 
 # 3. The MCP server (the only process with database connections), then the agent's endpoint
 uv run python -m text2sql_calorvia.mcp_server    # http://127.0.0.1:9001/mcp
-uv run python -m text2sql_calorvia.api           # http://127.0.0.1:9000/v1, model "calorvia-agent"
+uv run python -m text2sql_calorvia.api           # http://127.0.0.1:9000/v1, models calorvia-sql / -docs / -both
 
 # 4. Ask a question
 curl -s http://127.0.0.1:9000/v1/chat/completions -H 'Content-Type: application/json' \
@@ -161,6 +164,34 @@ with nothing else using the databases. `--role all` on `scripts/run_t2sql_eval.p
 
 In Open WebUI, add `http://127.0.0.1:9000/v1` as an OpenAI connection: the steps unfold live in a fold-out, charts
 show as images, and the queries that ran are listed under every answer.
+
+## One chat for both (step 31)
+
+The model you pick is the toggle:
+
+| Model | Searches | Runs |
+|---|---|---|
+| `calorvia-sql` (also `calorvia-agent`) | the three databases | the agent, as in phase B |
+| `calorvia-docs` | the documents | the RAG of phase A (`status_filter`), unchanged |
+| `calorvia-both` | both | the agent with a `search_documents` tool: it picks the source per question, and can compare |
+
+A client may send `"sources": ["sql", "docs"]` instead of choosing a model. Extracts are cited `[D1]`, `[D2]`; the cited
+documents are listed under the answer with the queries; an image or scanned page the answer cites is shown from a
+signed `/images/` link that expires like a chart's. With `API_KEYS`, the documents are filtered by the same role as
+the databases.
+
+Needs everything at once: the embedder (8001), the reranker (8002), the generator on 8000 as in step 2 above, the
+MCP server and the endpoint. In Open WebUI, pick the model in the selector. In Streamlit
+(`uv run streamlit run app/chat.py`), the sidebar's "Chercher dans" chooses Documents (the RAG, run in the app, with
+its extracts), Bases de données or Les deux (both asked to the endpoint on 9000).
+
+To try it in Open WebUI with Docker (port 3000 and 3001 are auto-ontology's):
+
+```bash
+docker run -d --name open-webui --network=host -e PORT=8080 \
+  -v open-webui:/app/backend/data ghcr.io/open-webui/open-webui:main
+# http://localhost:8080 -> Admin Settings -> Connections -> OpenAI: http://127.0.0.1:9000/v1, any key in local mode
+```
 
 ## Phase B: the source databases
 
@@ -288,6 +319,7 @@ src/text2sql_calorvia/
 ├── reconcile.py    # cross-source matching in Python on a normalized key (VAT, staff number, name)
 ├── agent.py        # the LangGraph agent: agent -> tools -> ... -> check -> finish, budgets, grounding check
 ├── api.py          # the OpenAI-compatible endpoint (FastAPI): /v1/models, /v1/chat/completions, streaming
+├── documents.py    # step 31: the RAG in the endpoint (search_documents, documents-only mode, signed image links)
 ├── charts.py       # step 15: query results drawn as PNG charts (matplotlib)
 ├── memory.py       # step 15: conversations and learned memory in PostgreSQL
 ├── evaluation.py   # step 14: the question set, scoring in code, the behaviour judge and its rules
