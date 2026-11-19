@@ -1939,3 +1939,10 @@ All chunks compete for the same five places. Read in English, the 2025 results p
 
 So that the answer quotes the document as written: figures, names and terms come from the source, not from a translation that could have altered them, and the citation points to what the reader will find in the file. The translation only decides which chunks are found and in what order; an error in it can cost a ranking, not a wrong figure in an answer.
 </details>
+
+**14.** French chunks give every multilingual answer rank 1, yet the judged multilingual answers are no better than with translation on demand. How can better ranking bring no better answers?
+
+<details><summary>Answer</summary>
+
+The generator reads the whole top 5, not only the first chunk. With translation on demand the right Dutch chunks were already inside the top 5, just lower; moving them to rank 1 changes MRR, not what the generator reads. Retrieval metrics measure order; the answer depends on presence. That is why changes are judged on answers before being adopted.
+</details>
