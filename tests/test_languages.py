@@ -136,3 +136,15 @@ def test_the_glossary_is_added_to_the_translation_prompt_only_when_configured():
     assert translation_prompt({"search": {}}) == TRANSLATION_PROMPT
     prompt = translation_prompt({"search": {"glossary": "prompts/glossary_translation.txt"}})
     assert prompt.startswith(TRANSLATION_PROMPT) and "chariot élévateur → heftruck" in prompt
+
+
+def test_translated_search_false_keeps_the_translations_for_the_reranker_only(monkeypatch):
+    from rag_calorvia.rag import pipeline
+    seen = {}
+    monkeypatch.setattr(pipeline, "translate_question", lambda q, c: VERSIONS)
+    monkeypatch.setattr(pipeline, "reference_date", lambda q, c: None)
+    monkeypatch.setattr(pipeline, "search", lambda q, c, query_filter, versions: seen.setdefault("search", versions) and [])
+    monkeypatch.setattr(pipeline, "rerank", lambda q, chunks, c, versions: seen.setdefault("rerank", versions) and [])
+    config = {"search": {"translated_search": False}}
+    pipeline.retrieve(VERSIONS["fr"], config)
+    assert seen == {"search": {"fr": VERSIONS["fr"]}, "rerank": VERSIONS}

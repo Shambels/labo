@@ -46,7 +46,10 @@ def retrieve(question, config, role=None):
     """The top_k chunks for a question (translate, search, then rerank), with the time of each stage.
 
     Enough on its own for the retrieval metrics: experiments that only change retrieval skip generation.
-    The reranker always compares the chunks with the original (French) question.
+    The reranker compares the chunks with the original (French) question, or with its version in each chunk's language
+    ([reranker] query_language = "chunk", step 30). [search] translated_search = false (step 30c): the translations
+    serve the reranker only, the search runs on the French question, so the candidates stay those of the untranslated
+    configuration.
     """
     start = time.perf_counter()
     versions = translate_question(question, config)  # {'fr': question} when [search] translate is off
@@ -57,7 +60,8 @@ def retrieve(question, config, role=None):
     reference_ms = elapsed_ms(start)
 
     start = time.perf_counter()
-    candidates = search(question, config, query_filter=question_filter(config, reference, role), versions=versions)
+    searched = versions if config["search"].get("translated_search", True) else {"fr": question}
+    candidates = search(question, config, query_filter=question_filter(config, reference, role), versions=searched)
     search_ms = elapsed_ms(start)
 
     start = time.perf_counter()
