@@ -165,10 +165,10 @@ def rag_page():
                 qs = [q for q in questions if q["id"] in common]
             rows = compare.metric_table(scores, qs, registry, metric, by)
             runs_ = list(scores)
-            arrow = "lower is better" if metric in compare.LOWER_IS_BETTER else "higher is better"
+            better = compare.direction(metric)
             st.subheader(f"{metric}")
-            st.caption(f"{arrow} · mean over the questions that have the metric, their number in brackets · "
-                       "▲ best of the row")
+            st.caption((f"{better} is better · ▲ best of the row" if better else "describes the runs, no better direction")
+                       + " · mean over the questions that have the metric, their number in brackets")
             table = []
             for row in rows:
                 best = compare.best_run(row, runs_, metric)

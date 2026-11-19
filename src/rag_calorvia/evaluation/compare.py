@@ -11,7 +11,11 @@ import json
 from rag_calorvia import db
 from rag_calorvia.evaluation.report import summarize
 
-LOWER_IS_BETTER = {"trap_hit@5", "trap_hit@3"}   # the share of questions whose top k holds a trap
+# Which way is better, per metric. Durations (*_ms), traps and redundancy: lower. Counts that describe a run without
+# ranking it: none (a longer answer is not a better one, more documents in the top 5 only helps multi-document
+# questions, a refusal is right on out_of_corpus questions and wrong elsewhere). Anything else: higher.
+LOWER_IS_BETTER = {"trap_hit@3", "trap_hit@5", "redundancy@5", "near_duplicates@5"}
+NO_DIRECTION = {"completion_tokens", "documents@5", "refusal", "tool_calls", "translations", "reference_date"}
 RETRIEVAL_METRICS = ["recall@5", "mrr@5", "hit@5", "ndcg@5", "trap_hit@5"]
 JUDGED_METRICS = ["correctness", "faithfulness", "answer_relevancy", "contextual_precision", "contextual_recall"]
 LONG_TEXT = 120   # a configuration string longer than this (a stored prompt) is compared by its hash
@@ -57,12 +61,20 @@ def metric_table(scores, questions, registry, metric, by):
     return rows
 
 
-def best_run(row, runs, metric):
-    """The run with the best mean in a row (None on a tie or with fewer than two values)."""
-    values = {run: row[run] for run in runs if row.get(run) is not None}
-    if len(values) < 2 or len(set(round(v, 6) for v in values.values())) == 1:
+def direction(metric):
+    """'higher', 'lower', or None when the metric describes a run without ranking it."""
+    if metric in NO_DIRECTION:
         return None
-    pick = min if metric in LOWER_IS_BETTER else max
+    return "lower" if metric in LOWER_IS_BETTER or metric.endswith("_ms") else "higher"
+
+
+def best_run(row, runs, metric):
+    """The run with the best mean in a row (None on a tie, with fewer than two values, or without a direction)."""
+    values = {run: row[run] for run in runs if row.get(run) is not None}
+    better = direction(metric)
+    if better is None or len(values) < 2 or len(set(round(v, 6) for v in values.values())) == 1:
+        return None
+    pick = min if better == "lower" else max
     best = pick(values.values())
     winners = [run for run, v in values.items() if round(v, 6) == round(best, 6)]
     return winners[0] if len(winners) == 1 else None
