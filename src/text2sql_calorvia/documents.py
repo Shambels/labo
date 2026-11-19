@@ -3,7 +3,7 @@
 - **search_documents**, a tool of the agent in "both" mode: the RAG's retrieval only (translate, hybrid search,
   rerank) with the final configuration, no generation. The agent's model reads the extracts next to its query
   results and writes one answer, citing extracts as [D1], [D2]...
-- **documents only**: the RAG as it is (`pipeline.answer` split in two so the endpoint can show the search before
+- **documents only**: the RAG with its final configuration (`settings.final_config`; `pipeline.answer` split in two so the endpoint can show the search before
   the answer is written), its answers unchanged from phase A.
 - **image links**: an extract read from an image or a scan is shown under the answer, from a signed /images/ link
   that expires, like a chart (step 29). The role was checked when the extract was found.
@@ -15,12 +15,10 @@ import re
 import time
 import tomllib
 from functools import cache
-from pathlib import Path
 
 from text2sql_calorvia import access
 from text2sql_calorvia.config import settings
 
-CONFIG = Path("experiments/status_filter.toml")   # the final RAG configuration (step 9), relative to the repo root
 MAX_EXTRACTS = 5          # extracts per search given to the agent's model (the RAG's top_k)
 EXTRACT_CHARS = 1500      # a long transcribed image is cut: the context also holds the query results
 MAX_IMAGES = 3
@@ -31,7 +29,8 @@ IMAGE_TAG = re.compile(r"\s*!\[[^\n]*?\]\([^)\s]*/images/[\w-]+\.[0-9a-f]{64}\.j
 
 @cache
 def rag_config() -> dict:
-    with open(CONFIG, "rb") as f:
+    from rag_calorvia.config import settings as rag_settings
+    with open(rag_settings.final_config, "rb") as f:
         return tomllib.load(f)
 
 

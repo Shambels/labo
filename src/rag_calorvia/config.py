@@ -24,9 +24,14 @@ class Settings(BaseSettings):
     eval_path: Path = Path("data/calorvia_eval.json")         # symlink to the eval set in enonces/
     conversions_path: Path = Path("data/conversions")         # Docling output cache (step 4)
     vision_path: Path = Path("data/vision")                   # VLM transcription cache (step 7)
+    translations_path: Path = Path("data/translations")       # French versions of nl/en chunks (step 30g)
     reports_path: Path = Path("data/reports")
     models_path: Path  # holds embedder/{name}, reranker/{name} and docling/
     docling_device: str = "cuda"  # where Docling runs its PDF layout and table models: cuda or cpu
+    # The configuration the chat, the agent's endpoint and the access proof use. Step 9's final evaluation was
+    # status_filter; step 30 added translation on demand for the reranker (runs 148, 150, 152) and Markdown tables
+    # (runs 154, 156, judged against french_chunks_tables, run 160)
+    final_config: Path = Path("experiments/markdown_tables.toml")
 
     @property
     def docling_models_path(self):

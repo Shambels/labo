@@ -1,0 +1,34 @@
+Glossaire de l'entreprise (français → néerlandais ; anglais), à utiliser quand le terme apparaît :
+- chariot élévateur → heftruck ; forklift
+- transpalette → transpallet ; pallet truck
+- entrepôt → magazijn ; warehouse
+- allée → gang ; aisle
+- rayonnage → rek ; racking
+- piéton, passage pour piétons → voetganger, oversteekplaats ; pedestrian, crossing
+- limiteur de vitesse → snelheidsbegrenzer ; speed limiter
+- plan d'action sécurité → actieplan veiligheid ; safety action plan
+- rapport d'incident → incidentrapport ; incident report
+- accident du travail → arbeidsongeval ; occupational accident
+- absentéisme → absenteïsme ; absenteeism
+- CPPT (comité pour la prévention et la protection au travail) → Comité PBW (comité voor preventie en bescherming op het werk)
+- conseiller en prévention → preventieadviseur ; prevention adviser
+- rapport de production mensuel → maandelijks productierapport ; monthly production report
+- unités produites → geproduceerde eenheden ; units produced
+- arrêt, temps d'arrêt → stilstand ; downtime
+- rebut (taux de rebut) → uitval ; scrap rate
+- instruction de travail → werkinstructie ; work instruction
+- emballer → inpakken ; to pack
+- gerber, empiler → stapelen ; to stack
+- contrat de maintenance → onderhoudscontract ; maintenance contract
+- délai d'intervention → interventietijd ; response time
+- délai de livraison → levertermijn ; lead time
+- fournisseur → leverancier ; supplier
+- contrat d'approvisionnement → leveringsovereenkomst ; supply agreement
+- rappel (de produit) → terugroeping ; recall
+- hausse de prix → prijsverhoging ; price increase
+- plan de compte (client) → accountplan ; account plan
+- chiffre d'affaires → omzet ; revenue
+- objectif → doelstelling ; target
+- offre d'emploi → vacature ; job offer
+- pompe à chaleur → warmtepomp ; heat pump
+- fluide frigorigène → koelmiddel ; refrigerant

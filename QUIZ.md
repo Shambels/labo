@@ -1844,3 +1844,105 @@ An image tag can't send an API key, so the link itself must prove that the endpo
 
 The streaming code, the step fold-out, the conversation marker and the saving of the turn work unchanged for both routes: `run()` only picks which generator to read. One code path for the client means one behaviour to test.
 </details>
+
+---
+
+## Step 30: RAG experiments (reranking in the chunk's language, glossary)
+
+**1.** Run 143 adds the Dutch and English versions of the question to the search and loses seven questions, all on French documents. Where exactly were they lost, and why there?
+
+<details><summary>Answer</summary>
+
+In the search, before the reranker. Six result lists (dense and BM25 for three versions) are fused by RRF, which favours chunks found by several lists. A French chunk found only by the French searches sinks below chunks the translations also found, and can leave the 30 candidates (Q049: from 17th to out). The reranker can't bring back a chunk it never sees.
+</details>
+
+**2.** Reranking each chunk against the question in its own language was meant to fix Q024, and run 144 made it worse. Why, and what does that say about the idea?
+
+<details><summary>Answer</summary>
+
+The Dutch version said "reachstackers" where the contract says "heftrucks": the Dutch chunks were compared with a wrong question, so they scored lower than against the French one. The idea depends on the translation being right; with the glossary (145) the same mechanism puts four of the contract's chunks in the top 5.
+</details>
+
+**3.** In run 146 the translations are used only to rerank. Why can no French question lose recall compared with the final configuration?
+
+<details><summary>Answer</summary>
+
+The search is the final configuration's (French question only), so the 30 candidates are the same, and a French chunk is still scored against the French question, with the same score. Only non-French chunks get a new score; they can push a French chunk down only by beating it, which is what the reranker is for. Q003 fell from 1st to 4th that way, but stayed in the top 5.
+</details>
+
+**4.** The reranker merges scores obtained with different queries into one ranking. What assumption does that make?
+
+<details><summary>Answer</summary>
+
+That a cross-encoder's score means the same thing whatever the phrasing of the question: a Dutch chunk scored 0.8 against the Dutch question is as relevant as a French chunk scored 0.8 against the French one. It holds only approximately (each phrasing has its own score distribution), which is why the merged ranking has to be measured, not assumed.
+</details>
+
+**5.** Run 146 gains 0.008 recall and 0.010 MRR, for 2.1 s more per question. What would you need before keeping it in the final configuration?
+
+<details><summary>Answer</summary>
+
+A judged run on the targeted questions, since better ranks don't always mean better answers, and an honest look at the numbers: one question gained in recall and four in rank, out of 7 multilingual questions, with the idea taken from a dev-set failure (Q024) and no unused test set left to confirm it. Then a decision on whether 2 s per question is worth it for a corpus that is about 5 % Dutch or English.
+</details>
+
+**6.** Run 148 translates only when a non-French chunk is in the French reranking's top 5. Why the top 5 and not "any non-French candidate among the 30"?
+
+<details><summary>Answer</summary>
+
+Measured before choosing: 55 of 127 questions have a non-French candidate somewhere among the 30, only 19 in the French top 5, and every question the translations improved is among those 19. The French reranker, even with the wrong language, already places a relevant Dutch or English chunk near the top; translation only fixes its exact rank. A wider window would translate three times as often for no measured gain, and would let irrelevant non-French chunks be rescored into the top 5, as happened to Q039 in run 146.
+</details>
+
+**7.** Q039's MRR drops from 1.0 to 0.5 in run 148, yet nothing was translated for it. What happened, and what does it teach about reading small differences?
+
+<details><summary>Answer</summary>
+
+Its two copies of the same minutes score 0.97737 and 0.97733; the reranker runs in fp16 and its scores vary in the fourth decimal between calls, so the tie flipped. A difference of one question at one rank can be noise of the measuring instrument itself: check the scores before attributing it to the change.
+</details>
+
+**8.** To judge run 148's configuration, why generate the final configuration again (run 149) instead of comparing with run 56's stored answers?
+
+<details><summary>Answer</summary>
+
+The generator has changed since run 56: 32k context and an 8-bit KV cache for phase B. Answers from two servers differ for reasons that have nothing to do with retrieval. Generating both on the same server leaves the retrieval change as the only difference, and the control gets its own name so run 56 stays the reported final run.
+</details>
+
+**9.** The dev set showed no difference between a window of 5 and of 10. Why choose 10?
+
+<details><summary>Answer</summary>
+
+The window was set on the dev questions as worded. Q024 reworded put the Dutch contract 8th in the French ranking: a window of 5 translated nothing and missed it. A threshold fitted exactly to the dev set's phrasings is fragile; 10 costs 0.13 s on average and leaves a margin for questions the set doesn't hold.
+</details>
+
+**10.** Docling's default turns Q093's table into "Incidents, Taux de clic : 4 % = Aucun incident majeur". Explain how the row label disappears.
+
+<details><summary>Answer</summary>
+
+The default serializer writes each cell as "row header, column header = value", the column headers taken from the row Docling reads as the table's header. In a two-column table without a real header, it read the first data row as the header: "Simulation d'hameçonnage (mai)" and "Taux de clic : 4 %" became column names, so the first one names nothing anymore and the second is repeated as a column name in every other row. A Markdown table writes the rows as they are.
+</details>
+
+**11.** The Markdown tables were judged on 39 questions chosen by their evidence being inside a table cell, not on the 31-question sample or on whole types. Why?
+
+<details><summary>Answer</summary>
+
+The change only touches table text, and the questions it can affect cut across types (CODIR actions, decisions, factual reports). The sample has 2 per type, mostly not about tables; whole types would judge many questions the change cannot touch and dilute the effect. Selecting by where the evidence sits targets exactly what changed.
+</details>
+
+**12.** Translating the 147 non-French chunks once at indexing puts every multilingual answer first, yet two French questions are lost. Why can a change to Dutch and English chunks hurt a French question?
+
+<details><summary>Answer</summary>
+
+All chunks compete for the same five places. Read in English, the 2025 results press release scored low against French questions; read in French, it is a fair candidate for anything about "2025" and takes a place. The CSR report was 5th, the last place: one new competitor was enough. Improving the scoring of some chunks always reshuffles the others.
+</details>
+
+**13.** Why does the generator still read the original Dutch text when the search uses the French translation?
+
+<details><summary>Answer</summary>
+
+So that the answer quotes the document as written: figures, names and terms come from the source, not from a translation that could have altered them, and the citation points to what the reader will find in the file. The translation only decides which chunks are found and in what order; an error in it can cost a ranking, not a wrong figure in an answer.
+</details>
+
+**14.** French chunks give every multilingual answer rank 1, yet the judged multilingual answers are no better than with translation on demand. How can better ranking bring no better answers?
+
+<details><summary>Answer</summary>
+
+The generator reads the whole top 5, not only the first chunk. With translation on demand the right Dutch chunks were already inside the top 5, just lower; moving them to rank 1 changes MRR, not what the generator reads. Retrieval metrics measure order; the answer depends on presence. That is why changes are judged on answers before being adopted.
+</details>

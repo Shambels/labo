@@ -46,25 +46,41 @@ def retrieve(question, config, role=None):
     """The top_k chunks for a question (translate, search, then rerank), with the time of each stage.
 
     Enough on its own for the retrieval metrics: experiments that only change retrieval skip generation.
-    The reranker always compares the chunks with the original (French) question.
+    The reranker compares the chunks with the original (French) question, or with its version in each chunk's language
+    ([reranker] query_language = "chunk", step 30). [search] translated_search = false (step 30c): the translations
+    serve the reranker only, the search runs on the French question, so the candidates stay those of the untranslated
+    configuration.
     """
+    on_demand = bool(config["reranker"].get("translate_window"))   # step 30d: translate later, only if needed
     start = time.perf_counter()
-    versions = translate_question(question, config)  # {'fr': question} when [search] translate is off
+    versions = {"fr": question} if on_demand else translate_question(question, config)  # {'fr'} when translate is off
     translate_ms = elapsed_ms(start)
+    made = {}
+
+    def translate(languages):
+        """Called by the reranker when a non-French chunk is in its French top N; timed apart."""
+        begin = time.perf_counter()
+        made["versions"] = translate_question(question, config, languages)
+        made["ms"] = elapsed_ms(begin)
+        return made["versions"]
 
     start = time.perf_counter()
     reference = reference_date(question, config)  # None when [search] reference_date is off
     reference_ms = elapsed_ms(start)
 
     start = time.perf_counter()
-    candidates = search(question, config, query_filter=question_filter(config, reference, role), versions=versions)
+    searched = versions if config["search"].get("translated_search", True) else {"fr": question}
+    candidates = search(question, config, query_filter=question_filter(config, reference, role), versions=searched)
     search_ms = elapsed_ms(start)
 
     start = time.perf_counter()
-    chunks = rerank(question, candidates, config)
+    chunks = rerank(question, candidates, config, versions, translate if on_demand else None)
     rerank_ms = elapsed_ms(start)
     timings = {"search_ms": search_ms, "rerank_ms": rerank_ms}
-    if len(versions) > 1:
+    if made:
+        versions = made["versions"]
+        timings = {"translate_ms": made["ms"], **timings, "rerank_ms": rerank_ms - made["ms"]}
+    elif len(versions) > 1:
         timings = {"translate_ms": translate_ms, **timings}
     if config["search"].get("reference_date", False):
         timings = {"reference_ms": reference_ms, **timings}

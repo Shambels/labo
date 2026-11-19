@@ -30,6 +30,9 @@ commits listed below; the step-by-step story, with every decision, is in `ROADMA
 - **Test vs dev:** answer correctness is as good on the held-out questions (0.823 vs 0.784), retrieval is lower
   (0.850 vs 0.939), partly a measurement effect (two right answers found in other documents than the listed
   evidence). No sign of tuning to the dev questions.
+- **After the final evaluation (step 30):** the configuration in use became `markdown_tables`: the question
+  translated for the reranker only when a Dutch or English chunk is near the top, and Docling tables written as
+  Markdown. Measured on the dev set only (the test set was spent): see [Step 30](#step-30-after-the-final-evaluation).
 
 ## Method
 
@@ -225,6 +228,39 @@ describes the start of the recall (214 units, the faulty valve batch), not its e
   the structured route of the statement: CODIR decisions and actions extracted into PostgreSQL and queried by
   date.
 
+## Step 30: after the final evaluation
+
+The ideas left over by this report, tried one change at a time on the 127 dev questions (runs 142–160, `ROADMAP.md`
+step 30). The test set was used in step 9: these results are dev results, and some ideas came from dev failures
+(Q024, Q093), so they are optimistic.
+
+| Run | Change | recall@5 | MRR@5 | `multilingual` MRR | trap rate | mean latency (retrieval) |
+|---|---|---|---|---|---|---|
+| 134 | `status_filter` (final, step 9) | 0.939 | 0.871 | 0.655 | 0.353 | 0.19 s |
+| 143 | + question in nl/en in the search | 0.889 | 0.832 | 0.726 | | 2.46 s |
+| 145 | + rerank each chunk in its language, glossary | 0.902 | 0.837 | 0.798 | 0.235 | 2.30 s |
+| 146 | translations for the reranker only | 0.947 | 0.881 | 0.798 | 0.353 | 2.27 s |
+| 152 | … only when a non-French chunk is in the French top 10 | 0.947 | 0.877 | 0.798 | 0.353 | 0.63 s |
+| 154 | + Docling tables as Markdown (**in use**) | **0.951** | 0.873 | 0.798 | 0.353 | 0.65 s |
+| 158 | `status_filter` + nl/en chunks translated to French at indexing | 0.930 | **0.883** | **1.000** | 0.294 | 0.19 s |
+
+- **Translating the question into the search hurts French questions** (7 lost): six result lists fused by RRF push
+  French evidence out of the 30 candidates. Translations are worth having **for the reranker only**, and only when
+  a Dutch or English chunk is already near the top of the French ranking (27 of 127 questions).
+- **Reranking in the chunk's language is only as good as the translation:** without a glossary of the company's
+  words, "chariots élévateurs" became "reachstackers" and the Dutch contract fell out of the top 5.
+- **Markdown tables:** Docling's default serialization takes column names from the row it reads as the header; on
+  Q093's table it read the first data row, and the row label disappeared. Judged on the 39 dev questions whose
+  evidence is inside a table: correctness 0.767 → 0.790, faithfulness 0.769 → 0.827; Q093 is now read correctly.
+- **Translating the documents instead of the questions** (147 chunks, once, 7 minutes) ranks every Dutch and English
+  answer first at no cost per question, but the judged answers are no better (0.871 vs 0.886 on `multilingual`):
+  translation on demand already put the right chunks in the top 5, and the generator reads all five. It also lets a
+  translated English press release push two French CSR answers out (Q144, Q087). Kept as a measured option.
+- **Judged together** on the same 47 questions (tables, `multilingual`, Q144, Q087), generated on the same server:
+  correctness 0.783 (translation on demand), **0.802** (+ Markdown tables, adopted), 0.766 (French chunks + tables).
+- **Not done:** CODIR actions in SQL (`action_tracking` recall is now 1.000), Docling chunks + SQL tools (a
+  decomposition of step 6's gain, no score expected), search on page images (no GPU memory left).
+
 ## Limits
 
 - **The judge is fallible:** faithfulness verdicts were checked by hand in step 4 and 4 of 5 penalties were judge
@@ -232,8 +268,8 @@ describes the start of the recall (214 units, the faulty valve batch), not its e
   is not fully reproducible at temperature 0 (98/127 identical answers between two prompt variants).
 - **Small numbers:** 2 questions per type in the sample, 4 to 14 per targeted type; differences under ≈ 0.03 on
   the 77 judged questions are noise.
-- **What was not tried:** CODIR actions and decisions in SQL; reranking against the question in the chunk's
-  language; a glossary for the translation; Docling chunks + SQL tools (to separate the reader's effect from the
-  tools'); ColPali-style search on page images.
+- **What was not tried:** CODIR actions and decisions in SQL; Docling chunks + SQL tools (to separate the reader's
+  effect from the tools'); ColPali-style search on page images. Reranking in the chunk's language, the glossary,
+  Markdown tables and translated chunks were tried in step 30, on the dev set only.
 - **Time spent:** the ETL (Docling conversion 42 s, VLM ≈ 6 min) is cheap; the judge is the bottleneck (≈ 20 s per
   question), which shaped the evaluation design.

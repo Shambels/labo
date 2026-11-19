@@ -7,7 +7,7 @@
 and "Les deux" ask the agent's endpoint (models calorvia-sql and calorvia-both) with the same key: its answer carries
 the queries that ran and the documents it cites.
 
-The configuration is the final one (experiments/status_filter.toml); another can be chosen in the sidebar.
+The configuration is the final one (settings.final_config); another can be chosen in the sidebar.
 With API_KEYS set, the chat asks for a key and answers only from the documents of the user's role (D77); the settings
 of .streamlit/config.toml keep it on this machine otherwise.
 """
@@ -17,6 +17,7 @@ from pathlib import Path
 import streamlit as st
 from openai import OpenAI, OpenAIError
 
+from rag_calorvia.config import settings as rag_settings
 from rag_calorvia.rag.images import answer_images, image_bytes
 from rag_calorvia.rag.permissions import identify
 from rag_calorvia.rag.pipeline import answer
@@ -44,7 +45,7 @@ user, role = st.session_state.identity
 mode = st.sidebar.radio("Chercher dans", list(MODES), help="Documents : procédures, contrats, PV, tarifs... "
                         "Bases de données : ventes, comptabilité, paie. Les deux : l'agent choisit, et peut comparer.")
 configs = sorted(Path("experiments").glob("*.toml"))
-default = next((i for i, p in enumerate(configs) if p.stem == "status_filter"), 0)
+default = next((i for i, p in enumerate(configs) if p == rag_settings.final_config), 0)
 if role is None and mode == "Documents":
     config_path = st.sidebar.selectbox("Configuration", configs, index=default, format_func=lambda p: p.stem)
 else:

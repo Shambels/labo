@@ -1,0 +1,4 @@
+# Step 30f: dev questions whose evidence snippet is inside a table cell of a Docling document (not a workbook).
+# Computed from the conversions and the eval set's snippets; the questions the Markdown-table change targets.
+Q001 Q004 Q006 Q008 Q009 Q018 Q019 Q023 Q029 Q032 Q037 Q039 Q042 Q047 Q053 Q063 Q066 Q067 Q072 Q073
+Q076 Q083 Q091 Q092 Q093 Q097 Q099 Q102 Q106 Q117 Q118 Q127 Q131 Q134 Q141 Q142 Q143 Q151 Q152
