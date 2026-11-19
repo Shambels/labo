@@ -61,7 +61,7 @@ def retrieve(question, config, role=None):
     search_ms = elapsed_ms(start)
 
     start = time.perf_counter()
-    chunks = rerank(question, candidates, config)
+    chunks = rerank(question, candidates, config, versions)
     rerank_ms = elapsed_ms(start)
     timings = {"search_ms": search_ms, "rerank_ms": rerank_ms}
     if len(versions) > 1:

@@ -6,6 +6,7 @@ on the GPU together.
 import copy
 import logging
 import time
+from pathlib import Path
 
 from rag_calorvia import db
 from rag_calorvia.etl.index import index_corpus
@@ -26,6 +27,8 @@ def stored_config(config):
     stored = copy.deepcopy(config)
     if config["generation"]["enabled"]:
         stored["generation"]["system_prompt_text"] = load_system_prompt(config)
+    if config["search"].get("glossary"):   # step 30: the translation glossary, same reason
+        stored["search"]["glossary_text"] = Path(config["search"]["glossary"]).read_text(encoding="utf-8")
     return stored
 
 

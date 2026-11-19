@@ -1,5 +1,9 @@
+import pytest
+
 from rag_calorvia.etl.chunk import chunk_language
 from rag_calorvia.etl.index import bm25, collection_name, sparse_language
+from rag_calorvia.rag import rerank as rerank_module
+from rag_calorvia.rag.translate import TRANSLATION_PROMPT, translation_prompt
 
 CONFIG = {"chunking": {"max_tokens": 256, "context_line": True}, "embedder": {"model": "bge-m3"}}
 
@@ -89,3 +93,46 @@ def test_question_filter_combines_status_and_date():
     both = question_filter(config, date(2025, 12, 31))
     [date_part] = both.must
     assert date_part.should[0].range.lte.date() == date(2025, 12, 31) and both.must_not
+
+
+# --- step 30: reranking in the chunk's language, translation glossary ----------------------------------------------
+RERANK = {"reranker": {"model": "bge-reranker"}, "search": {"top_k": 2}}
+VERSIONS = {"fr": "Combien coûte le contrat ?", "nl": "Hoeveel kost het contract?", "en": "How much is the contract?"}
+CHUNKS = [{"text": "a", "language": "fr"}, {"text": "b", "language": "nl"}, {"text": "c", "language": "de"},
+          {"text": "d", "language": "nl"}]
+
+
+@pytest.fixture
+def calls(monkeypatch):
+    """The reranker replaced: each text scores by its letter, and every (query, texts) call is recorded."""
+    seen = []
+
+    def score(model, query, texts):
+        seen.append((query, texts))
+        return [(i, {"a": 0.4, "b": 0.9, "c": 0.1, "d": 0.6}[t]) for i, t in enumerate(texts)]
+    monkeypatch.setattr(rerank_module, "score", score)
+    return seen
+
+
+def test_by_default_every_chunk_is_scored_against_the_french_question(calls):
+    ranked = rerank_module.rerank(VERSIONS["fr"], CHUNKS, RERANK, VERSIONS)
+    assert calls == [(VERSIONS["fr"], ["a", "b", "c", "d"])] and [c["text"] for c in ranked] == ["b", "d"]
+
+
+def test_query_language_chunk_scores_each_chunk_in_its_language(calls):
+    config = {**RERANK, "reranker": {"model": "bge-reranker", "query_language": "chunk"}}
+    ranked = rerank_module.rerank(VERSIONS["fr"], CHUNKS, config, VERSIONS)
+    assert sorted(calls) == sorted([(VERSIONS["fr"], ["a", "c"]), (VERSIONS["nl"], ["b", "d"])])  # German: French
+    assert [(c["text"], c["rerank_score"]) for c in ranked] == [("b", 0.9), ("d", 0.6)]       # one merged ranking
+
+
+def test_without_translations_query_language_changes_nothing(calls):
+    config = {**RERANK, "reranker": {"model": "bge-reranker", "query_language": "chunk"}}
+    rerank_module.rerank(VERSIONS["fr"], CHUNKS, config, {"fr": VERSIONS["fr"]})
+    assert calls == [(VERSIONS["fr"], ["a", "b", "c", "d"])]
+
+
+def test_the_glossary_is_added_to_the_translation_prompt_only_when_configured():
+    assert translation_prompt({"search": {}}) == TRANSLATION_PROMPT
+    prompt = translation_prompt({"search": {"glossary": "prompts/glossary_translation.txt"}})
+    assert prompt.startswith(TRANSLATION_PROMPT) and "chariot élévateur → heftruck" in prompt
