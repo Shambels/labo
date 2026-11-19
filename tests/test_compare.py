@@ -74,3 +74,12 @@ def test_the_page_asks_for_an_admin_key_once_keys_are_set(results_database, monk
     monkeypatch.setattr(agent_settings, "api_keys", "alice:key-a")
     at = AppTest.from_file(PAGE, default_timeout=60).run()
     assert at.text_input[0].label == "Access key" and not at.dataframe
+
+
+def test_bar_charts_give_each_run_its_own_band(results_database):
+    """Streamlit applies autosize "fit" to a chart without one, which squeezed several runs into one band."""
+    at = AppTest.from_file(PAGE, default_timeout=120).run()
+    import json
+    spec = json.loads(at.get("vega_lite_chart")[0].proto.spec)
+    assert spec["autosize"] == {"type": "fit-x", "contains": "padding"}
+    assert spec["height"] == {"step": 32} and "height" not in spec["mark"]

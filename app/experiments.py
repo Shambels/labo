@@ -101,15 +101,22 @@ def in_use_name():
         return tomllib.load(f)["name"]
 
 
+BAR_STEP = 32   # pixels per run: the chart grows with the number of runs instead of squeezing them
+
+
 def bar_chart(rows, metric):
-    """One metric's overall value per run: horizontal bars, one series, a tooltip per bar."""
+    """One metric's overall value per run: horizontal bars, one series, a tooltip per bar.
+
+    Sized by a step per run with autosize fit-x, set here: without an autosize, Streamlit applies "fit", which squeezes
+    axes and labels into a fixed height and made the bars and labels of several runs overlap."""
     dark = getattr(st.context.theme, "type", None) == "dark"
-    data = pd.DataFrame(rows)
-    return (alt.Chart(data).mark_bar(color="#3987e5" if dark else "#2a78d6", cornerRadiusEnd=4, height=14)
+    return (alt.Chart(pd.DataFrame(rows)).mark_bar(color="#3987e5" if dark else "#2a78d6", cornerRadiusEnd=4)
             .encode(x=alt.X("value:Q", title=metric, scale=alt.Scale(zero=True)),
-                    y=alt.Y("run:N", sort=None, title=None),
+                    y=alt.Y("run:N", sort=None, title=None, scale=alt.Scale(paddingInner=0.35),
+                            axis=alt.Axis(labelLimit=320)),
                     tooltip=["run", alt.Tooltip("value:Q", format=".3f"), "n"])
-            .properties(height=36 * len(rows) + 20))
+            # top level: Streamlit only looks there, and a config-level autosize loses to its default
+            .properties(height=alt.Step(BAR_STEP), autosize=alt.AutoSizeParams(type="fit-x", contains="padding")))
 
 
 # --- RAG --------------------------------------------------------------------------------------------------------------
