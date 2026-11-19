@@ -748,3 +748,4 @@ Left to `direction` alone: `08_Juridique` and `00_Direction`, apart from the COD
 | 2026-11-19 | 30 | Combined run judged (160): in use + Markdown tables wins (0.802 on 47 questions); `markdown_tables` made the configuration in use (D80) |
 | 2026-11-19 | 30 | Step 30 closed: report section written, merged into `main`, pushed |
 | 2026-11-19 | – | Step 30's configuration comments cleaned (values unchanged); `app/experiments.py`, a page comparing RAG and text-to-SQL runs (metrics per group, changed questions, settings that differ), 7 tests |
+| 2026-11-19 | – | Quiz game `app/quiz.py` (package `labo_quiz`): 259 QUIZ.md questions, 66 multiple-choice versions, 29 code & pipeline questions (order, match, choice, multi), XP, badges, scores per phase, redo of misses, pipeline map; 11 tests |

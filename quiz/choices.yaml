@@ -1,0 +1,465 @@
+# Multiple-choice versions of QUIZ.md questions whose answers are too long to type (app/quiz.py).
+# Key: <section>-q<number>, as the quiz page names them (warmup, step-00 ... step-31). `correct` is the right
+# option, `wrong` the distractors; the page shuffles them. After answering, the full answer from QUIZ.md is shown.
+
+warmup-q3:
+  correct: Decisions changed over time, newer minutes repeat the old date "pour rappel", and several schedule versions coexist; plain similarity prefers none of them.
+  wrong:
+    - The embedder cannot read dates, so every date looks the same to the search.
+    - The eval set lists April 1st as the expected answer by mistake.
+    - The LLM's training data contains April 1st and overrides the extracts.
+
+warmup-q8:
+  correct: "Defence in depth: each layer has blind spots (a SET can lift read-only, a parser can miss a construct), so an attack must beat them all at once."
+  wrong:
+    - sqlglot is faster than the database at refusing writes, so it saves load.
+    - The read-only account cannot run SELECT on SQL Server without them.
+    - They are only there to produce nicer error messages for the user.
+
+step-00-q1:
+  correct: The files stay on disk (only the index changes), but every past commit pushed to GitHub still holds them until history is rewritten.
+  wrong:
+    - The files are deleted from disk and from every past commit on GitHub.
+    - The files stay on disk and GitHub removes them from history automatically at the next push.
+    - Nothing changes until the .gitignore is committed, which then purges history.
+
+step-00-q5:
+  correct: pydantic-settings raises a ValidationError when config.py is imported (fail fast); extra="ignore" tolerates .env keys the class doesn't declare.
+  wrong:
+    - postgres_url becomes None and the first query fails; extra="ignore" hides missing fields.
+    - The default port 5432 is used; extra="ignore" makes every field optional.
+    - A warning is logged and the RAG runs without a database; extra="ignore" ignores the whole .env file.
+
+step-01-q7:
+  correct: The folder mixes personal data (annual reviews) with useful non-personal data (salary grid); the rule follows the content, not the folder.
+  wrong:
+    - A folder rule would also exclude the CODIR minutes stored next to it.
+    - exclusions.toml cannot express folder rules, only files.
+    - The salary grid is personal data too; excluding one file is a temporary shortcut.
+
+step-01-q6:
+  correct: "The tuple compares element by element (False < True): non-archived beats archived, non-PDF beats PDF, then shorter path; document.path last makes the result independent of read order."
+  wrong:
+    - The newest file wins; document.path is only there for readability.
+    - The largest file wins, since it holds the most text; document.path sorts alphabetically for display.
+    - The first file read wins; document.path deduplicates identical names.
+
+step-02-q1:
+  correct: Precise patterns in the file name, then the first date in the text, then a bare year in the name, which is often part of a code (NC-2025-047), not a date.
+  wrong:
+    - The file's modification time, then its creation time, then the year in the name.
+    - The first date in the text, then the file name, then today's date.
+    - A bare year first, since it is the most common, then the text, then patterns.
+
+step-02-q2:
+  correct: A negative lookahead so that codes like TM-2025-0391 or NC-2025-047 are not read as March or April 2025.
+  wrong:
+    - It makes the pattern match faster by stopping at the first digit.
+    - It rejects future months such as 2027-01.
+    - It forces the month to be followed by a day, as in 2025-03-12.
+
+step-03-q7:
+  correct: Apostrophes written as underscores in corpus file names, and evidence citing an excluded duplicate; fixing the data once keeps metrics.py identical to exercise 3's tested code.
+  wrong:
+    - Uppercase paths and Windows separators; the metrics were too slow to fix there.
+    - Missing evidence and wrong expected answers; the metrics are generated code that cannot be changed.
+    - Dates in paths and archived files; fixing the metrics would change the judge.
+
+step-03-q8:
+  correct: "Whether every needed snippet exists in the document's whole converted text: the best any chunking and search could do, so conversion problems are separated from search problems."
+  wrong:
+    - The maximum recall the reranker can reach with 30 candidates.
+    - The highest correctness score the judge gives to a perfect answer.
+    - The number of questions the generator can answer without retrieval.
+
+step-04-q14:
+  correct: "An LLM judge makes mistakes too: check a sample of its verdicts by hand and treat faithfulness as a noisy lower bound, relying more on reliable metrics."
+  wrong:
+    - The judge is right and the answer should be rewritten to satisfy it.
+    - The metric should be dropped entirely and replaced by recall.
+    - The judge needs a bigger context; once enlarged its verdicts can be trusted.
+
+step-04-q15:
+  correct: A refusal makes no claim, so "is every claim supported?" doesn't apply; 1 would inflate the mean, 0 penalises honesty. Whether refusing was right is measured elsewhere.
+  wrong:
+    - It is a bug in DeepEval that a newer version fixes.
+    - Refusals should score 1 because they are always faithful.
+    - Refusals should score 0 so the system learns to answer more often.
+
+step-05-q10:
+  correct: An undetectable answer (a number, a code) is evidence of no language; counting it either way would bias the metric, so it averages only what it can measure and reports n.
+  wrong:
+    - Short answers are always in French, so counting them changes nothing.
+    - The detector crashes on short texts, so they must be skipped.
+    - The judge already scores those answers on language.
+
+step-05-q2:
+  correct: It reduces inflected forms to a common root with one language's rules; French rules don't know Dutch suffixes or stopwords, which then distort BM25's IDF.
+  wrong:
+    - It translates words to French, and Dutch translations are often wrong.
+    - It removes accents; Dutch has none, so its words never match.
+    - It splits compound words; Dutch compounds are too long for it.
+
+step-06-q15:
+  correct: git rm --cached records a deletion in the commit; merging into main, where the files were tracked, applies that deletion to the working tree too.
+  wrong:
+    - The merge used --hard by default, which deletes untracked files.
+    - .gitignore on main told Git to delete ignored files during the merge.
+    - The files were only symlinks on the branch, and the merge resolved them.
+
+step-06-q16:
+  correct: Every experiment's stored git_commit pointed to a vanished commit; they were mapped through filter-repo's commit-map, checked with git cat-file, then main and tags were force-pushed.
+  wrong:
+    - "Nothing: experiment rows store the config, not the commit."
+    - The experiments had to be run again on the new history.
+    - The old commits were kept in a backup branch that the database points to.
+
+step-07-q4:
+  correct: "The VLM rarely misreads what it copies but skips text and sometimes invents descriptions: a missing value is likelier than a wrong one, so show the image next to the answer."
+  wrong:
+    - VLM output is reliable enough to need no check.
+    - VLM numbers are unreliable and should be removed from the chunks.
+    - The VLM should be replaced by OCR, which never omits text.
+
+step-07-q6:
+  correct: An image's meaning sits in relations (a box and its manager), and cutting it can split a fact in two; at 1024 tokens only one image is cut and Q056 is answered.
+  wrong:
+    - Images use more tokens per word, so cuts lose more text.
+    - The reranker cannot score a chunk without its image.
+    - Larger chunks are always better for every document.
+
+step-08-q10:
+  correct: The overall gain is within noise; it was kept because rules help where traps matter and no answer became wrong, with the trade-off recorded.
+  wrong:
+    - "Rejected: any loss on a type is unacceptable."
+    - "Kept: 0.790 is higher than 0.785, so it is better."
+    - "Rejected: the judge was proven wrong on all decision_history questions."
+
+step-08-q2:
+  correct: The first date in the text was GesPro's end of support; dates preceded by a deadline cue ("support le", "à compter", "prévu"...) are now skipped, and an audit showed only 7 documents changed.
+  wrong:
+    - From the file's metadata; the fix reads the file name instead.
+    - From the Docling conversion date; the fix uses the registry date.
+    - From a typo in the document; the fix corrects the corpus file.
+
+step-09-q1:
+  correct: Judging a change only on the questions it targets shows its benefit, never its side effects; it must also be judged broadly, on the same question set.
+  wrong:
+    - The judge model changed between steps 8 and 9.
+    - The 41 questions were from the test set by mistake.
+    - time_rules was never actually enabled in step 8's run.
+
+step-09-q4:
+  correct: "No sign of it: answers are as good on test; retrieval is lower on only 30 questions, and some \"misses\" found the answer in documents the eval doesn't list."
+  wrong:
+    - "Yes: lower recall on test proves the system was tuned to dev."
+    - "Yes: higher correctness on test means the judge is lenient on test."
+    - Impossible to say without running the test set a second time.
+
+step-10-q7:
+  correct: The staff-number key (10405 vs M10405), normalised in Python since no join crosses engines, and the rate 0.1000 being a percentage, not a fraction.
+  wrong:
+    - The currency and the VAT rate.
+    - The date format and the decimal separator.
+    - The salesperson's name and the invoice type.
+
+step-10-q2:
+  correct: "\"#tmp\" lives in tempdb, open to every login, while dbo.X needs CREATE TABLE; both are still writes, so validation refuses every SELECT INTO."
+  wrong:
+    - "\"#tmp\" is read-only; dbo.X is a real table. Only dbo.X must be refused."
+    - SQL Server ignores "#" tables in transactions; both are harmless.
+    - "\"#tmp\" is refused by the grants too; step 11 only needs to refuse dbo.X."
+
+step-11-q2:
+  correct: Regenerated SQL isn't a faithful copy and the CFO must read the exact query; the limit is added as LIMIT n+1 (PostgreSQL) or SET ROWCOUNT n+1 (SQL Server).
+  wrong:
+    - sqlglot's output is slower; the limit is added by the model in its prompt.
+    - Regeneration loses comments; the limit is enforced by the database grants.
+    - The model's text is shorter; no limit is added, results are cut in Python.
+
+step-11-q8:
+  correct: Accent- and punctuation-free matching on both engines (Aeris, VAT formats) and typo tolerance with difflib.
+  wrong:
+    - Searching salary amounts and personal columns quickly.
+    - Writing the matching values back to a cache table.
+    - Avoiding the read-only transaction for faster lookups.
+
+step-12-q2:
+  correct: The connector tested table-level SELECT, but agent_ro reads employees through column grants; "silently" because questions would fail later with no pointer to the cause.
+  wrong:
+    - The table was empty, so the profiler skipped it; the log was disabled.
+    - The table name had an accent the connector couldn't read.
+    - auto-ontology excludes personal tables by design and says so in the docs.
+
+step-12-q7:
+  correct: From up to five sample_values per profiled column; the script empties samples of sensitive tables and columns, then checks the files for staff numbers, e-mails and IBANs.
+  wrong:
+    - From the LLM's training data; the export is deleted after use.
+    - From the eval set; the script removes the eval file from the repo.
+    - From the query log; the script truncates the log before exporting.
+
+step-13-q5:
+  correct: Every number ≥ 1 000 must be in a tool result or the client's conversation (0.5 %); a sum or difference of two known numbers is correct arithmetic; the agent's own messages quote the numbers they question.
+  wrong:
+    - Only numbers in the footer are checked; sums are rare; instructions are too long.
+    - It checks the SQL syntax; sums are computed by the database; instructions hold no numbers.
+    - It verifies the answer's language; sums are ignored; the instructions are in English.
+
+step-13-q2:
+  correct: Full results went to the model, and it re-ran queries with a larger TOP; the fix separates fetching (2 000 rows kept in the state) from showing (50 rows).
+  wrong:
+    - The system prompt was too long; it was shortened.
+    - The model used reasoning mode; it was turned off.
+    - The ontology was loaded twice; the second copy was removed.
+
+step-14-q10:
+  correct: Its targets (A03, A05) still answered one reading without naming others; the +1 came from other questions changing path. A rule with no demonstrated effect only lengthens the prompt.
+  wrong:
+    - It made answers too long for the judge.
+    - It doubled the latency of every question.
+    - It produced two confidently wrong answers.
+
+step-14-q3:
+  correct: Yes/no questions scored only on numbers (X05 passed with the wrong account), and the judge counting "définition retenue" as offering another reading.
+  wrong:
+    - The judge ran on the test set, and refusals counted as right.
+    - Dates were ignored, and duplicate questions were counted twice.
+    - The footer was scored, and charts were counted as answers.
+
+step-15-q3:
+  correct: A memory becomes part of every later prompt (a lasting prompt injection); limits are explicit-only remembering, memories framed as data, and privacy enforced by the server and the database.
+  wrong:
+    - Memories may contain viruses; they are scanned before use.
+    - Memories slow the agent; only 5 are kept.
+    - Memories are encrypted, so they carry no risk.
+
+step-15-q4:
+  correct: The grounding check found 13 599,6 nowhere, so the model obtained the k€ value by SQL; the check now scales numbers followed by k€, M€, milliers, millions.
+  wrong:
+    - The model distrusts its own arithmetic; the prompt now tells it to divide.
+    - The footer needed a query per unit; the footer was changed.
+    - The memory stored the wrong unit; the memory was cleared.
+
+step-16-q2:
+  correct: The scorer was fitted to dev answers, and the agent met new kinds of error; the second worries more, since the ontology only covers what it was written from.
+  wrong:
+    - The test questions are harder, and the model is non-deterministic; neither is a concern.
+    - The test set is smaller, and the judge is stricter; the first worries more.
+    - Different servers ran dev and test; reruns would close the gap.
+
+step-16-q1:
+  correct: A scorer fix and a second run where A03 passed for the targeted reason; one run can't show a mechanism that fires only sometimes, with ±1–2 questions of noise.
+  wrong:
+    - The prompt was rewritten in English, which made the rule effective.
+    - The test set favoured it, so it was kept for test.
+    - Nothing changed; it was kept by mistake and later removed.
+
+step-17-q4:
+  correct: HAVING turned refused/empty results into a "does anyone earn more than T?" oracle; NULL or 0 rows padded the group count while the average held one person's value.
+  wrong:
+    - HAVING was slow; NULL rows caused division by zero.
+    - HAVING is not valid on PostgreSQL; NULL rows broke the log.
+    - HAVING returned names; zero rows exposed account numbers.
+
+step-17-q3:
+  correct: The attacks have many relatives a deny-list misses; the forms a legitimate aggregate needs are few and can be listed, at the cost of refusing some harmless queries.
+  wrong:
+    - Allowlists run faster than deny-lists in sqlglot.
+    - The four prohibitions conflicted with each other.
+    - An allowlist lets the model write any query it explains.
+
+step-18-q5:
+  correct: Nothing listens on that address, so no other machine can connect to it; it says nothing about the network path or a firewall.
+  wrong:
+    - The firewall blocks the port for every machine on the LAN.
+    - The service is down and must be restarted.
+    - Only localhost clients without Docker can reach it.
+
+step-18-q4:
+  correct: Inside a container, 127.0.0.1 is the container itself; Trino reaches the host via its gateway, where a loopback-bound port isn't listening; auto-ontology uses host networking.
+  wrong:
+    - Trino needs TLS on loopback, auto-ontology doesn't.
+    - Trino caches connections that loopback resets.
+    - auto-ontology reads a dump of the sources, not the databases.
+
+step-19-q2:
+  correct: The fingerprint detects edited questions; the guard stops partial, dirty and repeated runs. Neither controls what the author of the set already knows.
+  wrong:
+    - Both stop the model from seeing the questions during training.
+    - The fingerprint hides the answers; the guard encrypts the set.
+    - They protect against server crashes during the run.
+
+step-19-q5:
+  correct: It catches an expected value that doesn't match its query; it can't catch a query that answers the wrong question.
+  wrong:
+    - It catches slow queries; it can't catch syntax errors.
+    - It catches wrong answers from the agent; it can't catch judge errors.
+    - It catches permission errors; it can't catch missing tables.
+
+step-20-q2:
+  correct: No query ran, the question already settles the reading, or the answer names every reading; otherwise the note would sit under a refusal, offer what wasn't asked, or repeat the answer.
+  wrong:
+    - The answer is short, the user is an admin, or it's a weekend.
+    - The question is in Dutch, the ontology is off, or memory is on.
+    - The model is unsure, the query failed, or a chart was drawn.
+
+step-20-q1:
+  correct: The rule fires only if the model perceives an ambiguity, and it doesn't; code needs no judgement (the word is in a list, the reading isn't settled).
+  wrong:
+    - The prompt was too long and the rule was cut off.
+    - The model ignores rules in French.
+    - The rule conflicted with the grounding check.
+
+step-21-q1:
+  correct: Starting from ecriture and joining its children adds rows, so COUNT(*) no longer counts the starting table; starting from the lines adds none. It's a heuristic, hence a warning.
+  wrong:
+    - SQL Server orders joins differently from PostgreSQL.
+    - The second query uses an index, the first doesn't.
+    - The warning only checks the first table name alphabetically.
+
+step-21-q5:
+  correct: pay_elements is keyed by a code (a mapping); VDR_VENDEUR is keyed by a number and describes people, so its rows would link each person's identifiers.
+  wrong:
+    - VDR_VENDEUR is too large to show.
+    - pay_elements has no personal columns at all, VDR_VENDEUR is all personal.
+    - The card format only supports PostgreSQL tables.
+
+step-22-q4:
+  correct: "The answer presents it as established, but no query produced it: it came from a table card, which is not filtered for the question. The retry makes the agent count."
+  wrong:
+    - 23 is below 1 000, so every such number is flagged.
+    - The footer was missing, so the whole answer was flagged.
+    - The judge disagreed with the number.
+
+step-22-q5:
+  correct: No, 47 really came from a query; its meaning was wrong. The join warning of step 21 caught it by looking at the query's shape.
+  wrong:
+    - Yes, because 47 is a small figure.
+    - No, and nothing caught it; it reached the test answers.
+    - Yes, after a retry the model removed it.
+
+step-23-q3:
+  correct: "Grounding (1 109 came from a query), the join warning (correct counting) and the validator (valid SQL): they check form and origin, none knows 40 means customers here."
+  wrong:
+    - Only the validator; the others were disabled.
+    - "None: the agent bypassed them with a cached answer."
+    - The privacy rule, since the query touched payroll.
+
+step-23-q5:
+  correct: "No: after one retry the figures still had no support, so they stay marked for the reader while the asked figure is right."
+  wrong:
+    - "Yes: a right answer should never carry a warning."
+    - "Yes: the check should have retried until the warning disappeared."
+    - "No: the warning is about the chart, not the figures."
+
+step-24-q1:
+  correct: The client writes it, so anyone could claim another name; the key proves who calls. A gateway's end users are stored as webui/alice.
+  wrong:
+    - The field is too long for the database.
+    - Open WebUI never sends it.
+    - Keys and users must have the same name by convention.
+
+step-24-q5:
+  correct: An image tag can't send an Authorization header; the random id acts as the secret (since step 29, a signed link that expires).
+  wrong:
+    - Charts hold no data, so they need no protection.
+    - The browser caches charts, so keys would be useless.
+    - Open WebUI adds the key to image URLs automatically.
+
+step-25-q1:
+  correct: A login's grants are enforced by the database whatever query arrives, including one that slips past validation.
+  wrong:
+    - Database logins are faster than the validator.
+    - The validator cannot read table names.
+    - It saves memory in the MCP server.
+
+step-25-q3:
+  correct: The table card listed code values with counts and was built as agent_ro for everyone; every route data takes to the model must follow the role.
+  wrong:
+    - The model guessed 12 from its training data.
+    - The query log leaked the count to the commercial role.
+    - The grants were not applied until the next restart.
+
+step-26-q5:
+  correct: From fixed sentences of the prompt (examples naming accounting); reading real answers finds what tests didn't think of.
+  wrong:
+    - From the memory of a previous conversation.
+    - From the database error message.
+    - From the chart titles.
+
+step-26-q2:
+  correct: "Grants protect the data, not its description: table names and metric SQL are information, and a model told about unusable tables wastes calls."
+  wrong:
+    - The database refuses too slowly.
+    - The prompt is too long otherwise.
+    - The grants don't apply to the agent.
+
+step-27-q2:
+  correct: A permissive policy everyone_else lets any non-site login through; site_rows applies only to site logins; permissive policies combine with OR.
+  wrong:
+    - Row-level security was enabled only for site logins.
+    - The other logins are superusers.
+    - The policies are restrictive and combine with AND.
+
+step-27-q1:
+  correct: A rewrite must find every table in every subquery and breaks D45; a row policy applies to each read whatever the query, and depends on the login.
+  wrong:
+    - WHERE clauses are slower than policies.
+    - The model refuses to add WHERE clauses.
+    - SQL Server doesn't support WHERE on views.
+
+step-28-q2:
+  correct: Prefetches choose the 30 candidates; filtering after could leave few or none of the role's chunks and lets forbidden text reach later steps.
+  wrong:
+    - Qdrant can't filter final results.
+    - Filtering inside is faster, nothing else.
+    - The reranker needs forbidden chunks to calibrate its scores.
+
+step-28-q1:
+  correct: "Permissions don't change what a chunk says: allowed_roles is payload, updated in place with set_payload, and the fingerprint covers only the text."
+  wrong:
+    - The vectors are recomputed lazily at query time.
+    - Qdrant stores roles inside the vectors.
+    - The corpus was small enough to re-embed in seconds.
+
+step-29-q1:
+  correct: Guessing or keeping a link (bad signature or expiry → 404); it doesn't identify the viewer, who can open it until it expires.
+  wrong:
+    - It encrypts the chart image; only the key holder can decode it.
+    - It identifies the viewer by IP address.
+    - It prevents screenshots of the chart.
+
+step-29-q3:
+  correct: A broken query or failed connection also returns nothing and would look like perfect security; checking both directions proves the test sees the data.
+  wrong:
+    - Finding markers is faster than missing them.
+    - The markers are only visible to the role that planted them.
+    - The judge requires positive examples.
+
+step-31-q1:
+  correct: One model sees extracts and query results together and can compare them, under one grounding check; but phase A's measured RAG generation isn't what runs.
+  wrong:
+    - It halves the latency; it costs nothing.
+    - It lets the RAG answer SQL questions; it costs the ontology.
+    - It hides the documents from the footer; it costs memory.
+
+step-31-q5:
+  correct: The link must prove the endpoint issued it; the role was checked when the extract was found, and the signature covers path, page and expiry.
+  wrong:
+    - The path is encrypted, so no check is needed.
+    - Images are public documents, so roles don't apply.
+    - The browser sends the API key with images.
+
+step-30-q6:
+  correct: "Measured: 55 questions have a non-French candidate among 30 but only 19 in the French top 5, and every improved question is among them; a wider window translates more for no gain."
+  wrong:
+    - The reranker only accepts 5 chunks per call.
+    - Translations are cached for 5 questions at a time.
+    - top 5 is what the generator reads, so it's the only window possible.
+
+step-30-q10:
+  correct: Docling read the first data row as the header, so its cells became column names; the label names nothing and the value repeats in every row.
+  wrong:
+    - The PDF had no text layer, so OCR dropped the first row.
+    - The chunker cut the table after its first row.
+    - Markdown escaping removed the parentheses and the label.

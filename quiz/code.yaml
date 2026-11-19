@@ -1,0 +1,436 @@
+# Phase G of the quiz (app/quiz.py): the code and the flow of the whole app.
+# Each question belongs to a `node` of the pipeline map; types:
+#   order   `steps` in the right order (the page shuffles them; you pick them in order)
+#   match   `pairs` [left, right]: each left gets a list of every right
+#   choice  one `correct`, several `wrong`        multi  several `correct`, several `wrong`
+# `code` is a snippet shown above the question; `files` are where to read more; `explain` comes after the answer.
+
+questions:
+  # --- indexing ---------------------------------------------------------------------------------------------------
+  - id: code-index-order
+    node: chunking
+    type: order
+    prompt: Put the indexing of the corpus in order, from the files on disk to the points in Qdrant.
+    steps:
+      - "inventory: the registry of every file (format, duplicates, exclusions, date, status)"
+      - "read each document once: Docling conversion, openpyxl for workbooks, VLM transcription for images (all cached)"
+      - "chunk: 256 tokens, context line + headings, tables as Markdown"
+      - "allowed_roles on every chunk, from policy/roles.yaml"
+      - "embed with bge-m3 and compute BM25 sparse vectors"
+      - "upsert into the collection, each point carrying the index fingerprint"
+    files: [scripts/inventory.py, src/rag_calorvia/etl/convert.py, src/rag_calorvia/etl/chunk.py, src/rag_calorvia/etl/index.py]
+    explain: >-
+      etl/index.py's index_corpus calls chunk_corpus, which reads the registry and the caches (it never converts or
+      calls the VLM itself), adds allowed_roles, then the chunks are embedded and upserted with a fingerprint of the
+      whole chunk list, so a stale collection is detected and rebuilt.
+
+  - id: code-chunk-routes
+    node: chunking
+    type: match
+    prompt: chunk_document sends each kind of document to a different reader. Match them.
+    pairs:
+      - ["a workbook (.xlsx) with [chunking] excel = \"openpyxl\"", "chunk_workbook: rows, tables, summaries"]
+      - ["an image or a scan, with vision on", "vision_chunks: the cached VLM transcription, one image = one chunk (1024 tokens)"]
+      - ["a Word, PDF or HTML document", "Docling's HybridChunker on the cached conversion"]
+      - ["a PDF with charts inside", "Docling chunks, then vision chunks for its embedded images"]
+    files: [src/rag_calorvia/etl/chunk.py]
+    explain: >-
+      The order of the tests in chunk_document matters: workbooks first (openpyxl), then images and scans, then
+      Docling; a text PDF additionally gets vision chunks for the charts it contains.
+
+  - id: code-context-line
+    node: chunking
+    type: choice
+    prompt: Every chunk starts with a context line such as "[PV du CODIR du 13 octobre 2025 · PV_CODIR_2025-10-13 · 00_Direction/CODIR/2025]". Why?
+    correct: A chunk taken alone (a row of an action table) doesn't say which document or date it comes from; the line puts type, date, file and folder into its text, where search and the generator see them.
+    wrong:
+      - Qdrant needs it to compute the payload index.
+      - It's a comment for humans, removed before embedding.
+      - It lets the reranker skip chunks without a date.
+    files: [src/rag_calorvia/etl/chunk.py]
+    explain: Step 4 measured it at +10 recall points, the second largest gain of phase A.
+
+  - id: code-fingerprint
+    node: index
+    type: choice
+    prompt: index_corpus finds a collection with the right name. When does it still rebuild it?
+    correct: When the stored fingerprint (a hash of every chunk's document, index and text) or the point count differs from the chunks the current code produces.
+    wrong:
+      - Every time, since collections are cheap.
+      - Only when the collection is older than a day.
+      - "Never: the name proves the content."
+    files: [src/rag_calorvia/etl/index.py]
+    explain: >-
+      The name only says which options built the index. A change in the chunking code keeps the name, so the
+      fingerprint catches it; adding allowed_roles (payload) doesn't touch it, which is why step 28 re-embedded nothing.
+
+  # --- a RAG question -------------------------------------------------------------------------------------------------
+  - id: code-rag-order
+    node: search
+    type: order
+    prompt: With the configuration in use (markdown_tables), put the path of a question through the RAG in order.
+    steps:
+      - "hybrid search with the French question: dense + BM25 fused by RRF, 30 candidates, drafts/archives and other roles' chunks filtered inside each prefetch"
+      - "the reranker scores the 30 candidates against the French question"
+      - "only if a Dutch or English chunk is in that top 10: translate the question (with the glossary)"
+      - "rescore the non-French candidates against the question in their language, keep the top 5"
+      - "the generator (Qwen) reads the 5 extracts in the reranker's order and may query workbook tables"
+    files: [src/rag_calorvia/rag/pipeline.py, src/rag_calorvia/rag/rerank.py, src/rag_calorvia/rag/generate.py]
+    explain: >-
+      pipeline.retrieve then generate. Translation comes after the search on purpose (step 30): translating for the
+      search cost 7 French questions. The extracts stay in the reranker's order: chronological order was tried in
+      step 8 and dropped in step 9.
+
+  - id: code-rerank-snippet
+    node: rerank
+    type: choice
+    prompt: Reading this block of rerank(), what happens when none of the French top 10 is a Dutch or English chunk?
+    code: |
+      window = config["reranker"].get("translate_window")
+      if translate is not None and window:
+          scored = sorted(score(model, question, [search_text(chunk) for chunk in chunks]), key=lambda p: p[1], reverse=True)
+          if any(language_of(chunks[i]) != "fr" for i, _ in scored[:window]):
+              versions = translate(sorted({language_of(c) for c in chunks} - {"fr"}))
+              others = [i for i, _ in scored if query_for(chunks[i], {**versions, "fr": question}) != question]
+              scored = [(i, s) for i, s in scored if i not in set(others)]
+              scored += score_in_languages(model, question, chunks, versions, others)
+    correct: translate is never called; the French scores are the ranking, exactly as without translation.
+    wrong:
+      - Every non-French candidate is translated anyway, but not rescored.
+      - The question is translated into Dutch and English, then discarded.
+      - The reranker is skipped and the search order is kept.
+    files: [src/rag_calorvia/rag/rerank.py]
+    explain: That's why most questions run at the final configuration's speed (median 0.19 s); 27 of 127 dev questions trigger the translation.
+
+  - id: code-question-filter
+    node: search
+    type: multi
+    prompt: Which conditions can question_filter put into the Qdrant filter of a question?
+    code: |
+      def question_filter(config, reference, role=None):
+          status = status_filter(config)
+          must = ([date_condition(reference)] if reference is not None else []) + ([role_condition(role)] if role else [])
+          if not must:
+              return status
+          return models.Filter(must=must, must_not=status.must_not if status else None)
+    correct:
+      - "must_not: a registry status listed in [search] exclude_status (draft, archive)"
+      - "must: allowed_roles contains the caller's role"
+      - "must: dated on or before the question's reference date (when that option is on)"
+    wrong:
+      - "must: the chunk's language is French"
+      - "must_not: chunks already shown in the conversation"
+    files: [src/rag_calorvia/rag/pipeline.py]
+    explain: The filter is applied inside each prefetch (D77), so all 30 candidates are already allowed; nothing filters by language.
+
+  - id: code-search-text
+    node: rerank
+    type: choice
+    prompt: A chunk may carry both `text` and `search_text` (french_chunks experiment). Who reads which?
+    correct: The index and the reranker read search_text (the French version); the generator reads text, the original, so it quotes the document as written.
+    wrong:
+      - The generator reads search_text so that answers are in French.
+      - Both read text; search_text is only stored for debugging.
+      - The index reads text, the reranker reads search_text.
+    files: [src/rag_calorvia/etl/translate.py, src/rag_calorvia/rag/rerank.py]
+    explain: In the configuration in use no chunk has a search_text, so both read text; search_text() falls back to it.
+
+  # --- the endpoint ---------------------------------------------------------------------------------------------------
+  - id: code-models
+    node: endpoint
+    type: match
+    prompt: Match each request to what the endpoint runs.
+    pairs:
+      - ["model calorvia-docs", "documents_only: the RAG's search then its generation, no agent"]
+      - ["model calorvia-sql (or calorvia-agent)", "the agent with the MCP tools, no documents"]
+      - ["model calorvia-both", "the agent with search_documents added to its tools"]
+      - ["\"sources\": [\"sql\", \"docs\"] with any model", "the agent with search_documents, whatever the model says"]
+    files: [src/text2sql_calorvia/api.py]
+    explain: sources_of reads the `sources` field first, then the model through ALIASES and MODELS; an unknown model is a 404, a bad sources list a 400.
+
+  - id: code-sources-of
+    node: endpoint
+    type: choice
+    prompt: 'A client sends {"model": "gpt-4", "messages": [...]}. What does it get?'
+    code: |
+      def sources_of(request: ChatRequest) -> set[str]:
+          if request.sources is not None:
+              wanted = set(request.sources)
+              if not wanted or not wanted <= SOURCES:
+                  raise HTTPException(400, ...)
+              return wanted
+          model = ALIASES.get(request.model, request.model)
+          if model not in MODELS:
+              raise HTTPException(404, f"Unknown model {request.model!r}: ...")
+          return MODELS[model]
+    correct: A 404 naming the three models, before any search or agent runs.
+    wrong:
+      - The SQL agent, the default.
+      - The documents mode, since gpt-4 isn't a Calorvia model.
+      - A 400 about the sources field.
+    files: [src/text2sql_calorvia/api.py]
+    explain: Only calorvia-agent is aliased (to calorvia-sql), so clients configured before step 31 keep working.
+
+  - id: code-request-order
+    node: endpoint
+    type: order
+    prompt: A streaming request to calorvia-both with API keys on. Put what the endpoint does in order.
+    steps:
+      - "authenticate the Bearer key: the user is the key's name"
+      - "clean the history: drop system messages and earlier <details> step blocks"
+      - "sources_of: calorvia-both → sql + docs"
+      - "issue a signed role token for the user (15 minutes)"
+      - "stream the agent: each tool step as a line inside <details>"
+      - "send the answer, its footer and the hidden conversation marker, then save the turn"
+    files: [src/text2sql_calorvia/api.py, src/text2sql_calorvia/auth.py, src/text2sql_calorvia/access.py]
+    explain: The role token travels with every MCP call, so the server — not the model — decides which login, tables and rows the question runs under.
+
+  - id: code-documents-only
+    node: endpoint
+    type: choice
+    prompt: documents_only yields ("tools", ...) then ("finish", ...), like Agent.stream. What does that buy?
+    correct: The streaming, the step fold-out, the conversation marker and the saving work unchanged for both routes; run() only picks which generator to read.
+    wrong:
+      - The RAG can call SQL tools.
+      - The agent's grounding check also runs on RAG answers.
+      - The two routes can run in parallel.
+    files: [src/text2sql_calorvia/api.py]
+    explain: One code path for the client means one behaviour to test (tests/test_one_chat.py).
+
+  # --- the agent ------------------------------------------------------------------------------------------------------
+  - id: code-graph-order
+    node: agent_graph
+    type: order
+    prompt: A normal question through the LangGraph agent (no budget hit, one grounding retry). Put the nodes in order.
+    steps:
+      - "agent: the LLM with its tools proposes tool calls"
+      - "tools: the calls run (MCP, reconcile, charts, search_documents)"
+      - "agent: the LLM reads the results and writes an answer"
+      - "check: a number is found in no result, the model is sent back once"
+      - "agent: the corrected answer"
+      - "check: every number is supported"
+      - "finish: other readings, charts, images and the footer added by code"
+    files: [src/text2sql_calorvia/agent.py]
+    explain: wrap_up replaces the rest when the budget is spent (24 tool calls or 4 failed queries); finish always runs.
+
+  - id: code-route
+    node: agent_graph
+    type: choice
+    prompt: The last message holds 3 tool calls; 22 calls were already made and 1 query failed. Where does _route go?
+    code: |
+      def _route(self, state):
+          last = state["messages"][-1]
+          if not getattr(last, "tool_calls", None):
+              return "check"
+          if (state.get("tool_calls", 0) + len(last.tool_calls) > settings.max_tool_calls
+                  or state.get("sql_errors", 0) >= settings.max_sql_errors):
+              return "wrap_up"
+          return "tools"
+    correct: "wrap_up: 22 + 3 = 25 > 24 (max_tool_calls); the pending calls are answered \"not run\" and the model must answer."
+    wrong:
+      - "tools: the limit is checked after the calls run."
+      - "check: 1 failed query is under the limit of 4."
+      - "tools: only failed queries count towards the budget."
+    files: [src/text2sql_calorvia/agent.py, src/text2sql_calorvia/config.py]
+    explain: The budget counts the calls about to run, so the agent never exceeds it.
+
+  - id: code-rows
+    node: agent_graph
+    type: match
+    prompt: A query returns 1 800 rows. Match each number to what it is.
+    pairs:
+      - ["2 000", "rows the agent fetches and keeps in its state under q1 (agent_fetch_rows)"]
+      - ["50", "rows the model sees in the tool message (rows_to_model)"]
+      - ["5 000", "the server's ceiling on rows a client may ask for (max_rows_limit)"]
+      - ["26 000", "estimated tokens past which the oldest tool answers are shortened (context_tokens)"]
+    files: [src/text2sql_calorvia/config.py, src/text2sql_calorvia/agent.py]
+    explain: "Fetching is separated from showing (step 13): reconcile and charts read the full rows from the state, the model reads a preview and a note."
+
+  - id: code-same-query
+    node: agent_graph
+    type: choice
+    prompt: The model sends exactly the same execute_sql query a second time in one question. What happens?
+    correct: It isn't run; the model is told it already has that result (q1...) and the attempt counts as a failed query.
+    wrong:
+      - It runs again, in case the data changed.
+      - It is run but the result is not shown.
+      - The agent stops and answers "je ne sais pas".
+    files: [src/text2sql_calorvia/agent.py]
+    explain: Seen in step 14 (X05) — the same query 8 times until the budget ran out. same_query compares source and text, spacing and LIMIT aside.
+
+  - id: code-extracts
+    node: agent_graph
+    type: choice
+    prompt: In calorvia-both, a second search_documents call returns an extract already found by the first. Which id does it get?
+    code: |
+      def number_extracts(found, known):
+          out = []
+          for e in found:
+              same = next((k for k in known if (k["document"], k["text"]) == (e["document"], e["text"])), None)
+              if same is None:
+                  same = {**e, "id": f"D{len(known) + 1}"}
+                  known.append(same)
+              out.append(same)
+          return out
+    correct: Its first id (say D2), so a citation the model already wrote still points to the right document.
+    wrong:
+      - The next free id, D6.
+      - "None: duplicates are dropped from the second result."
+      - D1, since ids restart with each search.
+    files: [src/text2sql_calorvia/documents.py]
+    explain: Numbering by content keeps citations stable for the whole question; the footer lists the cited extracts by id.
+
+  # --- grounding --------------------------------------------------------------------------------------------------
+  - id: code-grounding
+    node: grounding
+    type: multi
+    prompt: Which numbers in an answer pass the large-number grounding check without a retry?
+    correct:
+      - "13 599 646,63 € when a query returned 13599646.63"
+      - "13 599,6 k€ when a query returned 13599646.63"
+      - "1 499 823,54 € when two results were 13 599 646,63 and 12 099 823,09"
+      - "18 400 € when a search_documents extract says \"18 400 euro\""
+    wrong:
+      - "14 500 000 € estimated from two months of data"
+      - "a figure copied from the agent's previous answer, with no new query"
+    files: [src/text2sql_calorvia/agent.py, src/text2sql_calorvia/grounding.py]
+    explain: ≥ 1 000, within 0.5 %, in a tool result of this question or the client's messages; units scaled (k€, M€); sums and differences of two known numbers allowed. A previous answer is not a result (step 13's "et pour avril ?").
+
+  # --- MCP and the databases ----------------------------------------------------------------------------------------
+  - id: code-layers
+    node: validation
+    type: match
+    prompt: The four layers of read-only protection. Match each layer to what it does.
+    pairs:
+      - ["layer 1: the database login", "grants: a role's login can only SELECT its tables (and its rows, with RLS)"]
+      - ["layer 2: validation (sqlglot)", "one read only, tables and columns readable, privacy allowlist, row limit"]
+      - ["layer 3: execution", "read-only transaction rolled back, client-side timeout, at most max_rows rows"]
+      - ["layer 4: traceability", "a log row written before validation and execution; no log, no query"]
+    files: [src/text2sql_calorvia/validation.py, src/text2sql_calorvia/execution.py, src/text2sql_calorvia/access.py]
+    explain: Each layer has blind spots; an attack has to beat all four. The tests send writes through run_unvalidated to show layer 3 and 1 stop them even without layer 2.
+
+  - id: code-sql-order
+    node: mcp
+    type: order
+    prompt: The model calls execute_sql. Put the path of the query in order.
+    steps:
+      - "the agent adds what the model must not choose: question, session id, max_rows, role token"
+      - "the MCP server reads the role token and picks that role's login"
+      - "a log row is written to t2sql_query_log (so a refused query is logged too)"
+      - "validation: one read, dialect, tables/columns of the role, privacy rule, row limit added"
+      - "the query runs read-only with a timeout, as written by the model (D45)"
+      - "the agent keeps the rows as q1 and shows the model 50 of them"
+    files: [src/text2sql_calorvia/agent.py, src/text2sql_calorvia/mcp_server.py, src/text2sql_calorvia/validation.py, src/text2sql_calorvia/execution.py]
+    explain: The injected parameters are removed from the tool schemas the model sees (tool_schema drops INJECTED), so it can't forge a role or a row budget.
+
+  - id: code-mcp-tools
+    node: mcp
+    type: multi
+    prompt: Which of these are tools of the MCP server (calorvia-sources)?
+    correct: [list_sources, list_tables, get_table_card, find_values, validate_sql, execute_sql, get_sales_commission]
+    wrong: [reconcile, make_chart, search_documents, remember]
+    files: [src/text2sql_calorvia/mcp_server.py]
+    explain: reconcile, make_chart, remember/forget and search_documents are local tools of the agent; only the MCP server holds database connections.
+
+  - id: code-d45
+    node: validation
+    type: choice
+    prompt: Validation parses the query with sqlglot. What text does the database finally run?
+    correct: The model's own text, with only a row limit added (LIMIT n+1, or SET ROWCOUNT on SQL Server), so the footer shows exactly what ran.
+    wrong:
+      - sqlglot's regenerated SQL, which is normalised and safer.
+      - A rewritten query with each role's WHERE clauses added.
+      - A stored procedure chosen from the certified ontology.
+    files: [src/text2sql_calorvia/validation.py, src/text2sql_calorvia/execution.py]
+    explain: D45. Row limits per site come from row-level security in the database, not from rewriting (step 27).
+
+  # --- access -------------------------------------------------------------------------------------------------------
+  - id: code-access-where
+    node: access
+    type: match
+    prompt: Role-based access is enforced in several places. Match each control to where it lives.
+    pairs:
+      - ["which tables a role can query", "the role's database login and its grants"]
+      - ["which site's rows a site manager sees", "row-level security policies in the databases"]
+      - ["which documents a role can retrieve", "allowed_roles in each Qdrant prefetch"]
+      - ["which tables and metrics the model is told about", "the prompt, tools and cards filtered per role"]
+      - ["who may open a chart or image link", "a signed link that expires (24 h)"]
+    files: [src/text2sql_calorvia/access.py, policy/roles.yaml, src/rag_calorvia/rag/pipeline.py, src/text2sql_calorvia/agent.py]
+    explain: Phase D. The data layers enforce; filtering the prompt only stops the model from describing or chasing what it can't read.
+
+  - id: code-role-token
+    node: access
+    type: choice
+    prompt: What does the role token the endpoint gives the agent contain, and what can't the model do with it?
+    correct: The role, the user and an expiry, signed with a key derived from the agent_ro password; it's injected by the agent, never shown to the model, so the model can't choose or change it.
+    wrong:
+      - The user's API key, which the model passes to each tool.
+      - A list of allowed tables the model may edit.
+      - The database password of the role, encrypted.
+    files: [src/text2sql_calorvia/access.py, src/text2sql_calorvia/agent.py]
+    explain: issue_token / read_identity; a forged, altered or expired token is refused by the MCP server.
+
+  # --- whole app ----------------------------------------------------------------------------------------------------
+  - id: code-files
+    node: endpoint
+    type: match
+    prompt: Match each file to its job.
+    pairs:
+      - ["src/rag_calorvia/rag/pipeline.py", "retrieve and answer: the RAG's search, rerank and generation"]
+      - ["src/rag_calorvia/etl/chunk.py", "documents → chunks with their context line and roles"]
+      - ["src/text2sql_calorvia/agent.py", "the LangGraph graph, budgets, grounding check and footer"]
+      - ["src/text2sql_calorvia/api.py", "the OpenAI-compatible endpoint, models, streaming, signed links"]
+      - ["src/text2sql_calorvia/mcp_server.py", "the only process with database connections: 7 tools"]
+      - ["src/text2sql_calorvia/documents.py", "the RAG inside the endpoint: search_documents, documents-only, images"]
+    files: [README.md]
+    explain: The Layout section of the README lists every module with one line each.
+
+  - id: code-servers
+    node: endpoint
+    type: match
+    prompt: Match each port to what listens on it.
+    pairs:
+      - ["8000", "the generator (Qwen3.8-27B, llama-server, 32k context)"]
+      - ["8001", "the embedder (bge-m3, vLLM)"]
+      - ["8002", "the reranker (bge-reranker-v2-m3, vLLM)"]
+      - ["8003", "the judge (Gemma 4) or the VLM, one at a time"]
+      - ["9000", "the agent's OpenAI-compatible endpoint"]
+      - ["9001", "the MCP server"]
+    files: [README.md]
+    explain: Everything binds to 127.0.0.1 (step 18); the judge and the VLM share 8003 because the GPU can't hold them beside the generator.
+
+  - id: code-final-config
+    node: search
+    type: choice
+    prompt: You want the chat and calorvia-docs to use another RAG configuration. What do you change?
+    correct: FINAL_CONFIG in .env (settings.final_config), then restart the endpoint and Streamlit.
+    wrong:
+      - Rename the TOML file to status_filter.toml.
+      - Pass ?config= in the chat URL.
+      - Re-run the test set with the new configuration.
+    files: [src/rag_calorvia/config.py]
+    explain: One setting names it; the step 9 evaluation and exports keep status_filter, what was measured on the test set.
+
+  - id: code-eval-stores
+    node: evaluation
+    type: match
+    prompt: Where does each kind of result live?
+    pairs:
+      - ["a RAG run's per-question scores", "PostgreSQL table scores (experiments, answers)"]
+      - ["a text-to-SQL run's results", "PostgreSQL tables t2sql_experiments and t2sql_results"]
+      - ["every query the agent ran", "t2sql_query_log"]
+      - ["conversations and learned memory", "t2sql_conversations, t2sql_messages and t2sql_memory"]
+    files: [src/rag_calorvia/sql/schema.sql, src/text2sql_calorvia/sql/eval/schema.sql]
+    explain: app/experiments.py reads the first two; every run stores its git commit and a dirty flag.
+
+  - id: code-judge-noise
+    node: evaluation
+    type: choice
+    prompt: Two runs' answers to Q062 are identical except the citation number; the judge gives faithfulness 1.0 to one and 0.0 to the other. What do you conclude?
+    correct: "Judge noise: compare runs on the same questions, read verdicts by hand, and don't decide on small differences."
+    wrong:
+      - The citation number matters; the second run is worse.
+      - The first run is better and should be adopted.
+      - The judge must be replaced by the generator.
+    files: [ROADMAP.md]
+    explain: Steps 4 and 30 found the same; correctness proved more reliable than faithfulness.
