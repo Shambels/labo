@@ -1897,3 +1897,10 @@ Measured before choosing: 55 of 127 questions have a non-French candidate somewh
 
 Its two copies of the same minutes score 0.97737 and 0.97733; the reranker runs in fp16 and its scores vary in the fourth decimal between calls, so the tie flipped. A difference of one question at one rank can be noise of the measuring instrument itself: check the scores before attributing it to the change.
 </details>
+
+**8.** To judge run 148's configuration, why generate the final configuration again (run 149) instead of comparing with run 56's stored answers?
+
+<details><summary>Answer</summary>
+
+The generator has changed since run 56: 32k context and an 8-bit KV cache for phase B. Answers from two servers differ for reasons that have nothing to do with retrieval. Generating both on the same server leaves the retrieval change as the only difference, and the control gets its own name so run 56 stays the reported final run.
+</details>
