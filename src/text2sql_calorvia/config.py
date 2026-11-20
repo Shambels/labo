@@ -51,6 +51,11 @@ class Settings(BaseSettings):
     chart_max_age_days: int = 30      # older chart files are deleted when a new chart is drawn
     chart_link_hours: int = 24        # how long a signed chart link works (step 29)
     overlap_max_rows: int = 200_000   # payroll: rows read to compare what two queries cover
+    # Monitoring (step 32, D81): Langfuse, self-hosted (monitoring/docker-compose.yaml). Off while a key is empty
+    langfuse_url: str = "http://localhost:3100"
+    langfuse_public_key: str = ""
+    langfuse_secret_key: str = ""
+    langfuse_environment: str = "local"   # Langfuse's filter between deployments (lowercase, no "langfuse" prefix)
 
     # The course PostgreSQL (5432): every query of the agent is logged there
     postgres_url: str

@@ -12,6 +12,7 @@ dependencies = [
     "docling>=2.94",
     "fastapi>=0.163.1",
     "langchain-openai>=1.8.0",
+    "langfuse>=5.2.0",
     "langgraph>=1.2.22",
     "matplotlib>=3.11.2",
     "mcp>=2.3.0",

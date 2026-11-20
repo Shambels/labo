@@ -37,7 +37,7 @@ from langgraph.graph import END, START, StateGraph
 from langgraph.graph.message import add_messages
 from mcp.client import Client
 
-from text2sql_calorvia import access, charts, documents, grounding, memory, ontology
+from text2sql_calorvia import access, charts, documents, grounding, memory, ontology, tracing
 from text2sql_calorvia.config import settings
 from text2sql_calorvia.reconcile import KEY_TYPES, reconcile
 
@@ -335,7 +335,7 @@ class Agent:
     # --- nodes ------------------------------------------------------------------------------------------------------
     async def _agent(self, state: AgentState, config) -> dict:
         tools = config["configurable"]["tools"]
-        reply = await self.llm.bind_tools(tools).ainvoke(fit(state["messages"]))
+        reply = await self.llm.bind_tools(tools).ainvoke(fit(state["messages"]), **tracing.llm_kwargs("agent"))
         return {"messages": [reply]}
 
     async def _tools(self, state: AgentState, config) -> dict:
@@ -347,52 +347,55 @@ class Agent:
         for call in calls:
             name, args = call["name"], dict(call["args"])
             step = {"tool": name, "args": dict(args)}   # what the model asked, before the agent adds its own fields
-            if name == "search_documents" and state.get("documents"):
-                found = await asyncio.to_thread(documents.search, str(args.get("query", "")), state.get("role"))
-                shown = documents.number_extracts(found, extracts)
-                step.update(ok=True, extracts=[e["id"] for e in shown])
-                output = documents.for_model(shown)
-            elif name in LOCAL_TOOLS:
-                try:
-                    output = self._local_tool(name, args, state, results, drawn)
-                    step["ok"] = True
-                    if name in ("make_chart", "remember"):
-                        step["result"] = output
-                except KeyError as e:
-                    output = {"error": f"Résultat inconnu : {e}. Résultats disponibles : {', '.join(results) or 'aucun'}."}
-                    step["ok"] = False
-                except ValueError as e:
-                    output, step["ok"] = {"error": str(e)}, False
-            elif name == "execute_sql" and (same := same_query(results, args)):
-                # Seen in step 14 (X05): the model sent the same query 8 times in a row until the budget ran out
-                output = {"ok": False, "errors": [
-                    f"Requête identique à {same}, déjà exécutée pour cette question : le résultat ne changera pas. "
-                    "Utilisez ce résultat, changez d'approche, ou répondez avec ce que vous avez."]}
-                step.update(ok=False, stage="repeat", errors=output["errors"])
-                sql_errors += 1
-            else:
-                if state.get("access_token"):
-                    args["access_token"] = state["access_token"]
-                if name in {"execute_sql", "get_sales_commission"}:
-                    args.update(question=state["question"], session_id=state["session_id"])
-                if name == "execute_sql":
-                    args["max_rows"] = settings.agent_fetch_rows
-                output = structured(await client.call_tool(name, args))
-                ok = not (isinstance(output, dict) and (output.get("ok") is False or "error" in output))
-                step["ok"] = ok
-                if name in SQL_TOOLS and not ok:
+            kind = "retriever" if name == "search_documents" else "tool"
+            with tracing.observe(name, as_type=kind, input=step["args"]) as observed:   # the model's arguments only
+                if name == "search_documents" and state.get("documents"):
+                    found = await asyncio.to_thread(documents.search, str(args.get("query", "")), state.get("role"))
+                    shown = documents.number_extracts(found, extracts)
+                    step.update(ok=True, extracts=[e["id"] for e in shown])
+                    output = documents.for_model(shown)
+                elif name in LOCAL_TOOLS:
+                    try:
+                        output = self._local_tool(name, args, state, results, drawn)
+                        step["ok"] = True
+                        if name in ("make_chart", "remember"):
+                            step["result"] = output
+                    except KeyError as e:
+                        output = {"error": f"Résultat inconnu : {e}. Résultats disponibles : {', '.join(results) or 'aucun'}."}
+                        step["ok"] = False
+                    except ValueError as e:
+                        output, step["ok"] = {"error": str(e)}, False
+                elif name == "execute_sql" and (same := same_query(results, args)):
+                    # Seen in step 14 (X05): the model sent the same query 8 times in a row until the budget ran out
+                    output = {"ok": False, "errors": [
+                        f"Requête identique à {same}, déjà exécutée pour cette question : le résultat ne changera pas. "
+                        "Utilisez ce résultat, changez d'approche, ou répondez avec ce que vous avez."]}
+                    step.update(ok=False, stage="repeat", errors=output["errors"])
                     sql_errors += 1
-                    step["errors"] = output.get("errors") or [output.get("error")]
-                    # execute returns the SQL it ran only when validation passed: then the database refused it
-                    step["stage"] = "execution" if name == "execute_sql" and "sql" in output else "validation"
-                if name == "get_table_card" and ok and not self.use_ontology:
-                    output.pop("ontology_terms", None)
-                if name == "execute_sql" and ok:
-                    qid = f"q{len(results) + 1}"
-                    results[qid] = {k: output.get(k) for k in ("source", "sql", "columns", "rows", "row_count", "truncated")}
-                    step.update(id=qid, sql=output["sql"], source=output["source"], row_count=output["row_count"],
-                                truncated=output["truncated"], warnings=output.get("warnings", []))
-                    output = for_model(qid, output)
+                else:
+                    if state.get("access_token"):
+                        args["access_token"] = state["access_token"]
+                    if name in {"execute_sql", "get_sales_commission"}:
+                        args.update(question=state["question"], session_id=state["session_id"])
+                    if name == "execute_sql":
+                        args["max_rows"] = settings.agent_fetch_rows
+                    output = structured(await client.call_tool(name, args))
+                    ok = not (isinstance(output, dict) and (output.get("ok") is False or "error" in output))
+                    step["ok"] = ok
+                    if name in SQL_TOOLS and not ok:
+                        sql_errors += 1
+                        step["errors"] = output.get("errors") or [output.get("error")]
+                        # execute returns the SQL it ran only when validation passed: then the database refused it
+                        step["stage"] = "execution" if name == "execute_sql" and "sql" in output else "validation"
+                    if name == "get_table_card" and ok and not self.use_ontology:
+                        output.pop("ontology_terms", None)
+                    if name == "execute_sql" and ok:
+                        qid = f"q{len(results) + 1}"
+                        results[qid] = {k: output.get(k) for k in ("source", "sql", "columns", "rows", "row_count", "truncated")}
+                        step.update(id=qid, sql=output["sql"], source=output["source"], row_count=output["row_count"],
+                                    truncated=output["truncated"], warnings=output.get("warnings", []))
+                        output = for_model(qid, output)
+                observed.update(output=output, level=None if step.get("ok") else "WARNING")
             steps.append(step)
             messages.append(ToolMessage(as_tool_text(output), tool_call_id=call["id"], name=name))
         return {"messages": messages, "results": results, "steps": steps, "sql_errors": sql_errors,
@@ -425,7 +428,7 @@ class Agent:
         instruction = HumanMessage(
             f"Limite atteinte ({why}). N'appelez plus d'outil. Répondez maintenant avec les seuls résultats obtenus ; "
             "s'ils ne suffisent pas, dites que vous ne savez pas et expliquez ce qui a bloqué.")
-        reply = await self.llm.ainvoke(fit(state["messages"] + pending + [instruction]))
+        reply = await self.llm.ainvoke(fit(state["messages"] + pending + [instruction]), **tracing.llm_kwargs("wrap_up"))
         return {"messages": pending + [instruction, reply]}
 
     @staticmethod
@@ -450,10 +453,13 @@ class Agent:
         # message quotes the very number it questions)
         corpus = "\n".join(str(m.content) for i, m in enumerate(state["messages"])
                            if i < state["history_len"] or isinstance(m, ToolMessage))
-        missing = ungrounded(answer, corpus)
-        if any(step["tool"] in EVIDENCE_TOOLS and step.get("ok") for step in state.get("steps", [])):
-            missing += grounding.unsupported(answer, self._evidence(state),
-                                             (settings.min_group_size, settings.rows_to_model))
+        with tracing.observe("grounding_check", as_type="guardrail", input=answer) as observed:
+            missing = ungrounded(answer, corpus)
+            if any(step["tool"] in EVIDENCE_TOOLS and step.get("ok") for step in state.get("steps", [])):
+                missing += grounding.unsupported(answer, self._evidence(state),
+                                                 (settings.min_group_size, settings.rows_to_model))
+            observed.update(output={"unverified": missing, "retry": bool(missing) and not state.get("grounding_retry")},
+                            level="WARNING" if missing else None)
         if not missing:
             return {"unverified": []}
         if not state.get("grounding_retry"):
@@ -489,6 +495,7 @@ class Agent:
         pictures, shown = documents.image_tags(extracts)
         if shown:   # recorded with the steps, so that reading the conversation back renews these links only
             steps.append({"tool": "show_images", "args": {}, "ok": True, "images": shown})
+        score_trace(state, steps, missing)
         return {"answer": text + images + pictures + footer(steps, state["session_id"], text, extracts), "steps": steps}
 
     # --- graph ------------------------------------------------------------------------------------------------------
@@ -566,6 +573,17 @@ class Agent:
             if node == "finish":
                 answer, steps = change["answer"], change["steps"]
         return {"answer": answer, "steps": steps, "results": results}
+
+
+def score_trace(state: AgentState, steps: list[dict], unverified: list[str]):
+    """The question's numbers as Langfuse scores (step 32): charted over time, a filter to find the bad traces."""
+    tracing.score("tool_calls", state.get("tool_calls", 0))
+    tracing.score("sql_errors", state.get("sql_errors", 0))
+    tracing.score("unverified_numbers", len(unverified), ", ".join(unverified) or None)
+    tracing.score("grounding_retry", 1 if state.get("grounding_retry") else 0)
+    tracing.score("budget_spent", 1 if any(isinstance(m, HumanMessage) and str(m.content).startswith("Limite atteinte")
+                                           for m in state["messages"]) else 0)
+    tracing.score("queries_run", sum(1 for s in steps if s["tool"] == "execute_sql" and s.get("ok")))
 
 
 def footer(steps: list[dict], session_id: str, answer: str = "", extracts: list[dict] = ()) -> str:

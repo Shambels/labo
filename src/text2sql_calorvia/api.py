@@ -33,7 +33,7 @@ from fastapi import Depends, FastAPI, Header, HTTPException
 from fastapi.responses import FileResponse, Response, StreamingResponse
 from pydantic import BaseModel
 
-from text2sql_calorvia import access, auth, charts, documents, memory
+from text2sql_calorvia import access, auth, charts, documents, memory, tracing
 from text2sql_calorvia.agent import Agent, default_agent
 from text2sql_calorvia.config import settings
 
@@ -42,6 +42,7 @@ MARKER = re.compile(r"\s*<!-- calorvia:conversation=([\w-]+) -->")
 CHART_ID = re.compile(r"[0-9a-f]{16}")
 SOURCES = {"sql", "docs"}
 MODELS = {"calorvia-sql": {"sql"}, "calorvia-docs": {"docs"}, "calorvia-both": {"sql", "docs"}}
+TRACE_NAME = {frozenset(v): k for k, v in MODELS.items()}   # step 32: a trace is named after what was searched
 ALIASES = {settings.agent_model_name: "calorvia-sql"}   # the name of steps 13–29: clients configured with it still work
 
 
@@ -103,11 +104,16 @@ def sources_of(request: ChatRequest) -> set[str]:
 
 async def documents_only(question: str, role: str | None):
     """The RAG of phase A, as the same (node, change) events as the agent: the search, then the answer."""
-    context = await asyncio.to_thread(documents.retrieve_context, question, role)
+    with tracing.observe("search_documents", as_type="retriever", input={"query": question}) as observed:
+        context = await asyncio.to_thread(documents.retrieve_context, question, role)
+        observed.update(output=[{"document": c["document"], "date": c.get("doc_date"), "text": c["text"]} for c in context])
     step = {"tool": "search_documents", "args": {"query": question}, "ok": True,
             "extracts": [f"D{n}" for n in range(1, len(context) + 1)]}
     yield "tools", {"steps": [step]}
-    result = await asyncio.to_thread(documents.write_answer, question, context, role)
+    with tracing.observe("write_answer", as_type="generation", input=question,
+                         model=documents.rag_config().get("generation", {}).get("model")) as observed:
+        result = await asyncio.to_thread(documents.write_answer, question, context, role)
+        observed.update(output=result["answer"])
     shown = [{"tool": "show_images", "args": {}, "ok": True, "images": result["images"]}] if result["images"] else []
     yield "finish", {"answer": result["answer"], "steps": [step, *shown]}
 
@@ -229,6 +235,14 @@ def create_app(agent: Agent | None = None, api_keys: str | None = None, gateways
                 return documents_only(messages[-1]["content"], role)
             return get_agent().stream(messages, session_id, user, conversation_id, **extra)
 
+        def traced():
+            """The trace of this request (step 32): per user, per conversation, named after what was searched."""
+            return tracing.trace(TRACE_NAME[frozenset(wanted)], question=messages[-1]["content"], user=user,
+                                 session_id=conversation_id,
+                                 tags=[request.model, "stream" if request.stream else "single",
+                                       "openwebui" if x_openwebui_user_id else "api"],
+                                 metadata={"completion_id": completion_id, "role": role, "turn": str(len(messages) // 2 + 1)})
+
         def save(answer: str, steps: list[dict]):
             try:
                 memory.save_turn(conversation_id, user, messages[-1]["content"], answer, steps)
@@ -236,13 +250,15 @@ def create_app(agent: Agent | None = None, api_keys: str | None = None, gateways
                 print(f"conversation not saved: {type(error).__name__}: {error}", flush=True)
 
         if not request.stream:
-            if wanted == {"docs"}:
-                result = {"answer": "", "steps": []}
-                async for node, change in run():
-                    if node == "finish":
-                        result = change
-            else:
-                result = await get_agent().ask(messages, session_id, user, conversation_id, **extra)
+            with traced() as trace:
+                if wanted == {"docs"}:
+                    result = {"answer": "", "steps": []}
+                    async for node, change in run():
+                        if node == "finish":
+                            result = change
+                else:
+                    result = await get_agent().ask(messages, session_id, user, conversation_id, **extra)
+                trace.update(output=result["answer"])
             save(result["answer"], result["steps"])
             return {"id": completion_id, "object": "chat.completion", "created": created,
                     "model": request.model,
@@ -259,26 +275,29 @@ def create_app(agent: Agent | None = None, api_keys: str | None = None, gateways
         async def events():
             yield chunk({"role": "assistant", "content": ""})
             opened, shown, steps = False, 0, []
-            try:
-                async for node, change in run():
-                    if node == "tools":
-                        steps = change["steps"]
-                        if not opened:
-                            yield chunk({"content": "<details>\n<summary>Étapes de l'agent</summary>\n\n"})
-                            opened = True
-                        for step in change["steps"][shown:]:
-                            yield chunk({"content": f"- {describe_step(step)}\n"})
-                        shown = len(change["steps"])
-                    elif node == "finish":
-                        if opened:
-                            yield chunk({"content": "\n</details>\n\n"})
-                            opened = False
-                        yield chunk({"content": change["answer"] + marker})
-                        save(change["answer"], change.get("steps", steps))
-            except Exception as error:   # the client gets a readable end, not a cut stream
-                if opened:
-                    yield chunk({"content": "\n</details>\n\n"})
-                yield chunk({"content": f"L'agent a rencontré une erreur : {type(error).__name__}: {error}"})
+            with traced() as trace:
+                try:
+                    async for node, change in run():
+                        if node == "tools":
+                            steps = change["steps"]
+                            if not opened:
+                                yield chunk({"content": "<details>\n<summary>Étapes de l'agent</summary>\n\n"})
+                                opened = True
+                            for step in change["steps"][shown:]:
+                                yield chunk({"content": f"- {describe_step(step)}\n"})
+                            shown = len(change["steps"])
+                        elif node == "finish":
+                            if opened:
+                                yield chunk({"content": "\n</details>\n\n"})
+                                opened = False
+                            yield chunk({"content": change["answer"] + marker})
+                            trace.update(output=change["answer"])
+                            save(change["answer"], change.get("steps", steps))
+                except Exception as error:   # the client gets a readable end, not a cut stream
+                    trace.update(level="ERROR", status_message=f"{type(error).__name__}: {error}")
+                    if opened:
+                        yield chunk({"content": "\n</details>\n\n"})
+                    yield chunk({"content": f"L'agent a rencontré une erreur : {type(error).__name__}: {error}"})
             yield chunk({}, "stop")
             yield "data: [DONE]\n\n"
 

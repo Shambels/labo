@@ -12,6 +12,7 @@ With API_KEYS set, the chat asks for a key and answers only from the documents o
 of .streamlit/config.toml keep it on this machine otherwise.
 """
 import tomllib
+import uuid
 from pathlib import Path
 
 import streamlit as st
@@ -21,6 +22,7 @@ from rag_calorvia.config import settings as rag_settings
 from rag_calorvia.rag.images import answer_images, image_bytes
 from rag_calorvia.rag.permissions import identify
 from rag_calorvia.rag.pipeline import answer
+from text2sql_calorvia import tracing
 from text2sql_calorvia.config import settings as agent_settings
 
 MODES = {"Documents": None, "Bases de données": "calorvia-sql", "Les deux": "calorvia-both"}
@@ -64,6 +66,7 @@ st.title("Assistant Calorvia")
 
 if "history" not in st.session_state:
     st.session_state.history = []
+    st.session_state.session_id = f"streamlit-{uuid.uuid4().hex}"   # groups this chat's traces in Langfuse (step 32)
 
 
 def show(turn):
@@ -94,6 +97,16 @@ def show(turn):
 for turn in st.session_state.history:
     show(turn)
 
+def ask_documents(question):
+    """The RAG, run here; traced like the endpoint's calorvia-docs (the other modes are traced by the endpoint)."""
+    with tracing.trace("calorvia-docs", question=question, user=user or "default",
+                       session_id=st.session_state.session_id, tags=["streamlit", config_path.stem]) as trace:
+        result = answer(question, config, role)
+        trace.update(output=result["answer"], metadata={"extracts": [c["document"] for c in result["context"]],
+                                                        "latency_ms": result["latency_ms"]})
+    return result
+
+
 def ask_agent(question, model):
     """The agent's endpoint, with the conversation so far (an earlier answer carries the conversation's id)."""
     client = OpenAI(base_url=f"http://{agent_settings.agent_host}:{agent_settings.agent_port}/v1",
@@ -107,7 +120,7 @@ def ask_agent(question, model):
 if question := st.chat_input("Votre question sur Calorvia"):
     with st.spinner("Recherche et rédaction de la réponse…"):
         try:
-            result = answer(question, config, role) if MODES[mode] is None else ask_agent(question, MODES[mode])
+            result = ask_documents(question) if MODES[mode] is None else ask_agent(question, MODES[mode])
         except OpenAIError as error:
             st.error(f"L'agent ne répond pas ({type(error).__name__}) : lancez le serveur MCP et "
                      "`uv run python -m text2sql_calorvia.api`.")
