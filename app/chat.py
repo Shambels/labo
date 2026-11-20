@@ -7,13 +7,20 @@
 and "Les deux" ask the agent's endpoint (models calorvia-sql and calorvia-both) with the same key: its answer carries
 the queries that ran and the documents it cites.
 
+Step 33: every conversation is kept (PostgreSQL, the endpoint's tables), whatever the mode: the sidebar lists them,
+searches them, reopens one to go on, and shows the archives. Under the title, the current one can be renamed, archived
+or restored, compacted (its earlier turns summarized for the agent) and exported as Markdown. The conversation id is
+sent to the endpoint (X-Conversation-Id), so a conversation may mix the three modes.
+
 The configuration is the final one (settings.final_config); another can be chosen in the sidebar.
 With API_KEYS set, the chat asks for a key and answers only from the documents of the user's role (D77); the settings
 of .streamlit/config.toml keep it on this machine otherwise.
 """
 import tomllib
+import uuid
 from pathlib import Path
 
+import psycopg
 import streamlit as st
 from openai import OpenAI, OpenAIError
 
@@ -21,9 +28,11 @@ from rag_calorvia.config import settings as rag_settings
 from rag_calorvia.rag.images import answer_images, image_bytes
 from rag_calorvia.rag.permissions import identify
 from rag_calorvia.rag.pipeline import answer
+from text2sql_calorvia import conversations, memory
 from text2sql_calorvia.config import settings as agent_settings
 
 MODES = {"Documents": None, "Bases de données": "calorvia-sql", "Les deux": "calorvia-both"}
+CONTEXT_KEYS = ("document", "doc_date", "text", "rerank_score", "image_path", "page")   # what show() reads of a chunk
 
 st.set_page_config(page_title="Assistant Calorvia", page_icon="💬", layout="wide")
 
@@ -41,6 +50,7 @@ if st.session_state.identity is None:
                 st.rerun()
     st.stop()
 user, role = st.session_state.identity
+owner = user or "default"    # whose conversations: the key's name, or "default" in local mode, as at the endpoint
 
 mode = st.sidebar.radio("Chercher dans", list(MODES), help="Documents : procédures, contrats, PV, tarifs... "
                         "Bases de données : ventes, comptabilité, paie. Les deux : l'agent choisit, et peut comparer.")
@@ -60,10 +70,110 @@ with open(config_path, "rb") as f:
 st.sidebar.caption("Les extraits, les images et les requêtes SQL sont affichés sous chaque réponse : "
                    "vérifiez une valeur lue dans une image avant de la réutiliser.")
 
-st.title("Assistant Calorvia")
+
+# --- conversations (step 33) ----------------------------------------------------------------------------------------
+def new_conversation():
+    st.session_state.history = []
+    st.session_state.conversation_id = f"st-{uuid.uuid4().hex}"   # stored at its first turn
+
+
+def turn_of(question: dict, reply: dict) -> dict:
+    """A stored question and answer as a turn of this page: Documents turns kept their extracts in their step."""
+    steps = reply.get("steps") or []
+    docs = next((s for s in steps if s.get("mode") == "Documents"), None)
+    if docs:
+        return {"question": question["content"], "mode": "Documents",
+                "result": {"answer": reply["content"], "context": docs.get("context", []),
+                           "latency_ms": docs.get("latency_ms", 0), "tool_calls": docs.get("tool_calls", [])}}
+    from text2sql_calorvia.api import with_fresh_links  # chart and image links renewed, as the endpoint's read route
+    both = any(s.get("tool") == "search_documents" for s in steps)
+    return {"question": question["content"], "mode": "Les deux" if both else "Bases de données",
+            "result": {"answer": with_fresh_links(reply)["content"]}}
+
+
+def open_conversation(conversation_id: str):
+    stored = memory.conversation(conversation_id)
+    pairs = zip(stored[0::2], stored[1::2])
+    st.session_state.history = [turn_of(q, a) for q, a in pairs if q["role"] == "user" and a["role"] == "assistant"]
+    st.session_state.conversation_id = conversation_id
+
 
 if "history" not in st.session_state:
-    st.session_state.history = []
+    new_conversation()
+
+st.sidebar.divider()
+st.sidebar.subheader("Conversations")
+if st.sidebar.button("➕ Nouvelle conversation", width="stretch"):
+    new_conversation()
+    st.rerun()
+search = st.sidebar.text_input("Rechercher", placeholder="un mot du titre ou des messages")
+show_archives = st.sidebar.toggle("Archives", help="Les conversations archivées : rouvrez-en une pour la restaurer.")
+try:
+    listed = memory.conversations(owner, 30, show_archives, search)
+except psycopg.Error:
+    listed = None
+    st.sidebar.caption("Historique indisponible : PostgreSQL (5432) ne répond pas.")
+if listed == [] and (search or show_archives):
+    st.sidebar.caption("Aucune conversation.")
+for c in listed or []:
+    current = c["id"] == st.session_state.conversation_id
+    label = ("▶ " if current else "") + c["title"][:60]
+    if st.sidebar.button(label, key=f"open-{c['id']}", width="stretch", disabled=current,
+                         help=f"{c['updated_at'][:16].replace('T', ' ')} · {c['messages']} messages"
+                              + (" · compactée" if c["compacted"] else "")):
+        open_conversation(c["id"])
+        st.rerun()
+
+st.title("Assistant Calorvia")
+
+
+def manage(conversation_id: str):
+    """Rename, archive or restore, compact, export: the current conversation, once it is stored."""
+    try:
+        info = memory.conversation_info(conversation_id)
+    except psycopg.Error:
+        return
+    if not info or info["user"] != owner:
+        return
+    stored = memory.conversation(conversation_id)
+    with st.expander(f"⚙️ {info['title']}" + (" · archivée" if info["archived"] else ""), expanded=False):
+        c1, c2 = st.columns([3, 1])
+        title = c1.text_input("Titre", value=info["title"], key=f"title-{conversation_id}")
+        if c2.button("Renommer", width="stretch", disabled=title.strip() in ("", info["title"])):
+            memory.rename(conversation_id, owner, title)
+            st.rerun()
+        c1, c2, c3 = st.columns(3)
+        if info["archived"]:
+            if c1.button("Restaurer", width="stretch"):
+                memory.archive(conversation_id, owner, False)
+                st.rerun()
+        elif c1.button("Archiver", width="stretch", help="Cachée de la liste, rien n'est effacé ; voir « Archives »."):
+            memory.archive(conversation_id, owner, True)
+            new_conversation()
+            st.rerun()
+        tokens = conversations.estimated_tokens(stored)
+        if c2.button("Compacter", width="stretch",
+                     help=f"Résume les échanges sauf les {conversations.KEEP_TURNS} derniers : l'agent lira le résumé à "
+                          f"leur place. Historique : ~{tokens:,} jetons sur {agent_settings.context_tokens:,}.".replace(",", " ")):
+            with st.spinner("Résumé des échanges précédents…"):
+                try:
+                    done = conversations.compact(conversation_id, owner)
+                    st.success(f"{done['summary_messages']} messages résumés ; {done['kept_messages']} gardés tels quels.")
+                except (ValueError, OpenAIError) as error:
+                    st.warning(str(error) if isinstance(error, ValueError) else
+                               f"Le modèle ne répond pas ({type(error).__name__}) : lancez le générateur sur 8000.")
+            info = memory.conversation_info(conversation_id)
+        c3.download_button("Exporter (.md)", conversations.export_markdown(conversation_id, owner),
+                           file_name=f"{conversation_id}.md", mime="text/markdown", width="stretch")
+        st.caption(f"Historique relu par l'agent : ~{tokens:,} jetons (contexte : {agent_settings.context_tokens:,})."
+                   .replace(",", " "))
+        if info["summary"]:
+            st.markdown(f"**Résumé lu par l'agent à la place des {info['summary_messages']} premiers messages** "
+                        f"(compactée le {info['compacted_at'][:16].replace('T', ' ')}) :")
+            st.markdown(info["summary"])
+
+
+manage(st.session_state.conversation_id)
 
 
 def show(turn):
@@ -94,24 +204,39 @@ def show(turn):
 for turn in st.session_state.history:
     show(turn)
 
+
+def ask_documents(question):
+    """The RAG, run here; the turn is saved like the endpoint's, its extracts in its step so it can be shown again."""
+    result = answer(question, config, role)
+    step = {"tool": "search_documents", "args": {"query": question}, "ok": True, "mode": "Documents",
+            "context": [{k: c[k] for k in CONTEXT_KEYS if k in c} for c in result["context"]],
+            "latency_ms": result["latency_ms"], "tool_calls": result.get("tool_calls", [])}
+    try:
+        memory.save_turn(st.session_state.conversation_id, owner, question, result["answer"], [step])
+    except psycopg.Error as error:   # keeping the history must never cost the user the answer
+        st.warning(f"Conversation non enregistrée ({type(error).__name__}).")
+    return result
+
+
 def ask_agent(question, model):
-    """The agent's endpoint, with the conversation so far (an earlier answer carries the conversation's id)."""
+    """The agent's endpoint, with the conversation so far, under this conversation's id (it saves the turn)."""
     client = OpenAI(base_url=f"http://{agent_settings.agent_host}:{agent_settings.agent_port}/v1",
                     api_key=st.session_state.get("key") or "local", timeout=600)
     messages = [m for t in st.session_state.history
                 for m in ({"role": "user", "content": t["question"]}, {"role": "assistant", "content": t["result"]["answer"]})]
-    reply = client.chat.completions.create(model=model, messages=messages + [{"role": "user", "content": question}])
-    return {"answer": reply.choices[0].message.content}
+    reply = client.chat.completions.create(model=model, messages=messages + [{"role": "user", "content": question}],
+                                           user=owner, extra_headers={"X-Conversation-Id": st.session_state.conversation_id})
+    return {"answer": conversations.MARKER.sub("", reply.choices[0].message.content)}   # the header names it
 
 
 if question := st.chat_input("Votre question sur Calorvia"):
     with st.spinner("Recherche et rédaction de la réponse…"):
         try:
-            result = answer(question, config, role) if MODES[mode] is None else ask_agent(question, MODES[mode])
+            result = ask_documents(question) if MODES[mode] is None else ask_agent(question, MODES[mode])
         except OpenAIError as error:
             st.error(f"L'agent ne répond pas ({type(error).__name__}) : lancez le serveur MCP et "
                      "`uv run python -m text2sql_calorvia.api`.")
             st.stop()
     turn = {"question": question, "result": result, "mode": mode}
     st.session_state.history.append(turn)
-    show(turn)
+    st.rerun()   # the sidebar lists the conversation once its first turn is stored

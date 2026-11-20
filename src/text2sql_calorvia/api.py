@@ -11,6 +11,11 @@ is the request's `user` field, or Open WebUI's X-OpenWebUI-User-Id header, else 
 on loopback. Step 29: an image tag can't send a key, so a chart link is signed and expires; reading a conversation back
 renews the links of the charts drawn in it.
 
+Step 33: conversations a user manages (conversations.py). GET /v1/conversations takes `archived` and `q` (search);
+PATCH /v1/conversations/<id> renames, archives or restores; POST /v1/conversations/<id>/compact summarizes the earlier
+turns, and from then on the agent reads the summary in their place; GET /v1/conversations/<id>/export is Markdown. Only
+the owner may change, compact or export a conversation, also in local mode (the `user` parameter names them).
+
 Step 31: one endpoint for the databases, the documents, or both. The model chosen is the toggle: `calorvia-sql` (the
 agent, also under its old name `calorvia-agent`), `calorvia-docs` (the RAG of phase A, unchanged), `calorvia-both` (the
 agent with `search_documents`). A client may instead send `"sources": ["sql", "docs"]`. Images of the documents are
@@ -30,10 +35,10 @@ from typing import Any
 
 import uvicorn
 from fastapi import Depends, FastAPI, Header, HTTPException
-from fastapi.responses import FileResponse, Response, StreamingResponse
+from fastapi.responses import FileResponse, PlainTextResponse, Response, StreamingResponse
 from pydantic import BaseModel
 
-from text2sql_calorvia import access, auth, charts, documents, memory
+from text2sql_calorvia import access, auth, charts, conversations, documents, memory
 from text2sql_calorvia.agent import Agent, default_agent
 from text2sql_calorvia.config import settings
 
@@ -56,6 +61,16 @@ class ChatRequest(BaseModel):
     stream: bool = False
     user: str | None = None
     sources: list[str] | None = None   # step 31: overrides the model's sources
+
+
+class ConversationUpdate(BaseModel):
+    """Step 33: a new title, and/or archived true (into the archives) or false (restored)."""
+    title: str | None = None
+    archived: bool | None = None
+
+
+class CompactRequest(BaseModel):
+    keep_turns: int = conversations.KEEP_TURNS
 
 
 def text_of(content) -> str:
@@ -149,6 +164,18 @@ def with_fresh_links(message: dict) -> dict:
     return {**message, "content": content}
 
 
+def compacted(messages: list[dict], conversation_id: str) -> list[dict]:
+    """The history the agent reads: the turns a compaction covers replaced by its summary (step 33)."""
+    try:
+        info = memory.conversation_info(conversation_id)
+        if not info or not info["summary"]:
+            return messages
+        return conversations.with_summary(messages, info, memory.conversation(conversation_id))
+    except Exception as error:   # the history as sent is still a valid history: never cost the user the answer
+        print(f"summary not applied: {type(error).__name__}: {error}", flush=True)
+        return messages
+
+
 def create_app(agent: Agent | None = None, api_keys: str | None = None, gateways: str | None = None) -> FastAPI:
     app = FastAPI(title="Calorvia text-to-SQL agent")
     get_agent = (lambda: agent) if agent else default_agent
@@ -191,10 +218,10 @@ def create_app(agent: Agent | None = None, api_keys: str | None = None, gateways
         return Response(data, media_type="image/jpeg", headers={"Cache-Control": "private, no-store"})
 
     @app.get("/v1/conversations")
-    def list_conversations(user: str = "default", limit: int = 50, who: auth.Caller = Depends(caller),
-                           x_openwebui_user_id: str | None = Header(default=None)):
+    def list_conversations(user: str = "default", limit: int = 50, archived: bool = False, q: str | None = None,
+                           who: auth.Caller = Depends(caller), x_openwebui_user_id: str | None = Header(default=None)):
         owner = auth.user_of(who, user, x_openwebui_user_id)
-        return {"object": "list", "data": memory.conversations(owner, min(max(limit, 1), 500))}
+        return {"object": "list", "data": memory.conversations(owner, min(max(limit, 1), 500), archived, q)}
 
     @app.get("/v1/conversations/{conversation_id}")
     def read_conversation(conversation_id: str, who: auth.Caller = Depends(caller),
@@ -203,7 +230,51 @@ def create_app(agent: Agent | None = None, api_keys: str | None = None, gateways
         messages = memory.conversation(conversation_id) if may_read(who, user, conversation_id) else []
         if not messages:
             raise HTTPException(404, "Unknown conversation.")
-        return {"id": conversation_id, "messages": [with_fresh_links(m) for m in messages]}
+        info = memory.conversation_info(conversation_id) or {}
+        return {"id": conversation_id, "title": info.get("title"), "archived": info.get("archived", False),
+                "summary": info.get("summary"), "summary_messages": info.get("summary_messages", 0),
+                "messages": [with_fresh_links(m) for m in messages]}
+
+    def owned(conversation_id: str, who: auth.Caller, user: str | None, end_user: str | None) -> str:
+        """The caller's name if the conversation is theirs; a 404 otherwise (as for an unknown id)."""
+        owner = auth.user_of(who, user, end_user)
+        try:
+            conversations.owned(conversation_id, owner)
+        except conversations.NotFound:
+            raise HTTPException(404, "Unknown conversation.")
+        return owner
+
+    @app.patch("/v1/conversations/{conversation_id}")
+    def update_conversation(conversation_id: str, change: ConversationUpdate, user: str = "default",
+                            who: auth.Caller = Depends(caller), x_openwebui_user_id: str | None = Header(default=None)):
+        owner = owned(conversation_id, who, user, x_openwebui_user_id)
+        if change.title is not None:
+            try:
+                memory.rename(conversation_id, owner, change.title)
+            except ValueError as error:
+                raise HTTPException(400, str(error))
+        if change.archived is not None:
+            memory.archive(conversation_id, owner, change.archived)
+        info = memory.conversation_info(conversation_id)
+        return {"id": conversation_id, "title": info["title"], "archived": info["archived"]}
+
+    @app.post("/v1/conversations/{conversation_id}/compact")
+    async def compact_conversation(conversation_id: str, request: CompactRequest | None = None, user: str = "default",
+                                   who: auth.Caller = Depends(caller),
+                                   x_openwebui_user_id: str | None = Header(default=None)):
+        owner = owned(conversation_id, who, user, x_openwebui_user_id)
+        keep = (request or CompactRequest()).keep_turns
+        try:
+            return await asyncio.to_thread(conversations.compact, conversation_id, owner, keep)
+        except ValueError as error:   # nothing to compact, or a summary that kept a figure the turns don't have
+            raise HTTPException(409, str(error))
+
+    @app.get("/v1/conversations/{conversation_id}/export")
+    def export_conversation(conversation_id: str, user: str = "default", who: auth.Caller = Depends(caller),
+                            x_openwebui_user_id: str | None = Header(default=None)):
+        owner = owned(conversation_id, who, user, x_openwebui_user_id)
+        return PlainTextResponse(conversations.export_markdown(conversation_id, owner), media_type="text/markdown",
+                                 headers={"Content-Disposition": f'attachment; filename="{conversation_id}.md"'})
 
     @app.post("/v1/chat/completions")
     async def chat(request: ChatRequest, x_conversation_id: str | None = Header(default=None),
@@ -222,6 +293,8 @@ def create_app(agent: Agent | None = None, api_keys: str | None = None, gateways
         role = access.role_of(user) if who.name else None   # the documents' filter: the same role as the databases
         if wanted == {"sql", "docs"}:
             extra["use_documents"] = True
+        if wanted != {"docs"}:   # the RAG alone reads the question only
+            messages = compacted(messages, conversation_id)
 
         def run():
             """The (node, change) events of this request: the RAG alone, or the agent."""

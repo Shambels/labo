@@ -249,7 +249,8 @@ def test_someone_elses_conversation_is_neither_read_nor_continued(monkeypatch):
 
 def test_the_list_of_conversations_is_the_callers(monkeypatch):
     seen = []
-    monkeypatch.setattr("text2sql_calorvia.memory.conversations", lambda user, limit: seen.append(user) or [])
+    monkeypatch.setattr("text2sql_calorvia.memory.conversations",
+                        lambda user, limit, archived=False, search=None: seen.append(user) or [])
     http, _ = keyed()
     http.get("/v1/conversations?user=bob", headers=bearer("key-a"))
     assert seen == ["alice"]
