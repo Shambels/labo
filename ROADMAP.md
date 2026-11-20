@@ -9,6 +9,8 @@ Two chatbots for the fictional company **Calorvia SA**, built one after the othe
 | **C. Improvements** | Both chatbots: what the two reports left open | This roadmap |
 | **D. Role-based access** | Who may see which tables, rows and documents | This roadmap |
 | **E. RAG experiments** | Ideas left open by the RAG report | This roadmap |
+| **F. One chat** | Both chatbots behind one endpoint | This roadmap |
+| **G. Monitoring and conversations** | Langfuse traces; conversations users can manage | This roadmap |
 
 Companion file: `QUIZ.md` (one quiz per step, answers collapsed).
 
@@ -99,6 +101,7 @@ Companion file: `QUIZ.md` (one quiz per step, answers collapsed).
 | D78 | Proving access | Random marker rows planted per kind of data, expected readers computed from the policy alone, checked in both directions, then removed with row counts compared. Evaluation per role: a query on a table outside the role is always a leak; a matching figure is only a flag, read by hand and recorded. Chart links signed, valid 24 hours | Trusting the unit tests; judging leaks from figures alone, since a role can reach the same number from its own tables |
 | D79 | One chat | The agent's endpoint serves three models, the model being the toggle: `calorvia-sql` (the agent; `calorvia-agent` kept as an alias), `calorvia-docs` (the RAG of phase A, called directly), `calorvia-both` (the agent with `search_documents`, retrieval only). A `sources` field may replace the model. Extracts are numbered D1, D2… per question and are evidence for the grounding check; cited images are served from signed, expiring links. Same role for documents and databases | A RAG answer pasted next to an agent answer can't compare the two sources; giving the agent the documents can. Documents-only stays the measured system of phase A instead of a new, unmeasured agent |
 | D80 | RAG configuration in use | `markdown_tables` (translation on demand, window 10, and Docling tables as Markdown) replaces `status_filter` in the chat, the agent's endpoint and the access proof, through `settings.final_config` (`FINAL_CONFIG`). Step 9's evaluation and exports stay those of `status_filter` | Same recall on French questions by construction, one question better answered (Q087) and four better ranked, +0.44 s on average (27 of 127 questions translated). Window 10 rather than 5: the same dev results, and a rephrased Q024 put the Dutch contract 8th in French. Not confirmed on unseen questions: the test set was used in step 9 |
+| D81 | Monitoring | Langfuse **self-hosted** (`monitoring/docker-compose.yaml`, v4.83.0 pinned, 127.0.0.1 only: UI and API on 3100, MinIO on 9190), traces with **full content** (prompts, tool arguments, the rows the model saw, extracts). One trace per question, opened by the endpoint (and by Streamlit's Documents mode): user, session = conversation id, release = commit. LLM calls traced by Langfuse's LangChain handler given **per call**, tool calls, searches and the grounding check by the agent's own spans; six scores per answer. Off while a key is empty; nothing traced outside a trace (evaluations) or in tests | Traces hold payroll aggregates and documents: they stay on this machine (D66). A handler on the graph would copy the whole state, every row included, into every node's span. The role token never enters a trace: spans record the model's arguments, before the agent adds its own |
 | D9 | Porting strategy | Port each hospital_rag module **in the step that needs it** (step 0: config, db, logs; step 3: evaluation; step 4: ETL and RAG) | Nothing unused or untested sits in the repo |
 
 ### Open decisions (to settle with you when we reach them)
@@ -111,7 +114,7 @@ Companion file: `QUIZ.md` (one quiz per step, answers collapsed).
 
 ## Working conventions
 
-- **One step = one branch** (`rag/step-03-eval`), small commits in English imperative mood, merged into `main` when the step is measured.
+- **One step = one branch** (`rag/step-03-eval`), small commits in English imperative mood, merged into `main` when the step is measured. **Since 2026-11-20 (step 32 on), branches are left unmerged: you review and merge them.**
 - **A baseline first, then one change at a time.** Every experiment is a TOML file in `experiments/`, every run is stored in PostgreSQL **with its git commit** (`git_dirty = false` for anything that goes in the report).
 - **Dev/test split:** the 31 questions whose number is a multiple of 5 are the held-out test set. We never look at them before step 9. The eval set measures, it never builds: no expected answer in a prompt, no rule written for one question.
 - At the end of each step: update this roadmap (status, notes, results) and add the step's quiz to `QUIZ.md`.
@@ -133,6 +136,7 @@ Companion file: `QUIZ.md` (one quiz per step, answers collapsed).
 | 5436 | The ERP's PostgreSQL copy (D47) | `ontology/docker-compose.yaml` |
 | 8000 | for auto-ontology the generator is served as `openai/qwen3.8-27b`, 32k context | see `ontology/NOTE.md` |
 | 6333 | Qdrant | Docker |
+| 3100, 9190 | Langfuse (step 32): web UI and API; MinIO for media uploads. Its Postgres, ClickHouse and Redis are not published | `monitoring/docker-compose.yaml` |
 
 ---
 
@@ -675,6 +679,19 @@ Left to `direction` alone: `08_Juridique` and `00_Direction`, apart from the COD
 
 ---
 
+## Phase G: monitoring and conversations
+
+### ✅ Step 32. Monitoring the agent with Langfuse (branch `ops/step-32-langfuse`, not merged)
+- **Langfuse, self-hosted** (D81): `monitoring/docker-compose.yaml`, trimmed from Langfuse's own file (no AI gateway), telemetry off, sign-up off. The organisation, the project, its keys and an admin user are created at first start from `.env` (`LANGFUSE_INIT_*`), so the application's keys exist before anyone opens the UI.
+- **`tracing.py`:** `trace` (the root, user, session, tags, metadata, started from an empty OpenTelemetry context), `observe` (a child span, only inside a trace), `score`, `llm_kwargs` (Langfuse's LangChain handler for one call). Each is a no-op when the keys are empty.
+- **What is traced:** the endpoint opens one trace per request (`calorvia-sql`, `calorvia-docs` or `calorvia-both`, tags: model, stream or single, openwebui or api). In the agent: each LLM call (generation, with tokens and cache reads), each tool call (`tool` or `retriever`, the model's arguments and what came back, WARNING when refused), the grounding check (`guardrail`), and six scores in `finish`: `tool_calls`, `queries_run`, `sql_errors`, `unverified_numbers`, `grounding_retry`, `budget_spent`. Documents only: the search and the RAG's answer. Streamlit's Documents mode: its own `calorvia-docs` trace.
+- **Found:** FastAPI 0.163 opens an OpenTelemetry span per request; once Langfuse set the global tracer provider, it became the never-exported parent of every trace. Traces now start from an empty context. `get_current_trace_id()` logs an error outside a span: `active()` reads OpenTelemetry's context instead.
+- **Live:** three questions through the endpoint (CA of March, "et pour avril ?" in the same conversation, headcount in Ghent): each a trace with its generations, its SQL tool call and the check, the two CA turns in one session; the second generation read 5 507 of its 5 754 tokens from the prompt cache.
+- **Limits:** the RAG inside a documents-only answer is one generation span (its retrieval steps and workbook tool calls are not split). Deleting a stored conversation does not delete its traces. Evaluations are not traced (they are stored in PostgreSQL with their commit).
+- **Tests: 6 new** (tracing, with an in-memory exporter); 802 in all.
+
+---
+
 ## Progress log
 
 | Date | Step | What happened |
@@ -749,3 +766,4 @@ Left to `direction` alone: `08_Juridique` and `00_Direction`, apart from the COD
 | 2026-11-19 | 30 | Step 30 closed: report section written, merged into `main`, pushed |
 | 2026-11-19 | – | Step 30's configuration comments cleaned (values unchanged); `app/experiments.py`, a page comparing RAG and text-to-SQL runs (metrics per group, changed questions, settings that differ), 7 tests |
 | 2026-11-19 | – | Quiz game `app/quiz.py` (package `labo_quiz`): 259 QUIZ.md questions, 66 multiple-choice versions, 29 code & pipeline questions (order, match, choice, multi), XP, badges, scores per phase, redo of misses, pipeline map; 11 tests |
+| 2026-11-20 | 32 | Branch `ops/step-32-langfuse`: Langfuse 4.83.0 self-hosted (3100), `tracing.py`, the endpoint, the agent and Streamlit's Documents mode traced; scores per answer; quiz phase G added (code questions move to H); left unmerged |

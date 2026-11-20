@@ -226,6 +226,29 @@ docker run -d --name open-webui --network=host -e PORT=8080 \
 # http://localhost:8080 -> Admin Settings -> Connections -> OpenAI: http://127.0.0.1:9000/v1, any key in local mode
 ```
 
+## Monitoring with Langfuse (step 32)
+
+Every question the endpoint answers becomes a [Langfuse](https://langfuse.com) trace, self-hosted on this machine:
+
+```bash
+# fill the LANGFUSE_* block of .env first (see .env.example), then:
+docker compose -f monitoring/docker-compose.yaml --env-file .env up -d   # ~1 min; http://localhost:3100
+uv run python -m text2sql_calorvia.api                                   # traces as soon as both keys are set
+```
+
+Log in with `LANGFUSE_ADMIN_EMAIL` / `LANGFUSE_ADMIN_PASSWORD`: the organisation, the project and its API keys (the
+same as the application's) were created at first start. Each trace is one question: its user, its conversation (a
+Langfuse *session*, the id of `t2sql_conversations`), the commit that answered (*release*), and below it each LLM call
+(input, output, tool calls, tokens), each tool call (the model's arguments, what came back, ⚠ when refused), the
+documents found and the grounding check. Six scores per answer to chart and filter on: `tool_calls`, `queries_run`,
+`sql_errors`, `unverified_numbers`, `grounding_retry`, `budget_spent`. Streamlit's Documents mode is traced as
+`calorvia-docs`.
+
+Traces hold everything the model saw (payroll aggregates, extracts): Langfuse is published on 127.0.0.1 only, sign-up
+is off, and its telemetry is off. Tracing is off while `LANGFUSE_PUBLIC_KEY` or `LANGFUSE_SECRET_KEY` is empty; the
+tests and the evaluation scripts never trace. To stop it: the same `docker compose` command with `down` (`down -v`
+also deletes the traces).
+
 ## Phase B: the source databases
 
 ```bash
@@ -355,11 +378,13 @@ src/text2sql_calorvia/
 ├── documents.py    # step 31: the RAG in the endpoint (search_documents, documents-only mode, signed image links)
 ├── charts.py       # step 15: query results drawn as PNG charts (matplotlib)
 ├── memory.py       # step 15: conversations and learned memory in PostgreSQL
+├── tracing.py      # step 32: Langfuse traces (one per question), spans, scores; off without keys
 ├── evaluation.py   # step 14: the question set, scoring in code, the behaviour judge and its rules
 └── sql/            # catalog queries per engine, starter/ queries, log/ (query log table)
 docs/sources/       # generated schemas + NOTES.md (exploration, read-only findings, traps)
 evaluation/         # t2sql_questions.yaml: the agent's evaluation set (51 questions, reference SQL)
 ontology/           # auto-ontology: NOTE.md, certification.yaml, export/ (Ossie YAML), patches/, compose files
+monitoring/         # step 32: Langfuse's compose file (self-hosted, 127.0.0.1:3100)
 scripts/            # command-line entry points
 exclusions.toml     # hand-reviewed exclusions, with their reason
 tests/

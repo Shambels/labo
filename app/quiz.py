@@ -15,15 +15,15 @@ import pandas as pd
 import streamlit as st
 
 from labo_quiz import engine
-from labo_quiz.engine import MODES, PHASES, Progress, badges, grade, level, match_details, pick, stats
+from labo_quiz.engine import CODE_PHASE, MODES, PHASES, Progress, badges, grade, level, match_details, pick, stats
 
 st.set_page_config(page_title="Calorvia quiz", page_icon="🎓", layout="wide")
 
 # Colours: phases take the categorical slots in fixed order (always with their letter and name beside them);
 # mastery uses the status colours, always with its percentage and an icon.
 DARK = getattr(st.context.theme, "type", None) == "dark"
-PHASE_COLOR = dict(zip(PHASES, ["#3987e5", "#d95926", "#199e70", "#c98500", "#d55181", "#0ca30c", "#9085e9"] if DARK
-                       else ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#008300", "#6250d6"]))
+PHASE_COLOR = dict(zip(PHASES, ["#3987e5", "#d95926", "#199e70", "#c98500", "#d55181", "#0ca30c", "#2fa8b5", "#9085e9"] if DARK
+                       else ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#008300", "#0e8a96", "#6250d6"]))
 STATUS = {"good": "#0ca30c", "warning": "#fab219", "critical": "#d03b3b", "none": "#d9d8d3"}
 KIND = {"open": "✍️ open", "choice": "🔘 one answer", "multi": "☑️ several answers", "order": "🔢 put in order",
         "match": "🔗 match"}
@@ -44,6 +44,7 @@ NODES = {  # the pipeline map: id -> (label, cluster)
     "sources": ("Sources\nERP · compta · paie", "The databases"),
     "access": ("Access\nroles · logins · RLS · links", "Across the app"),
     "evaluation": ("Evaluation\nmetrics · judge · runs", "Across the app"),
+    "monitoring": ("Monitoring\nLangfuse traces · scores", "Across the app"),
 }
 EDGES = [("inventory", "conversion", ""), ("conversion", "chunking", ""), ("chunking", "index", ""),
          ("index", "search", ""), ("search", "rerank", "30"), ("rerank", "generation", "5"),
@@ -51,7 +52,8 @@ EDGES = [("inventory", "conversion", ""), ("conversion", "chunking", ""), ("chun
          ("agent_graph", "search", "search_documents"), ("agent_graph", "grounding", ""),
          ("agent_graph", "mcp", "tool calls"), ("mcp", "validation", ""), ("validation", "sources", "read-only"),
          ("access", "mcp", "login per role"), ("access", "search", "allowed_roles"),
-         ("evaluation", "generation", "measures"), ("evaluation", "agent_graph", "measures")]
+         ("evaluation", "generation", "measures"), ("evaluation", "agent_graph", "measures"),
+         ("monitoring", "agent_graph", "traces"), ("monitoring", "endpoint", "per user, per conversation")]
 
 
 @st.cache_data(ttl=30)
@@ -161,7 +163,7 @@ def game_builder():
 
 def header(q):
     st.markdown(chip(f"<b>{q.phase}</b> · {PHASES[q.phase][0]}", PHASE_COLOR[q.phase])
-                + chip(q.title if q.phase != "G" else NODES.get(q.node, (q.node,))[0].split("\n")[0], "#8a8a85")
+                + chip(q.title if q.phase != CODE_PHASE else NODES.get(q.node, (q.node,))[0].split("\n")[0], "#8a8a85")
                 + chip(KIND[q.kind] if not typing(q) else KIND["open"], "#8a8a85"), unsafe_allow_html=True)
     st.markdown(f"### {q.prompt}")
     if q.code:

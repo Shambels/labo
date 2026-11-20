@@ -24,7 +24,7 @@ def q(qid, kind="choice", phase="A", **kw):
 def test_every_quiz_md_question_and_every_overlay_is_loaded():
     questions = engine.load_questions()
     quiz_md = Path(engine.QUIZ_MD).read_text(encoding="utf-8").count("<summary>Answer</summary>")
-    assert sum(1 for x in questions if x.phase != "G") == quiz_md
+    assert sum(1 for x in questions if x.phase != engine.CODE_PHASE) == quiz_md
     ids = {x.id for x in questions}
     assert len(ids) == len(questions)
     import yaml
@@ -33,7 +33,7 @@ def test_every_quiz_md_question_and_every_overlay_is_loaded():
 
 
 def test_code_questions_are_well_formed():
-    for x in (x for x in engine.load_questions() if x.phase == "G"):
+    for x in (x for x in engine.load_questions() if x.phase == engine.CODE_PHASE):
         assert x.node and x.explain and x.files, x.id
         if x.kind == "order":
             assert len(x.correct) >= 3
