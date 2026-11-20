@@ -39,6 +39,7 @@ NODE_OF_STEP = {
     19: "evaluation", 20: "agent_graph", 21: "validation", 22: "grounding", 23: "evaluation", 24: "access",
     25: "access", 26: "access", 27: "access", 28: "index", 29: "access", 30: "rerank", 31: "endpoint",
     32: "monitoring",
+    33: "conversations",
 }
 POINTS = {"right": 10, "partial": 3, "wrong": 0}
 RETRY_POINTS = 5            # right after an earlier miss

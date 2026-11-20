@@ -2006,3 +2006,63 @@ FastAPI 0.16x opens an OpenTelemetry span for each request. It is a no-op until 
 
 The release lets you compare the agent before and after a change on real usage (latency, tokens, scores per commit), like experiment runs are compared per commit. The session groups the turns of one conversation, so a follow-up such as "et pour avril ?" is read with the turn it depends on. It is the same id as `t2sql_conversations`, so a trace and a stored conversation point to each other.
 </details>
+
+---
+
+## Step 33: conversations the user manages
+
+**1.** The endpoint already saved every turn since step 15. What was missing for a user to "store and manage" conversations, and what was added?
+
+<details><summary>Answer</summary>
+
+Saving was there; managing was not. The routes could list and read, nothing else, and the Streamlit chat kept its history in the browser session only (lost on reload) and never saved its Documents turns. Added: list with search and archives, resume (any mode, the turns shown again with their extracts, charts and images), rename, archive and restore, compaction, Markdown export; in the Streamlit sidebar and as endpoint routes (PATCH, POST compact, GET export).
+</details>
+
+**2.** Why archive a conversation (`archived_at`) instead of deleting it, and what does that leave unsolved?
+
+<details><summary>Answer</summary>
+
+Your decision, in line with "forget" for memories (D63): what was asked and answered stays traceable, and a mistaken archive can be undone (the Archives view, or simply asking a new question in it). What it leaves open: a user who wants their data erased (GDPR right to erasure) has no way to do it themselves. The query log (`t2sql_query_log`) and Langfuse traces keep the questions anyway, so a real erasure would have to cover all three.
+</details>
+
+**3.** Compaction keeps every message in the database and in the export. What exactly changes, and for whom?
+
+<details><summary>Answer</summary>
+
+Only what the agent reads. When the next question arrives, the endpoint replaces the turns the summary covers with two messages ("Résume nos échanges précédents." and the summary), and keeps the last turns word for word. The user still sees and exports everything; the summary is shown under the conversation's settings, with how many messages it stands for. The point is the 32k context: every earlier answer, queries included, is sent again with each question.
+</details>
+
+**4.** Why must the summary pass a check before it is stored, and which check?
+
+<details><summary>Answer</summary>
+
+The summary is model output that will be read as conversation history, and the grounding check (D54, D71) accepts the conversation's numbers as evidence. A figure invented or mistyped in the summary would become "known" to every later answer, and the check would let it through. So the agent's own check (`ungrounded`) is run on the summary against the turns it summarizes: one retry naming the unfound figures, then the compaction is refused and nothing is stored. Like the agent's check, it accepts a sum or difference of two known figures.
+</details>
+
+**5.** The endpoint applies a summary only when the client's history is the stored one (same questions, in order). Why this condition?
+
+<details><summary>Answer</summary>
+
+The client sends the whole history each time, and it may not be the stored one: Open WebUI lets a user edit an earlier question or regenerate an answer. Replacing the first N messages of a different history by a summary of the stored ones would make the agent read a past that never happened. When the questions differ, the history goes to the agent as sent, which is always valid, only longer.
+</details>
+
+**6.** Every change (rename, archive, compact, export) names the user, also in local mode, while reading a conversation back does not in local mode. Why the difference?
+
+<details><summary>Answer</summary>
+
+Reading in local mode was already open (step 15): on loopback with no keys, anyone on the machine is trusted to read. Changing is new, so it follows the stricter rule: the SQL itself has `AND user_name = %s`, so an id alone changes nothing, and the routes answer 404 for someone else's conversation, the same answer as for an unknown id, so ids can't be probed. With keys, the user is the key's name and can't be chosen.
+</details>
+
+**7.** Streamlit's Documents mode now saves its turns with the extracts in the step (`mode: "Documents"`, `context`). What would be lost without them?
+
+<details><summary>Answer</summary>
+
+A resumed conversation could show only the answer text: not the extracts under it, nor the cited images, which `answer_images` finds from the answer's citations [1], [2] and the context. These are what the reader uses to check an answer (the RAG's rule: check a value read from an image before reusing it). The agent's turns don't need this: their answer already holds the queries and the cited documents, and the chart and image links are renewed on reading, as by the endpoint's read route.
+</details>
+
+**8.** A conversation is a Streamlit id (`st-…`) sent as `X-Conversation-Id`. What does that make possible, compared with the id hidden in an answer (`<!-- calorvia:conversation=… -->`)?
+
+<details><summary>Answer</summary>
+
+A conversation that mixes modes: a Documents turn saved by Streamlit itself, then a database turn saved by the endpoint, under the same id, because the client names it from the start. The hidden marker only works once the endpoint has answered and the client sends that answer back unchanged. The header is checked like the marker: someone else's id starts a new conversation.
+</details>

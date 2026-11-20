@@ -467,3 +467,34 @@ questions:
     explain: >-
       Streamlit's Documents mode opens its own trace (calorvia-docs); streaming or not, with keys or not, the endpoint
       traces every question. Monitoring is never a dependency of the answer.
+
+  # --- conversations (step 33) --------------------------------------------------------------------------------------
+  - id: code-compact-order
+    node: conversations
+    type: order
+    prompt: Put compaction in order, from the button to the next answer.
+    steps:
+      - "owned(): the conversation must be the user's"
+      - "cut: every message but the last keep_turns turns, never between a question and its answer"
+      - "transcript(): the earlier summary, then the turns, answers with their queries as a note"
+      - "llm_summary(), then ungrounded() on the summary against that transcript (one retry)"
+      - "set_summary(): the summary and how many messages it covers"
+      - "next question: with_summary() swaps the covered turns for the summary, if the history is the stored one"
+    files: [src/text2sql_calorvia/conversations.py, src/text2sql_calorvia/api.py]
+    explain: >-
+      The messages are never changed: only set_summary writes, and only what the agent reads is shortened. A summary
+      that keeps a figure the turns don't have is refused and nothing is stored.
+
+  - id: code-conversation-routes
+    node: conversations
+    type: match
+    prompt: Match each endpoint route of step 33 to what it does.
+    pairs:
+      - ["GET /v1/conversations?archived=true&q=avril", "the user's archived conversations whose title or a message contains « avril »"]
+      - ["PATCH /v1/conversations/<id>", "rename, archive or restore"]
+      - ["POST /v1/conversations/<id>/compact", "summarize the earlier turns for the agent (409 if nothing to compact)"]
+      - ["GET /v1/conversations/<id>/export", "the whole conversation as a Markdown file, charts named"]
+    files: [src/text2sql_calorvia/api.py, src/text2sql_calorvia/memory.py]
+    explain: >-
+      Every change names its owner (404 otherwise, as for an unknown id); a new question in an archived conversation
+      brings it back (touch_conversation).

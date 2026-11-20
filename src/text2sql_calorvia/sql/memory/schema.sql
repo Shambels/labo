@@ -26,3 +26,13 @@ CREATE TABLE IF NOT EXISTS t2sql_memory (
     created_at       TIMESTAMPTZ NOT NULL DEFAULT now(),
     active           BOOLEAN NOT NULL DEFAULT true   -- forget = deactivate: what was learned stays traceable
 );
+
+-- Step 33: conversations the user manages. Archived, never deleted (like a forgotten memory): archived_at set, the
+-- messages kept. A compacted conversation keeps every message; its summary replaces the first summary_messages ones
+-- in what the agent reads.
+ALTER TABLE t2sql_conversations ADD COLUMN IF NOT EXISTS archived_at TIMESTAMPTZ;
+ALTER TABLE t2sql_conversations ADD COLUMN IF NOT EXISTS summary TEXT;
+ALTER TABLE t2sql_conversations ADD COLUMN IF NOT EXISTS summary_messages INTEGER NOT NULL DEFAULT 0;
+ALTER TABLE t2sql_conversations ADD COLUMN IF NOT EXISTS compacted_at TIMESTAMPTZ;
+CREATE INDEX IF NOT EXISTS t2sql_conversations_user ON t2sql_conversations (user_name, updated_at DESC);
+CREATE INDEX IF NOT EXISTS t2sql_messages_conversation ON t2sql_messages (conversation_id, id);

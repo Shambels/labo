@@ -8,6 +8,9 @@
   (`forget`: deactivated, not deleted). Put in the system prompt as *data*: a stored memory must never become a
   lasting instruction that lifts a rule (read-only access, payroll privacy) — a memory is a prompt injection that
   would survive the conversation.
+- **Managing conversations** (step 33): rename, archive and restore (never delete: the messages stay, as a forgotten
+  memory does), search the titles and messages, and the summary that compaction stores (conversations.py). Every
+  change names the user: a conversation id alone changes nothing.
 """
 import json
 from functools import cache
@@ -19,6 +22,7 @@ from text2sql_calorvia.sources import load_sql
 
 KINDS = ("preference", "definition", "query")
 MAX_CONTENT = 1000
+MAX_TITLE = 200
 
 
 def connect():
@@ -42,12 +46,61 @@ def save_turn(conversation_id: str, user: str, question: str, answer: str, steps
         db.execute(load_sql("memory/touch_conversation"), (conversation_id,))
 
 
-def conversations(user: str, limit: int = 50) -> list[dict]:
+def like_pattern(text: str) -> str:
+    """A search text as an ILIKE pattern that matches it literally anywhere: its own % and _ are escaped."""
+    return "%" + text.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_") + "%"
+
+
+def conversations(user: str, limit: int = 50, archived: bool = False, search: str | None = None) -> list[dict]:
+    """The user's conversations, newest first: the active ones, or the archived ones; optionally only those whose
+    title or a message contains `search` (case-insensitive)."""
+    ensure_schema()
+    search = (search or "").strip()
+    with connect() as db:
+        rows = db.execute(load_sql("memory/conversations"), {
+            "user": user, "archived": archived, "limit": limit,
+            "pattern": like_pattern(search) if search else None}).fetchall()
+    return [{"id": i, "title": t, "created_at": c.isoformat(), "updated_at": u.isoformat(), "messages": n,
+             "archived": a is not None, "compacted": k is not None}
+            for i, t, c, u, n, a, k in rows]
+
+
+def conversation_info(conversation_id: str) -> dict | None:
+    """A conversation's row: owner, title, dates, and its summary if it was compacted."""
     ensure_schema()
     with connect() as db:
-        rows = db.execute(load_sql("memory/conversations"), (user, limit)).fetchall()
-    return [{"id": i, "title": t, "created_at": c.isoformat(), "updated_at": u.isoformat(), "messages": n}
-            for i, t, c, u, n in rows]
+        row = db.execute(load_sql("memory/conversation_info"), (conversation_id,)).fetchone()
+    if row is None:
+        return None
+    i, user, title, created, updated, archived, summary, covered, compacted = row
+    return {"id": i, "user": user, "title": title, "created_at": created.isoformat(), "updated_at": updated.isoformat(),
+            "archived": archived is not None, "summary": summary, "summary_messages": covered,
+            "compacted_at": compacted.isoformat() if compacted else None}
+
+
+def rename(conversation_id: str, user: str, title: str) -> bool:
+    title = " ".join((title or "").split())
+    if not title:
+        raise ValueError("Titre vide.")
+    ensure_schema()
+    with connect() as db:
+        return db.execute(load_sql("memory/rename"), (title[:MAX_TITLE], conversation_id, user)).fetchone() is not None
+
+
+def archive(conversation_id: str, user: str, archived: bool = True) -> bool:
+    """Into the archives (hidden from the list, every message kept) or back out; False if not the user's."""
+    ensure_schema()
+    with connect() as db:
+        return db.execute(load_sql("memory/archive"),
+                          {"archived": archived, "id": conversation_id, "user": user}).fetchone() is not None
+
+
+def set_summary(conversation_id: str, user: str, summary: str, covered: int) -> bool:
+    """Store a compaction: `summary` stands for the first `covered` messages when the agent reads the history."""
+    ensure_schema()
+    with connect() as db:
+        return db.execute(load_sql("memory/set_summary"),
+                          (summary, covered, conversation_id, user)).fetchone() is not None
 
 
 def conversation(conversation_id: str) -> list[dict]:
