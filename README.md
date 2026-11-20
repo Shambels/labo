@@ -226,6 +226,28 @@ docker run -d --name open-webui --network=host -e PORT=8080 \
 # http://localhost:8080 -> Admin Settings -> Connections -> OpenAI: http://127.0.0.1:9000/v1, any key in local mode
 ```
 
+## Managing conversations (step 33)
+
+Every conversation is kept in PostgreSQL, whatever the mode. In Streamlit (`uv run streamlit run app/chat.py`), the
+sidebar's **Conversations**: ➕ a new one, a search over titles and messages, the **Archives** toggle, and the list (a
+click reopens one, to go on in any mode). Under the title, **⚙️** renames, archives or restores, **compacts** (the
+earlier turns summarized for the agent; every message is kept and shown) and **exports** as Markdown.
+
+The same for any client of the endpoint:
+
+```bash
+curl -s "localhost:9000/v1/conversations?user=alice&q=avril"                      # search (archived=true: the archives)
+curl -s -X PATCH "localhost:9000/v1/conversations/<id>?user=alice" -H 'Content-Type: application/json' \
+  -d '{"title": "CA 2026", "archived": true}'                                     # rename, archive (false: restore)
+curl -s -X POST "localhost:9000/v1/conversations/<id>/compact?user=alice" -H 'Content-Type: application/json' \
+  -d '{"keep_turns": 2}'                                                          # needs the generator on 8000
+curl -s "localhost:9000/v1/conversations/<id>/export?user=alice" -o conversation.md
+```
+
+With `API_KEYS`, the user is the key's name and `user=` is ignored. Archiving never deletes: a new question in an
+archived conversation brings it back. Compaction keeps the last 2 turns word for word and refuses a summary holding a
+figure the conversation doesn't have.
+
 ## Phase B: the source databases
 
 ```bash
@@ -354,7 +376,8 @@ src/text2sql_calorvia/
 ├── api.py          # the OpenAI-compatible endpoint (FastAPI): /v1/models, /v1/chat/completions, streaming
 ├── documents.py    # step 31: the RAG in the endpoint (search_documents, documents-only mode, signed image links)
 ├── charts.py       # step 15: query results drawn as PNG charts (matplotlib)
-├── memory.py       # step 15: conversations and learned memory in PostgreSQL
+├── memory.py       # step 15: conversations and learned memory in PostgreSQL; step 33: search, rename, archive
+├── conversations.py  # step 33: compaction (summary checked like an answer), Markdown export
 ├── evaluation.py   # step 14: the question set, scoring in code, the behaviour judge and its rules
 └── sql/            # catalog queries per engine, starter/ queries, log/ (query log table)
 docs/sources/       # generated schemas + NOTES.md (exploration, read-only findings, traps)

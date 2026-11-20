@@ -9,6 +9,8 @@ Two chatbots for the fictional company **Calorvia SA**, built one after the othe
 | **C. Improvements** | Both chatbots: what the two reports left open | This roadmap |
 | **D. Role-based access** | Who may see which tables, rows and documents | This roadmap |
 | **E. RAG experiments** | Ideas left open by the RAG report | This roadmap |
+| **F. One chat** | Both chatbots behind one endpoint | This roadmap |
+| **G. Monitoring and conversations** | Langfuse traces; conversations users can manage | This roadmap |
 
 Companion file: `QUIZ.md` (one quiz per step, answers collapsed).
 
@@ -99,6 +101,7 @@ Companion file: `QUIZ.md` (one quiz per step, answers collapsed).
 | D78 | Proving access | Random marker rows planted per kind of data, expected readers computed from the policy alone, checked in both directions, then removed with row counts compared. Evaluation per role: a query on a table outside the role is always a leak; a matching figure is only a flag, read by hand and recorded. Chart links signed, valid 24 hours | Trusting the unit tests; judging leaks from figures alone, since a role can reach the same number from its own tables |
 | D79 | One chat | The agent's endpoint serves three models, the model being the toggle: `calorvia-sql` (the agent; `calorvia-agent` kept as an alias), `calorvia-docs` (the RAG of phase A, called directly), `calorvia-both` (the agent with `search_documents`, retrieval only). A `sources` field may replace the model. Extracts are numbered D1, D2… per question and are evidence for the grounding check; cited images are served from signed, expiring links. Same role for documents and databases | A RAG answer pasted next to an agent answer can't compare the two sources; giving the agent the documents can. Documents-only stays the measured system of phase A instead of a new, unmeasured agent |
 | D80 | RAG configuration in use | `markdown_tables` (translation on demand, window 10, and Docling tables as Markdown) replaces `status_filter` in the chat, the agent's endpoint and the access proof, through `settings.final_config` (`FINAL_CONFIG`). Step 9's evaluation and exports stay those of `status_filter` | Same recall on French questions by construction, one question better answered (Q087) and four better ranked, +0.44 s on average (27 of 127 questions translated). Window 10 rather than 5: the same dev results, and a rephrased Q024 put the Dutch contract 8th in French. Not confirmed on unseen questions: the test set was used in step 9 |
+| D82 | Managing conversations | Listed, searched (title and messages), resumed in any mode, renamed, **archived, never deleted** (restorable; a new question restores), exported as Markdown, and **compacted**: an LLM summary of every turn but the last 2, stored with how many messages it covers; the endpoint gives it to the agent in place of those turns when the client's history is the stored one. A summary keeping a figure the turns don't have is retried once, then refused. Every change names the user, in the SQL; 404 for another's conversation | Your choices (archive, an Archives view, a manual compaction). Archiving keeps what was asked traceable, like forgetting a memory (D63). The summary will be read as history, whose numbers the grounding check accepts: it is checked the same way. A client's edited history is not the stored one: it is sent as is |
 | D9 | Porting strategy | Port each hospital_rag module **in the step that needs it** (step 0: config, db, logs; step 3: evaluation; step 4: ETL and RAG) | Nothing unused or untested sits in the repo |
 
 ### Open decisions (to settle with you when we reach them)
@@ -111,7 +114,7 @@ Companion file: `QUIZ.md` (one quiz per step, answers collapsed).
 
 ## Working conventions
 
-- **One step = one branch** (`rag/step-03-eval`), small commits in English imperative mood, merged into `main` when the step is measured.
+- **One step = one branch** (`rag/step-03-eval`), small commits in English imperative mood, merged into `main` when the step is measured. **Since 2026-11-20 (step 32 on), branches are left unmerged: you review and merge them.**
 - **A baseline first, then one change at a time.** Every experiment is a TOML file in `experiments/`, every run is stored in PostgreSQL **with its git commit** (`git_dirty = false` for anything that goes in the report).
 - **Dev/test split:** the 31 questions whose number is a multiple of 5 are the held-out test set. We never look at them before step 9. The eval set measures, it never builds: no expected answer in a prompt, no rule written for one question.
 - At the end of each step: update this roadmap (status, notes, results) and add the step's quiz to `QUIZ.md`.
@@ -675,6 +678,20 @@ Left to `direction` alone: `08_Juridique` and `00_Direction`, apart from the COD
 
 ---
 
+## Phase G: monitoring and conversations
+
+### ✅ Step 33. Conversations the user manages (branch `chat/step-33-conversations`, not merged)
+- **Storage** (`memory.py`, `sql/memory/`): `archived_at`, `summary`, `summary_messages`, `compacted_at` on `t2sql_conversations` (added by `ensure_schema`, idempotent), two indexes. `conversations()` lists active or archived ones, with a search over titles and messages (ILIKE, the search text's own `%` and `_` escaped); `rename`, `archive` (true or false), `set_summary`, each with `AND user_name = %s`. A new turn moves the conversation to the top and out of the archives.
+- **`conversations.py`:** `export_markdown` (every message; step fold-outs, the id marker and expiring image links removed, charts named), `compact` (all but the last 2 turns, in pairs, an earlier summary folded in; the summary checked with `ungrounded` against the summarized turns, one retry, else refused), `with_summary` (applied only when the client's questions are the stored ones), `prompts/compact.txt`.
+- **Endpoint:** `GET /v1/conversations` takes `archived` and `q`; `GET /v1/conversations/<id>` adds title, archived, summary; `PATCH` renames, archives, restores; `POST …/compact` (409 when nothing to compact or the summary is refused); `GET …/export` (Markdown). 404 for another user's conversation. The chat route reads the summary in place of the covered turns (not in documents-only mode, which reads the question only).
+- **Streamlit:** a "Conversations" sidebar (new, search, Archives toggle, the list; a click reopens one), and under the title a panel to rename, archive or restore, compact (with the history's weight in tokens against the 32k context) and export. Documents turns are now saved, their extracts in the step, so they show again with extracts and images; agent turns get fresh chart links. The conversation id is sent as `X-Conversation-Id`, so one conversation can mix modes.
+- **Live:** a three-turn conversation (CA of March, April, the largest site), compacted with `keep_turns=1` in 15 s: both figures and both SQL queries kept word for word, the check passed. Then "quel est l'écart entre mars et avril, en pourcentage ?" answered −11,03 % (13 599 646,63 → 12 099 823,09 €) from the summary.
+- **Found:** the `default` user's list holds Open WebUI's background requests ("### Task: …" follow-up suggestions, titles), saved as conversations since step 15. Not filtered: to decide with you.
+- **Limits:** no erasure (your choice: archive only); the query log and the traces keep the questions anyway. Compaction is manual. A summary may keep a sum or difference of two figures (the check allows them, as for answers).
+- **Tests: 14 new** (conversations: storage, routes, the summary in the agent's history, the chat page); 810 in all.
+
+---
+
 ## Progress log
 
 | Date | Step | What happened |
@@ -749,3 +766,4 @@ Left to `direction` alone: `08_Juridique` and `00_Direction`, apart from the COD
 | 2026-11-19 | 30 | Step 30 closed: report section written, merged into `main`, pushed |
 | 2026-11-19 | – | Step 30's configuration comments cleaned (values unchanged); `app/experiments.py`, a page comparing RAG and text-to-SQL runs (metrics per group, changed questions, settings that differ), 7 tests |
 | 2026-11-19 | – | Quiz game `app/quiz.py` (package `labo_quiz`): 259 QUIZ.md questions, 66 multiple-choice versions, 29 code & pipeline questions (order, match, choice, multi), XP, badges, scores per phase, redo of misses, pipeline map; 11 tests |
+| 2026-11-20 | 33 | Branch `chat/step-33-conversations` (from `main`, independent of step 32): search, resume, rename, archive/restore, compaction checked like an answer, Markdown export; routes and Streamlit sidebar; quiz phase G added (code questions move to H); left unmerged |

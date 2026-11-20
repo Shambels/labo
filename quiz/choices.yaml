@@ -463,3 +463,31 @@ step-30-q10:
     - The PDF had no text layer, so OCR dropped the first row.
     - The chunker cut the table after its first row.
     - Markdown escaping removed the parentheses and the label.
+
+step-33-q2:
+  correct: "Earlier messages stay traceable and a mistaken archive can be undone; but a user cannot erase their data themselves, and the query log and traces keep the questions anyway."
+  wrong:
+    - Deleting rows in PostgreSQL is not possible with ON DELETE CASCADE.
+    - Archived conversations are cheaper to store than active ones.
+    - The agent needs every past conversation to answer.
+
+step-33-q3:
+  correct: "Only what the agent reads: the covered turns are replaced by the summary at the next question; the user still sees and exports every message."
+  wrong:
+    - The covered messages are deleted from PostgreSQL to free space.
+    - The summary is shown to the user instead of the messages.
+    - Open WebUI's copy of the conversation is rewritten.
+
+step-33-q4:
+  correct: "The summary will be read as history, whose numbers the grounding check accepts as evidence; so ungrounded() checks it against the summarized turns, with one retry, then refusal."
+  wrong:
+    - The summary is checked by the judge model (Gemma) for faithfulness.
+    - Summaries are never checked; the prompt forbids inventing.
+    - The summary's SQL is executed again to confirm each figure.
+
+step-33-q5:
+  correct: "A client may send an edited or regenerated history; replacing its first messages with a summary of the stored ones would give the agent a past that never happened."
+  wrong:
+    - Comparing questions is faster than counting messages.
+    - The summary cannot be applied to streaming requests.
+    - Open WebUI refuses histories that start with an assistant message.
