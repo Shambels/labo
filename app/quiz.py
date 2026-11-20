@@ -22,8 +22,9 @@ st.set_page_config(page_title="Calorvia quiz", page_icon="🎓", layout="wide")
 # Colours: phases take the categorical slots in fixed order (always with their letter and name beside them);
 # mastery uses the status colours, always with its percentage and an icon.
 DARK = getattr(st.context.theme, "type", None) == "dark"
-PHASE_COLOR = dict(zip(PHASES, ["#3987e5", "#d95926", "#199e70", "#c98500", "#d55181", "#0ca30c", "#2fa8b5", "#9085e9"] if DARK
-                       else ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#008300", "#0e8a96", "#6250d6"]))
+PHASE_COLOR = dict(zip(PHASES, ["#3987e5", "#d95926", "#199e70", "#c98500", "#d55181", "#0ca30c", "#2fa8b5", "#b07d3a", "#9085e9"] if DARK
+                       else ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#008300", "#0e8a96", "#8f5e1f",
+                             "#6250d6"]))
 STATUS = {"good": "#0ca30c", "warning": "#fab219", "critical": "#d03b3b", "none": "#d9d8d3"}
 KIND = {"open": "✍️ open", "choice": "🔘 one answer", "multi": "☑️ several answers", "order": "🔢 put in order",
         "match": "🔗 match"}

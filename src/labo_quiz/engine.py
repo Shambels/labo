@@ -3,7 +3,7 @@
 Questions come from three files, so the quiz grows with the project without code changes:
 - QUIZ.md: every step's open questions and their answers (the source of truth, written step by step);
 - quiz/choices.yaml: a multiple-choice version of the questions whose answers are too long to type;
-- quiz/code.yaml: phase H, the code and the flow of the app (ordering, matching, single and multiple choice).
+- quiz/code.yaml: phase Z, the code and the flow of the app (ordering, matching, single and multiple choice).
 
 Progress is a JSON file (data/quiz/progress.json, git-ignored): each question's best and latest result, attempts,
 the XP, the streak and the history. XP is only won when a question's best result improves, so replaying a known
@@ -28,9 +28,10 @@ PROGRESS = ROOT / "data" / "quiz" / "progress.json"
 PHASES = {
     "A": ("RAG", -1, 9), "B": ("Text-to-SQL agent", 10, 17), "C": ("Improvements", 18, 24),
     "D": ("Role-based access", 25, 29), "E": ("RAG experiments", 30, 30), "F": ("One chat", 31, 31),
-    "G": ("Monitoring & conversations", 32, 33), "H": ("Code & pipeline", None, None),
+    "G": ("Monitoring & conversations", 32, 33), "H": ("Fixing the judged errors", 34, 36),
+    "Z": ("Code & pipeline", None, None),
 }
-CODE_PHASE = "H"            # quiz/code.yaml's questions: about the app as it is, not about one step
+CODE_PHASE = "Z"            # quiz/code.yaml's questions: about the app as it is, not about one step
 # The part of the app each step is mostly about, for the pipeline map (None: about the project as a whole)
 NODE_OF_STEP = {
     -1: None, 0: None, 1: "inventory", 2: "inventory", 3: "evaluation", 4: "generation", 5: "search",
@@ -39,7 +40,7 @@ NODE_OF_STEP = {
     19: "evaluation", 20: "agent_graph", 21: "validation", 22: "grounding", 23: "evaluation", 24: "access",
     25: "access", 26: "access", 27: "access", 28: "index", 29: "access", 30: "rerank", 31: "endpoint",
     32: "monitoring",
-    33: "conversations",
+    33: "conversations", 34: "chunking", 35: "conversion", 36: "rerank",
 }
 POINTS = {"right": 10, "partial": 3, "wrong": 0}
 RETRY_POINTS = 5            # right after an earlier miss

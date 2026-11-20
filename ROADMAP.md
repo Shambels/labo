@@ -11,6 +11,7 @@ Two chatbots for the fictional company **Calorvia SA**, built one after the othe
 | **E. RAG experiments** | Ideas left open by the RAG report | This roadmap |
 | **F. One chat** | Both chatbots behind one endpoint | This roadmap |
 | **G. Monitoring and conversations** | Langfuse traces; conversations users can manage | This roadmap |
+| **H. Fixing the judged errors** | The wrong answers of the RAG in use, one cause per step | This roadmap |
 
 Companion file: `QUIZ.md` (one quiz per step, answers collapsed).
 
@@ -103,6 +104,7 @@ Companion file: `QUIZ.md` (one quiz per step, answers collapsed).
 | D80 | RAG configuration in use | `markdown_tables` (translation on demand, window 10, and Docling tables as Markdown) replaces `status_filter` in the chat, the agent's endpoint and the access proof, through `settings.final_config` (`FINAL_CONFIG`). Step 9's evaluation and exports stay those of `status_filter` | Same recall on French questions by construction, one question better answered (Q087) and four better ranked, +0.44 s on average (27 of 127 questions translated). Window 10 rather than 5: the same dev results, and a rephrased Q024 put the Dutch contract 8th in French. Not confirmed on unseen questions: the test set was used in step 9 |
 | D81 | Monitoring | Langfuse **self-hosted** (`monitoring/docker-compose.yaml`, v4.83.0 pinned, 127.0.0.1 only: UI and API on 3100, MinIO on 9190), traces with **full content** (prompts, tool arguments, the rows the model saw, extracts). One trace per question, opened by the endpoint (and by Streamlit's Documents mode): user, session = conversation id, release = commit. LLM calls traced by Langfuse's LangChain handler given **per call**, tool calls, searches and the grounding check by the agent's own spans; six scores per answer. Off while a key is empty; nothing traced outside a trace (evaluations) or in tests | Traces hold payroll aggregates and documents: they stay on this machine (D66). A handler on the graph would copy the whole state, every row included, into every node's span. The role token never enters a trace: spans record the model's arguments, before the agent adds its own |
 | D82 | Managing conversations | Listed, searched (title and messages), resumed in any mode, renamed, **archived, never deleted** (restorable; a new question restores), exported as Markdown, and **compacted**: an LLM summary of every turn but the last 2, stored with how many messages it covers; the endpoint gives it to the agent in place of those turns when the client's history is the stored one. A summary keeping a figure the turns don't have is retried once, then refused. Every change names the user, in the SQL; 404 for another's conversation | Your choices (archive, an Archives view, a manual compaction). Archiving keeps what was asked traceable, like forgetting a memory (D63). The summary will be read as history, whose numbers the grounding check accepts: it is checked the same way. A client's edited history is not the stored one: it is sent as is |
+| D83 | Who wrote a document | `[chunking] issuer = true`: "Calorvia SA" after the label of Calorvia's own documents in the context line; none for suppliers' quotes, invoices, delivery notes, certificates, contracts and ERP vendors' documents. The terms of sale get their own type (they were "Tarif") | The reranker matches words: "les conditions de paiement de Calorvia" scored a supplier's offer addressed to Calorvia SA with a "Conditions de paiement" row 0.77, and Calorvia's terms, which name neither, 0.019 (Q077); with the issuer 0.973. The type alone: 0.025 |
 | D9 | Porting strategy | Port each hospital_rag module **in the step that needs it** (step 0: config, db, logs; step 3: evaluation; step 4: ETL and RAG) | Nothing unused or untested sits in the repo |
 
 ### Open decisions (to settle with you when we reach them)
@@ -704,6 +706,26 @@ Left to `direction` alone: `08_Juridique` and `00_Direction`, apart from the COD
 
 ---
 
+## Phase H: fixing the judged errors
+
+`markdown_tables` (run 156) was judged on all 127 dev questions on 2026-11-20 (until then on 47): 77 right, 45 partly
+right, 5 wrong (correctness below 0.5). Checked against the documents: Q034, Q077 and Q008 really are wrong, each for
+its own reason (one step each, measured against run 156, one change each); Q107 is an ambiguous question ("première
+cause": the main one, or the earliest?), and a rule written for it would be one written for a dev question; Q139 is a
+judge error (the answer matches the image; the judge invented a "2025 vs 2026" contradiction). Each step's run is
+judged on the same 127 questions. None is made the configuration in use here: that is your call (`FINAL_CONFIG`).
+
+### ✅ Step 34. Who wrote a document, in its context line (branch `rag/step-34-issuer`, not merged)
+- **Cause (Q077, "Quelles sont les conditions de paiement de Calorvia ?"):** the search found the terms of sale (rank 10 of 30); the reranker put them 20th (0.019) behind three supplier offers (0.76), addressed "à … Calorvia SA" with a "Conditions de paiement" row. The terms' chunk says "3. Paiement Les factures sont payables à 30 jours fin de mois…": neither "conditions de paiement" nor "Calorvia". Scored by hand: type corrected 0.025, issuer named 0.963 to 0.973 (three wordings), and Q061 (the warranty, same document) 0.942 → 0.999.
+- **Change** (D83): `metadata.issuer()` and `EXTERNAL_TYPES`; `context_line(document, with_issuer)`; a `terms_of_sale` type ("Conditions générales de vente"); `experiments/issuer.toml` = `markdown_tables` + `issuer = true` (collection `…__issuer…`).
+- **Registry:** the new type is written by `scripts/inventory.py`. The registry is shared by every branch: it was run again with `main`'s code before the other steps' runs. **After merging, run `uv run python scripts/inventory.py`**; the in-use index is then rebuilt with the new label the next time it is indexed.
+- **Run 172** (commit `1a649e3`, 8 min) against 156: recall@5 0.951 → 0.947, MRR 0.873 → **0.890**, trap rate 0.353 → 0.412 (one of 17 trap questions: Q099 now has the 2023 policy in its top 5, its answer still right), Q133 and Q113 lose evidence with right answers.
+- **Judged on 127:** Q077 **0.0 → 1.0** ("payables à 30 jours fin de mois… 8 % l'an… minimum de 75 €"); mean correctness 0.821 → 0.823; Q147 1.0 → 0.7, Q061 0.5 → 0.4; wrong 5 → 7 by moves of 0.1 across the 0.5 line.
+- **Side effect:** for a question naming "Calorvia", many chunks now score 1.0 (Q133's whole top 5): the reranker can no longer tell them apart, and their order is left to chance. A cost to watch before adopting it.
+- **Tests: 2 new** (818 in all).
+
+---
+
 ## Progress log
 
 | Date | Step | What happened |
@@ -781,3 +803,4 @@ Left to `direction` alone: `08_Juridique` and `00_Direction`, apart from the COD
 | 2026-11-20 | 32 | Branch `ops/step-32-langfuse`: Langfuse 4.83.0 self-hosted (3100), `tracing.py`, the endpoint, the agent and Streamlit's Documents mode traced; scores per answer; quiz phase G added (code questions move to H); left unmerged |
 | 2026-11-20 | 33 | Branch `chat/step-33-conversations` (from `main`, independent of step 32): search, resume, rename, archive/restore, compaction checked like an answer, Markdown export; routes and Streamlit sidebar; quiz phase G added (code questions move to H); left unmerged |
 | 2026-11-20 | – | Steps 32 and 33 merged into `main` (your request), conflicts resolved (docs side by side; Streamlit's Documents turns traced and saved under one id), pushed |
+| 2026-11-20 | 34 | Branch `rag/step-34-issuer`: "Calorvia SA" in the context line of its own documents, terms of sale typed; run 172 judged on 127: Q077 0 → 1, mean 0.821 → 0.823, MRR 0.873 → 0.890, trap rate 0.353 → 0.412; left unmerged |

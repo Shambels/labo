@@ -519,3 +519,17 @@ step-33-q5:
     - Comparing questions is faster than counting messages.
     - The summary cannot be applied to streaming requests.
     - Open WebUI refuses histories that start with an assistant message.
+
+step-34-q1:
+  correct: "At the reranker: it rewards words shared with the question, and the supplier offers say \"Calorvia SA\" and \"Conditions de paiement\" while Calorvia's terms say neither."
+  wrong:
+    - "At the search: the terms of sale were not among the 30 candidates."
+    - "At generation: the model preferred the longer extract."
+    - "At indexing: the terms of sale were excluded as a price list."
+
+step-34-q3:
+  correct: "Suppliers' texts would claim to be Calorvia's, so \"les conditions de paiement de Calorvia\" would match a supplier's terms just as well: the confusion being fixed."
+  wrong:
+    - "The context line would pass the chunk's token budget."
+    - "BM25 ignores words that appear in every document."
+    - "The reranker cannot read company names."

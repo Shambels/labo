@@ -108,6 +108,7 @@ uv run python scripts/report.py baseline no_context_line__retrieval  # per quest
 uv run python scripts/ask.py "Quand le nouvel ERP démarre-t-il ?"   # one question, its chunks, and the images it cites
 uv run python scripts/compare_ocr.py   # Docling OCR vs the VLM on the scanned PDFs (step 7)
 uv run python scripts/run_experiment.py experiments/status_filter.toml --test  # the final config, once, on the 31 held-out questions
+uv run python scripts/run_experiment.py experiments/issuer.toml   # step 34: "Calorvia SA" in the context line (after scripts/inventory.py)
 uv run python scripts/export_results.py --final status_filter                  # results/*.csv
 uv run streamlit run app/chat.py      # chat with the final configuration: answer, extracts, cited images, SQL
 ```
