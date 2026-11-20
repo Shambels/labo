@@ -40,3 +40,10 @@ def forget_payroll_queries():
     """The server's memory of payroll aggregates (overlap.py) must not carry from one test to the next."""
     from text2sql_calorvia.overlap import guard
     guard.clear()
+
+
+@pytest.fixture(autouse=True)
+def no_tracing(monkeypatch):
+    """Tests never send traces to Langfuse, even with its keys in .env (step 32); test_tracing.py records them."""
+    from text2sql_calorvia import tracing
+    monkeypatch.setattr(tracing, "client", lambda: None)

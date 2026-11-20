@@ -1946,3 +1946,63 @@ So that the answer quotes the document as written: figures, names and terms come
 
 The generator reads the whole top 5, not only the first chunk. With translation on demand the right Dutch chunks were already inside the top 5, just lower; moving them to rank 1 changes MRR, not what the generator reads. Retrieval metrics measure order; the answer depends on presence. That is why changes are judged on answers before being adopted.
 </details>
+
+---
+
+## Step 32: monitoring the agent with Langfuse
+
+**1.** The chat's answers were already saved in PostgreSQL (`t2sql_messages`, with the steps) and every query in `t2sql_query_log`. What does Langfuse show that those tables don't?
+
+<details><summary>Answer</summary>
+
+What the model saw and did between the question and the answer: each LLM call with its full input (system prompt, history, tool results as the model received them), its output and tool calls, token counts and latency; each tool call with its arguments and what came back; the grounding check's verdict. All in one tree per question, grouped by user and conversation, with scores you can chart and filter on. The tables keep the outcome (the answer, the SQL that ran); the trace keeps the reasoning path, which is what you need to understand a wrong answer, a slow one, or a costly one.
+</details>
+
+**2.** Why self-host Langfuse rather than use Langfuse Cloud, here?
+
+<details><summary>Answer</summary>
+
+A trace holds everything the model saw: questions, SQL, query rows (payroll aggregates included) and document extracts. The project keeps all of that on this machine (D66: everything published on 127.0.0.1). Sending it to an external service would be a data transfer of the company's confidential figures, which no role-based access rule can then control. The price is running six containers (web, worker, Postgres, ClickHouse, Redis, MinIO).
+</details>
+
+**3.** LangGraph accepts a callback handler for the whole graph. Why give Langfuse's handler to each LLM call instead?
+
+<details><summary>Answer</summary>
+
+On the graph, each node becomes a span whose input is the whole state, and the state holds every row of every query (up to 2000 per result, kept for `reconcile`). Every node's span would copy them again, for each loop of the agent. Given to the LLM calls only, the trace holds what matters: what the model received (its 50-row preview), plus one span per tool call written by the agent itself.
+</details>
+
+**4.** A tool span records `step["args"]`, the arguments the model asked for, rather than the arguments actually sent to the MCP server. Why?
+
+<details><summary>Answer</summary>
+
+The agent adds fields the model never chose: the question and session for the query log, the row budget, and the role token (`access_token`). The token is a signed credential: written into a trace, anyone who can read Langfuse could reuse it within its lifetime. Recording the model's call also shows exactly what the model decided, which is what you debug. The token is added to `args` after `step["args"]` is copied, so it can't leak by accident.
+</details>
+
+**5.** What are the scores attached to each trace, and what are they for?
+
+<details><summary>Answer</summary>
+
+`tool_calls`, `queries_run`, `sql_errors`, `unverified_numbers`, `grounding_retry` and `budget_spent`, computed by code in `finish`. Langfuse charts them over time and filters traces by them: "every answer with an unverified number this week", "questions that spent the budget". They turn the agent's safety mechanisms (the grounding check, the bounds of step 13) into signals you watch in production, not only in an evaluation run.
+</details>
+
+**6.** Why is every tracing function a no-op when the keys are empty, and why does `observe` do nothing outside a trace?
+
+<details><summary>Answer</summary>
+
+Monitoring must never be a dependency of the answer: a fresh clone, the tests, or a Langfuse that is down must leave the chat working exactly as before. Outside a trace (an evaluation script calling `Agent.ask` directly), spans would appear as hundreds of orphan traces with no user or question; evaluations are already stored in PostgreSQL with their commit. The tests force tracing off (`conftest.py`), since `.env` holds real keys, and check what a trace holds with an in-memory exporter.
+</details>
+
+**7.** In the tests, the endpoint's trace had a parent span that never reached Langfuse. Where did it come from, and what was done?
+
+<details><summary>Answer</summary>
+
+FastAPI 0.16x opens an OpenTelemetry span for each request. It is a no-op until a tracer provider exists, but Langfuse sets the global provider, so the request span became real (recording, though never exported, since Langfuse exports only its own spans) and the parent of the question's trace. `tracing.trace` now starts from an empty OpenTelemetry context, so each question is the root of its own trace. The lesson: OpenTelemetry is shared by every library in the process, and adding an exporter can change what others do.
+</details>
+
+**8.** The trace's `release` is the commit, and its session is the conversation id. What does each let you do?
+
+<details><summary>Answer</summary>
+
+The release lets you compare the agent before and after a change on real usage (latency, tokens, scores per commit), like experiment runs are compared per commit. The session groups the turns of one conversation, so a follow-up such as "et pour avril ?" is read with the turn it depends on. It is the same id as `t2sql_conversations`, so a trace and a stored conversation point to each other.
+</details>

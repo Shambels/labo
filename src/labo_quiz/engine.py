@@ -3,7 +3,7 @@
 Questions come from three files, so the quiz grows with the project without code changes:
 - QUIZ.md: every step's open questions and their answers (the source of truth, written step by step);
 - quiz/choices.yaml: a multiple-choice version of the questions whose answers are too long to type;
-- quiz/code.yaml: phase G, the code and the flow of the app (ordering, matching, single and multiple choice).
+- quiz/code.yaml: phase H, the code and the flow of the app (ordering, matching, single and multiple choice).
 
 Progress is a JSON file (data/quiz/progress.json, git-ignored): each question's best and latest result, attempts,
 the XP, the streak and the history. XP is only won when a question's best result improves, so replaying a known
@@ -28,8 +28,9 @@ PROGRESS = ROOT / "data" / "quiz" / "progress.json"
 PHASES = {
     "A": ("RAG", -1, 9), "B": ("Text-to-SQL agent", 10, 17), "C": ("Improvements", 18, 24),
     "D": ("Role-based access", 25, 29), "E": ("RAG experiments", 30, 30), "F": ("One chat", 31, 31),
-    "G": ("Code & pipeline", None, None),
+    "G": ("Monitoring & conversations", 32, 33), "H": ("Code & pipeline", None, None),
 }
+CODE_PHASE = "H"            # quiz/code.yaml's questions: about the app as it is, not about one step
 # The part of the app each step is mostly about, for the pipeline map (None: about the project as a whole)
 NODE_OF_STEP = {
     -1: None, 0: None, 1: "inventory", 2: "inventory", 3: "evaluation", 4: "generation", 5: "search",
@@ -37,6 +38,7 @@ NODE_OF_STEP = {
     13: "agent_graph", 14: "evaluation", 15: "endpoint", 16: "evaluation", 17: "validation", 18: "access",
     19: "evaluation", 20: "agent_graph", 21: "validation", 22: "grounding", 23: "evaluation", 24: "access",
     25: "access", 26: "access", 27: "access", 28: "index", 29: "access", 30: "rerank", 31: "endpoint",
+    32: "monitoring",
 }
 POINTS = {"right": 10, "partial": 3, "wrong": 0}
 RETRY_POINTS = 5            # right after an earlier miss
@@ -127,7 +129,7 @@ def load_questions(quiz_md=QUIZ_MD, choices=CHOICES, code=CODE):
         for q in yaml.safe_load(Path(code).read_text(encoding="utf-8"))["questions"]:
             correct = q.get("steps") or q.get("correct") or []
             questions.append(Question(
-                id=q["id"], phase="G", section="code", title="Code & pipeline", kind=q["type"],
+                id=q["id"], phase=CODE_PHASE, section="code", title="Code & pipeline", kind=q["type"],
                 prompt=q["prompt"], explain=q["explain"], node=q["node"],
                 correct=[correct] if isinstance(correct, str) else list(correct), wrong=list(q.get("wrong", [])),
                 pairs=[list(p) for p in q.get("pairs", [])], code=q.get("code"), files=list(q.get("files", []))))
@@ -274,7 +276,7 @@ def badges(questions, progress):
     redeemed = sum(1 for s in progress.questions.values() if s["best"] == "right" and s["attempts"] > 1)
     if redeemed >= 10:
         earned.append(("🔁", "Comeback ×10", "10 questions right after a miss"))
-    code = [q for q in questions if q.phase == "G"]
+    code = [q for q in questions if q.phase == CODE_PHASE]
     if code and all(progress.state(q.id) for q in code):
         earned.append(("🗺️", "Pipeline explorer", "every code & pipeline question tried"))
     return earned

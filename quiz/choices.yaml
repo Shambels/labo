@@ -463,3 +463,31 @@ step-30-q10:
     - The PDF had no text layer, so OCR dropped the first row.
     - The chunker cut the table after its first row.
     - Markdown escaping removed the parentheses and the label.
+
+step-32-q1:
+  correct: "What the model saw and did in between: every LLM call's full input and output, tool calls with what came back, tokens, latency and the grounding verdict, as one tree per question, grouped by user and conversation."
+  wrong:
+    - The final answers, which PostgreSQL does not keep.
+    - The SQL that ran, which the query log does not record.
+    - The users' API keys, to audit who asked what.
+
+step-32-q3:
+  correct: On the graph, every node's span would take the whole state as input, every row of every query included, copied again at each loop; on the LLM calls, the trace holds what the model received.
+  wrong:
+    - LangGraph does not accept callbacks.
+    - The graph-level handler cannot record token counts.
+    - Langfuse only supports one LLM call per trace.
+
+step-32-q4:
+  correct: The agent adds fields the model never chose, among them the signed role token; written into a trace, anyone reading Langfuse could reuse it. The model's own call is also what you debug.
+  wrong:
+    - The MCP server rejects calls that were traced.
+    - The arguments sent to the server are too large for Langfuse.
+    - Langfuse cannot store integers such as max_rows.
+
+step-32-q7:
+  correct: FastAPI's own OpenTelemetry span for the request, made real once Langfuse set the global tracer provider but never exported; the trace now starts from an empty context.
+  wrong:
+    - Open WebUI sends a traceparent header with every request.
+    - The MCP server's span, propagated back over HTTP.
+    - A span left open by the previous test.

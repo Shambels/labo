@@ -1,4 +1,4 @@
-# Phase G of the quiz (app/quiz.py): the code and the flow of the whole app.
+# Phase H of the quiz (app/quiz.py): the code and the flow of the whole app.
 # Each question belongs to a `node` of the pipeline map; types:
 #   order   `steps` in the right order (the page shuffles them; you pick them in order)
 #   match   `pairs` [left, right]: each left gets a list of every right
@@ -434,3 +434,36 @@ questions:
       - The judge must be replaced by the generator.
     files: [ROADMAP.md]
     explain: Steps 4 and 30 found the same; correctness proved more reliable than faithfulness.
+
+  # --- monitoring (step 32) -----------------------------------------------------------------------------------------
+  - id: code-trace-tree
+    node: monitoring
+    type: match
+    prompt: A question's Langfuse trace is a tree of observations of different types. Match each to what made it.
+    pairs:
+      - ["agent (the root)", "tracing.trace in api.py: the question, the answer, user and conversation"]
+      - ["generation", "Langfuse's LangChain handler, given to each LLM call (agent, wrap_up)"]
+      - ["tool", "tracing.observe around each tool call in Agent._tools: the model's arguments, what came back"]
+      - ["guardrail", "the grounding check: the numbers found in no tool result"]
+      - ["retriever", "search_documents: the extracts found"]
+    files: [src/text2sql_calorvia/tracing.py, src/text2sql_calorvia/agent.py, src/text2sql_calorvia/api.py]
+    explain: >-
+      Langfuse is OpenTelemetry underneath: each span opened inside the root becomes its child, also in the graph's
+      node tasks and in asyncio.to_thread, which copy the context. Scores are added to the trace by finish.
+
+  - id: code-tracing-off
+    node: monitoring
+    type: multi
+    prompt: When is nothing sent to Langfuse?
+    correct:
+      - LANGFUSE_PUBLIC_KEY or LANGFUSE_SECRET_KEY is empty
+      - an evaluation script calls Agent.ask directly, outside any trace
+      - the tests run (conftest.py forces tracing off)
+    wrong:
+      - the question is asked in "Documents" mode in Streamlit
+      - the client does not stream the answer
+      - the user has a role (API keys are set)
+    files: [src/text2sql_calorvia/tracing.py, tests/conftest.py, app/chat.py]
+    explain: >-
+      Streamlit's Documents mode opens its own trace (calorvia-docs); streaming or not, with keys or not, the endpoint
+      traces every question. Monitoring is never a dependency of the answer.
