@@ -87,6 +87,8 @@ def collection_name(config):
         name += "__excel-openpyxl"
     if chunking.get("tables", "docling") == "markdown":   # step 30
         name += "__md-tables"
+    if chunking.get("issuer", False):   # step 34
+        name += "__issuer"
     if chunking.get("translate_to") == "fr":   # step 30g
         name += "__fr-chunks"
     if chunking.get("vision", False):

@@ -20,7 +20,7 @@ from rag_calorvia import db
 from rag_calorvia.config import settings
 from rag_calorvia.etl.convert import load_conversion
 from rag_calorvia.etl.excel import workbook_pieces
-from rag_calorvia.etl.metadata import detect_language
+from rag_calorvia.etl.metadata import detect_language, issuer
 from rag_calorvia.etl.translate import translates_chunks, with_french
 from rag_calorvia.etl.vision import targets_of, transcription
 from rag_calorvia.rag.permissions import allowed_roles
@@ -77,16 +77,21 @@ def french_date(document):
     return f" {start.year}-{end.year}"  # range
 
 
-def context_line(document):
+def context_line(document, with_issuer=False):
     """'[PV du CODIR du 13 octobre 2025 · PV_CODIR_2025-10-13 · 00_Direction/CODIR/2025]'.
 
     The file name is kept even when the label says the same: it holds what the label can't ('projet v1',
     'signé', 'FINAL', 'Tarif 2026'), for the lexical search and for the LLM.
+
+    with_issuer ([chunking] issuer = true, step 34): who wrote it, after the label: '[Conditions générales de vente
+    2026 · Calorvia SA · ...]'. The reranker read "les conditions de paiement de Calorvia" as a supplier's offer
+    addressed to Calorvia SA (0.77), and Calorvia's own terms, which never name the company, as off-topic (0.02).
     """
     path = document["path"]
     folder, _, name = path.rpartition("/")
     stem = name.rsplit(".", 1)[0]
-    return f"[{document['doc_label']}{french_date(document)} · {stem} · {folder}]"
+    who = issuer(document.get("doc_type")) if with_issuer else None
+    return f"[{document['doc_label']}{french_date(document)}{f' · {who}' if who else ''} · {stem} · {folder}]"
 
 
 def chunk_language(body, document_language):
@@ -182,7 +187,7 @@ def chunk_document(document, config):
     text = context line + headings + chunk text, under [chunking] max_tokens.
     """
     tokenizer = get_tokenizer(config["embedder"]["model"])
-    line = context_line(document) if config["chunking"]["context_line"] else None
+    line = context_line(document, config["chunking"].get("issuer", False)) if config["chunking"]["context_line"] else None
     # The chunkers count headings + text; the context line is added afterwards, so reserve its tokens
     reserved = count_tokens(line, tokenizer) + 1 if line else 0  # +1: the newline
     budget = config["chunking"]["max_tokens"] - reserved
