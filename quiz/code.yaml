@@ -547,3 +547,18 @@ questions:
     explain: >-
       The top 5 itself is never reordered: newer chunks replace its lowest, at most recent_slots of them. When nothing
       below is newer than all of the top 5, the top 5 is returned unchanged.
+
+  # --- step 37 ------------------------------------------------------------------------------------------------------
+  - id: code-vision-model
+    node: conversion
+    type: choice
+    prompt: "experiments/vlm_qwen38.toml says vision_model = \"qwen3.8-27b\". Where do its image chunks come from?"
+    correct: "From the transcriptions cached under qwen3.8-27b and the v2 prompt in data/vision/, made beforehand by transcribe.py --model qwen3.8-27b; chunking never calls a VLM."
+    wrong:
+      - "From the generator on 8000, asked to read each image during indexing."
+      - "From the Qwen3.5 transcriptions, re-read by Qwen3.8 at search time."
+      - "From the image files, embedded directly by bge-m3."
+    files: [src/rag_calorvia/etl/chunk.py, src/rag_calorvia/etl/vision.py, scripts/transcribe.py]
+    explain: >-
+      The cache key holds the model and the prompt; vision_chunks reads with compute=False and fails if a
+      transcription is missing, pointing to the transcribe.py command that makes it.

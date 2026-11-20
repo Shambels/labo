@@ -554,3 +554,10 @@ step-36-q3:
     - "The judge ignored the new chunk because it was ranked fifth."
     - "The generator refused because two chunks contradicted each other."
     - "The rule did not trigger: the March minutes were older than the top 5."
+
+step-37-q1:
+  correct: "Qwen3.8 listed the boxes row by row instead of each team as a table: the text is there, the relations between boxes are gone."
+  wrong:
+    - "Qwen3.8 cannot read French text in images."
+    - "The transcriptions were cut at the token limit."
+    - "The generator refuses to cite transcriptions made by itself."

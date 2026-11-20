@@ -2176,3 +2176,35 @@ The chunk brought in was the decisions table: "La campagne de rappel sera clôtu
 
 Every mechanism is code to maintain, a setting to understand and a source of surprises on new questions (here, any question whose top 5 is older than a near miss). Kept without a measured gain, it would be a rule justified by one dev question it doesn't even fix. The step's value is what it found: the problem is upstream, in which chunks are candidates at all.
 </details>
+
+---
+
+## Step 37: the images read by Qwen3.8-27B
+
+**1.** Qwen3.8-27B is three times larger than Qwen3.5-9B and read more of every page (stamps, handwritten notes, chart axes). Why did the image questions get worse (0.820 → 0.775)?
+
+<details><summary>Answer</summary>
+
+What the questions need from an image is mostly its structure: who reports to whom on an org chart, which bar belongs to which month. Qwen3.5 wrote each director's team as a table; Qwen3.8 listed every box in the order it appears on the page, row by row. The text is all there, the relations are gone: "Service après-vente / Grégory Pirard" ends up far from "Anne Vercammen / Directrice qualité", and the generator names only the director (Q147, 1.0 → 0.4). More characters is not more information.
+</details>
+
+**2.** How could the generator itself read the images, and what did that cost?
+
+<details><summary>Answer</summary>
+
+Qwen3.8-27B ships a vision projector (`mmproj-F16.gguf`): llama-server loads it with `--mmproj` and the same server answers questions and reads images (19.6 GB with the 32k context, against 18.5 without). It leaves no room for the embedder and reranker beside it, so the server was restarted without the projector to index and run. And it is slower: 15 s an image against 6 s for Qwen3.5-9B, 16 min for the 66 targets.
+</details>
+
+**3.** The audit counted 36 numbers found only by Qwen3.8 and 8 only by Qwen3.5, yet the judged answers got worse. What does the audit miss?
+
+<details><summary>Answer</summary>
+
+It checks that values are copied, not that they stay attached to what they describe. It was built in step 35 to catch a prompt losing facts, and it caught that (the looping delivery note); a model that keeps every value but reorders them passes it. Only the answers, judged on the questions, measure what the generator can use. A check by code says what it checks, nothing more.
+</details>
+
+**4.** Neither step 35's Qwen3.5 transcriptions nor step 37's Qwen3.8 ones are in Git. Why, and what must be done on another machine?
+
+<details><summary>Answer</summary>
+
+They are generated data, in `data/vision/` (git-ignored, like the Docling conversions), cached under a key that includes the model and the prompt. The code and the configuration that made them are in Git: `scripts/transcribe.py --prompt v2` (and `--model qwen3.8-27b` with the generator serving its projector) makes them again. The experiment run stores its commit; the transcriptions are reproducible from it, not stored by it.
+</details>
