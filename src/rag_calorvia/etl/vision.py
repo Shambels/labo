@@ -30,6 +30,22 @@ TRANSCRIBE_PROMPT = """Tu transcris des documents d'entreprise pour un moteur de
    d'un organigramme, la valeur la plus haute d'un graphique, la position des éléments d'un plan.
 N'invente rien : si un élément est illisible, écris [illisible]."""
 
+# Step 35: the first prompt let the VLM keep the boxes of a diagram and drop the text on its links. The network map
+# came out as six site names and not one of its five throughputs (Q034: "fibre 500 Mbit/s" between Namur and Gand),
+# while the application map, transcribed with the same prompt, kept its arrows' labels: the model needs to be asked.
+TRANSCRIBE_PROMPT_V2 = """Tu transcris des documents d'entreprise pour un moteur de recherche.
+1. Recopie tout le texte visible, exactement comme il est écrit : nombres, codes, dates, unités et
+   annotations manuscrites compris. Rends les tableaux en Markdown.
+2. Dans un schéma, un plan ou un organigramme, recopie aussi chaque texte posé sur un lien, une flèche ou un
+   trait (débit, distance, type de connexion, rattachement), sur une ligne qui commence par le nom des deux
+   éléments reliés, tels qu'ils sont écrits sur l'image, séparés par un tiret, puis deux-points et le texte.
+   Un tel texte n'a de sens qu'avec les deux éléments qu'il relie.
+3. Puis, sous le titre « Description », décris en trois phrases au plus le type d'image (organigramme,
+   plan, graphique, photo, facture...) et ce qu'elle montre qui n'est pas écrit : les rattachements
+   d'un organigramme, la valeur la plus haute d'un graphique, la position des éléments d'un plan.
+N'invente rien : si un élément est illisible, écris [illisible]."""
+PROMPTS = {"v1": TRANSCRIBE_PROMPT, "v2": TRANSCRIBE_PROMPT_V2}   # [chunking] vision_prompt; v1 by default
+
 MAX_SIDE = 1600        # pixels: larger images cost tokens and time without being more legible
 SCAN_DPI = 150         # rendering of scanned pages
 MIN_EMBEDDED_SIDE = 200  # smaller images inside a PDF are logos and icons
@@ -104,18 +120,26 @@ def cache_path(target, model, prompt):
     return settings.vision_path / f"{key}.json"
 
 
+RETRY_SIDE = 1024      # step 35: a transcription cut at max_tokens is a loop; the same image smaller reads through
+
+
 def describe(image, model, prompt=TRANSCRIBE_PROMPT, max_tokens=1500):
-    """The VLM's transcription and description of one image. Temperature 0: a transcription, not creativity."""
-    response = get_vlm().chat.completions.create(
-        model=model, temperature=0, max_tokens=max_tokens,
-        messages=[{"role": "user", "content": [
-            {"type": "text", "text": prompt},
-            {"type": "image_url", "image_url": {"url": image_to_data_url(image)}},
-        ]}],
-    )
-    choice = response.choices[0]
-    if choice.finish_reason == "length":
-        logger.warning("transcription cut at %d tokens", max_tokens)
+    """The VLM's transcription and description of one image. Temperature 0: a transcription, not creativity.
+
+    Step 35: cut at max_tokens, a transcription is a loop, not a long text (the Elcora delivery note: its header, then
+    1 500 tokens of nothing, 91 characters kept). It is read once more at RETRY_SIDE, which got the whole note."""
+    for side in (MAX_SIDE, RETRY_SIDE):
+        response = get_vlm().chat.completions.create(
+            model=model, temperature=0, max_tokens=max_tokens,
+            messages=[{"role": "user", "content": [
+                {"type": "text", "text": prompt},
+                {"type": "image_url", "image_url": {"url": image_to_data_url(image, side)}},
+            ]}],
+        )
+        choice = response.choices[0]
+        if choice.finish_reason != "length":
+            break
+        logger.warning("transcription cut at %d tokens (image at %d px)", max_tokens, side)
     return (choice.message.content or "").strip()
 
 

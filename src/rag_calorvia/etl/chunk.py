@@ -22,7 +22,7 @@ from rag_calorvia.etl.convert import load_conversion
 from rag_calorvia.etl.excel import workbook_pieces
 from rag_calorvia.etl.metadata import detect_language, issuer
 from rag_calorvia.etl.translate import translates_chunks, with_french
-from rag_calorvia.etl.vision import targets_of, transcription
+from rag_calorvia.etl.vision import PROMPTS, targets_of, transcription
 from rag_calorvia.rag.permissions import allowed_roles
 
 MONTHS_FR = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre",
@@ -127,6 +127,11 @@ def chunk_workbook(document, config, line, budget, tokenizer):
     ]
 
 
+def vision_prompt(config):
+    """Which transcriptions to index: [chunking] vision_prompt, "v1" (step 7) by default."""
+    return config["chunking"].get("vision_prompt", "v1")
+
+
 def uses_vision(config):
     """[chunking] vision = true (step 7): images, scans and charts in PDFs are indexed from their transcriptions."""
     return config["chunking"].get("vision", False)
@@ -159,17 +164,19 @@ def target_label(target):
     return f"Graphique de la page {target.page + 1}"
 
 
-def vision_chunks(document, line, budget, tokenizer, start_index=0):
+def vision_chunks(document, line, budget, tokenizer, start_index=0, prompt="v1"):
     """Chunks from the cached transcriptions of a document's images (its own image, scanned pages, embedded charts).
 
-    The transcriptions must exist (scripts/transcribe.py): chunking never calls the VLM.
+    The transcriptions must exist (scripts/transcribe.py): chunking never calls the VLM. prompt: which transcriptions,
+    [chunking] vision_prompt (step 35: "v2" also copies the text on a diagram's links).
     """
     payload = document_payload(document)
     chunks = []
     for target in targets_of(document):
-        record = transcription(target, compute=False)
+        record = transcription(target, prompt=PROMPTS[prompt], compute=False)
         if record is None:
-            raise FileNotFoundError(f"no transcription for {target}: run scripts/transcribe.py with the VLM first")
+            raise FileNotFoundError(f"no transcription for {target} with prompt {prompt}: "
+                                    f"run scripts/transcribe.py --prompt {prompt} with the VLM first")
         label = target_label(target)
         head = "\n".join(p for p in [line, label] if p)
         reserve = count_tokens(label, tokenizer) + 1
@@ -197,7 +204,7 @@ def chunk_document(document, config):
     if reads_with_openpyxl(document, config):
         return chunk_workbook(document, config, line, budget, tokenizer)
     if document["source_type"] in ("image", "scan"):  # only reached with [chunking] vision = true
-        return vision_chunks(document, line, vision_budget, tokenizer)
+        return vision_chunks(document, line, vision_budget, tokenizer, prompt=vision_prompt(config))
     chunker = HybridChunker(tokenizer=HuggingFaceTokenizer(tokenizer=tokenizer, max_tokens=budget),
                             **({"serializer_provider": MarkdownTables()} if markdown_tables(config) else {}))
     converted = load_conversion(document["path"])
@@ -210,7 +217,8 @@ def chunk_document(document, config):
         chunks.append({**payload, "chunk_index": len(chunks), "language": chunk_language(body, document["language"]),
                        "text": "\n".join(p for p in [line, body] if p)})
     if uses_vision(config) and document["format"] == "pdf":  # charts inside a text PDF
-        chunks += vision_chunks(document, line, vision_budget, tokenizer, start_index=len(chunks))
+        chunks += vision_chunks(document, line, vision_budget, tokenizer, start_index=len(chunks),
+                                prompt=vision_prompt(config))
     return chunks
 
 
