@@ -98,3 +98,24 @@ def test_each_prompt_has_its_own_transcriptions(tmp_path, monkeypatch):
     config = {"embedder": {"model": "bge-m3"}, "chunking": {"max_tokens": 256, "context_line": True, "vision": True}}
     assert collection_name({**config, "chunking": {**config["chunking"], "vision_prompt": "v2"}}).endswith("-prompt-v2")
     assert "prompt" not in collection_name(config)
+
+
+def test_each_model_has_its_own_transcriptions(tmp_path, monkeypatch):
+    """Step 37: [chunking] vision_model picks another VLM's transcriptions; none means settings.vlm_model."""
+    from rag_calorvia.etl.index import collection_name
+    from rag_calorvia.etl.vision import PROMPTS
+    monkeypatch.setattr(settings, "vision_path", tmp_path)
+    monkeypatch.setattr(settings, "vlm_model", "small")
+    target = Target("net.png", "image")
+    cache_path(target, "small", PROMPTS["v2"]).write_text(json.dumps({"text": "transcription by the small model"}))
+    cache_path(target, "big", PROMPTS["v2"]).write_text(json.dumps({"text": "transcription by the big model"}))
+    document = {"path": "net.png", "source_type": "image", "format": "png", "language": "fr", "doc_date": None,
+                **{f: None for f in ["department", "doc_type", "doc_label", "date_end", "date_precision",
+                                     "date_source", "version", "status"]}}
+    tokenizer = get_tokenizer("bge-m3")
+    assert vision_chunks(document, "[S]", 200, tokenizer, prompt="v2")[0]["text"].endswith("by the small model")
+    assert vision_chunks(document, "[S]", 200, tokenizer, prompt="v2", model="big")[0]["text"].endswith("by the big model")
+    config = {"embedder": {"model": "bge-m3"},
+              "chunking": {"max_tokens": 256, "context_line": True, "vision": True, "vision_prompt": "v2"}}
+    assert collection_name({**config, "chunking": {**config["chunking"], "vision_model": "big"}}).endswith("-prompt-v2-vlm-big")
+    assert collection_name(config).endswith("-prompt-v2")

@@ -132,6 +132,11 @@ def vision_prompt(config):
     return config["chunking"].get("vision_prompt", "v1")
 
 
+def vision_model(config):
+    """Which VLM's transcriptions to index: [chunking] vision_model (step 37), else settings.vlm_model (qwen3.5-9b)."""
+    return config["chunking"].get("vision_model")
+
+
 def uses_vision(config):
     """[chunking] vision = true (step 7): images, scans and charts in PDFs are indexed from their transcriptions."""
     return config["chunking"].get("vision", False)
@@ -164,19 +169,21 @@ def target_label(target):
     return f"Graphique de la page {target.page + 1}"
 
 
-def vision_chunks(document, line, budget, tokenizer, start_index=0, prompt="v1"):
+def vision_chunks(document, line, budget, tokenizer, start_index=0, prompt="v1", model=None):
     """Chunks from the cached transcriptions of a document's images (its own image, scanned pages, embedded charts).
 
     The transcriptions must exist (scripts/transcribe.py): chunking never calls the VLM. prompt: which transcriptions,
-    [chunking] vision_prompt (step 35: "v2" also copies the text on a diagram's links).
+    [chunking] vision_prompt (step 35: "v2" also copies the text on a diagram's links). model: which VLM made them,
+    [chunking] vision_model (step 37); None: settings.vlm_model.
     """
     payload = document_payload(document)
     chunks = []
     for target in targets_of(document):
-        record = transcription(target, prompt=PROMPTS[prompt], compute=False)
+        record = transcription(target, model=model, prompt=PROMPTS[prompt], compute=False)
         if record is None:
             raise FileNotFoundError(f"no transcription for {target} with prompt {prompt}: "
-                                    f"run scripts/transcribe.py --prompt {prompt} with the VLM first")
+                                    f"run scripts/transcribe.py --prompt {prompt}"
+                                    + (f" --model {model}" if model else "") + " with the VLM first")
         label = target_label(target)
         head = "\n".join(p for p in [line, label] if p)
         reserve = count_tokens(label, tokenizer) + 1
@@ -204,7 +211,8 @@ def chunk_document(document, config):
     if reads_with_openpyxl(document, config):
         return chunk_workbook(document, config, line, budget, tokenizer)
     if document["source_type"] in ("image", "scan"):  # only reached with [chunking] vision = true
-        return vision_chunks(document, line, vision_budget, tokenizer, prompt=vision_prompt(config))
+        return vision_chunks(document, line, vision_budget, tokenizer, prompt=vision_prompt(config),
+                             model=vision_model(config))
     chunker = HybridChunker(tokenizer=HuggingFaceTokenizer(tokenizer=tokenizer, max_tokens=budget),
                             **({"serializer_provider": MarkdownTables()} if markdown_tables(config) else {}))
     converted = load_conversion(document["path"])
@@ -218,7 +226,7 @@ def chunk_document(document, config):
                        "text": "\n".join(p for p in [line, body] if p)})
     if uses_vision(config) and document["format"] == "pdf":  # charts inside a text PDF
         chunks += vision_chunks(document, line, vision_budget, tokenizer, start_index=len(chunks),
-                                prompt=vision_prompt(config))
+                                prompt=vision_prompt(config), model=vision_model(config))
     return chunks
 
 

@@ -1,6 +1,6 @@
 """Transcribe every image, scanned page and embedded chart of the indexed corpus with the VLM, once (cached).
 
-Needs the VLM on VLM_URL. Usage: uv run python scripts/transcribe.py [--only images|scans|embedded] [--limit N] [--prompt v2]
+Needs the VLM on VLM_URL. Usage: uv run python scripts/transcribe.py [--only images|scans|embedded] [--limit N] [--prompt v2] [--model qwen3.8-27b]
 """
 import argparse
 import logging
@@ -15,6 +15,7 @@ parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.R
 parser.add_argument("--only", choices=KINDS, help="one kind of target")
 parser.add_argument("--limit", type=int, help="at most N targets (to try the prompt on a few first)")
 parser.add_argument("--prompt", choices=PROMPTS, default="v1", help="which prompt (step 35: v2 also copies the text on links)")
+parser.add_argument("--model", help="served name of another VLM (step 37: qwen3.8-27b); default: VLM_MODEL")
 args = parser.parse_args()
 setup_logging()
 logger = logging.getLogger("transcribe")
@@ -26,8 +27,8 @@ targets = targets[:args.limit] if args.limit else targets
 
 total, computed = 0.0, 0
 for i, target in enumerate(targets, 1):
-    cached = transcription(target, prompt=PROMPTS[args.prompt], compute=False) is not None
-    record = transcription(target, prompt=PROMPTS[args.prompt])
+    cached = transcription(target, model=args.model, prompt=PROMPTS[args.prompt], compute=False) is not None
+    record = transcription(target, model=args.model, prompt=PROMPTS[args.prompt])
     if not cached:
         computed += 1
         total += record["seconds"]

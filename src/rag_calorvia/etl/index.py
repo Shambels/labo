@@ -97,6 +97,8 @@ def collection_name(config):
             name += f"-{chunking['vision_max_tokens']}"
         if chunking.get("vision_prompt", "v1") != "v1":   # step 35
             name += f"-prompt-{chunking['vision_prompt']}"
+        if chunking.get("vision_model"):   # step 37
+            name += f"-vlm-{chunking['vision_model']}"
     return name
 
 
