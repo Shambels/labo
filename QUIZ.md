@@ -2144,3 +2144,35 @@ Every number of each v1 transcription was looked for in its v2 transcription and
 
 Not of what step 35 changed. Its five extracts are the same chunks; one is a scanned amendment transcribed again with the same facts and different line breaks. The generator, asked whether a yearly volume commitment is met at the end of May, computed a pro rata once and compared totals the next time: a reasoning question flips on wording. One run per configuration can't separate that noise from an effect; that is why the comparison is read question by question, with the extracts.
 </details>
+
+---
+
+## Step 36: the newest relevant chunks
+
+**1.** For "Où en est le rappel de l'Aéris 12 ?", the top 5 held only documents from the December 2025 launch, though the March 2026 closure was among the candidates. Why couldn't chronological ordering (step 8) help?
+
+<details><summary>Answer</summary>
+
+Ordering applies to the five chunks the reranker kept: it decides which comes last, closest to the question, not which get in. The reranker scores relevance to the question, and a dozen chunks about the recall all scored 0.80 to 0.99; the launch documents won. Time never entered the choice of the five.
+</details>
+
+**2.** The rule only brings in chunks from ranks 6 to 10 that score at least 0.5 and are newer than every chunk of the top 5. What does each condition prevent?
+
+<details><summary>Answer</summary>
+
+Ranks 6 to 10: the newest chunk of the whole corpus can't jump in, only one the reranker nearly kept. At least 0.5: relevance stays required, newness only breaks near-ties. Newer than all of the top 5: when the top already holds the latest, nothing changes, and the top 5 is never reordered. A first version that also reshuffled inside the top 5 let a workbook dated "2026" (end of the year) displace two June 2026 minutes on Q052: dates must also be precise to the day or the month to count.
+</details>
+
+**3.** The run brought the 2 March minutes into Q008's top 5, yet the judge scored 0.4, as before. What happened?
+
+<details><summary>Answer</summary>
+
+The chunk brought in was the decisions table: "La campagne de rappel sera clôturée le 31 mars 2026". The answer now said so, still without the facts expected: 211 units repaired of 214, 3 not found, Valtek paying 65 %. Those are in another chunk of the same minutes ("4. Aéris 12 : clôture du rappel"), which the search never made a candidate; the 30 March minutes' chunk was one, scored 0.31. Retrieval improved its metric (recall 0 → 0.5) without giving the generator the fact.
+</details>
+
+**4.** No answer improved and none got worse. Why leave the step unadopted rather than keep a harmless mechanism?
+
+<details><summary>Answer</summary>
+
+Every mechanism is code to maintain, a setting to understand and a source of surprises on new questions (here, any question whose top 5 is older than a near miss). Kept without a measured gain, it would be a rule justified by one dev question it doesn't even fix. The step's value is what it found: the problem is upstream, in which chunks are candidates at all.
+</details>

@@ -547,3 +547,10 @@ step-35-q4:
     - "By judging the answers of the 127 dev questions before indexing."
     - "By reading the 66 images by hand against both transcriptions."
     - "It wasn't: transcriptions at temperature 0 can't lose facts."
+
+step-36-q3:
+  correct: "The chunk brought in was the decisions table (\"sera clôturée le 31 mars\"); the chunk with 211 of 214 repaired was not even a search candidate."
+  wrong:
+    - "The judge ignored the new chunk because it was ranked fifth."
+    - "The generator refused because two chunks contradicted each other."
+    - "The rule did not trigger: the March minutes were older than the top 5."

@@ -529,3 +529,21 @@ questions:
     explain: >-
       The cache key holds the prompt, so v1 and v2 transcriptions live side by side and the configuration in use is
       untouched until its config names v2.
+
+  # --- step 36 ------------------------------------------------------------------------------------------------------
+  - id: code-recent-slots
+    node: rerank
+    type: multi
+    prompt: "with_recent (step 36) brings a chunk from below the top 5 into it. Which conditions must that chunk meet?"
+    correct:
+      - "it ranks between 6 and recent_window (10)"
+      - "the reranker scores it at least recent_min_score (0.5)"
+      - "its date is precise to the day or the month and later than every date of the top 5"
+    wrong:
+      - "it comes from a document not yet in the top 5"
+      - "its language is French"
+      - "it is the newest chunk of the whole collection"
+    files: [src/rag_calorvia/rag/rerank.py]
+    explain: >-
+      The top 5 itself is never reordered: newer chunks replace its lowest, at most recent_slots of them. When nothing
+      below is newer than all of the top 5, the top 5 is returned unchanged.
