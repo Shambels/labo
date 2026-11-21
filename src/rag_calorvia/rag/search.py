@@ -35,45 +35,61 @@ def sparse_request(question, config):
     return {"query": bm25(question), "using": "sparse"}
 
 
-def hybrid_request(versions, config, query_filter):
+def within(query_filter, documents):
+    """The question's filter (statuses, role, reference date) and "one of these documents"."""
+    condition = models.FieldCondition(key="document", match=models.MatchAny(any=documents))
+    if query_filter is None:
+        return models.Filter(must=[condition])
+    return models.Filter(must=[*(query_filter.must or []), condition], must_not=query_filter.must_not)
+
+
+def hybrid_request(versions, config, query_filter, documents=None):
     """One dense and one BM25 search per version of the question ({'fr': ..., 'nl': ..., 'en': ...}), each BM25
-    with the stemmer of its language, then fused: a chunk found by several versions rises."""
+    with the stemmer of its language, then fused: a chunk found by several versions rises.
+
+    documents (step 41): the documents of the entities the question names; one more dense search of the first
+    version, restricted to them, joins the fusion."""
     search_config = config["search"]
     limit = search_config["candidates"]
-    prefetch = []
-    for (language, text), vector in zip(versions.items(), dense_vectors(versions.values(), config)):
+    prefetch, vectors = [], dense_vectors(versions.values(), config)
+    for (language, text), vector in zip(versions.items(), vectors):
         prefetch += [models.Prefetch(query=vector, using="dense", limit=limit, filter=query_filter),
                      models.Prefetch(query=bm25(text, language), using="sparse", limit=limit, filter=query_filter)]
+    if documents:
+        prefetch.append(models.Prefetch(query=vectors[0], using="dense", limit=limit,
+                                        filter=within(query_filter, documents)))
     return {"query": fusion_query(search_config), "prefetch": prefetch}
 
 
 SINGLE_SEARCHES = {"dense": dense_request, "sparse": sparse_request}
 
 
-def build_request(question, config, query_filter, versions):
+def build_request(question, config, query_filter, versions, documents=None):
     """The method-specific arguments of the Qdrant query."""
     method = config["search"]["method"]
     translated = bool(versions) and len(versions) > 1
     if translated and method != "hybrid":
         raise ValueError("question translation needs [search] method = 'hybrid'")
     if method == "hybrid":
-        return hybrid_request(versions if translated else {QUESTION_LANGUAGE: question}, config, query_filter)
+        return hybrid_request(versions if translated else {QUESTION_LANGUAGE: question}, config, query_filter,
+                              documents)
     if method in SINGLE_SEARCHES:
         return SINGLE_SEARCHES[method](question, config)
     raise ValueError(f"unknown search method: {method!r}")
 
 
-def search(question, config, query_filter=None, versions=None):
+def search(question, config, query_filter=None, versions=None, documents=None):
     """The [search] candidates best chunks for a question: payload dicts plus the search score, best first.
 
     versions: the question and its translations ({'fr': question, 'nl': ...}); more than one turns the hybrid
     search into 2 searches per version. query_filter (a models.Filter) also applies to every prefetch.
+    documents (step 41): the documents of the entities the question names, searched once more on their own.
     """
     points = get_qdrant().query_points(
         collection_name(config),
         query_filter=query_filter,
         limit=config["search"]["candidates"],
         with_payload=True,
-        **build_request(question, config, query_filter, versions),
+        **build_request(question, config, query_filter, versions, documents),
     ).points
     return [{**point.payload, "search_score": point.score} for point in points]

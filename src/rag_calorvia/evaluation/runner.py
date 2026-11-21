@@ -129,6 +129,8 @@ def run_experiment(config, allow_dirty=False):
                 if len(result["versions"]) > 1:  # the translations as the reason: they explain a gain or a loss
                     scores["translations"] = (float(len(result["versions"]) - 1),
                                               " | ".join(f"{k}: {v}" for k, v in result["versions"].items()))
+                if config["search"].get("entities"):   # step 41: the entities the question names, as the reason
+                    scores["entities"] = (float(len(result["entities"])), ", ".join(result["entities"]))
                 db.insert_scores(conn, experiment_id, score_rows(question, scores))
                 logger.info("[%d/%d] %s %s %.0f ms", i, len(questions), question["id"],
                             f"recall@5={scores['recall@5']:.2f}" if "recall@5" in scores else "", latency_ms)

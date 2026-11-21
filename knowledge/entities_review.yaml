@@ -1,0 +1,7 @@
+# The hand review of the semantic layer (step 41), applied by scripts/build_entities.py after the merge.
+# Names are matched without case, accents or punctuation. Each entry fixes something read in knowledge/entities.json.
+drop: []      # not an entity of the corpus, or too generic to name one thing
+merge: {}     # kept name: [names of the same entity]
+rename: {}    # old name: better name (the old one becomes an alias)
+aliases: {}   # name: [other names the documents use]
+kind: {}      # name: corrected kind

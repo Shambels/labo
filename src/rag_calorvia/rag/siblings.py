@@ -10,21 +10,12 @@ documents. Step 36 showed that reordering the candidates can't bring it in.
 A document the reranker keeps is relevant; its other chunks are where its details are. Among those that also score
 well, the newest document's come first: an older document's details are the ones a newer document updates.
 """
-from qdrant_client import models
-
 from rag_calorvia.etl.index import collection_name, get_qdrant
 from rag_calorvia.etl.translate import search_text
 from rag_calorvia.rag.rerank import NO_RERANKER, precise_date, score_in_languages
+from rag_calorvia.rag.search import within as with_filter
 
 MAX_CHUNKS = 400   # siblings fetched per question at most: a workbook can hold hundreds of row chunks
-
-
-def with_filter(query_filter, documents):
-    """The question's filter (statuses, role, reference date) and "one of these documents"."""
-    condition = models.FieldCondition(key="document", match=models.MatchAny(any=documents))
-    if query_filter is None:
-        return models.Filter(must=[condition])
-    return models.Filter(must=[*(query_filter.must or []), condition], must_not=query_filter.must_not)
 
 
 def fetch_siblings(chunks, config, query_filter):
