@@ -4,9 +4,8 @@ Two chatbots for **Calorvia SA**, a fictional Belgian heat-pump manufacturer:
 
 1. **`rag_calorvia`**: a RAG over 393 documents from the company's shared drive. Done: final evaluation of
    `experiments/status_filter.toml` (step 9), results and analysis in `RAPPORT.md`, exports in `results/`. The
-   configuration in use is `experiments/markdown_tables.toml` (step 30: status_filter, plus the question translated for
-   the reranker when a Dutch or English chunk is in its top 10, plus Docling tables as Markdown); `FINAL_CONFIG` in
-   `.env` changes it.
+   configuration in use is `experiments/combined_complete_top10.toml` (step 39: step 30's `markdown_tables`, plus the
+   issuer in the context line, the v2 image prompt, fuller answers and 10 chunks); `FINAL_CONFIG` in `.env` changes it.
 2. **`text2sql_calorvia`**: a text-to-SQL agent over three business databases (phase B). Done: LangGraph agent
    behind an OpenAI-compatible endpoint, read-only MCP server, certified ontology; results and analysis in
    `RAPPORT_T2SQL.md`, exports in `results/t2sql/`. To run it: [Phase B in five steps](#phase-b-in-five-steps).
@@ -111,6 +110,7 @@ uv run python scripts/ask.py "Quand le nouvel ERP démarre-t-il ?"   # one quest
 uv run python scripts/compare_ocr.py   # Docling OCR vs the VLM on the scanned PDFs (step 7)
 uv run python scripts/run_experiment.py experiments/status_filter.toml --test  # the final config, once, on the 31 held-out questions
 uv run python scripts/run_experiment.py experiments/issuer.toml   # step 34: "Calorvia SA" in the context line (after scripts/inventory.py)
+uv run python scripts/run_experiment.py experiments/combined_complete_top10.toml  # steps 38-39: issuer + v2 images + fuller rule 4 + 10 chunks
 uv run python scripts/export_results.py --final status_filter                  # results/*.csv
 uv run streamlit run app/chat.py      # chat with the final configuration: answer, extracts, cited images, SQL
 ```

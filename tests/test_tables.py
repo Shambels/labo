@@ -66,3 +66,38 @@ def test_results_are_capped(store, monkeypatch):
 def test_call_tool_returns_json(store):
     assert json.loads(call_tool(store, "run_sql", '{"sql": "SELECT COUNT(*) FROM t001"}'))["rows"] == [[3]]
     assert "error" in json.loads(call_tool(store, "nope", "{}"))
+
+
+# --- step 39: a tool call written as text is never the answer ---------------------------------------------------
+
+def test_a_tool_call_written_as_text_is_asked_again_without_tools(monkeypatch):
+    from types import SimpleNamespace
+
+    from rag_calorvia.rag import generate as generate_module
+
+    replies = ['<tool_call>\n<function=run_sql>\n<parameter=sql>SELECT 1</parameter>\n</function>\n</tool_call>',
+               "L'entrepôt de Herstal comptait 6 ETP fin mai 2026 [1]."]
+    requests = []
+
+    def create(**kwargs):
+        requests.append(kwargs)
+        message = SimpleNamespace(content=replies[len(requests) - 1], tool_calls=None)
+        return SimpleNamespace(choices=[SimpleNamespace(message=message, finish_reason="stop")],
+                               usage=SimpleNamespace(prompt_tokens=10, completion_tokens=5))
+
+    llm = SimpleNamespace(chat=SimpleNamespace(completions=SimpleNamespace(create=create)))
+    monkeypatch.setattr(generate_module, "get_llm", lambda: llm)
+    monkeypatch.setattr("rag_calorvia.rag.tables.get_store", lambda role=None: None)
+    config = {"generation": {"model": "m", "system_prompt": "prompts/tools.txt", "temperature": 0.0, "top_p": 1.0,
+                             "top_k": 40, "max_tokens": 64}, "tools": {"tables": True}}
+    result = generate_module.generate("Combien de personnes à Herstal ?", [{"text": "[x] Herstal"}], config)
+    assert result["answer"].startswith("L'entrepôt de Herstal")
+    assert "tools" not in requests[1]                      # asked again without the tools
+    assert requests[1]["messages"][-1]["content"] == generate_module.LAST_ROUND
+    assert result["completion_tokens"] == 10
+
+
+def test_raw_tool_call():
+    from rag_calorvia.rag.generate import raw_tool_call
+    assert raw_tool_call("<tool_call>\n<function=run_sql>")
+    assert not raw_tool_call("6 ETP [1].") and not raw_tool_call(None)

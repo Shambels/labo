@@ -34,6 +34,15 @@ def build_messages(question, chunks, config):
 
 
 MAX_TOOL_ROUNDS = 5  # rounds of tool calls before the LLM must answer with what it has
+# Said before the last round (step 39): with tool_choice "none" alone, Qwen3.8 can still write a call as text (Q017).
+LAST_ROUND = ("Tu ne peux plus appeler d'outil. Réponds maintenant à la question à partir des extraits "
+              "et des résultats déjà obtenus.")
+RAW_CALL = ("<tool_call>", "<function=")  # a tool call written in the answer's text instead of as a call
+
+
+def raw_tool_call(text):
+    """True when the answer is a tool call written as text, which the user must never see as an answer."""
+    return any(marker in (text or "") for marker in RAW_CALL)
 
 
 def uses_tools(config):
@@ -55,8 +64,8 @@ def generate(question, chunks, config, role=None):
         tools, store = TOOLS, get_store(role)
 
     calls, prompt_tokens, completion_tokens = [], 0, 0
-    for round_ in range(MAX_TOOL_ROUNDS + 1):
-        last = round_ == MAX_TOOL_ROUNDS
+    def complete(with_tools, tool_choice):
+        nonlocal prompt_tokens, completion_tokens
         response = get_llm().chat.completions.create(
             model=params["model"],
             messages=messages,
@@ -64,11 +73,24 @@ def generate(question, chunks, config, role=None):
             top_p=params["top_p"],
             max_tokens=params["max_tokens"],
             extra_body={"top_k": params["top_k"]},  # llama-server parameter, not part of the OpenAI API
-            **({"tools": tools, "tool_choice": "none" if last else "auto"} if tools else {}),
+            **({"tools": tools, "tool_choice": tool_choice} if with_tools else {}),
         )
         prompt_tokens += response.usage.prompt_tokens
         completion_tokens += response.usage.completion_tokens
-        choice = response.choices[0]
+        return response.choices[0]
+
+    for round_ in range(MAX_TOOL_ROUNDS + 1):
+        last = round_ == MAX_TOOL_ROUNDS
+        if last and tools:
+            messages.append({"role": "user", "content": LAST_ROUND})
+        choice = complete(bool(tools), "none" if last else "auto")
+        if tools and raw_tool_call(choice.message.content) and not choice.message.tool_calls:
+            # Asked once more, without the tools: the call written as text is never shown as the answer.
+            logger.warning("tool call written as text, asked again without tools: %s", question)
+            messages.append({"role": "assistant", "content": choice.message.content})
+            messages.append({"role": "user", "content": LAST_ROUND})
+            choice = complete(False, None)
+            break
         if not choice.message.tool_calls or last:
             break
         messages.append(choice.message.model_dump(exclude_none=True))

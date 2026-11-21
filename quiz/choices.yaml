@@ -561,3 +561,24 @@ step-37-q1:
     - "Qwen3.8 cannot read French text in images."
     - "The transcriptions were cut at the token limit."
     - "The generator refuses to cite transcriptions made by itself."
+
+step-38-q2:
+  correct: "Step 36 changed no answer and step 37 made the image questions worse: only changes that each improved a measured result are combined."
+  wrong:
+    - "Their branches could not be rebased on main."
+    - "They need a different generator model."
+    - "Their indexes would not fit beside the combined one in Qdrant."
+
+step-39-q1:
+  correct: "The rule asks for the details, the extra chunks hold them: with 5 chunks some details are missing, with the old rule the generator ignores the extra chunks."
+  wrong:
+    - "Ten chunks make the reranker more accurate on the first five."
+    - "The rule makes the judge more lenient with longer answers."
+    - "Ten chunks avoid the translation step."
+
+step-39-q3:
+  correct: "Its complaints were checked against the extracts: four of four were false, the values were in an extract the judge had."
+  wrong:
+    - "Faithfulness is not computed when top_k is 10."
+    - "The generator is never wrong at temperature 0."
+    - "The judge's scores were averaged over three runs."
