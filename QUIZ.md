@@ -2208,3 +2208,74 @@ It checks that values are copied, not that they stay attached to what they descr
 
 They are generated data, in `data/vision/` (git-ignored, like the Docling conversions), cached under a key that includes the model and the prompt. The code and the configuration that made them are in Git: `scripts/transcribe.py --prompt v2` (and `--model qwen3.8-27b` with the generator serving its projector) makes them again. The experiment run stores its commit; the transcriptions are reproducible from it, not stored by it.
 </details>
+
+---
+
+## Step 38: the fixes combined
+
+**1.** Steps 34 and 35 each moved the judged mean by about 0.002, yet together they give +0.016. How can two "no effect" changes add up to an effect?
+
+<details><summary>Answer</summary>
+
+Each fixed one question (Q077, Q034, 0 → 1, i.e. +0.008 each on 127) and lost a little elsewhere by noise: judged one run at a time, the gain was hidden among moves of ±0.1. Together they fix both questions, and in this run the noise happened not to go against them. The mean is a blunt measure for one-question fixes: read the questions they target, and check that nothing else falls by 0.3 (nothing did).
+</details>
+
+**2.** Why were steps 36 and 37 left out of the combination?
+
+<details><summary>Answer</summary>
+
+Step 36 (recent slots) changed no answer: a rule that fixes nothing only adds a mechanism to maintain and a way to fail. Step 37 (Qwen3.8 as VLM) made the image questions worse (0.820 → 0.775). Combining means the changes that each improved a measured result, one change per reason.
+</details>
+
+**3.** After merging step 34, `scripts/inventory.py` had to be run again before the run. Why?
+
+<details><summary>Answer</summary>
+
+Step 34 gave the terms of sale their own type, written in the `documents` registry, a database table shared by every branch rather than a file in Git. The registry still held `main`'s older label; without a new inventory the context line would have said "Tarif", and the index fingerprint would not have matched what step 34 measured.
+</details>
+
+**4.** In run 184 most of the remaining partly right answers (0.5–0.7) are right but short. Where were the missing details?
+
+<details><summary>Answer</summary>
+
+Mostly in the extracts already given: the condition next to "5 ans" (Q061), the breakdown of a budget (Q081) or a score (Q122), "then 45 a day" after "38 until September" (Q143). Rule 4 asked for "une à trois phrases" and nothing about details, so the generator kept the main value only. The rest sat just below the top 5: Q101's contract cap at rank 6, Q127's quarterly plan at rank 9.
+</details>
+
+---
+
+## Step 39: fuller answers and 10 chunks
+
+**1.** The fuller rule 4 alone gave +0.011, ten chunks alone −0.006, both together +0.040. Why do they need each other?
+
+<details><summary>Answer</summary>
+
+The rule asks for the details an extract attaches to the answer; with 5 chunks, some of those details aren't there (Q101's cap, Q127's plan). Ten chunks bring them in, but with the old rule the generator still writes one sentence and ignores them, and the extra chunks are only more room for confusion (Q147, Q158 lost). One supplies the material, the other asks for it to be used.
+</details>
+
+**2.** With `top_k = 10`, are recall@5 and MRR@5 still comparable with the earlier runs?
+
+<details><summary>Answer</summary>
+
+Yes: `metrics.py` computes each metric for every k in `K_VALUES` (3, 5, 10) up to `top_k`, on the first k chunks of the ranking. Ranks 1-5 are the same as with `top_k = 5` (same search, same reranker), so the @5 metrics are identical; only @10 and contextual recall, which the judge computes on everything the generator saw (0.922 → 0.959), change.
+</details>
+
+**3.** Faithfulness fell from 0.789 to 0.705. Why was that not read as the generator inventing facts?
+
+<details><summary>Answer</summary>
+
+Because the complaints were checked against the extracts, and four out of four were false: "168 interventions", "400 248,00 €", "1er mai", "12 km/h" are each written in an extract the judge had. Longer answers over ten extracts make more claims, and the judge misses more of them; it also never sees the SQL tools' results. A judged metric that moves must be read case by case before it is believed, in both directions.
+</details>
+
+**4.** Q017 scored 0 because its answer was `<tool_call><function=run_sql>…`. What happened, and what is the fix?
+
+<details><summary>Answer</summary>
+
+The generator used its five tool rounds on SQL; the sixth call was sent with `tool_choice = "none"`, and the model wrote a call as text instead of answering, which became the answer. Now a user message says before the last round that no tool can be called any more, and an answer that still contains a raw call (`raw_tool_call`) is asked again once without tools. Live: "6 ETP".
+</details>
+
+**5.** Why is 0.877 an optimistic estimate of `combined_complete_top10`?
+
+<details><summary>Answer</summary>
+
+Rule 4's wording came from reading the dev set's partly right answers, and the same dev set judged it: the change was fitted to the questions that measure it. The test set, the clean measure, was already used in step 9. On new questions, expect a smaller gain; the mechanism (details in the context, a rule asking for them) is general, the size of the gain is not proven.
+</details>

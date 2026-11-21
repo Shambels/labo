@@ -562,3 +562,19 @@ questions:
     explain: >-
       The cache key holds the model and the prompt; vision_chunks reads with compute=False and fails if a
       transcription is missing, pointing to the transcribe.py command that makes it.
+
+  # --- step 39 ------------------------------------------------------------------------------------------------------
+  - id: code-raw-tool-call
+    node: generation
+    type: order
+    prompt: "Put generate()'s path in order for a question whose SQL keeps failing (step 39)."
+    steps:
+      - "rounds 1-5: tool_choice = \"auto\", each run_sql call answered with a tool message"
+      - "before the last round, the user message LAST_ROUND: no tool can be called any more"
+      - "round 6: tool_choice = \"none\""
+      - "if raw_tool_call(answer): asked once more, without tools, after LAST_ROUND again"
+      - "the answer is the text of that last reply"
+    files: [src/rag_calorvia/rag/generate.py]
+    explain: >-
+      tool_choice = "none" stops structured calls but not a call written as text (Q017 in run 187); the text check
+      ensures a raw <tool_call> is never shown as an answer.
