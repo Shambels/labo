@@ -80,4 +80,33 @@ def rerank(question, chunks, config, versions=None, translate=None):
     else:
         scored = score_in_languages(model, question, chunks, versions, range(len(chunks)))
     scored.sort(key=lambda pair: pair[1], reverse=True)
-    return [{**chunks[i], "rerank_score": s} for i, s in scored[:top_k]]
+    ranked = [{**chunks[i], "rerank_score": s} for i, s in scored]
+    if config["reranker"].get("recent_slots"):
+        return with_recent(ranked, top_k, config["reranker"])
+    return ranked[:top_k]
+
+
+PRECISE = ("day", "month")   # a date that can say "newer": a document dated "2026" isn't newer than a June meeting
+
+
+def precise_date(chunk):
+    return (chunk.get("doc_date") or "") if chunk.get("date_precision") in PRECISE else ""
+
+
+def with_recent(ranked, top_k, options):
+    """Step 36: up to `recent_slots` chunks from just below the top_k (ranks top_k+1 to recent_window) are brought in,
+    in place of the lowest of the top_k, when the reranker still finds them relevant (score >= recent_min_score) and
+    they are newer than every chunk of the top_k (dates precise to the day or the month only).
+
+    "Où en est le rappel de l'Aéris 12 ?" (Q008): the reranker scored a dozen chunks about the recall between 0.80 and
+    0.99, all on topic; the five best were the launch (December 2025), the closure (March 2026) came ninth. Relevance
+    has no notion of time: among chunks it scores alike, the latest is the one a status question needs. When nothing
+    below the top_k is newer than all of it, nothing changes; the top_k is never reordered.
+    """
+    top = ranked[:top_k]
+    newest = max((precise_date(c) for c in top), default="")
+    below = ranked[top_k:options.get("recent_window", 10)]
+    newer = [c for c in below if c["rerank_score"] >= options.get("recent_min_score", 0.5) and precise_date(c) > newest]
+    recent = sorted(newer, key=precise_date, reverse=True)[:min(options["recent_slots"], top_k)]
+    recent.sort(key=lambda c: -c["rerank_score"])
+    return top[:top_k - len(recent)] + recent
