@@ -100,6 +100,7 @@ uv run python scripts/inventory.py   # Docling conversions (cached in data/conve
 uv run python scripts/check_eval.py  # the ceiling: which dev questions the indexed text can answer at all
 uv run python scripts/transcribe.py  # images, scanned pages, charts in PDFs -> data/vision/ (VLM on 8003, once)
 uv run python scripts/transcribe.py --prompt v2  # step 35: also the text on a diagram's links (for experiments/diagram_labels.toml)
+VLM_URL=http://localhost:8000/v1 uv run python scripts/transcribe.py --prompt v2 --model qwen3.8-27b  # step 37: the generator, served with --mmproj
 uv run python scripts/index.py experiments/baseline.toml          # chunks + Qdrant collection (embedder)
 uv run python scripts/run_experiment.py experiments/baseline.toml # dev set -> answers + scores in PostgreSQL
 uv run python scripts/run_experiment.py experiments/baseline.toml --retrieval-only  # no generator needed
