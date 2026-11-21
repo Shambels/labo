@@ -22,6 +22,7 @@ class Settings(BaseSettings):
     # Relative to the repo root: scripts are run from there (uv run python scripts/...)
     corpus_path: Path = Path("data/calorvia")                 # symlink to the corpus in enonces/
     eval_path: Path = Path("data/calorvia_eval.json")         # symlink to the eval set in enonces/
+    fresh_eval_path: Path = Path("evaluation/rag_fresh_questions.json")  # step 40: questions on documents never cited
     conversions_path: Path = Path("data/conversions")         # Docling output cache (step 4)
     vision_path: Path = Path("data/vision")                   # VLM transcription cache (step 7)
     translations_path: Path = Path("data/translations")       # French versions of nl/en chunks (step 30g)

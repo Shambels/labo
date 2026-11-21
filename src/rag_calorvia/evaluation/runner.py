@@ -11,7 +11,7 @@ from pathlib import Path
 from rag_calorvia import db
 from rag_calorvia.etl.index import index_corpus
 from rag_calorvia.etl.metadata import detect_language
-from rag_calorvia.evaluation.dataset import align_with_registry, judge_sample, load_questions
+from rag_calorvia.evaluation.dataset import HELD_OUT, align_with_registry, judge_sample, load_questions
 from rag_calorvia.evaluation.metrics import answer_scores, redundancy_scores, retrieval_scores
 from rag_calorvia.git_state import git_state
 from rag_calorvia.rag.generate import load_system_prompt
@@ -71,13 +71,14 @@ def score_rows(question, scores):
 
 
 def split_of(config):
-    """The question set of a run: "dev" (default, every tuning run) or "test" (the held-out set, once, at the end)."""
+    """The question set of a run: "dev" (default, every tuning run), "test" (held out, step 9) or "fresh" (held
+    out, step 40): the last two once, at the end."""
     return config.get("evaluation", {}).get("split", "dev")
 
 
 def eval_questions(conn, split):
     """The questions of a split, aligned with the registry. Only the final evaluation reads the test set."""
-    return align_with_registry(load_questions(split, allow_test=split == "test"), db.load_registry(conn))
+    return align_with_registry(load_questions(split, allow_test=split in HELD_OUT), db.load_registry(conn))
 
 
 def run_experiment(config, allow_dirty=False):
@@ -159,7 +160,7 @@ def judge_experiment(experiment_id, judge_model=None, force=False, types=None, q
         done = set() if force else db.load_score_keys(conn, experiment_id)
         split = split_of(stored)
         questions = eval_questions(conn, split)
-        if split == "test":  # the final evaluation: every held-out question is judged, no sample
+        if split in HELD_OUT:  # a final evaluation: every held-out question is judged, no sample
             sample = questions
         else:
             sample = ([q for q in questions if q["id"] in set(question_ids)] if question_ids

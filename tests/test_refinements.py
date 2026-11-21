@@ -73,3 +73,20 @@ def test_rule_8_and_prompt_v3():
     assert "8. Si un mot de la question peut se comprendre de deux façons" in readings
     assert "regroupe chaque case sous la case dont elle dépend" in PROMPTS["v3"]
     assert "N'écris rien pour un lien sans texte" in PROMPTS["v3"]
+
+
+def test_the_fresh_set_is_held_out_and_never_cites_a_dev_or_test_document():
+    """Step 40: a third set, on documents no dev or test question cites; read only when asked for."""
+    import json
+
+    import pytest
+
+    from rag_calorvia.evaluation.dataset import load_questions
+    with pytest.raises(PermissionError):
+        load_questions("fresh")
+    fresh = load_questions("fresh", allow_test=True)
+    assert len(fresh) == 35 and len({q["id"] for q in fresh}) == 35
+    with open("data/calorvia_eval.json", encoding="utf-8") as f:
+        cited = {e["document"].replace("'", "_") for q in json.load(f) for e in q["evidence"] + (q.get("traps") or [])}
+    # each question's first document; another copy of the same fact may be cited (F028: Q102's monthly report)
+    assert not {q["evidence"][0]["document"] for q in fresh if q["evidence"]} & cited

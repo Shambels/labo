@@ -1,0 +1,764 @@
+[
+ {
+  "id": "F001",
+  "type": "factual",
+  "thread": null,
+  "question": "Quand l'usine de Seneffe sera-t-elle fermée pendant l'été 2026 ?",
+  "answer": "Du lundi 27 juillet au vendredi 14 août 2026 inclus ; le site de Gand et l'entrepôt de Herstal restent ouverts avec des équipes réduites.",
+  "evidence": [
+   {
+    "document": "02_RH/Notes_de_service/2026-06-15 NS-2026-11 Horaires d_été et fermeture collective.docx",
+    "snippets": [
+     "L'usine de Seneffe sera fermée du lundi 27 juillet au vendredi 14 août 2026 inclus"
+    ],
+    "grade": 2,
+    "fact": 0
+   }
+  ],
+  "traps": [],
+  "difficulty": "facile",
+  "notes": "step 40: written from documents no dev or test question cites"
+ },
+ {
+  "id": "F002",
+  "type": "factual",
+  "thread": null,
+  "question": "Quand l'entrepôt de Herstal a-t-il reçu ses premières marchandises, et que stocke-t-il ?",
+  "answer": "Le 18 mai 2026. Il stocke les pompes à chaleur destinées aux clients de la province de Liège et de l'Allemagne.",
+  "evidence": [
+   {
+    "document": "02_RH/Notes_de_service/2026-05-12 NS-2026-08 Ouverture de l_entrepôt de Herstal.docx",
+    "snippets": [
+     "accueillera ses premières marchandises le 18 mai 2026"
+    ],
+    "grade": 2,
+    "fact": 0
+   }
+  ],
+  "traps": [],
+  "difficulty": "facile",
+  "notes": "step 40: written from documents no dev or test question cites"
+ },
+ {
+  "id": "F003",
+  "type": "factual",
+  "thread": null,
+  "question": "Selon la charte du droit à la déconnexion, entre quelles heures les réunions doivent-elles se tenir ?",
+  "answer": "Elles ne commencent pas avant 8 h 30 et ne se terminent pas après 17 h 30, sauf exception.",
+  "evidence": [
+   {
+    "document": "02_RH/Politiques/Charte droit a la deconnexion.docx",
+    "snippets": [
+     "Les réunions ne commencent pas avant 8 h 30 et ne se terminent pas après 17 h 30"
+    ],
+    "grade": 2,
+    "fact": 0
+   }
+  ],
+  "traps": [],
+  "difficulty": "facile",
+  "notes": "step 40: written from documents no dev or test question cites"
+ },
+ {
+  "id": "F004",
+  "type": "factual",
+  "thread": null,
+  "question": "Quel est le temps de retour attendu de l'installation photovoltaïque de Seneffe ?",
+  "answer": "5,5 ans : 410 000 € investis pour une économie annuelle estimée à 74 000 € (520 kWc, 495 MWh par an).",
+  "evidence": [
+   {
+    "document": "01_Finance/Investissements/Demande capex CAPEX-2026-003 - Installation photovoltaïque de Seneffe.docx",
+    "snippets": [
+     "Temps de retour",
+     "5,5 ans"
+    ],
+    "grade": 2,
+    "fact": 0
+   }
+  ],
+  "traps": [],
+  "difficulty": "facile",
+  "notes": "step 40: written from documents no dev or test question cites"
+ },
+ {
+  "id": "F005",
+  "type": "decision_reason",
+  "thread": null,
+  "question": "Pourquoi la demande d'investissement pour les panneaux photovoltaïques de Seneffe doit-elle passer par le conseil d'administration ?",
+  "answer": "Parce que son montant, 410 000 €, dépasse 250 000 € : au-delà de ce seuil, l'approbation du conseil d'administration est requise (le contrôle de gestion a donné un avis favorable et le CODIR l'a validée).",
+  "evidence": [
+   {
+    "document": "01_Finance/Investissements/Demande capex CAPEX-2026-003 - Installation photovoltaïque de Seneffe.docx",
+    "snippets": [
+     "Conseil d'administration (au-delà de 250 000 €)"
+    ],
+    "grade": 2,
+    "fact": 0
+   },
+   {
+    "document": "01_Finance/Investissements/Demande capex CAPEX-2026-003 - Installation photovoltaïque de Seneffe.docx",
+    "snippets": [
+     "410 000 €"
+    ],
+    "grade": 2,
+    "fact": 1
+   }
+  ],
+  "traps": [],
+  "difficulty": "moyen",
+  "notes": "step 40: written from documents no dev or test question cites"
+ },
+ {
+  "id": "F006",
+  "type": "factual",
+  "thread": null,
+  "question": "Qui doit valider un paiement de plus de 10 000 € vers un IBAN fournisseur modifié récemment ?",
+  "answer": "La directrice ou le directeur financier, personnellement, quand l'IBAN a été modifié depuis moins de 30 jours (procédure FIN-07).",
+  "evidence": [
+   {
+    "document": "01_Finance/Procedures/Procedure modification coordonnees bancaires fournisseurs.pdf",
+    "snippets": [
+     "Pour tout paiement supérieur à 10 000 € vers un IBAN modifié depuis moins de 30 jours"
+    ],
+    "grade": 2,
+    "fact": 0
+   }
+  ],
+  "traps": [],
+  "difficulty": "moyen",
+  "notes": "step 40: written from documents no dev or test question cites"
+ },
+ {
+  "id": "F007",
+  "type": "factual",
+  "thread": null,
+  "question": "Quand aura lieu la prochaine inspection légale du pont roulant ?",
+  "answer": "En mars 2027. L'inspection du 5 mars 2026 était conforme (650 €, 4 h d'arrêt planifiées un samedi).",
+  "evidence": [
+   {
+    "document": "03_Production/Maintenance/Fiches_intervention/2026-03-05 INT-2026-458 Pont roulant.docx",
+    "snippets": [
+     "Prochaine inspection en mars 2027"
+    ],
+    "grade": 2,
+    "fact": 0
+   }
+  ],
+  "traps": [],
+  "difficulty": "facile",
+  "notes": "step 40: written from documents no dev or test question cites"
+ },
+ {
+  "id": "F008",
+  "type": "factual",
+  "thread": null,
+  "question": "Combien a coûté la non-conformité due au mauvais câblage de la sonde extérieure sur l'Aéris 9 ?",
+  "answer": "690 € (NC-2026-013, 11 unités, causée par un opérateur intérimaire non formé ; action : formation et détrompeur sur le connecteur).",
+  "evidence": [
+   {
+    "document": "04_Qualite/Non_conformites/NC-2026-013.docx",
+    "snippets": [
+     "Mauvais câblage de la sonde extérieure",
+     "690 €"
+    ],
+    "grade": 2,
+    "fact": 0
+   }
+  ],
+  "traps": [],
+  "difficulty": "moyen",
+  "notes": "step 40: written from documents no dev or test question cites"
+ },
+ {
+  "id": "F009",
+  "type": "meeting_detail",
+  "thread": null,
+  "question": "Quel niveau de bruit a été mesuré près des presses de Seneffe, et qu'est-ce que cela implique ?",
+  "answer": "88 dB(A) : la protection auditive y est obligatoire (CPPT de Seneffe du 13 janvier 2026).",
+  "evidence": [
+   {
+    "document": "03_Production/Seneffe/CPPT/PV CPPT Seneffe 2026-01-13.docx",
+    "snippets": [
+     "88 dB(A) près des presses"
+    ],
+    "grade": 2,
+    "fact": 0
+   }
+  ],
+  "traps": [],
+  "difficulty": "moyen",
+  "notes": "step 40: written from documents no dev or test question cites"
+ },
+ {
+  "id": "F010",
+  "type": "meeting_detail",
+  "thread": null,
+  "question": "Combien du budget du projet Atlas avait été consommé lors du COPIL du 16 avril 2026 ?",
+  "answer": "431 k€ sur un budget approuvé de 725 k€, pour une mise en production visée le 1er juin 2026.",
+  "evidence": [
+   {
+    "document": "07_IT/Projet_Atlas_ERP/COPIL/COPIL_Atlas_09_20260416.docx",
+    "snippets": [
+     "Budget consommé",
+     "431 k€"
+    ],
+    "grade": 2,
+    "fact": 0
+   }
+  ],
+  "traps": [],
+  "difficulty": "moyen",
+  "notes": "step 40: written from documents no dev or test question cites"
+ },
+ {
+  "id": "F011",
+  "type": "factual",
+  "thread": null,
+  "question": "Que se passe-t-il si le go/no-go final de la bascule vers Atlas est négatif ?",
+  "answer": "Les utilisateurs reprennent GesPro 7 le lundi 1er juin et la bascule est reportée d'une semaine.",
+  "evidence": [
+   {
+    "document": "07_IT/Projet_Atlas_ERP/Documentation/Plan de bascule Atlas.pdf",
+    "snippets": [
+     "En cas de no-go final, les utilisateurs reprennent GesPro 7"
+    ],
+    "grade": 2,
+    "fact": 0
+   }
+  ],
+  "traps": [],
+  "difficulty": "moyen",
+  "notes": "step 40: written from documents no dev or test question cites"
+ },
+ {
+  "id": "F012",
+  "type": "factual",
+  "thread": null,
+  "question": "Qui est responsable de l'inventaire physique complet pendant la bascule vers Atlas, et quand a-t-il lieu ?",
+  "answer": "Marc Delhaye, du vendredi 29/05 à 13 h 00 au samedi 30/05 à 16 h 00.",
+  "evidence": [
+   {
+    "document": "07_IT/Projet_Atlas_ERP/Documentation/Plan de bascule Atlas.pdf",
+    "snippets": [
+     "Inventaire physique complet",
+     "Marc Delhaye"
+    ],
+    "grade": 2,
+    "fact": 0
+   }
+  ],
+  "traps": [],
+  "difficulty": "moyen",
+  "notes": "step 40: written from documents no dev or test question cites"
+ },
+ {
+  "id": "F013",
+  "type": "meeting_detail",
+  "thread": null,
+  "question": "Quel chiffre d'affaires la France a-t-elle réalisé en janvier 2026 ?",
+  "answer": "2 857 k€, sur un chiffre d'affaires total de 14 300 k€ en janvier 2026.",
+  "evidence": [
+   {
+    "document": "05_Commercial/Reunions_commerciales/CR reunion commerciale 2026-02-11.docx",
+    "snippets": [
+     "France",
+     "2 857"
+    ],
+    "grade": 2,
+    "fact": 0
+   },
+   {
+    "document": "05_Commercial/Tableaux_de_bord/Tableau de bord commercial 2026-01.png",
+    "snippets": [
+     "2 857"
+    ],
+    "grade": 2,
+    "fact": 0
+   }
+  ],
+  "traps": [],
+  "difficulty": "moyen",
+  "notes": "step 40: written from documents no dev or test question cites"
+ },
+ {
+  "id": "F014",
+  "type": "meeting_detail",
+  "thread": null,
+  "question": "Quel taux d'absentéisme a été relevé au CODIR du 10 novembre 2025 ?",
+  "answer": "7,0 % en semaine 45, pour un objectif inférieur à 5 %.",
+  "evidence": [
+   {
+    "document": "00_Direction/CODIR/2025/PV_CODIR_2025-11-10.docx",
+    "snippets": [
+     "Taux d'absentéisme",
+     "7,0 %"
+    ],
+    "grade": 2,
+    "fact": 0
+   }
+  ],
+  "traps": [],
+  "difficulty": "moyen",
+  "notes": "step 40: written from documents no dev or test question cites"
+ },
+ {
+  "id": "F015",
+  "type": "meeting_detail",
+  "thread": null,
+  "question": "Quelles pistes Pieter De Smet a-t-il présentées en novembre 2025 contre l'absentéisme à Gand ?",
+  "answer": "La rotation des postes de préparation de commandes, des entretiens de retour après absence et la révision des horaires de l'équipe de nuit (nouvel horaire en test depuis le 3 novembre).",
+  "evidence": [
+   {
+    "document": "00_Direction/CODIR/2025/PV_CODIR_2025-11-10.docx",
+    "snippets": [
+     "rotation des postes de préparation de commandes"
+    ],
+    "grade": 2,
+    "fact": 0
+   }
+  ],
+  "traps": [],
+  "difficulty": "moyen",
+  "notes": "step 40: written from documents no dev or test question cites"
+ },
+ {
+  "id": "F016",
+  "type": "factual",
+  "thread": null,
+  "question": "Quand a lieu la journée portes ouvertes de l'usine de Seneffe ?",
+  "answer": "Le samedi 6 juin 2026, de 10 h 00 à 17 h 00, pour les familles et les riverains.",
+  "evidence": [
+   {
+    "document": "02_RH/Notes_de_service/2026-04-21 NS-2026-05 Journée portes ouvertes de Seneffe.docx",
+    "snippets": [
+     "le samedi 6 juin 2026"
+    ],
+    "grade": 2,
+    "fact": 0
+   },
+   {
+    "document": "00_Direction/CODIR/2026/2026-04-20 CODIR PV.docx",
+    "snippets": [
+     "Journée portes ouvertes de l'usine de Seneffe le samedi 6 juin"
+    ],
+    "grade": 1,
+    "fact": 0
+   }
+  ],
+  "traps": [],
+  "difficulty": "facile",
+  "notes": "step 40: written from documents no dev or test question cites"
+ },
+ {
+  "id": "F017",
+  "type": "factual",
+  "thread": null,
+  "question": "Quels points faibles la synthèse des démonstrations ERP relève-t-elle pour Sylvan Suite ?",
+  "answer": "Une gestion de production limitée et peu de références industrielles en Belgique, malgré le coût d'abonnement le plus bas (note moyenne 3,4 sur 5).",
+  "evidence": [
+   {
+    "document": "06_Achats/Appel_offres_ERP/Synthese demonstrations ERP.docx",
+    "snippets": [
+     "gestion de production limitée"
+    ],
+    "grade": 2,
+    "fact": 0
+   }
+  ],
+  "traps": [],
+  "difficulty": "moyen",
+  "notes": "step 40: written from documents no dev or test question cites"
+ },
+ {
+  "id": "F018",
+  "type": "factual",
+  "thread": null,
+  "question": "Où les visiteurs doivent-ils se garer au siège de Namur ?",
+  "answer": "Sur les emplacements V1 à V8 du parking situé derrière le bâtiment, rue des Artisans 42.",
+  "evidence": [
+   {
+    "document": "09_Communication/Intranet/Plans d_acces et parkings.html",
+    "snippets": [
+     "Les visiteurs se garent sur les emplacements V1 à V8"
+    ],
+    "grade": 2,
+    "fact": 0
+   }
+  ],
+  "traps": [],
+  "difficulty": "facile",
+  "notes": "step 40: written from documents no dev or test question cites"
+ },
+ {
+  "id": "F019",
+  "type": "factual",
+  "thread": null,
+  "question": "Quel objectif de ventes est fixé pour 2026 avec Thermo Services Lille ?",
+  "answer": "180 pompes à chaleur, dont 60 Aéris Pro (responsable : Mathilde Roux).",
+  "evidence": [
+   {
+    "document": "05_Commercial/Comptes_cles/Plan de compte Thermo Services Lille 2026.docx",
+    "snippets": [
+     "180 pompes à chaleur, dont 60 Aéris Pro"
+    ],
+    "grade": 2,
+    "fact": 0
+   }
+  ],
+  "traps": [],
+  "difficulty": "facile",
+  "notes": "step 40: written from documents no dev or test question cites"
+ },
+ {
+  "id": "F020",
+  "type": "multilingual",
+  "thread": null,
+  "question": "Quel était le taux d'absentéisme à Gand en février 2026 ?",
+  "answer": "5,4 % (comité PBW de Gand du 19 mars 2026).",
+  "evidence": [
+   {
+    "document": "03_Production/Gent/Veiligheid/Comite PBW/Verslag Comite PBW Gent 2026-03-19.docx",
+    "snippets": [
+     "Absenteïsme in februari 2026: 5,4 %"
+    ],
+    "grade": 2,
+    "fact": 0
+   }
+  ],
+  "traps": [],
+  "difficulty": "moyen",
+  "notes": "step 40: written from documents no dev or test question cites"
+ },
+ {
+  "id": "F021",
+  "type": "multilingual",
+  "thread": null,
+  "question": "Combien de jours de congé sont offerts pour le poste d'account manager dans le Limbourg ?",
+  "answer": "32 jours de congé par an, avec un contrat fixe, une voiture de société, des chèques-repas de 8 euros et une assurance hospitalisation.",
+  "evidence": [
+   {
+    "document": "02_RH/Recrutement/Offres/REC-2026-011 Accountmanager Limburg.html",
+    "snippets": [
+     "32 vakantiedagen per jaar"
+    ],
+    "grade": 2,
+    "fact": 0
+   }
+  ],
+  "traps": [],
+  "difficulty": "moyen",
+  "notes": "step 40: written from documents no dev or test question cites"
+ },
+ {
+  "id": "F022",
+  "type": "multilingual",
+  "thread": null,
+  "question": "Quel est le rendement de récupération de chaleur du Ventis D450 Pro ?",
+  "answer": "94 %.",
+  "evidence": [
+   {
+    "document": "05_Commercial/Fiches_produits/Ventis_D450_Pro_EN.pdf",
+    "snippets": [
+     "Heat recovery efficiency",
+     "94 %"
+    ],
+    "grade": 2,
+    "fact": 0
+   },
+   {
+    "document": "05_Commercial/Fiches_produits/Ventis_D450_Pro_FR.pdf",
+    "snippets": [
+     "Rendement de récupération de chaleur",
+     "94 %"
+    ],
+    "grade": 2,
+    "fact": 0
+   },
+   {
+    "document": "05_Commercial/Fiches_produits/Ventis_D450_Pro_NL.pdf",
+    "snippets": [
+     "Rendement warmteterugwinning",
+     "94 %"
+    ],
+    "grade": 2,
+    "fact": 0
+   }
+  ],
+  "traps": [],
+  "difficulty": "facile",
+  "notes": "step 40: written from documents no dev or test question cites"
+ },
+ {
+  "id": "F023",
+  "type": "excel_lookup",
+  "thread": null,
+  "question": "Quel était l'effectif total de Calorvia en ETP fin avril 2026 ?",
+  "answer": "621 ETP.",
+  "evidence": [
+   {
+    "document": "02_RH/Effectifs/Effectifs mensuels 2025-2026.xlsx",
+    "snippets": [
+     "Site : Total",
+     "04/2026 : 621"
+    ],
+    "grade": 2,
+    "fact": 0
+   },
+   {
+    "document": "01_Finance/Reporting_mensuel/Reporting 2026-04.xlsx",
+    "snippets": [
+     "Site : Total",
+     "ETP : 621"
+    ],
+    "grade": 2,
+    "fact": 0
+   }
+  ],
+  "traps": [],
+  "difficulty": "moyen",
+  "notes": "step 40: written from documents no dev or test question cites"
+ },
+ {
+  "id": "F024",
+  "type": "excel_lookup",
+  "thread": null,
+  "question": "Quel a été le TRS de la ligne L2 de Seneffe en mars 2026 ?",
+  "answer": "81,5 % (720 Aéris 12 produites, 19,8 h d'arrêt, 1,1 % de rebut).",
+  "evidence": [
+   {
+    "document": "03_Production/Seneffe/Rapports_mensuels/Rapport production Seneffe 2026-03.xlsx",
+    "snippets": [
+     "Ligne : L2",
+     "TRS (%) : 81.5"
+    ],
+    "grade": 2,
+    "fact": 0
+   }
+  ],
+  "traps": [],
+  "difficulty": "moyen",
+  "notes": "step 40: written from documents no dev or test question cites"
+ },
+ {
+  "id": "F025",
+  "type": "excel_reasoning",
+  "thread": null,
+  "question": "Quelle ligne de Seneffe a produit le plus d'unités en mars 2026 ?",
+  "answer": "La ligne L1 (Aéris 6 / 9) : 838 unités, sur 2 076 au total (L2 : 720, L3 : 518).",
+  "evidence": [
+   {
+    "document": "03_Production/Seneffe/Rapports_mensuels/Rapport production Seneffe 2026-03.xlsx",
+    "snippets": [
+     "Ligne : L1",
+     "Unités produites : 838"
+    ],
+    "grade": 2,
+    "fact": 0
+   }
+  ],
+  "traps": [],
+  "difficulty": "moyen",
+  "notes": "step 40: written from documents no dev or test question cites"
+ },
+ {
+  "id": "F026",
+  "type": "excel_lookup",
+  "thread": null,
+  "question": "Quel accident avec arrêt s'est produit à l'usine de Seneffe en mars 2026 ?",
+  "answer": "Le 19 mars 2026, une coupure à la main en tôlerie.",
+  "evidence": [
+   {
+    "document": "03_Production/Seneffe/Rapports_mensuels/Rapport production Seneffe 2026-03.xlsx",
+    "snippets": [
+     "19/03 : accident avec arrêt (coupure à la main en tôlerie)"
+    ],
+    "grade": 2,
+    "fact": 0
+   }
+  ],
+  "traps": [],
+  "difficulty": "moyen",
+  "notes": "step 40: written from documents no dev or test question cites"
+ },
+ {
+  "id": "F027",
+  "type": "image_only",
+  "thread": null,
+  "question": "Quel est le montant TTC de la facture de transport TransArdenne de février 2026 ?",
+  "answer": "24 856,79 € TTC (20 542,80 € HT et 4 313,99 € de TVA à 21 %).",
+  "evidence": [
+   {
+    "document": "01_Finance/Comptabilite/Factures_fournisseurs/2026-02-27 TransArdenne TA-2026-00218.jpg",
+    "snippets": [
+     "24 856,79"
+    ],
+    "grade": 2,
+    "fact": 0
+   }
+  ],
+  "traps": [],
+  "difficulty": "moyen",
+  "notes": "step 40: written from documents no dev or test question cites"
+ },
+ {
+  "id": "F028",
+  "type": "image_only",
+  "thread": null,
+  "question": "Quelle ligne de Seneffe avait le taux de rebut le plus élevé en décembre 2025 ?",
+  "answer": "La ligne L2, avec 3,4 % (L1 : 1,7 %, L3 : 1,6 %).",
+  "evidence": [
+   {
+    "document": "04_Qualite/Indicateurs/Rebut par ligne decembre 2025.png",
+    "snippets": [
+     "3,4"
+    ],
+    "grade": 2,
+    "fact": 0
+   },
+   {
+    "document": "03_Production/Seneffe/Rapports_mensuels/Rapport production Seneffe 2025-12.xlsx",
+    "snippets": [
+     "Ligne : L2",
+     "Rebut (%) : 3.4"
+    ],
+    "grade": 2,
+    "fact": 0
+   }
+  ],
+  "traps": [],
+  "difficulty": "moyen",
+  "notes": "step 40: written from documents no dev or test question cites"
+ },
+ {
+  "id": "F029",
+  "type": "image_only",
+  "thread": null,
+  "question": "Quel chiffre d'affaires la Flandre a-t-elle réalisé en février 2026 ?",
+  "answer": "4 281 k€, sur un chiffre d'affaires total de 13 500 k€ (−2,1 % par rapport au budget).",
+  "evidence": [
+   {
+    "document": "05_Commercial/Tableaux_de_bord/Tableau de bord commercial 2026-02.png",
+    "snippets": [
+     "4 281"
+    ],
+    "grade": 2,
+    "fact": 0
+   }
+  ],
+  "traps": [],
+  "difficulty": "moyen",
+  "notes": "step 40: written from documents no dev or test question cites"
+ },
+ {
+  "id": "F030",
+  "type": "version_trap",
+  "thread": null,
+  "question": "Dans le dernier planning du projet Atlas, quand la bascule du site de Gand est-elle prévue ?",
+  "answer": "Du 12 au 14 juin 2026, pour un démarrage de Gand le 15 juin (planning version 3 du 19/05/2026, démarrage en deux temps), après la correction de l'interface WMS de Gand (19/05 – 10/06). Namur, Seneffe et Lille basculent du 29 au 31 mai.",
+  "evidence": [
+   {
+    "document": "07_IT/Projet_Atlas_ERP/Planning/Planning Atlas v3.png",
+    "snippets": [
+     "12/06"
+    ],
+    "grade": 2,
+    "fact": 0
+   }
+  ],
+  "traps": [
+   {
+    "document": "07_IT/Projet_Atlas_ERP/Planning/Planning Atlas v2.png",
+    "snippets": [
+     "29/05"
+    ],
+    "grade": 2,
+    "fact": 0
+   }
+  ],
+  "difficulty": "difficile",
+  "notes": "step 40: written from documents no dev or test question cites"
+ },
+ {
+  "id": "F031",
+  "type": "image_only",
+  "thread": null,
+  "question": "Quelle est la pression de service du compresseur d'air de Seneffe ?",
+  "answer": "7,5 bar (compresseur à vis Airvex AVX-55 VSD de 2022, 55 kW, 9,1 m3/min).",
+  "evidence": [
+   {
+    "document": "03_Production/Seneffe/Photos_equipements/IMG_20260314_Compresseur_dair.jpg",
+    "snippets": [
+     "7,5 bar"
+    ],
+    "grade": 2,
+    "fact": 0
+   }
+  ],
+  "traps": [],
+  "difficulty": "moyen",
+  "notes": "step 40: written from documents no dev or test question cites"
+ },
+ {
+  "id": "F032",
+  "type": "factual",
+  "thread": null,
+  "question": "Combien de contacts qualifiés le salon Énergie+ 2026 a-t-il générés ?",
+  "answer": "214 contacts qualifiés, contre 168 en 2025, pour un coût par contact de 215 € (247 € en 2025).",
+  "evidence": [
+   {
+    "document": "05_Commercial/Salons/Bilan salon Energie+ 2026.pptx",
+    "snippets": [
+     "Contacts qualifiés",
+     "214"
+    ],
+    "grade": 2,
+    "fact": 0
+   }
+  ],
+  "traps": [],
+  "difficulty": "facile",
+  "notes": "step 40: written from documents no dev or test question cites"
+ },
+ {
+  "id": "F033",
+  "type": "scan_ocr",
+  "thread": null,
+  "question": "Quel retard de livraison Énergies du Condroz a-t-il signalé en novembre 2025 ?",
+  "answer": "Sa commande CMD-25-4471 de 12 Aéris 6, confirmée pour le 24 octobre, n'a été livrée que le 14 novembre, soit trois semaines de retard ; quatre chantiers ont été reportés et le client demande un geste commercial.",
+  "evidence": [
+   {
+    "document": "04_Qualite/Reclamations/Courrier Énergies 2025-11-18.pdf",
+    "snippets": [
+     "CMD-25-4471"
+    ],
+    "grade": 2,
+    "fact": 0
+   }
+  ],
+  "traps": [],
+  "difficulty": "moyen",
+  "notes": "step 40: written from documents no dev or test question cites"
+ },
+ {
+  "id": "F034",
+  "type": "out_of_corpus",
+  "thread": null,
+  "question": "Quand se tiendra le salon Énergie+ 2027 ?",
+  "answer": "Information absente du corpus.",
+  "evidence": [],
+  "traps": [],
+  "difficulty": "moyen",
+  "notes": "step 40: written from documents no dev or test question cites"
+ },
+ {
+  "id": "F035",
+  "type": "out_of_corpus",
+  "thread": null,
+  "question": "Combien de places compte la crèche d'entreprise de Seneffe ?",
+  "answer": "Information absente du corpus.",
+  "evidence": [],
+  "traps": [],
+  "difficulty": "moyen",
+  "notes": "step 40: written from documents no dev or test question cites"
+ }
+]

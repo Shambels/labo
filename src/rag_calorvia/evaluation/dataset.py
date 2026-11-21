@@ -4,13 +4,18 @@ Rules of the statement, enforced here rather than remembered:
 - the 31 questions whose number is a multiple of 5 are the test set: tune on the 127 others, evaluate the
   chosen configuration on the test set once, at the end (step 9);
 - the eval set measures, it never builds: nothing here is used by the RAG itself.
+
+Step 40: the test set was used in step 9, and every step since has been tuned on the dev set, so neither can say how
+the configuration does on questions nobody tuned for. The "fresh" split is a third set (settings.fresh_eval_path),
+written from documents no dev or test question cites, held out like the test set: run once, on the final choice.
 """
 import json
 from collections import defaultdict
 
 from rag_calorvia.config import settings
 
-SPLITS = ("dev", "test", "all")
+SPLITS = ("dev", "test", "all", "fresh")
+HELD_OUT = ("test", "fresh")   # read only when asked for (allow_test=True)
 JUDGE_PER_TYPE = 2  # 2 questions per type of the dev set: 31 questions (image_in_document has only 1 in dev)
 
 
@@ -24,7 +29,10 @@ def load_questions(split="dev", allow_test=False, path=None):
     if split not in SPLITS:
         raise ValueError(f"split must be one of {SPLITS}, not {split!r}")
     if split != "dev" and not allow_test:
-        raise PermissionError("the test set is held out until the final evaluation: pass allow_test=True")
+        raise PermissionError(f"the {split} set is held out until the final evaluation: pass allow_test=True")
+    if split == "fresh":
+        with open(path or settings.fresh_eval_path, encoding="utf-8") as f:
+            return json.load(f)
     with open(path or settings.eval_path, encoding="utf-8") as f:
         questions = json.load(f)
     if split == "dev":
