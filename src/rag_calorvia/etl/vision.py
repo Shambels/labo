@@ -44,7 +44,24 @@ TRANSCRIBE_PROMPT_V2 = """Tu transcris des documents d'entreprise pour un moteur
    plan, graphique, photo, facture...) et ce qu'elle montre qui n'est pas écrit : les rattachements
    d'un organigramme, la valeur la plus haute d'un graphique, la position des éléments d'un plan.
 N'invente rien : si un élément est illisible, écris [illisible]."""
-PROMPTS = {"v1": TRANSCRIBE_PROMPT, "v2": TRANSCRIBE_PROMPT_V2}   # [chunking] vision_prompt; v1 by default
+# Step 40: Qwen3.8 (step 37) read v2's org charts row by row: the six directors, then every team mixed, so the
+# after-sales manager ended up far from his director (Q147); it also wrote "[lien de rattachement]" for every unlabelled
+# line. v3 asks for each box under the box it hangs from, and for nothing on a line without text.
+TRANSCRIBE_PROMPT_V3 = """Tu transcris des documents d'entreprise pour un moteur de recherche.
+1. Recopie tout le texte visible, exactement comme il est écrit : nombres, codes, dates, unités et
+   annotations manuscrites compris. Rends les tableaux en Markdown.
+2. Dans un organigramme ou une arborescence, regroupe chaque case sous la case dont elle dépend : écris la case
+   supérieure (son texte complet, par exemple le nom et la fonction), puis, juste en dessous, chaque case qui lui
+   est rattachée sur une ligne qui commence par « - ». Ne recopie jamais les cases rangée par rangée : une case n'a
+   de sens qu'avec celle dont elle dépend.
+3. Dans un schéma ou un plan, recopie chaque texte posé sur un lien, une flèche ou un trait (débit, distance,
+   type de connexion), sur une ligne qui commence par le nom des deux éléments reliés, tels qu'ils sont écrits sur
+   l'image, séparés par un tiret, puis deux-points et le texte. N'écris rien pour un lien sans texte.
+4. Puis, sous le titre « Description », décris en trois phrases au plus le type d'image (organigramme,
+   plan, graphique, photo, facture...) et ce qu'elle montre qui n'est pas écrit : la valeur la plus haute d'un
+   graphique, la position des éléments d'un plan.
+N'invente rien : si un élément est illisible, écris [illisible]."""
+PROMPTS = {"v1": TRANSCRIBE_PROMPT, "v2": TRANSCRIBE_PROMPT_V2, "v3": TRANSCRIBE_PROMPT_V3}   # [chunking] vision_prompt; v1 by default
 
 MAX_SIDE = 1600        # pixels: larger images cost tokens and time without being more legible
 SCAN_DPI = 150         # rendering of scanned pages
