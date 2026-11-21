@@ -194,3 +194,14 @@ def test_contextual_chunks_have_their_own_collection():
     config = {"embedder": {"model": "bge-m3"}, "chunking": {"max_tokens": 256, "context_line": True}}
     assert not collection_name(config).endswith("__contextual")
     assert collection_name({**config, "chunking": {**config["chunking"], "contextual": True}}).endswith("__contextual")
+
+
+def test_the_llm_lines_are_parsed_and_the_header_and_broken_lines_skipped():
+    from rag_calorvia.etl.entities import parse_lines
+    text = ("nom | type | alias | description\n"
+            "- Aéris 12 | produit | Aeris12 ; AE12 | pompe à chaleur rappelée\n"
+            "Pieter De Smet | personne | | directeur du site de Gand\n"
+            "une ligne sans champs")
+    assert parse_lines(text) == [
+        {"nom": "Aéris 12", "type": "produit", "alias": ["Aeris12", "AE12"], "description": "pompe à chaleur rappelée"},
+        {"nom": "Pieter De Smet", "type": "personne", "alias": [], "description": "directeur du site de Gand"}]

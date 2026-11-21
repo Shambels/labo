@@ -82,13 +82,17 @@ def card(entities, role=None):
     """The extract that says what the named entities are, or None when none has a readable description."""
     lines = []
     for entity in entities:
-        description = next((d for d in entity["descriptions"] if can_read(role, d["document"])), None)
+        description = next((d for d in entity["descriptions"]   # a reviewed description has no document
+                            if d["document"] is None or can_read(role, d["document"])), None)
         if description is None:
             continue
         aliases = [a for a in entity["aliases"] if len(normalize(a)) >= MIN_KEY][:3]
         also = f" ; aussi : {', '.join(aliases)}" if aliases else ""
-        source = Path(description["document"]).stem + (f", {description['date']}" if description.get("date") else "")
-        lines.append(f"- {entity['name']} ({entity['kind']}{also}) : {description['text']} (source : {source})")
+        source = ""
+        if description["document"]:
+            source = f" (source : {Path(description['document']).stem}"
+            source += f", {description['date']})" if description.get("date") else ")"
+        lines.append(f"- {entity['name']} ({entity['kind']}{also}) : {description['text']}{source}")
         if len(lines) == MAX_CARDS:
             break
     if not lines:

@@ -10,6 +10,7 @@ import argparse
 import json
 import time
 import tomllib
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 import yaml
@@ -25,6 +26,7 @@ OUTPUT, REVIEW = Path("knowledge/entities.json"), Path("knowledge/entities_revie
 parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
 parser.add_argument("config", help="experiment TOML file: its chunks are the documents' text")
 parser.add_argument("--no-compute", action="store_true", help="merge what is cached; never call the LLM")
+parser.add_argument("--workers", type=int, default=1, help="documents sent at once (the server's -np slots)")
 args = parser.parse_args()
 setup_logging()
 
@@ -32,14 +34,23 @@ with open(args.config, "rb") as f:
     config = tomllib.load(f)
 config["chunking"].pop("contextual", None)   # the documents as written, without the context sentences
 documents = by_document(chunk_corpus(config))
-found, start = {}, time.time()
-for i, (document, members) in enumerate(documents.items(), 1):
-    entities = document_entities(document, document_text(members, config["chunking"]["context_line"], MAX_DOCUMENT_CHARS),
-                                 config["generation"]["model"], compute=not args.no_compute)
-    if entities is not None:
-        found[document] = entities
-    if i % 20 == 0 or i == len(documents):
-        print(f"{i}/{len(documents)} documents ({time.time() - start:.0f} s)", flush=True)
+found, start, done = {}, time.time(), 0
+
+
+def extract(item):
+    document, members = item
+    return document, document_entities(document, document_text(members, config["chunking"]["context_line"],
+                                                                 MAX_DOCUMENT_CHARS),
+                                       config["generation"]["model"], compute=not args.no_compute)
+
+
+with ThreadPoolExecutor(args.workers) as pool:
+    for document, entities in pool.map(extract, documents.items()):
+        if entities is not None:
+            found[document] = entities
+        done += 1
+        if done % 20 == 0 or done == len(documents):
+            print(f"{done}/{len(documents)} documents ({time.time() - start:.0f} s)", flush=True)
 
 with db.connect(read_only=True) as conn:
     dates = {d["path"]: d["doc_date"].isoformat() if d["doc_date"] else None

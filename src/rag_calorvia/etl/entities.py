@@ -26,24 +26,17 @@ KINDS = ["personne", "site", "produit", "client", "fournisseur", "projet", "inst
 PROMPT = """Tu construis le référentiel des entités de l'entreprise Calorvia (pompes à chaleur et ventilation) à partir
 de ses documents. Liste les entités nommées du document : personnes, sites et bâtiments, produits et gammes, clients,
 fournisseurs et partenaires, projets, instances (comités, conseils), équipements et lignes de production.
-Pour chacune :
+Une ligne par entité, quatre champs séparés par « | » :
+nom | type | alias | description
 - nom : son nom le plus complet dans le document ;
 - type : un de personne, site, produit, client, fournisseur, projet, instance, équipement, autre ;
-- alias : les autres noms que le document lui donne (sigle, nom court, nom dans une autre langue), sans le nom ;
-- description : ce que le document dit qu'elle est, en 15 mots au plus (la fonction d'une personne, le rôle d'un site,
+- alias : les autres noms que le document lui donne (sigle, nom court, nom dans une autre langue), séparés par « ; »,
+  vide s'il n'y en a pas ;
+- description : ce que le document dit qu'elle est, en 10 mots au plus (la fonction d'une personne, le rôle d'un site,
   la nature d'un produit ou d'un projet), sans montants.
+Exemple : Pieter De Smet | personne | | directeur du site de Gand
 Ne liste ni Calorvia elle-même, ni les départements, ni les dates, ni les montants, ni les documents. N'invente rien :
-seulement ce que le document écrit. Réponds en JSON."""
-SCHEMA = {
-    "type": "object",
-    "properties": {"entites": {"type": "array", "items": {
-        "type": "object",
-        "properties": {"nom": {"type": "string"}, "type": {"type": "string", "enum": KINDS},
-                       "alias": {"type": "array", "items": {"type": "string"}},
-                       "description": {"type": "string"}},
-        "required": ["nom", "type", "alias", "description"]}}},
-    "required": ["entites"],
-}
+seulement ce que le document écrit. Réponds uniquement par les lignes."""
 MAX_DOCUMENT_CHARS = 12000   # the entities of a long workbook are in its first rows; the list's length is the cost
 MIN_KEY = 3   # names and aliases shorter than this (normalized) are dropped: "L4" stays, "A" doesn't
 
@@ -52,6 +45,19 @@ def normalize(text):
     """Lower case, no accents, punctuation as spaces: 'Aéris 12' and 'AERIS-12' both give 'aeris 12'."""
     text = unicodedata.normalize("NFKD", text or "").encode("ascii", "ignore").decode().lower()
     return " ".join(re.sub(r"[^a-z0-9]+", " ", text).split())
+
+
+def parse_lines(text):
+    """The LLM's lines 'nom | type | alias ; alias | description' -> [{nom, type, alias, description}].
+    One line per entity costs half the tokens of JSON: the output, not the document, is what takes the time."""
+    entities = []
+    for line in (text or "").splitlines():
+        fields = [f.strip() for f in line.strip().strip("-* ").split("|")]
+        if len(fields) != 4 or not fields[0] or fields[0].lower() == "nom":
+            continue
+        entities.append({"nom": fields[0], "type": fields[1].lower(),
+                         "alias": [a.strip() for a in fields[2].split(";") if a.strip()], "description": fields[3]})
+    return entities
 
 
 def cache_path(document, text, model):
@@ -69,15 +75,9 @@ def document_entities(document, text, model, compute=True):
     from rag_calorvia.rag.generate import get_llm
     started = time.perf_counter()
     response = get_llm().chat.completions.create(
-        model=model, temperature=0.0, max_tokens=3000,
-        response_format={"type": "json_schema", "json_schema": {"name": "entites", "schema": SCHEMA}},
+        model=model, temperature=0.0, max_tokens=2000,
         messages=[{"role": "system", "content": PROMPT}, {"role": "user", "content": text}])
-    choice = response.choices[0]
-    try:
-        entities = json.loads(choice.message.content or "{}").get("entites", [])
-    except json.JSONDecodeError:   # cut by max_tokens: keep nothing rather than half a list
-        logger.warning("entities of %s: invalid JSON (%s)", document, choice.finish_reason)
-        entities = []
+    entities = parse_lines(response.choices[0].message.content)
     record = {"document": document, "model": model, "entities": entities,
               "seconds": round(time.perf_counter() - started, 1)}
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -177,7 +177,9 @@ def dedupe_normalized(aliases, name):
 
 
 def apply_review(entities, review):
-    """The hand review (knowledge/entities_review.yaml): drop, merge {kept name: [other names]}, rename, aliases.
+    """The hand review (knowledge/entities_review.yaml): drop, merge {kept name: [other names]}, rename, aliases,
+    drop_aliases {name: [aliases]}, describe {name: text} (a checked description, shown before the extracted ones,
+    with no source document), kind.
 
     Names are matched normalized. A merged entity brings its aliases, descriptions and documents to the kept one."""
     review = review or {}
@@ -205,6 +207,13 @@ def apply_review(entities, review):
     for name, extra in (review.get("aliases") or {}).items():
         entity = by_name[normalize(name)]
         entity["aliases"] = dedupe_normalized([*entity["aliases"], *extra], entity["name"])
+    for name, wrong in (review.get("drop_aliases") or {}).items():
+        entity = by_name[normalize(name)]
+        bad = {normalize(a) for a in wrong}
+        entity["aliases"] = [a for a in entity["aliases"] if normalize(a) not in bad]
+    for name, text in (review.get("describe") or {}).items():
+        entity = by_name[normalize(name)]
+        entity["descriptions"] = [{"text": text, "document": None, "date": None}, *entity["descriptions"]][:3]
     for name, kind in (review.get("kind") or {}).items():
         by_name[normalize(name)]["kind"] = kind
     return sorted(by_name.values(), key=lambda e: (-len(e["documents"]), e["name"]))
