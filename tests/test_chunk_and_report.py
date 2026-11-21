@@ -69,3 +69,16 @@ def test_refusals_are_not_judged_on_faithfulness():
     assert "correctness" in metrics_for(question, "Je ne sais pas.")
     assert metrics_for(question, "Le numéro est BRV-19-04417 [1].") == METRIC_NAMES
     assert metrics_for({"type": "out_of_corpus"}, "Je ne sais pas.") == ["correctness"]
+
+
+def test_the_issuer_follows_the_label_of_calorvias_own_documents():
+    """Step 34: '[label · Calorvia SA · file · folder]'; a supplier's offer says nothing (it isn't Calorvia's text)."""
+    cgv = {**document(path="05_Commercial/Tarifs/Conditions generales de vente 2026.pdf",
+                      label="Conditions générales de vente", start=date(2026, 1, 1), end=date(2026, 12, 31),
+                      precision="year"), "doc_type": "terms_of_sale"}
+    assert context_line(cgv, with_issuer=True) == (
+        "[Conditions générales de vente 2026 · Calorvia SA · Conditions generales de vente 2026 · 05_Commercial/Tarifs]")
+    offer = {**document(path="03_Production/Seneffe/Ligne_L4/Offre Linetech LT-Q-25-0871.pdf", label="Offre fournisseur",
+                        start=date(2025, 10, 16)), "doc_type": "supplier_quote"}
+    assert "Calorvia SA" not in context_line(offer, with_issuer=True)
+    assert "Calorvia SA" not in context_line(cgv)   # off unless [chunking] issuer = true

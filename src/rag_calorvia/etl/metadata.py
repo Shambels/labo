@@ -47,6 +47,7 @@ DOC_TYPES = [
     ("procedure", r"Procedure|Procedures/|Consignes", "Procédure"),
     ("capex_request", r"Demande capex", "Demande d'investissement"),
     ("budget", r"Budget", "Budget"),
+    ("terms_of_sale", r"Conditions generales de vente", "Conditions générales de vente"),   # step 34: was "Tarif"
     ("price_list", r"Tarifs?/|Tarif ", "Tarif"),
     ("sales_meeting", r"Reunions_commerciales/", "Compte rendu de réunion commerciale"),
     ("dashboard", r"Tableaux_de_bord/|Indicateurs/", "Tableau de bord"),
@@ -68,6 +69,18 @@ DOC_TYPES = [
     ("report", r"Rapport|Verslag|Bilan|Synthese", "Rapport"),
     ("workbook", r"\.(xlsx|csv)$", "Classeur"),  # any other workbook: registers, follow-ups, exports
 ]
+
+
+# Step 34: who wrote a document. The corpus is Calorvia's shared drive, so Calorvia wrote it, except these types,
+# written by a supplier, an insurer, the other party of a contract or an ERP vendor. A question naming "Calorvia" ("les
+# conditions de paiement de Calorvia") should find Calorvia's own text, not a supplier's offer addressed to Calorvia.
+COMPANY = "Calorvia SA"
+EXTERNAL_TYPES = {"supplier_quote", "supplier_invoice", "delivery_note", "certificate", "contract", "erp_tender"}
+
+
+def issuer(kind):
+    """Who wrote a document of this type: the company, or None when someone else did (or it is shared)."""
+    return None if kind in EXTERNAL_TYPES else COMPANY
 
 
 def doc_type(relative_path):

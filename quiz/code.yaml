@@ -1,4 +1,4 @@
-# Phase H of the quiz (app/quiz.py): the code and the flow of the whole app.
+# Phase Z of the quiz (app/quiz.py): the code and the flow of the whole app.
 # Each question belongs to a `node` of the pipeline map; types:
 #   order   `steps` in the right order (the page shuffles them; you pick them in order)
 #   match   `pairs` [left, right]: each left gets a list of every right
@@ -498,3 +498,18 @@ questions:
     explain: >-
       Every change names its owner (404 otherwise, as for an unknown id); a new question in an archived conversation
       brings it back (touch_conversation).
+
+  # --- step 34 ------------------------------------------------------------------------------------------------------
+  - id: code-issuer-line
+    node: chunking
+    type: choice
+    prompt: "With [chunking] issuer = true, which context line is right for Linetech's offer LT-Q-25-0871, addressed to Calorvia SA?"
+    correct: "[Offre fournisseur du 16 octobre 2025 · Offre Linetech LT-Q-25-0871 · 03_Production/Seneffe/Ligne_L4]"
+    wrong:
+      - "[Offre fournisseur du 16 octobre 2025 · Calorvia SA · Offre Linetech LT-Q-25-0871 · 03_Production/Seneffe/Ligne_L4]"
+      - "[Calorvia SA · Offre fournisseur du 16 octobre 2025 · Offre Linetech LT-Q-25-0871 · 03_Production/Seneffe/Ligne_L4]"
+      - "[Offre fournisseur du 16 octobre 2025 · Linetech Automation BV · Offre Linetech LT-Q-25-0871 · 03_Production/Seneffe/Ligne_L4]"
+    files: [src/rag_calorvia/etl/chunk.py, src/rag_calorvia/etl/metadata.py]
+    explain: >-
+      supplier_quote is in EXTERNAL_TYPES: issuer() returns None and nothing is added. Only Calorvia's own documents
+      get "· Calorvia SA ·" after the label; the supplier's name is not in the registry.

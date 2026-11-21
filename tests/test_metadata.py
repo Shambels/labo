@@ -77,6 +77,7 @@ def test_workbook_only_reads_its_title_line():
     ("00_Direction/Strategie/Photo tableau SWOT seminaire 2025-08-26.jpg", "photo"),
     ("05_Commercial/Comptes_cles/Avenant tarifaire Distrinergie 2026 signe.pdf", "contract"),
     ("05_Commercial/Tarifs/Tarif 2026 - projet v1.xlsx", "price_list"),
+    ("05_Commercial/Tarifs/Conditions generales de vente 2026.pdf", "terms_of_sale"),   # step 34: was price_list
     ("01_Finance/Investissements/Suivi capex 2026.xlsx", "workbook"),
     ("07_IT/Support/README.md", "other"),
 ])

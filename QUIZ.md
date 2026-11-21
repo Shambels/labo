@@ -2066,3 +2066,42 @@ A resumed conversation could show only the answer text: not the extracts under i
 
 A conversation that mixes modes: a Documents turn saved by Streamlit itself, then a database turn saved by the endpoint, under the same id, because the client names it from the start. The hidden marker only works once the endpoint has answered and the client sends that answer back unchanged. The header is checked like the marker: someone else's id starts a new conversation.
 </details>
+
+---
+
+## Step 34: who wrote a document, in its context line
+
+**1.** The search found Calorvia's terms of sale for "Quelles sont les conditions de paiement de Calorvia ?", yet the answer quoted a supplier's payment terms. Where did it go wrong, and why?
+
+<details><summary>Answer</summary>
+
+At the reranker. The terms' chunk was 10th of 30 candidates; the reranker scored it 0.019 and put three supplier offers first (about 0.77). A cross-encoder reads the question and the chunk together and rewards shared words: the offers are addressed "à … Calorvia SA" and have a row titled "Conditions de paiement", both words of the question. The terms' chunk says "3. Paiement Les factures sont payables…": it names neither, because no one writes their company's name in their own terms.
+</details>
+
+**2.** Correcting the document's type ("Conditions générales de vente" instead of "Tarif") gave 0.025; naming the issuer gave 0.97. What does that say about what the reranker needs?
+
+<details><summary>Answer</summary>
+
+The question's distinctive word was "Calorvia", the whose; the type only says what kind of text it is. The context line was built to say which document and which date (step 4); it never said who wrote it, because everything on the drive seemed obviously Calorvia's. For a reader, it is; for a model scoring word overlap, what isn't written isn't there.
+</details>
+
+**3.** Why not add "Calorvia SA" to every chunk?
+
+<details><summary>Answer</summary>
+
+Then a supplier's offer, an invoice or a contract would claim to be Calorvia's text: "les conditions de paiement de Calorvia" would match Linetech's terms just as well, the very confusion being fixed. Only documents Calorvia wrote get the issuer; quotes, invoices, delivery notes, certificates, contracts (two parties) and the ERP vendors' documents don't.
+</details>
+
+**4.** Run 172 gains on MRR but its trap rate rises from 0.353 to 0.412, and for Q133 the whole top 5 scores 1.0. How do you read that?
+
+<details><summary>Answer</summary>
+
+The trap rate is over 17 questions: one more trap (Q099, whose answer stays right) is +0.06. The 1.0 scores are the real cost: when a question names Calorvia, every chunk naming Calorvia gains, and the reranker's scores saturate. Five chunks at 1.0 have no order, so the top 5 is chosen by chance among more than five. The judged mean barely moves (0.821 → 0.823): one answer fixed, a few small losses. A fix that helps one question and blurs others should be judged before being adopted.
+</details>
+
+**5.** Step 34 changed a type rule. Why is the registry a trap when several branches are measured one after the other?
+
+<details><summary>Answer</summary>
+
+The registry is a database table, shared by every branch, not a file in Git. After step 34's inventory, the terms of sale were "terms_of_sale" for every configuration: the next run of another step would have found the in-use index stale (its fingerprint covers the context lines) and rebuilt it with the new label, mixing two changes. The inventory was run again with `main`'s code before the other runs; after merging step 34 it must be run once more.
+</details>
