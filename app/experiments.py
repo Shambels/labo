@@ -135,7 +135,9 @@ def rag_page():
     latest = {}
     for r in pool:
         latest[r["name"]] = r["id"]
-    defaults = [latest[n] for n in ("status_filter__retrieval", f"{using}__retrieval") if n in latest]
+    # the in-use configuration's retrieval-only run, else its latest run with answers (step 39 made only those)
+    in_use = next((latest[n] for n in (f"{using}__retrieval", using) if n in latest), None)
+    defaults = [latest[n] for n in ("status_filter__retrieval",) if n in latest] + ([in_use] if in_use else [])
     chosen = st.multiselect("Compare", list(reversed(list(label))), default=defaults, format_func=label.get,
                             help="Newest first. ★ marks the configuration in use (settings.final_config).")
     with st.expander(f"All {len(pool)} runs"):

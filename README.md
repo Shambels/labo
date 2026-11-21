@@ -4,9 +4,8 @@ Two chatbots for **Calorvia SA**, a fictional Belgian heat-pump manufacturer:
 
 1. **`rag_calorvia`**: a RAG over 393 documents from the company's shared drive. Done: final evaluation of
    `experiments/status_filter.toml` (step 9), results and analysis in `RAPPORT.md`, exports in `results/`. The
-   configuration in use is `experiments/markdown_tables.toml` (step 30: status_filter, plus the question translated for
-   the reranker when a Dutch or English chunk is in its top 10, plus Docling tables as Markdown); `FINAL_CONFIG` in
-   `.env` changes it.
+   configuration in use is `experiments/combined_complete_top10.toml` (step 39: step 30's `markdown_tables`, plus the
+   issuer in the context line, the v2 image prompt, fuller answers and 10 chunks); `FINAL_CONFIG` in `.env` changes it.
 2. **`text2sql_calorvia`**: a text-to-SQL agent over three business databases (phase B). Done: LangGraph agent
    behind an OpenAI-compatible endpoint, read-only MCP server, certified ontology; results and analysis in
    `RAPPORT_T2SQL.md`, exports in `results/t2sql/`. To run it: [Phase B in five steps](#phase-b-in-five-steps).
