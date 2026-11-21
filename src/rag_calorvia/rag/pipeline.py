@@ -9,6 +9,7 @@ from rag_calorvia.rag.generate import generate
 from rag_calorvia.rag.reference_date import date_condition, reference_date
 from rag_calorvia.rag.rerank import rerank
 from rag_calorvia.rag.search import search
+from rag_calorvia.rag.series import add_newer
 from rag_calorvia.rag.siblings import add_siblings
 from rag_calorvia.rag.translate import translate_question
 
@@ -90,6 +91,10 @@ def retrieve(question, config, role=None):
         start = time.perf_counter()
         chunks = add_siblings(question, chunks, config, query_filter, made.get("versions", versions))
         timings["siblings_ms"] = elapsed_ms(start)
+    if config["reranker"].get("newer_in_series"):   # step 41: the next documents of the kept documents' series
+        start = time.perf_counter()
+        chunks = add_newer(question, chunks, config, query_filter, made.get("versions", versions))
+        timings["series_ms"] = elapsed_ms(start)
     if made:
         versions = made["versions"]
         timings = {"translate_ms": made["ms"], **timings, "rerank_ms": rerank_ms - made["ms"]}

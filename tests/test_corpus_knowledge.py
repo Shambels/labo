@@ -125,3 +125,32 @@ def test_the_entities_documents_add_one_restricted_dense_search(monkeypatch):
     wider = hybrid_request({"fr": "q"}, config, status, documents=["pv.docx"])["prefetch"]
     assert len(plain) == 2 and len(wider) == 3
     assert wider[2].filter.must[0].key == "document" and wider[2].filter.must_not == status.must_not
+
+
+# --- series ---------------------------------------------------------------------------------------------------------
+from rag_calorvia.rag.series import next_documents, series_key
+
+SERIES = {("codir_minutes", "00_Direction/CODIR"): [
+    ("2025-12-08", "00_Direction/CODIR/2025/PV_CODIR_2025-12-08.docx", None),
+    ("2026-03-02", "00_Direction/CODIR/2026/2026-03-02 CODIR PV.docx", None),
+    ("2026-03-09", "00_Direction/CODIR/2026/2026-03-09 CODIR PV.docx", "draft"),
+    ("2026-03-30", "00_Direction/CODIR/2026/2026-03-30 CODIR PV.docx", None)]}
+
+
+def kept(path, date, doc_type="codir_minutes"):
+    return {"document": path, "doc_type": doc_type, "doc_date": date}
+
+
+def test_a_series_is_one_periodic_type_in_one_folder_whatever_the_year():
+    assert series_key("00_Direction/CODIR/2025/PV_CODIR_2025-12-08.docx", "codir_minutes") == \
+        series_key("00_Direction/CODIR/2026/2026-03-02 CODIR PV.docx", "codir_minutes") == ("codir_minutes", "00_Direction/CODIR")
+    assert series_key("08_Juridique/Contrats/Bail.pdf", "contract") is None
+
+
+def test_the_documents_after_the_newest_kept_one_are_read_drafts_left_out():
+    chunks = [kept("00_Direction/CODIR/2025/PV_CODIR_2025-12-08.docx", "2025-12-08"),
+              kept("00_Direction/CODIR/2026/2026-03-02 CODIR PV.docx", "2026-03-02T00:00:00"),
+              kept("faq.html", None, "intranet_page")]
+    assert next_documents(chunks, SERIES, excluded=["draft"]) == ["00_Direction/CODIR/2026/2026-03-30 CODIR PV.docx"]
+    assert next_documents(chunks, SERIES, follow=1) == ["00_Direction/CODIR/2026/2026-03-09 CODIR PV.docx"]
+    assert next_documents([kept("faq.html", None, "intranet_page")], SERIES) == []
