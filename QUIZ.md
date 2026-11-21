@@ -2279,3 +2279,40 @@ The generator used its five tool rounds on SQL; the sixth call was sent with `to
 
 Rule 4's wording came from reading the dev set's partly right answers, and the same dev set judged it: the change was fitted to the questions that measure it. The test set, the clean measure, was already used in step 9. On new questions, expect a smaller gain; the mechanism (details in the context, a rule asking for them) is general, the size of the gain is not proven.
 </details>
+
+## Step 40: five refinements and a fresh held-out set
+
+**1.** Run 191 repeats run 187's configuration on the current code. Only Q017's answer changed, yet four other questions had different extracts. Why, and what does it mean for comparing runs?
+
+<details><summary>Answer</summary>
+
+The reranker's scores move in the fourth decimal from one run to the next (vLLM batches requests differently), which swaps chunks scored alike (Q036: two chunks at 0.0128) or lets another candidate in (Q033). Generation at temperature 0 is deterministic for the same extracts, so an answer changes only when its extracts change. A difference between two runs is a change only if it is larger than this noise; a question whose extracts are identical can keep its judged verdict (`scripts/reuse_judgments.py`), and only the changed ones are judged again.
+</details>
+
+**2.** The score floor (keep ranks 6-10 only at 0.1 or more) dropped chunks scored 0.01 to 0.1, lost one evidence snippet in 127 questions, and still lowered correctness from 0.884 to 0.870. Why?
+
+<details><summary>Answer</summary>
+
+The details lost were not in the dropped chunks: Q021's "0,2 bar", Q088's "three months of rent", Q139's go-live date are all in extract [1], which was kept. With fewer extracts the generator wrote shorter answers. Part of step 39's gain came from the number of extracts in the context, not only from what they hold: a change to the context changes how much the model writes.
+</details>
+
+**3.** How do the siblings bring Q008's "211 unités sur 214" into the context when it was never among the 30 candidates?
+
+<details><summary>Answer</summary>
+
+After the reranker, the other chunks of the documents in the top 10 are fetched from Qdrant (with the question's own filter) and scored. Those scoring 0.5 or more are sorted by their document's date, newest first, and up to 2 are added after the top 10. The 2 March minutes were in the top 10 through their decisions table; their item "Aéris 12 : clôture du rappel" scores 0.585, low among all siblings, but its document is the newest. Q008 0.3 → 1.0, and Q024, Q004 gained too.
+</details>
+
+**4.** Rule 8 asked the generator to name the reading it chose when a word reads two ways. Q107 stayed wrong and four questions fell. What does this say about prompt rules aimed at one question?
+
+<details><summary>Answer</summary>
+
+A rule in the system prompt applies to every question: 58 of 127 answers changed for a rule meant for a few, and the model applied it where nothing was ambiguous (Q139, Q127). Q107 itself still read "première" as the earliest and then refused. A prompt rule has a cost on every answer; it has to earn it on the whole set, not on the question it was written for.
+</details>
+
+**5.** Why judge `combined_siblings` on 35 new questions, and why is its fresh score still not a clean estimate?
+
+<details><summary>Answer</summary>
+
+Every change since step 9 was chosen on the dev set, and the test set was spent in step 9: the dev score is fitted to the questions that measure it. The fresh set uses documents no dev or test question cites, and was run once, after the choice was made. But it was written by the same assistant that tuned the system, each question from one document with distinctive wording: retrieval was perfect for all three configurations, so it is easier than the dev set. It measures transfer of answer quality, not of retrieval.
+</details>

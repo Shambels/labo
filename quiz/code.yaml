@@ -578,3 +578,34 @@ questions:
     explain: >-
       tool_choice = "none" stops structured calls but not a call written as text (Q017 in run 187); the text check
       ensures a raw <tool_call> is never shown as an answer.
+
+  # --- step 40 ------------------------------------------------------------------------------------------------------
+  - id: code-siblings
+    node: retrieval
+    type: order
+    prompt: "Put retrieve()'s path in order with [reranker] siblings = 2 (step 40)."
+    steps:
+      - "search: 30 candidates, with the question's filter (statuses, role, reference date)"
+      - "rerank: the top_k (10) best, scored by the cross-encoder"
+      - "fetch_siblings: the other chunks of those 10 documents, with the same filter"
+      - "score them against the question; keep those >= sibling_min_score (0.5)"
+      - "pick: newest document first, then the best score; at most 2, added after the 10"
+    files: [src/rag_calorvia/rag/pipeline.py, src/rag_calorvia/rag/siblings.py]
+    explain: >-
+      The siblings come after the reranker's 10, so the retrieval metrics @5 don't move; their time is siblings_ms.
+      Q008's closure item (0.585) came in because its document was the newest, not because it scored well.
+
+  - id: code-saturation
+    node: retrieval
+    type: choice
+    prompt: "With [reranker] saturation = 0.99, how does rerank() order chunks scored 0.9999, 0.9995 and 0.9991?"
+    correct: "As equals: they keep the search's order, the key being (-min(score, 0.99), candidate index)."
+    wrong:
+      - "By score: 0.9999 first."
+      - "By date, newest first."
+      - "They are dropped: a saturated score is treated as an error."
+    files: [src/rag_calorvia/rag/rerank.py]
+    explain: >-
+      Differences in the fourth decimal are noise (they move between runs); the search's rank is a stable tie-break.
+      Measured neutral (0.884 → 0.886) and not adopted.
+
