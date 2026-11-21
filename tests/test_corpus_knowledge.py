@@ -154,3 +154,43 @@ def test_the_documents_after_the_newest_kept_one_are_read_drafts_left_out():
     assert next_documents(chunks, SERIES, excluded=["draft"]) == ["00_Direction/CODIR/2026/2026-03-30 CODIR PV.docx"]
     assert next_documents(chunks, SERIES, follow=1) == ["00_Direction/CODIR/2026/2026-03-09 CODIR PV.docx"]
     assert next_documents([kept("faq.html", None, "intranet_page")], SERIES) == []
+
+
+# --- contextual chunks ----------------------------------------------------------------------------------------------
+import pytest
+
+from rag_calorvia.etl import contextual as contextual_module
+from rag_calorvia.etl.contextual import MissingContext, add_contexts, with_context_sentence
+from rag_calorvia.etl.documents import document_text
+from rag_calorvia.etl.index import collection_name
+
+LINE = "[PV du CODIR du 2 mars 2026 · 2026-03-02 CODIR PV · 00_Direction/CODIR/2026]"
+
+
+def test_the_sentence_goes_after_the_context_line():
+    assert with_context_sentence(f"{LINE}\n4. Aéris 12", "Point 4 sur le rappel.", True) == \
+        f"{LINE}\nContexte : Point 4 sur le rappel.\n4. Aéris 12"
+    assert with_context_sentence("4. Aéris 12", "Point 4.", False) == "Contexte : Point 4.\n4. Aéris 12"
+
+
+def test_the_llm_reads_the_document_once_with_its_line_then_the_bodies():
+    chunks = [{"text": f"{LINE}\nun"}, {"text": f"{LINE}\ndeux"}]
+    assert document_text(chunks, True, 1000) == f"{LINE}\n\nun\n\ndeux"
+    assert document_text(chunks, True, 10) == LINE[:10]
+
+
+def test_contexts_come_from_the_cache_only_and_reach_the_search_text(monkeypatch):
+    config = {"chunking": {"context_line": True}, "generation": {"model": "m"}}
+    chunks = [{"document": "pv.docx", "chunk_index": 0, "text": f"{LINE}\n4. Aéris 12", "search_text": f"{LINE}\n4. Aéris 12"}]
+    monkeypatch.setattr(contextual_module, "context", lambda document, whole, body, model, compute: "Le rappel.")
+    (chunk,) = add_contexts(chunks, config)
+    assert chunk["text"].splitlines()[1] == chunk["search_text"].splitlines()[1] == "Contexte : Le rappel."
+    monkeypatch.setattr(contextual_module, "context", lambda *args, **kwargs: None)
+    with pytest.raises(MissingContext):
+        add_contexts(chunks, config)
+
+
+def test_contextual_chunks_have_their_own_collection():
+    config = {"embedder": {"model": "bge-m3"}, "chunking": {"max_tokens": 256, "context_line": True}}
+    assert not collection_name(config).endswith("__contextual")
+    assert collection_name({**config, "chunking": {**config["chunking"], "contextual": True}}).endswith("__contextual")

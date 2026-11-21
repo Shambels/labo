@@ -18,6 +18,7 @@ from transformers import AutoTokenizer
 
 from rag_calorvia import db
 from rag_calorvia.config import settings
+from rag_calorvia.etl.contextual import add_contexts, contextualizes
 from rag_calorvia.etl.convert import load_conversion
 from rag_calorvia.etl.excel import workbook_pieces
 from rag_calorvia.etl.metadata import detect_language, issuer
@@ -240,4 +241,6 @@ def chunk_corpus(config):
               for document in documents for chunk in chunk_document(document, config)]
     if translates_chunks(config):   # step 30g: a French search text for the nl/en chunks, from the cache only
         chunks = [with_french(chunk, config) for chunk in chunks]
+    if contextualizes(config):   # step 41: a sentence placing each chunk in its document, from the cache only
+        chunks = add_contexts(chunks, config)
     return chunks

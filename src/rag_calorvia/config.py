@@ -26,6 +26,7 @@ class Settings(BaseSettings):
     conversions_path: Path = Path("data/conversions")         # Docling output cache (step 4)
     vision_path: Path = Path("data/vision")                   # VLM transcription cache (step 7)
     translations_path: Path = Path("data/translations")       # French versions of nl/en chunks (step 30g)
+    contexts_path: Path = Path("data/contexts")               # one sentence placing each chunk in its document (step 41)
     entities_path: Path = Path("data/entities")               # entities found in each document by the LLM (step 41)
     reports_path: Path = Path("data/reports")
     models_path: Path  # holds embedder/{name}, reranker/{name} and docling/
