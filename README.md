@@ -4,8 +4,9 @@ Two chatbots for **Calorvia SA**, a fictional Belgian heat-pump manufacturer:
 
 1. **`rag_calorvia`**: a RAG over 393 documents from the company's shared drive. Done: final evaluation of
    `experiments/status_filter.toml` (step 9), results and analysis in `RAPPORT.md`, exports in `results/`. The
-   configuration in use is `experiments/combined_complete_top10.toml` (step 39: step 30's `markdown_tables`, plus the
-   issuer in the context line, the v2 image prompt, fuller answers and 10 chunks); `FINAL_CONFIG` in `.env` changes it.
+   configuration in use is `experiments/combined_siblings.toml` (step 40: step 30's `markdown_tables`, plus the
+   issuer in the context line, the v2 image prompt, fuller answers, 10 chunks, and up to 2 other chunks of the kept
+   documents, newest first); `FINAL_CONFIG` in `.env` changes it.
 2. **`text2sql_calorvia`**: a text-to-SQL agent over three business databases (phase B). Done: LangGraph agent
    behind an OpenAI-compatible endpoint, read-only MCP server, certified ontology; results and analysis in
    `RAPPORT_T2SQL.md`, exports in `results/t2sql/`. To run it: [Phase B in five steps](#phase-b-in-five-steps).
@@ -105,6 +106,8 @@ uv run python scripts/run_experiment.py experiments/baseline.toml # dev set -> a
 uv run python scripts/run_experiment.py experiments/baseline.toml --retrieval-only  # no generator needed
 uv run python scripts/judge_experiment.py baseline                 # 31-question sample (judge on 8003 only)
 uv run python scripts/judge_experiment.py tools_tables --types excel_lookup excel_reasoning  # every dev question of these types
+uv run python scripts/reuse_judgments.py 196 --from 191   # step 40: copy verdicts of identical answers; prints what is left to judge
+uv run python scripts/run_experiment.py experiments/combined_siblings.toml --fresh  # step 40: the 35 fresh held-out questions, once
 uv run python scripts/report.py baseline no_context_line__retrieval  # per question type and per format
 uv run python scripts/ask.py "Quand le nouvel ERP démarre-t-il ?"   # one question, its chunks, and the images it cites
 uv run python scripts/compare_ocr.py   # Docling OCR vs the VLM on the scanned PDFs (step 7)

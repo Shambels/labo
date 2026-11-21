@@ -582,3 +582,17 @@ step-39-q3:
     - "Faithfulness is not computed when top_k is 10."
     - "The generator is never wrong at temperature 0."
     - "The judge's scores were averaged over three runs."
+
+step-40-q2:
+  correct: "With fewer extracts the generator wrote shorter answers: the lost details were in extract [1], which was kept."
+  wrong:
+    - "The dropped chunks held the evidence of most questions."
+    - "The floor also removed chunks from the top 5."
+    - "The judge penalises answers built on fewer than 10 extracts."
+
+step-40-q4:
+  correct: "A system-prompt rule applies to every question: it changed 58 answers, lowered four, and did not fix the one it was written for."
+  wrong:
+    - "Rule 8 was ignored because the prompt was too long."
+    - "Rule 8 only applies to questions in Dutch."
+    - "The judge cannot score answers that name two readings."

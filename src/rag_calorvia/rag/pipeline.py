@@ -8,6 +8,7 @@ from rag_calorvia.rag.generate import generate
 from rag_calorvia.rag.reference_date import date_condition, reference_date
 from rag_calorvia.rag.rerank import rerank
 from rag_calorvia.rag.search import search
+from rag_calorvia.rag.siblings import add_siblings
 from rag_calorvia.rag.translate import translate_question
 
 
@@ -70,13 +71,18 @@ def retrieve(question, config, role=None):
 
     start = time.perf_counter()
     searched = versions if config["search"].get("translated_search", True) else {"fr": question}
-    candidates = search(question, config, query_filter=question_filter(config, reference, role), versions=searched)
+    query_filter = question_filter(config, reference, role)
+    candidates = search(question, config, query_filter=query_filter, versions=searched)
     search_ms = elapsed_ms(start)
 
     start = time.perf_counter()
     chunks = rerank(question, candidates, config, versions, translate if on_demand else None)
     rerank_ms = elapsed_ms(start)
     timings = {"search_ms": search_ms, "rerank_ms": rerank_ms}
+    if config["reranker"].get("siblings"):   # step 40: the other chunks of the documents kept
+        start = time.perf_counter()
+        chunks = add_siblings(question, chunks, config, query_filter, made.get("versions", versions))
+        timings["siblings_ms"] = elapsed_ms(start)
     if made:
         versions = made["versions"]
         timings = {"translate_ms": made["ms"], **timings, "rerank_ms": rerank_ms - made["ms"]}

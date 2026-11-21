@@ -111,6 +111,10 @@ Companion file: `QUIZ.md` (one quiz per step, answers collapsed).
 | D87 | Combining the fixes | `combined` = `markdown_tables` + `issuer` (D83) + `vision_prompt = "v2"` (D84): the two changes that each fixed a judged error. Not the recency slots (D85, no answer changed) nor Qwen3.8 as VLM (D86, worse) | Judged on 127: 0.821 → **0.837**, wrong 5 → 4, Q034 and Q077 both fixed, no question down by 0.3. Retrieval the best of the series: recall@5 0.963, MRR 0.897. Each alone moved the mean by ±0.002: the gains add up because they fix different questions |
 | D88 | Fuller answers, 10 chunks | `prompts/tools_complete.txt` (rule 4: the answer first, then the details the extracts attach to it: conditions, exceptions, a total's breakdown, the period and what follows, the value replaced, a decision's reason) and `[search] top_k = 10`: `combined_complete_top10`. **The configuration in use** (`settings.final_config`, switched on 2026-11-21 at your request; replaces D80's `markdown_tables`) | 0.837 → **0.877**, wrong 4 → 3, good answers 82 → 95; each alone +0.011 / −0.006, together +0.040: the rule asks for details, the extra chunks hold them (Q101's contract cap ranked 6th, Q127's quarterly plan 9th). Costs: answers 143 → 205 characters, 3.9 → 6.1 s. Faithfulness 0.789 → 0.705 is mostly the judge (4 of 4 complaints checked are false: the value is in an extract). Rule 4 was written after reading the dev failures: the test set, used in step 9, gives no clean measure |
 | D89 | A tool call written as text | Before the last tool round, a user message says no tool can be called any more; an answer that is still a `<tool_call>` written as text is asked again once, without tools | Q017 in run 187: five `run_sql`, then the sixth call came back as text with `tool_choice = "none"`, and that text was the answer (correctness 0). Live after the fix: "6 ETP [10]" |
+| D90 | Repeats and judging | `scripts/reuse_judgments.py`: a run's verdicts are copied from another run for the questions whose answer and extracts are identical; only the others are judged | Run 191 repeated 187: Q017 alone changed its answer; four more had extracts swapped by reranker scores moving in the fourth decimal (vLLM batching). Judging 127 questions again costs 40 min per run and adds the judge's noise |
+| D91 | Siblings | `[reranker] siblings = 2`, `sibling_min_score = 0.5` (`rag/siblings.py`): the other chunks of the top 10's documents scored, up to 2 of them, newest document first, added after the 10: `combined_siblings`. **The configuration in use** (`settings.final_config`, switched on 2026-11-21 at your request; replaces D88's `combined_complete_top10`) | Dev 0.884 → **0.898**, wrong 2 → 1, good 96 → 101, nothing down by 0.3; Q008 0.3 → 1.0 ("211 unités sur 214"), Q024, Q004 up. +0.17 s. Fresh set: 0.857 → 0.860 |
+| D92 | Not adopted in step 40 | The score floor (`[reranker] min_score`), rule 8 (`prompts/tools_readings.txt`), Qwen3.8 with image prompt v3; the tie-break (`[reranker] saturation`) is kept as an option | Floor 0.870 (shorter answers with fewer extracts); rule 8 0.876 (58 answers changed, Q107 still wrong); Qwen3.8 + v3 0.876, image questions 0.843 → 0.771; tie-break 0.886, neutral |
+| D93 | A fresh held-out set | `evaluation/rag_fresh_questions.json`: 35 questions on documents no dev or test question cites, split `fresh`, run once (`--fresh`) after the choice | Dev gains since `markdown_tables`: +0.077; fresh: **+0.023**. The set is easier than dev (recall@5 1.0 for every configuration) and was written by the same assistant that tuned the system |
 | D9 | Porting strategy | Port each hospital_rag module **in the step that needs it** (step 0: config, db, logs; step 3: evaluation; step 4: ETL and RAG) | Nothing unused or untested sits in the repo |
 
 ### Open decisions (to settle with you when we reach them)
@@ -782,6 +786,38 @@ judged on the same 127 questions. None is made the configuration in use here: th
 - **Made the configuration in use (D88)** on 2026-11-21, at your request: `settings.final_config` = `combined_complete_top10`. Caveats: rule 4 was written after reading these dev failures, and the dev set judged it, so 0.877 is optimistic; the test set was used in step 9. Answers are 43 % longer and 2.2 s slower.
 - **Tests: 2 new** (826 in all).
 
+
+### ✅ Step 40. Five refinements and a fresh held-out set (branch `rag/step-40-refinements`, not merged)
+- **Your request:** (1) re-run `combined_complete_top10` on the current code; (2) a fresh held-out set; (4) drop extracts 6-10 the reranker scores low; (5) bring Q008's closure into the context; (6) break the issuer's ties; (7) Qwen3.8 for images with a prompt for structure; (8) a rule for questions that read two ways. Each change alone on top of `combined_complete_top10`, against its re-run.
+- **(1) Run 191** (`combined_complete_top10` again): only Q017 changed ("6 ETP" instead of a raw tool call, D89): correctness **0.884**, wrong 2, good 96. Four other questions had extracts swapped: the reranker's scores move in the fourth decimal between runs (vLLM batching). Generation is deterministic, so verdicts of identical (answer, extracts) pairs are copied (D90, `scripts/reuse_judgments.py`) and only changed questions are judged: 5 to 64 per run instead of 127.
+- **Changes** (`rerank.py`, `siblings.py`, `vision.py`, `prompts/tools_readings.txt`; experiments `combined_floor`, `combined_ties`, `combined_siblings`, `combined_readings`, `combined_vlm_v3`):
+
+  | Run | Experiment | correctness | wrong | good | faithfulness | extracts | length | latency | answers changed |
+  |---|---|---|---|---|---|---|---|---|---|
+  | 191 | `combined_complete_top10` | 0.884 | 2 | 96 | 0.713 | 10 | 205 | 6.18 s | – |
+  | 194 | `combined_floor` (ranks 6-10 at ≥ 0.1) | 0.870 | 3 | 91 | 0.707 | 8.25 | 199 | 5.70 s | 31 |
+  | 195 | `combined_ties` (≥ 0.99 tied, search order) | 0.886 | 2 | 97 | 0.710 | 10 | 209 | 6.13 s | 15 |
+  | 196 | `combined_siblings` | **0.898** | **1** | **101** | **0.730** | 10.44 | 202 | 6.33 s | 18 |
+  | 197 | `combined_readings` (rule 8) | 0.876 | 4 | 94 | 0.675 | 10 | 215 | 6.45 s | 58 |
+  | 198 | `combined_vlm_v3` (Qwen3.8, prompt v3) | 0.876 | 4 | 93 | 0.693 | 10 | 206 | 6.12 s | 49 |
+
+- **Floor (4):** sized on run 187's scores (0.1 keeps 8.25 chunks and loses one evidence snippet, Q149's), yet 0.884 → 0.870: the lost details (Q021's "0,2 bar", Q088's three months of rent, Q139's go-live) are all in extract [1], which was kept. With fewer extracts the generator writes less: part of step 39's gain is the number of extracts, not only what they hold.
+- **Ties (6):** neutral (one more good answer, no move of 0.3); MRR@5 0.897 → 0.894. Kept as an option, not adopted.
+- **Siblings (5):** Q008's "4. Aéris 12 : clôture du rappel" scores 0.585 (below the top 10's 0.81-0.99, 6th of 38 siblings) but its document is the newest; Q008 **0.3 → 1.0** (211 of 214, the 3 not found, Valtek's 65 %), Q024 0.5 → 1.0, Q004 0.7 → 1.0, nothing down. It still says "sera clôturée": the 30 March minutes never reach the context.
+- **Rule 8 (8):** Q107 still reads "première" as the earliest, now ending in "Je ne sais pas."; 58 answers changed, Q063, Q127, Q139, Q147 down. Written without Q107's word as its example; a rule for a few questions is paid by all.
+- **Qwen3.8 + v3 (7):** the org charts now come as trees (Q147's after-sales manager under Anne Vercammen, 42 child lines, no "[lien de rattachement]"), 91 numbers only in v3 against 29 only in v2, 16 min for 66 targets. But the 14 image questions 0.843 → 0.771 (Q127 1.0 → 0.0, Q139 1.0 → 0.4), and Q147 names the manager without his director (0.7).
+- **(2) The fresh set** (D93): 35 questions (factual, meeting details, multilingual, Excel, images, a scan, a version trap, 2 out of corpus) on 34 documents no question cites; every snippet checked against the indexed chunks, image answers against the images. Run once, after the choice, on three configurations:
+
+  | Run | Experiment (fresh) | correctness | wrong | good | faithfulness | recall@5 | length | latency |
+  |---|---|---|---|---|---|---|---|---|
+  | 201 | `markdown_tables` | 0.837 | 0 | 21 | 0.909 | 1.0 | 113 | 3.4 s |
+  | 200 | `combined_complete_top10` | 0.857 | 0 | 24 | 0.717 | 1.0 | 134 | 4.8 s |
+  | 199 | `combined_siblings` | 0.860 | 0 | 24 | 0.710 | 1.0 | 140 | 5.2 s |
+
+  Phase H's dev gain (0.821 → 0.898) shrinks to **+0.023** on new questions, with a single question moving by 0.3 (F001). The 11 partly right answers are all right but short ("690 € [1]", "431 k€ [1]"): rule 4 makes answers fuller less often on new questions. Faithfulness falls 0.909 → 0.71 with 10 extracts here too; on dev it was mostly the judge (step 39), not checked by hand on this set. Limits: retrieval is perfect for every configuration (each question from one document, with its own words), and the questions were written by the assistant that tuned the system.
+- **Made the configuration in use (D91)** on 2026-11-21, at your request: `settings.final_config` = `combined_siblings` (best on dev, equal on the fresh set, +0.17 s).
+- **Tests: 8 new** (834 in all).
+
 ---
 
 ## Progress log
@@ -869,3 +905,5 @@ judged on the same 127 questions. None is made the configuration in use here: th
 | 2026-11-21 | 38 | Branch `rag/step-38-combined`: `combined` = markdown_tables + issuer + v2 prompt; run 184 judged on 127: 0.821 → 0.837, wrong 5 → 4, recall@5 0.963, MRR 0.897; left unmerged |
 | 2026-11-21 | 39 | Same branch: fuller rule 4 (185), top_k 10 (186), both (187): 0.877, wrong 3, good 95; faithfulness 0.705 checked as judge errors; raw tool-call answer fixed (D89); `combined_complete_top10` recommended, not switched; left unmerged |
 | 2026-11-21 | 39 | Same branch: `combined_complete_top10` made the configuration in use (`settings.final_config`, D88); left unmerged |
+| 2026-11-21 | 40 | Branch `rag/step-40-refinements`: re-run 191 (0.884), floor, ties, siblings, rule 8, Qwen3.8 + v3 (runs 194-198); siblings 0.898 (D91); fresh set of 35 (D93): 0.837 → 0.860; verdicts reused for unchanged answers (D90); not switched, left unmerged |
+| 2026-11-21 | 40 | Same branch: `combined_siblings` made the configuration in use (`settings.final_config`, D91); left unmerged |

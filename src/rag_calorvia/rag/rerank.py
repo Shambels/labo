@@ -79,11 +79,33 @@ def rerank(question, chunks, config, versions=None, translate=None):
         scored = score(model, question, [search_text(chunk) for chunk in chunks])
     else:
         scored = score_in_languages(model, question, chunks, versions, range(len(chunks)))
-    scored.sort(key=lambda pair: pair[1], reverse=True)
+    scored.sort(key=sort_key(config["reranker"].get("saturation")))
     ranked = [{**chunks[i], "rerank_score": s} for i, s in scored]
     if config["reranker"].get("recent_slots"):
         return with_recent(ranked, top_k, config["reranker"])
-    return ranked[:top_k]
+    return above_floor(ranked[:top_k], config["reranker"])
+
+
+def sort_key(saturation=None):
+    """Best score first. [reranker] saturation (step 40): scores at or above it count as equal, and those chunks keep
+    the search's order (an index into the candidates, which come best first).
+
+    Since step 34's issuer, a question naming "Calorvia" gives many chunks 0.999+ (Q133: the whole top 5); the
+    differences between them are noise in the fourth decimal, and the order of the extracts was left to chance."""
+    if saturation is None:
+        return lambda pair: -pair[1]
+    return lambda pair: (-min(pair[1], saturation), pair[0])
+
+
+def above_floor(top, options):
+    """[reranker] min_score (step 40): beyond the first `min_score_from` chunks (5), only those scoring at least
+    min_score are kept. Run 187 gave 10 chunks to every question; ranks 6 to 10 scored 0.14 to 0.48 at the median, and
+    at 0.1 the cut keeps 8.25 on average and loses one evidence snippet of the 127 questions (Q149's)."""
+    floor = options.get("min_score")
+    if floor is None:
+        return top
+    keep = options.get("min_score_from", 5)
+    return top[:keep] + [chunk for chunk in top[keep:] if chunk["rerank_score"] >= floor]
 
 
 PRECISE = ("day", "month")   # a date that can say "newer": a document dated "2026" isn't newer than a June meeting

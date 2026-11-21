@@ -22,6 +22,7 @@ class Settings(BaseSettings):
     # Relative to the repo root: scripts are run from there (uv run python scripts/...)
     corpus_path: Path = Path("data/calorvia")                 # symlink to the corpus in enonces/
     eval_path: Path = Path("data/calorvia_eval.json")         # symlink to the eval set in enonces/
+    fresh_eval_path: Path = Path("evaluation/rag_fresh_questions.json")  # step 40: questions on documents never cited
     conversions_path: Path = Path("data/conversions")         # Docling output cache (step 4)
     vision_path: Path = Path("data/vision")                   # VLM transcription cache (step 7)
     translations_path: Path = Path("data/translations")       # French versions of nl/en chunks (step 30g)
@@ -31,8 +32,8 @@ class Settings(BaseSettings):
     # The configuration the chat, the agent's endpoint and the access proof use. Step 9's final evaluation was
     # status_filter; step 30 added translation on demand for the reranker (runs 148, 150, 152) and Markdown tables
     # (runs 154, 156, judged against french_chunks_tables, run 160); steps 34-39 added the issuer, the v2 image prompt,
-    # the fuller rule 4 and 10 chunks (run 187, D88)
-    final_config: Path = Path("experiments/combined_complete_top10.toml")
+    # the fuller rule 4 and 10 chunks (run 187, D88); step 40 the siblings (run 196, D91)
+    final_config: Path = Path("experiments/combined_siblings.toml")
 
     @property
     def docling_models_path(self):
