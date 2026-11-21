@@ -16,8 +16,15 @@ def get_llm():
 
 
 def load_system_prompt(config):
-    """The text of the system prompt file. The runner stores it with the experiment: files change, results must not."""
-    return Path(config["generation"]["system_prompt"]).read_text(encoding="utf-8").strip()
+    """The text of the system prompt file. The runner stores it with the experiment: files change, results must not.
+
+    [generation] corpus (step 41): a description of the corpus (sites, the label line, versions, series, and which
+    details go with an answer from each kind of document) added after the rules. Step 41's analysis of the misses:
+    45 of 50 lost answers on dev and 19 of 19 on the fresh set had the evidence in the context and stopped at the core
+    fact; rule 4 says which details to add in general, the description says it per kind of document."""
+    text = Path(config["generation"]["system_prompt"]).read_text(encoding="utf-8").strip()
+    corpus = config["generation"].get("corpus")
+    return f"{text}\n\n{Path(corpus).read_text(encoding='utf-8').strip()}" if corpus else text
 
 
 def format_passages(chunks):
