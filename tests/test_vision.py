@@ -77,3 +77,24 @@ def test_collection_name_records_the_vision_budget():
     assert collection_name(config).endswith("__vision")
     config["chunking"]["vision_max_tokens"] = 1024
     assert collection_name(config).endswith("__vision-1024")
+
+
+def test_each_prompt_has_its_own_transcriptions(tmp_path, monkeypatch):
+    """Step 35: [chunking] vision_prompt picks the transcriptions; v1 stays the default, v2 asks for links' labels."""
+    from rag_calorvia.etl.index import collection_name
+    from rag_calorvia.etl.vision import PROMPTS
+    monkeypatch.setattr(settings, "vision_path", tmp_path)
+    monkeypatch.setattr(settings, "vlm_model", "m")
+    target = Target("net.png", "image")
+    cache_path(target, "m", PROMPTS["v1"]).write_text(json.dumps({"text": "Gand\nNamur"}))
+    cache_path(target, "m", PROMPTS["v2"]).write_text(json.dumps({"text": "Gand - Namur : fibre 500 Mbit/s"}))
+    document = {"path": "net.png", "source_type": "image", "format": "png", "language": "fr", "doc_date": None,
+                **{f: None for f in ["department", "doc_type", "doc_label", "date_end", "date_precision",
+                                     "date_source", "version", "status"]}}
+    tokenizer = get_tokenizer("bge-m3")
+    assert vision_chunks(document, "[Schéma]", 200, tokenizer)[0]["text"].endswith("Gand\nNamur")
+    assert vision_chunks(document, "[Schéma]", 200, tokenizer, prompt="v2")[0]["text"].endswith("fibre 500 Mbit/s")
+    assert PROMPTS["v1"] == TRANSCRIBE_PROMPT and "lien" in PROMPTS["v2"]
+    config = {"embedder": {"model": "bge-m3"}, "chunking": {"max_tokens": 256, "context_line": True, "vision": True}}
+    assert collection_name({**config, "chunking": {**config["chunking"], "vision_prompt": "v2"}}).endswith("-prompt-v2")
+    assert "prompt" not in collection_name(config)

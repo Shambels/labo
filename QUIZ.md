@@ -2105,3 +2105,42 @@ The trap rate is over 17 questions: one more trap (Q099, whose answer stays righ
 
 The registry is a database table, shared by every branch, not a file in Git. After step 34's inventory, the terms of sale were "terms_of_sale" for every configuration: the next run of another step would have found the in-use index stale (its fingerprint covers the context lines) and rebuilt it with the new label, mixing two changes. The inventory was run again with `main`'s code before the other runs; after merging step 34 it must be run once more.
 </details>
+
+---
+
+## Step 35: the text on a diagram's links
+
+**1.** For "Quel est le débit de la liaison réseau entre Namur et Gand ?", the right image was ranked first, and the answer was "Je ne sais pas". Was the generator wrong?
+
+<details><summary>Answer</summary>
+
+No: it answered from what it was given, and the 500 Mbit/s was not there. The VLM's transcription kept the six boxes of the map and dropped every text placed on the links. Retrieval scored a hit (the right document) while the chunk was useless: a hit on the document is not a hit on the fact. The fix had to be upstream, at transcription.
+</details>
+
+**2.** The application map, transcribed with the same first prompt, kept its arrows' labels. Why change the prompt for every image rather than redo the network map by hand?
+
+<details><summary>Answer</summary>
+
+A hand fix corrects one file and teaches nothing about the next diagram; the inconsistency shows the model does it sometimes and must be asked to do it always. A prompt is a rule for every image, measured on every question. The cost is every transcription made again, so they were audited against v1 before indexing.
+</details>
+
+**3.** The first v2 wording gave the format as « A – B : texte », and the VLM wrote "A – Gand : fibre 500 Mbit/s". What does that teach about writing prompts?
+
+<details><summary>Answer</summary>
+
+A small model copies an example's form literally, placeholders included. The instruction now describes the line (both ends' names as written on the image, a dash, a colon, the text) without a placeholder to copy. Every prompt change was tried on the two diagrams before transcribing the 66 targets.
+</details>
+
+**4.** How was v2 checked before being indexed, and what did the check find?
+
+<details><summary>Answer</summary>
+
+Every number of each v1 transcription was looked for in its v2 transcription and the other way round. 14 targets differed: mostly axis ticks of charts, which carry no fact; the claims chart improved (each value written next to its month); a delivery note came back as 91 characters, a loop cut at 1 500 tokens. Read again at 1 024 px it was whole, so a cut transcription is now retried at that size. Without the audit, a new prompt could lose facts as silently as the old one dropped the links.
+</details>
+
+**5.** Q127 fell from 0.7 to 0.2 in this run. Is it a regression of step 35?
+
+<details><summary>Answer</summary>
+
+Not of what step 35 changed. Its five extracts are the same chunks; one is a scanned amendment transcribed again with the same facts and different line breaks. The generator, asked whether a yearly volume commitment is met at the end of May, computed a pro rata once and compared totals the next time: a reasoning question flips on wording. One run per configuration can't separate that noise from an effect; that is why the comparison is read question by question, with the extracts.
+</details>

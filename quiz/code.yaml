@@ -513,3 +513,19 @@ questions:
     explain: >-
       supplier_quote is in EXTERNAL_TYPES: issuer() returns None and nothing is added. Only Calorvia's own documents
       get "· Calorvia SA ·" after the label; the supplier's name is not in the registry.
+
+  # --- step 35 ------------------------------------------------------------------------------------------------------
+  - id: code-vision-prompt
+    node: conversion
+    type: order
+    prompt: "Put the path of step 35's change in order, from the prompt to an answer."
+    steps:
+      - "PROMPTS[\"v2\"] in vision.py: also the text on links, both ends named"
+      - "scripts/transcribe.py --prompt v2: each target read by the VLM, cached under a key that includes the prompt"
+      - "a transcription cut at 1500 tokens is read again at 1024 px"
+      - "chunking with [chunking] vision_prompt = \"v2\": vision_chunks reads the v2 transcriptions, never the VLM"
+      - "index.py: a collection of its own (…-prompt-v2)"
+    files: [src/rag_calorvia/etl/vision.py, scripts/transcribe.py, src/rag_calorvia/etl/chunk.py, src/rag_calorvia/etl/index.py]
+    explain: >-
+      The cache key holds the prompt, so v1 and v2 transcriptions live side by side and the configuration in use is
+      untouched until its config names v2.

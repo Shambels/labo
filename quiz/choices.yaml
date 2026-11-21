@@ -533,3 +533,17 @@ step-34-q3:
     - "The context line would pass the chunk's token budget."
     - "BM25 ignores words that appear in every document."
     - "The reranker cannot read company names."
+
+step-35-q1:
+  correct: "No: the transcription it was given had the sites but none of the link labels, so the 500 Mbit/s was nowhere in its extracts."
+  wrong:
+    - "Yes: the answer was in the image and the generator should have read it."
+    - "Yes: the reranker gave it the right chunk with a high score."
+    - "No: the question was about a document excluded from the index."
+
+step-35-q4:
+  correct: "Each transcription's numbers were compared between v1 and v2: mostly axis ticks differed, one chart improved, and one delivery note had looped (cut at the token limit), now read again at 1024 px."
+  wrong:
+    - "By judging the answers of the 127 dev questions before indexing."
+    - "By reading the 66 images by hand against both transcriptions."
+    - "It wasn't: transcriptions at temperature 0 can't lose facts."
