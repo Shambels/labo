@@ -28,7 +28,7 @@ PROGRESS = ROOT / "data" / "quiz" / "progress.json"
 PHASES = {
     "A": ("RAG", -1, 9), "B": ("Text-to-SQL agent", 10, 17), "C": ("Improvements", 18, 24),
     "D": ("Role-based access", 25, 29), "E": ("RAG experiments", 30, 30), "F": ("One chat", 31, 31),
-    "G": ("Monitoring & conversations", 32, 33), "H": ("Fixing the judged errors", 34, 40),
+    "G": ("Monitoring & conversations", 32, 33), "H": ("Fixing the judged errors", 34, 41),
     "Z": ("Code & pipeline", None, None),
 }
 CODE_PHASE = "Z"            # quiz/code.yaml's questions: about the app as it is, not about one step

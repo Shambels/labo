@@ -609,3 +609,46 @@ questions:
       Differences in the fourth decimal are noise (they move between runs); the search's rank is a stable tie-break.
       Measured neutral (0.884 → 0.886) and not adopted.
 
+
+  - id: code-series
+    node: retrieval
+    type: order
+    prompt: "Put add_newer()'s path in order with [reranker] newer_in_series = 2 (step 41)."
+    steps:
+      - "series_key: each kept chunk's (periodic type, folder without its year folders)"
+      - "next_documents: in each series, the documents dated after the newest kept one, drafts and archives left out"
+      - "scroll their chunks with the question's filter (role, reference date)"
+      - "score them against the question; keep those >= series_min_score (0.5)"
+      - "pick: newest document first, then the best score; at most 2, added after the siblings"
+    files: [src/rag_calorvia/rag/series.py, src/rag_calorvia/rag/pipeline.py]
+    explain: >-
+      Q008's closure is in the 30 March minutes, four meetings after the 2 March ones the reranker kept: reading only
+      the next two documents (series_follow = 2) missed it, so every later document of the series is read.
+
+  - id: code-entity-card
+    node: generation
+    type: choice
+    prompt: "With [generation] entity_cards = true, where does the entity card go, and why does recall@5 not change?"
+    correct: "After the other extracts, in the context only: answer() adds it, retrieve()'s chunks (the metrics) never hold it."
+    wrong:
+      - "First, before extract [1], and it replaces the lowest chunk of the top 10."
+      - "In the system prompt, so it is never cited."
+      - "In the search query, as extra words for BM25."
+    files: [src/rag_calorvia/rag/pipeline.py, src/rag_calorvia/rag/entities.py]
+    explain: >-
+      The card is an extract like the others (numbered, citable), built from knowledge/entities.json for the entities
+      the question names, with descriptions only from documents the role may read.
+
+  - id: code-contextual
+    node: chunking
+    type: choice
+    prompt: "Why does chunking with [chunking] contextual = true never call the LLM?"
+    correct: "Contexts are computed once by scripts/contextualize_chunks.py into data/contexts/; chunking reads the cache and stops with MissingContext when one is missing."
+    wrong:
+      - "The context sentence is written by the embedder."
+      - "Chunking calls the LLM only for Dutch chunks."
+      - "The context is the file name, so no LLM is needed."
+    files: [src/rag_calorvia/etl/contextual.py, src/rag_calorvia/etl/chunk.py]
+    explain: >-
+      Same rule as the translations of step 30g: an index never calls the LLM by accident, and a missing sentence
+      stops the indexing instead of silently mixing chunks with and without context.
