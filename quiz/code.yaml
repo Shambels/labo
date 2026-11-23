@@ -667,3 +667,25 @@ questions:
     explain: >-
       The terms take another road: terms_for() puts them in each table card, built by the MCP server. Both are cached
       per process, which is why step 42 ran its evaluation against a second MCP server started from the branch.
+
+  - id: code-answer-text
+    node: agent_graph
+    type: choice
+    prompt: "The model replied [text + make_chart call], then « Le graphique ci-dessus montre… ». What does answer_text() return?"
+    code: |
+      final = own_text(messages[-1].content)
+      if numbers(final):
+          return final
+      for message in reversed(messages[history_len:-1]):
+          if isinstance(message, HumanMessage):
+              break
+          ...  # an AIMessage whose calls are all make_chart, with figures in its text
+    correct: "The text written with the make_chart call: the last message has no figure."
+    wrong:
+      - "Both texts joined, the caption last."
+      - "The caption: the last message is always the answer."
+      - "Nothing: an answer without figures is replaced by « Je ne sais pas »."
+    files: [src/text2sql_calorvia/agent.py]
+    explain: >-
+      _check and _finish both call answer_text(), so the grounding check verifies the text that is shown. The search
+      never goes past a HumanMessage (the grounding retry, or the user's question) nor into earlier turns.

@@ -2390,3 +2390,33 @@ The user asked for a *bénéfice* (profit). No database allocates overheads, sal
 
 No: the query is the certified one, grouped by year. The 10-row series triggers `make_chart`, and after a chart the model writes one sentence, skipping the prompt's "figure first, then the definition" rule, so the "not a net profit" caveat is lost too. That is the answer-writing step's problem, to fix in the prompt or in `finish`, and to measure separately.
 </details>
+
+## Step 43: the answer written before the chart
+
+**1.** For the top-5 margin question the agent's final text was only « Le graphique ci-dessus montre la marge brute par produit et par année. », yet the model had written the whole table. Where was it, and why did the agent drop it?
+
+<details><summary>Answer</summary>
+
+In the message that called `make_chart`: the model wrote its answer and asked for the chart in the same reply. After the tool result it wrote one more line, and `_check` and `_finish` took the answer from the last message only. The table was in the state all along; the code read the wrong message.
+</details>
+
+**2.** Why does `answer_text` return the make_chart message's text only when the last message holds no figure, rather than always joining the two?
+
+<details><summary>Answer</summary>
+
+When the model writes its answer after the chart, the earlier text is a draft of the same answer: joining them would print it twice. A last message with figures is an answer; one without (« Le graphique ci-dessus… ») is a caption, and the caption is what gets replaced. The test is `numbers()`, the same reader the grounding check uses.
+</details>
+
+**3.** `answer_text` stops its search at the first `HumanMessage`. Which two cases does that protect?
+
+<details><summary>Answer</summary>
+
+The grounding check's retry is a HumanMessage: if the model, asked to remove an unverified number, rewrites « Je ne sais pas. », that rewrite is the answer, and the draft holding the unverified number must not come back. And an earlier turn of the conversation ends with the user's new question (a HumanMessage, and before `history_len`): an old answer is never this question's answer.
+</details>
+
+**4.** Why only the text of a `make_chart` call, and not of any message that calls a tool?
+
+<details><summary>Answer</summary>
+
+Text written with `execute_sql` or `get_table_card` is a plan (« Je calcule 2025 et 2026. »), written before the results exist. A chart is drawn from a result already executed, so the text that comes with it is written after the figures are known: it is an answer, checked by the grounding check like any other.
+</details>

@@ -638,3 +638,17 @@ step-42-q4:
     - "The SQL of the metric did not parse on SQL Server."
     - "The metric count in test_ontology.py was still 11."
     - "The glossary is limited to 11 metrics."
+
+step-43-q1:
+  correct: "In the message that called make_chart; _check and _finish read only the last message, a one-line caption."
+  wrong:
+    - "The chart replaced the table because charts.py deletes Markdown tables."
+    - "The grounding check removed the table's unverified numbers."
+    - "The table was longer than rows_to_model, so it was truncated."
+
+step-43-q3:
+  correct: "A rewrite asked by the grounding check must win over the old draft, and an earlier turn's answer is never this question's."
+  wrong:
+    - "HumanMessages hold the chart's URL, which must not be in the answer."
+    - "The model cannot read past a HumanMessage."
+    - "It makes the search faster on long conversations; the result is the same."
