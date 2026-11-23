@@ -2,7 +2,8 @@
 
 Seen in the query log and the traces: an alias of the SELECT used in an ORDER BY expression (« Invalid column name
 'benefice_2025' », three times in one question), « ORDER BY 2 + 3 », tables prefixed with the source's name
-(« erp.dbo.STK_MVT », six times under the site roles), TOP with OFFSET. Each hint says what SQL allows and gives
+(« erp.dbo.STK_MVT », six times under the site roles), TOP with OFFSET, and in step 44's replay a column of
+the SELECT missing from GROUP BY, twice in a row. Each hint says what SQL allows and gives
 the rewrite; the model wrote the same failing query again when it had only the database's message.
 """
 import re
@@ -48,6 +49,12 @@ def hint(source: str, sql: str, message: str) -> str | None:
             return (f"Piste : « {parts[0]} » est le nom de la source dans les outils, pas un préfixe SQL : "
                     f"écrivez {'.'.join(parts[1:])}.")
         return f"Piste : table inconnue de la source {source} ; vérifiez son nom avec list_tables."
+    grouped = re.search(r"Column '([^']+)' is invalid in the select list|column \"([^\"]+)\" must appear in the GROUP BY",
+                        message)
+    if grouped:
+        name = grouped.group(1) or grouped.group(2)
+        return (f"Piste : avec GROUP BY, chaque colonne du SELECT est soit dans le GROUP BY, soit dans un agrégat. "
+                f"Ajoutez {name} au GROUP BY, ou écrivez MAX({name}) s'il a une seule valeur par groupe.")
     if "TOP can not be used in the same query or sub-query as a OFFSET" in message:
         return "Piste : en T-SQL, TOP et OFFSET ne se combinent pas : ORDER BY … OFFSET n ROWS FETCH NEXT m ROWS ONLY."
     return None

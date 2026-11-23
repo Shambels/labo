@@ -41,6 +41,14 @@ def test_a_table_prefixed_with_the_source_name_gets_its_sql_name():
     assert "list_tables" in hint("compta", "SELECT 1", 'relation "ecritures" does not exist')
 
 
+def test_a_column_outside_group_by_gets_both_fixes():
+    erp = hint("erp", "SELECT 1", "Column 'VTE_FACT_LIG.ART_ID' is invalid in the select list because it is not "
+               "contained in either an aggregate function or the GROUP BY clause.")
+    assert "Ajoutez VTE_FACT_LIG.ART_ID au GROUP BY" in erp and "MAX(VTE_FACT_LIG.ART_ID)" in erp
+    assert "GROUP BY" in hint("paie", "SELECT 1", 'column "e.site" must appear in the GROUP BY clause or be used in an '
+                              "aggregate function")
+
+
 def test_top_with_offset_gets_the_t_sql_form():
     assert "FETCH NEXT" in hint("erp", "SELECT 1", "A TOP can not be used in the same query or sub-query as a OFFSET.")
 
