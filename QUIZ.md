@@ -2316,3 +2316,40 @@ A rule in the system prompt applies to every question: 58 of 127 answers changed
 
 Every change since step 9 was chosen on the dev set, and the test set was spent in step 9: the dev score is fitted to the questions that measure it. The fresh set uses documents no dev or test question cites, and was run once, after the choice was made. But it was written by the same assistant that tuned the system, each question from one document with distinctive wording: retrieval was perfect for all three configurations, so it is easier than the dev set. It measures transfer of answer quality, not of retrieval.
 </details>
+
+## Step 41: what the corpus knows
+
+**1.** Before trying anything, `scripts/analyse_misses.py` sorted run 199's 19 lost answers: all incomplete, and 31 of their 34 missing numbers were in the context. What did this decide about the four changes to try?
+
+<details><summary>Answer</summary>
+
+The misses were not retrieval misses: the generator had the details and left them out. The change most likely to help is one that tells the generator which details count (the corpus prompt), not one that brings in more chunks (entities, series, contextual chunks). And so it turned out: only the corpus prompt gained. Measuring where the points are lost before choosing what to build saves building the wrong thing.
+</details>
+
+**2.** The corpus prompt raised the fresh set from 0.860 to 0.897. Why is that number weaker evidence than step 40's fresh score?
+
+<details><summary>Answer</summary>
+
+Step 41's analysis read run 199's fresh misses, and `prompts/corpus.txt` (its list of details per kind of document) was written after it. The fresh set has informed the change it measures, so it is no longer held out for it. It still says the gain is not only a dev artefact, but a clean estimate would need questions nobody has looked at since the prompt was written.
+</details>
+
+**3.** The semantic layer's search adds one dense search restricted to the documents of the entities the question names. Recall@5 did not move, yet correctness fell from 0.898 to 0.880. How?
+
+<details><summary>Answer</summary>
+
+The evidence document was found as before, so recall@5 stayed the same, but the extra prefetch changed which chunks of other documents joined the 30 candidates and then the context: 51 answers changed. Chunks about the named entity that do not answer the question (Atlas, Herstal, forklifts) took the place of chunks that carried details. A retrieval metric that counts only the evidence document cannot see what the rest of the context is worth to the answer.
+</details>
+
+**4.** Why does `knowledge/entities_review.yaml` exist, when the LLM already extracted and merged the entities?
+
+<details><summary>Answer</summary>
+
+The extraction is noisy in ways that hurt matching: common nouns taken as entities ("Pompes à chaleur", "Salle Meuse"), aliases that belong to someone else or are wrong ("COO, TL" for Thomas Lambert, "Conseil" for the CA), descriptions that miss what a site is. A wrong alias makes the question matcher pick the wrong entity on every question that uses the word. As with phase B's certified terms, the hand review is small and kept in a file, so rebuilding the layer reapplies it.
+</details>
+
+**5.** Faithfulness fell from 0.730 to 0.658 with the corpus prompt while correctness rose. Should that block the change?
+
+<details><summary>Answer</summary>
+
+Not by itself. Checked by hand, some complaints are real (Q076 writes "Ghent" for Gand, Q019 picked one of two rates in the context) and some are false (Q006's "A-26-005" is in extract [1]). Longer answers make more claims for the judge to check, and the judge misses some. It is a reason to make the judge trustworthy before comparing faithfulness between runs (suggestion 7), and to read the drops, not to reject a change that gained on both sets.
+</details>

@@ -596,3 +596,17 @@ step-40-q4:
     - "Rule 8 was ignored because the prompt was too long."
     - "Rule 8 only applies to questions in Dutch."
     - "The judge cannot score answers that name two readings."
+
+step-41-q1:
+  correct: "The missing details were in the context: tell the generator which details count, rather than retrieve more chunks."
+  wrong:
+    - "Most misses were retrieval misses, so the search had to change."
+    - "The answers were too long, so the prompt had to ask for shorter ones."
+    - "The judge was wrong on all 19, so nothing had to change."
+
+step-41-q3:
+  correct: "The extra prefetch changed the other chunks of the context (51 answers), not whether the evidence document was found."
+  wrong:
+    - "The entity search dropped the evidence document from the top 5."
+    - "The entity card replaced extract [1]."
+    - "The judge penalises answers that name an entity."

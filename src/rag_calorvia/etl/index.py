@@ -91,6 +91,8 @@ def collection_name(config):
         name += "__issuer"
     if chunking.get("translate_to") == "fr":   # step 30g
         name += "__fr-chunks"
+    if chunking.get("contextual", False):   # step 41
+        name += "__contextual"
     if chunking.get("vision", False):
         name += "__vision"
         if chunking.get("vision_max_tokens", chunking["max_tokens"]) != chunking["max_tokens"]:

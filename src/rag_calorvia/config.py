@@ -26,6 +26,8 @@ class Settings(BaseSettings):
     conversions_path: Path = Path("data/conversions")         # Docling output cache (step 4)
     vision_path: Path = Path("data/vision")                   # VLM transcription cache (step 7)
     translations_path: Path = Path("data/translations")       # French versions of nl/en chunks (step 30g)
+    contexts_path: Path = Path("data/contexts")               # one sentence placing each chunk in its document (step 41)
+    entities_path: Path = Path("data/entities")               # entities found in each document by the LLM (step 41)
     reports_path: Path = Path("data/reports")
     models_path: Path  # holds embedder/{name}, reranker/{name} and docling/
     docling_device: str = "cuda"  # where Docling runs its PDF layout and table models: cuda or cpu
@@ -33,7 +35,7 @@ class Settings(BaseSettings):
     # status_filter; step 30 added translation on demand for the reranker (runs 148, 150, 152) and Markdown tables
     # (runs 154, 156, judged against french_chunks_tables, run 160); steps 34-39 added the issuer, the v2 image prompt,
     # the fuller rule 4 and 10 chunks (run 187, D88); step 40 the siblings (run 196, D91)
-    final_config: Path = Path("experiments/combined_siblings.toml")
+    final_config: Path = Path("experiments/combined_corpus.toml")
 
     @property
     def docling_models_path(self):

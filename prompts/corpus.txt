@@ -1,0 +1,13 @@
+Les documents de Calorvia (pour lire les extraits ; ces lignes ne sont pas une source de réponse) :
+- Calorvia SA est un fabricant belge de pompes à chaleur et de groupes de ventilation. Ses sites : le siège à Namur, les usines de Seneffe et de Gand (« Gent » en néerlandais ; ses rapports sont en néerlandais), l'entrepôt de Herstal et le bureau commercial de Lille (France). Le projet Atlas est le remplacement de son ERP.
+- Chaque extrait commence par une ligne entre crochets : le type de document, sa date, « Calorvia SA » quand l'entreprise en est l'auteur, puis le nom du fichier et son dossier. Elle dit de quand date une information et d'où elle vient.
+- Un fichier dont le nom porte « projet », « v1 » ou « brouillon » est une version provisoire ; « signé », « FINAL » ou « approuvé » désigne la version qui fait foi.
+- Les PV (CODIR, conseil d'administration, COPIL du projet Atlas, comité de sécurité), les reportings et rapports mensuels et les tableaux de bord forment des séries. Quand deux documents d'une série diffèrent, ou qu'un ancien annonce ce qu'un plus récent constate, la réponse est celle du plus récent : donne sa date.
+
+Les précisions de la règle 4, selon le document d'où vient la réponse :
+- fiche de non-conformité, réclamation, incident : la référence, la quantité, la cause et l'action décidée ;
+- PV et compte rendu : la décision, son responsable et son échéance ;
+- reporting, rapport, tableau de bord, budget : la période, et le total, l'objectif ou le budget auquel la valeur se compare ;
+- offre d'emploi, offre de prix, contrat, tarif : les autres conditions de l'offre (durée, avantages, prix, délais) ;
+- investissement, projet : le montant, le gain ou le budget, et l'échéance ;
+- procédure, note de service, plan, page intranet : où, quand et pour qui la règle vaut.

@@ -4,10 +4,12 @@ import time
 from qdrant_client import models
 
 from rag_calorvia.etl.chunk import ACCESS_FIELD
+from rag_calorvia.rag.entities import card, entities_of, entity_documents
 from rag_calorvia.rag.generate import generate
 from rag_calorvia.rag.reference_date import date_condition, reference_date
 from rag_calorvia.rag.rerank import rerank
 from rag_calorvia.rag.search import search
+from rag_calorvia.rag.series import add_newer
 from rag_calorvia.rag.siblings import add_siblings
 from rag_calorvia.rag.translate import translate_question
 
@@ -70,9 +72,15 @@ def retrieve(question, config, role=None):
     reference_ms = elapsed_ms(start)
 
     start = time.perf_counter()
+    entities = entities_of(question, config)   # step 41: [] without [search] entities
+    documents = entity_documents(entities, config, role) if entities else None
+    entities_ms = elapsed_ms(start)
+
+    start = time.perf_counter()
     searched = versions if config["search"].get("translated_search", True) else {"fr": question}
     query_filter = question_filter(config, reference, role)
-    candidates = search(question, config, query_filter=query_filter, versions=searched)
+    candidates = search(question, config, query_filter=query_filter, versions=searched,
+                        **({"documents": documents} if documents else {}))
     search_ms = elapsed_ms(start)
 
     start = time.perf_counter()
@@ -83,6 +91,10 @@ def retrieve(question, config, role=None):
         start = time.perf_counter()
         chunks = add_siblings(question, chunks, config, query_filter, made.get("versions", versions))
         timings["siblings_ms"] = elapsed_ms(start)
+    if config["reranker"].get("newer_in_series"):   # step 41: the next documents of the kept documents' series
+        start = time.perf_counter()
+        chunks = add_newer(question, chunks, config, query_filter, made.get("versions", versions))
+        timings["series_ms"] = elapsed_ms(start)
     if made:
         versions = made["versions"]
         timings = {"translate_ms": made["ms"], **timings, "rerank_ms": rerank_ms - made["ms"]}
@@ -90,7 +102,10 @@ def retrieve(question, config, role=None):
         timings = {"translate_ms": translate_ms, **timings}
     if config["search"].get("reference_date", False):
         timings = {"reference_ms": reference_ms, **timings}
-    return {"chunks": chunks, "versions": versions, "reference": reference, "timings": timings}
+    if config["search"].get("entities"):
+        timings = {"entities_ms": entities_ms, **timings}
+    return {"chunks": chunks, "versions": versions, "reference": reference, "timings": timings,
+            "entities": [entity["name"] for entity in entities]}
 
 
 def context_order(chunks, config):
@@ -109,6 +124,9 @@ def answer(question, config, role=None):
     citations [n] refer to."""
     result = retrieve(question, config, role)
     context = context_order(result["chunks"], config)
+    entity_card = card(entities_of(question, config), role) if config["generation"].get("entity_cards") else None
+    if entity_card:   # step 41: what the named entities are, as the last extract
+        context = [*context, entity_card]
 
     start = time.perf_counter()
     generation = generate(question, context, config, role)

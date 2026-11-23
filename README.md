@@ -108,6 +108,9 @@ uv run python scripts/judge_experiment.py baseline                 # 31-question
 uv run python scripts/judge_experiment.py tools_tables --types excel_lookup excel_reasoning  # every dev question of these types
 uv run python scripts/reuse_judgments.py 196 --from 191   # step 40: copy verdicts of identical answers; prints what is left to judge
 uv run python scripts/run_experiment.py experiments/combined_siblings.toml --fresh  # step 40: the 35 fresh held-out questions, once
+uv run python scripts/analyse_misses.py 196   # step 41: why a run's answers lost points (refusal, not found, wrong, incomplete)
+uv run python scripts/build_entities.py experiments/combined_entities.toml --workers 2  # step 41: the semantic layer -> knowledge/entities.json (generator)
+uv run python scripts/contextualize_chunks.py experiments/combined_contextual.toml       # step 41: one context sentence per chunk -> data/contexts/ (generator)
 uv run python scripts/report.py baseline no_context_line__retrieval  # per question type and per format
 uv run python scripts/ask.py "Quand le nouvel ERP démarre-t-il ?"   # one question, its chunks, and the images it cites
 uv run python scripts/compare_ocr.py   # Docling OCR vs the VLM on the scanned PDFs (step 7)

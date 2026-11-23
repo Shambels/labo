@@ -1,0 +1,55 @@
+# The hand review of the semantic layer (step 41), applied by scripts/build_entities.py after the merge.
+# Names are matched without case, accents or punctuation. Each entry fixes something read in knowledge/entities.json
+# on 2026-11-22 (386 entities from 2 857 mentions in 379 documents).
+
+# Common nouns, not named entities: they would match ordinary words of a question ("les vannes quatre voies") and
+# describe a thing in general. Rooms and an e-mail address are not what questions are about.
+drop:
+  - Pompes à chaleur
+  - Groupes de ventilation
+  - Salle Meuse
+  - jobs@calorvia.example
+  - four de brasage
+  - vanne quatre voies
+  - quatre-voies
+  - vannes quatre voies
+  - gang 7
+  - heftruck
+  - heftrucks
+  - 14 elektrische heftrucks
+  - 6 transpaletten
+  - azote
+  - baguette à 15 % d'argent
+  - lignes d'assemblage
+  - new assembly line
+  - pare-feu principal
+  - productielijnen
+  - salle serveurs
+  - ventilatie-units
+  - warehouse
+  - warmtepompen
+
+merge: {}
+rename: {}
+aliases: {}
+
+# Wrong links made by the merge or by the extraction: GesPro 7 is the ERP Praxio replaces (intranet, "Le projet Atlas
+# en 10 questions"), not Praxio; "Conseil" alone and "conseil de surveillance" are not the board's names; "COO, TL"
+# and "CFO, LD" are two aliases written as one.
+drop_aliases:
+  Praxio: [GesPro 7]
+  Conseil d'administration: [Conseil, conseil de surveillance]
+  Thomas Lambert: ["COO, TL"]
+  Laurent Dewit: ["CFO, LD"]
+
+# The newest description is the newest document's, which says what the entity was doing there, not what it is
+# ("Gand: site de l'entrepôt sécurisé", "Lille: site de production"). Checked against the documents.
+describe:
+  Gand: usine de groupes de ventilation de Calorvia (« Gent » en néerlandais ; ses rapports sont en néerlandais)
+  Seneffe: usine de pompes à chaleur de Calorvia
+  Namur: siège social de Calorvia, rue des Artisans 42
+  Lille: bureau commercial de Calorvia en France
+  Herstal: entrepôt de Calorvia, opérationnel depuis le 18 mai 2026
+  Sarah Vandamme: responsable du contrôle de gestion
+
+kind: {}
