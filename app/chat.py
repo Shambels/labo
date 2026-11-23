@@ -21,6 +21,7 @@ import uuid
 from pathlib import Path
 
 import psycopg
+import requests
 import streamlit as st
 from openai import OpenAI, OpenAIError
 
@@ -234,13 +235,31 @@ def ask_agent(question, model):
     return {"answer": conversations.MARKER.sub("", reply.choices[0].message.content)}   # the header names it
 
 
+MODEL_SERVERS = {rag_settings.llm_url: "le générateur", rag_settings.embeddings_url: "l'embedder",
+                 rag_settings.rerank_url: "le reranker"}
+
+
+def documents_error(error: Exception) -> str:
+    """What to start when the RAG, run here, fails: the model server the failed request went to, from its URL."""
+    request = getattr(error, "request", None)
+    url = str(request.url) if request is not None else ""
+    server = next((f"{name} ({base})" for base, name in MODEL_SERVERS.items() if url.startswith(base)), None)
+    if server:
+        return f"Le serveur de modèle ne répond pas ({type(error).__name__}) : lancez {server}."
+    return (f"Un serveur de modèle ne répond pas ({type(error).__name__}{f', {url}' if url else ''}) : vérifiez le "
+            "générateur (8000), l'embedder (8001) et le reranker (8002).")
+
+
 if question := st.chat_input("Votre question sur Calorvia"):
     with st.spinner("Recherche et rédaction de la réponse…"):
         try:
             result = ask_documents(question) if MODES[mode] is None else ask_agent(question, MODES[mode])
-        except OpenAIError as error:
-            st.error(f"L'agent ne répond pas ({type(error).__name__}) : lancez le serveur MCP et "
-                     "`uv run python -m text2sql_calorvia.api`.")
+        except (OpenAIError, requests.RequestException) as error:
+            if MODES[mode] is None:   # the RAG runs here: only the model servers, never the MCP server or 9000
+                st.error(documents_error(error))
+            else:
+                st.error(f"L'agent ne répond pas ({type(error).__name__}) : lancez le serveur MCP (9001), "
+                         "`uv run python -m text2sql_calorvia.api` (9000) et le générateur (8000).")
             st.stop()
     turn = {"question": question, "result": result, "mode": mode}
     st.session_state.history.append(turn)
