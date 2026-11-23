@@ -1,19 +1,20 @@
 """Step 15: charts of query results, conversations and learned memory."""
+import json
 import os
 import uuid
 
 import anyio
 import psycopg
 import pytest
-from langchain_core.messages import AIMessage
+from langchain_core.messages import AIMessage, HumanMessage
 
 from text2sql_calorvia import charts, memory
-from text2sql_calorvia.agent import Agent
+from text2sql_calorvia.agent import Agent, answer_text
 from text2sql_calorvia.charts import make_chart
 from text2sql_calorvia.config import settings
 from text2sql_calorvia.mcp_server import server
 
-from test_agent import MARCH, ScriptedLLM, call
+from test_agent import MARCH, ScriptedLLM, call, last_tool_result
 
 RESULT = {"columns": ["site", "personnes"], "rows": [["GENT", 190], ["HERSTAL", 6], ["NAMUR", 126]]}
 
@@ -133,3 +134,54 @@ def test_old_charts_are_deleted_and_other_files_kept(tmp_path):
     os.utime(other, (1000, 1000))
     assert charts.cleanup(tmp_path, max_age_days=30) == 1
     assert not old.exists() and new.exists() and other.exists()
+
+
+# --- the answer written with the chart call (step 43) ----------------------------------------------------------------
+BY_MONTH = ("SELECT MONTH(FAC_DT) AS mois, SUM(FAC_MT_HT) AS ca FROM VTE_FACT "
+            "WHERE FAC_DT >= '2026-01-01' GROUP BY MONTH(FAC_DT)")
+CHART = call("make_chart", result="q1", kind="bar", x="mois", y=["ca"], title="CA HT par mois, 2026")
+
+
+def with_chart(text):
+    """The model's reply that asks for the chart, its text built from the query's first row."""
+    def reply(messages):
+        first = json.loads(last_tool_result(messages))["rows"][0]
+        return AIMessage(text.format(mois=first[0], ca=first[1]), tool_calls=[CHART])
+    return reply
+
+
+def test_an_answer_written_with_the_chart_call_is_kept(user, tmp_path, monkeypatch):
+    monkeypatch.setattr(settings, "charts_dir", tmp_path)
+    llm = ScriptedLLM(AIMessage("", tool_calls=[call("execute_sql", source="erp", sql=BY_MONTH)]),
+                      with_chart("CA HT 2026 par mois (ERP) : mois {mois}, {ca} €."),
+                      AIMessage("Le graphique ci-dessus montre le CA par mois."))
+    answer = ask(llm, "Graphique du CA par mois", user)["answer"]
+    assert answer.startswith("CA HT 2026 par mois (ERP) : mois ") and "ci-dessus" not in answer
+    assert "Nombre(s) non retrouvé(s)" not in answer and answer.index("CA HT") < answer.index("![CA HT par mois")
+
+
+def test_an_answer_written_after_the_chart_is_the_answer(user, tmp_path, monkeypatch):
+    monkeypatch.setattr(settings, "charts_dir", tmp_path)
+    llm = ScriptedLLM(AIMessage("", tool_calls=[call("execute_sql", source="erp", sql=BY_MONTH)]),
+                      with_chart("Brouillon : mois {mois}, {ca} €."),
+                      lambda messages: AIMessage("Réponse : " + next(
+                          m.content for m in messages if isinstance(m, AIMessage) and m.tool_calls
+                          and m.tool_calls[0]["name"] == "make_chart").removeprefix("Brouillon : ")))
+    answer = ask(llm, "Graphique du CA par mois", user)["answer"]
+    assert answer.startswith("Réponse : mois ") and "Brouillon" not in answer
+
+
+def test_the_text_of_the_chart_call_is_used_only_when_the_last_message_has_no_figure():
+    draft = AIMessage("Mars : 13 599 646,63 €.", tool_calls=[CHART])
+    history = [HumanMessage("question")]
+    assert answer_text([*history, draft, AIMessage("Le graphique ci-dessus.")], 1) == "Mars : 13 599 646,63 €."
+    assert answer_text([*history, draft, AIMessage("Mars : 13 599 646,63 € HT.")], 1) == "Mars : 13 599 646,63 € HT."
+    # a rewrite asked by the grounding check is the answer, even without figures
+    asked = [*history, draft, HumanMessage("Vérification automatique : …"), AIMessage("Je ne sais pas.")]
+    assert answer_text(asked, 1) == "Je ne sais pas."
+    # only the text of a make_chart call: « Je lance la requête » with execute_sql is not an answer
+    plan = AIMessage("Je calcule 2025 et 2026.", tool_calls=[call("execute_sql", source="erp", sql="SELECT 1")])
+    assert answer_text([*history, plan, AIMessage("Voici.")], 1) == "Voici."
+    # never an answer of an earlier turn
+    earlier = [HumanMessage("avant"), draft, HumanMessage("question")]
+    assert answer_text([*earlier, AIMessage("Le graphique ci-dessus.")], 3) == "Le graphique ci-dessus."
