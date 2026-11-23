@@ -279,6 +279,24 @@ def own_text(content: str | None) -> str:
     return HISTORY_NOTE.sub("", OWN_FOOTER.sub("", content or "")).strip()
 
 
+def answer_text(messages: list, history_len: int) -> str:
+    """The answer of this question: the model's last message, unless it holds no figure and the model wrote its answer
+    with its make_chart call (step 43). The model often writes the whole answer in the message that asks for the chart,
+    then, once the chart exists, only « Le graphique ci-dessus montre… »: that line would replace the answer. A rewrite
+    asked by the grounding check (a HumanMessage) is the answer even without figures: the search stops there."""
+    final = own_text(messages[-1].content)
+    if numbers(final):
+        return final
+    for message in reversed(messages[history_len:-1]):
+        if isinstance(message, HumanMessage):
+            break
+        calls = getattr(message, "tool_calls", None) or []
+        draft = own_text(message.content) if isinstance(message, AIMessage) else ""
+        if calls and all(c["name"] == "make_chart" for c in calls) and numbers(draft):
+            return draft
+    return final
+
+
 def numbers(text: str, scaled: bool = False) -> list[tuple[str, float]]:
     """Numbers as written and their value: '13 599 646,63' (French), '13599646.63' (JSON), '1.234.567'.
     scaled: a unit after the number multiplies it ('13 599,6 k€' -> 13 599 600, '1,2 M€' -> 1 200 000)."""
@@ -448,7 +466,7 @@ class Agent:
         return known
 
     async def _check(self, state: AgentState) -> dict:
-        answer = own_text(state["messages"][-1].content)
+        answer = answer_text(state["messages"], state["history_len"])
         # The conversation as the client sent it, and tool results; never the agent's own instructions (this check's
         # message quotes the very number it questions)
         corpus = "\n".join(str(m.content) for i, m in enumerate(state["messages"])
@@ -479,7 +497,7 @@ class Agent:
 
     async def _finish(self, state: AgentState) -> dict:
         steps, missing = list(state.get("steps", [])), state.get("unverified") or []
-        text = own_text(state["messages"][-1].content)
+        text = answer_text(state["messages"], state["history_len"])
         ran = any(s["tool"] in {"execute_sql", "get_sales_commission"} and s.get("ok") for s in steps)
         read = any(s["tool"] == "search_documents" and s.get("extracts") for s in steps)
         if missing and not (ran or read):

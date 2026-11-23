@@ -2353,3 +2353,70 @@ The extraction is noisy in ways that hurt matching: common nouns taken as entiti
 
 Not by itself. Checked by hand, some complaints are real (Q076 writes "Ghent" for Gand, Q019 picked one of two rates in the context) and some are false (Q006's "A-26-005" is in extract [1]). Longer answers make more claims for the judge to check, and the judge misses some. It is a reason to make the judge trustworthy before comparing faithfulness between runs (suggestion 7), and to read the drops, not to reject a change that gained on both sets.
 </details>
+
+## Step 42: the cost the agent could not find
+
+**1.** Asked for the profit of its top 5 products, the agent costed each product's consumption with `stk_mvt CONS JOIN art_nomenc ON art_nomenc.art_id_comp = stk_mvt.art_id`, got 52,2 M€ of components for 38,8 M€ of revenue, and concluded there was no usable cost. What was wrong with the join, and what is the right link?
+
+<details><summary>Answer</summary>
+
+A component is in up to 8 finished products, so each consumption row matched once per product that uses its component: every product was charged with the consumption of all its siblings. A consumption belongs to the production order it was made for: `stk_mvt.mvt_ref = prd_of.of_num`, and `prd_of.art_id` is the product. Done that way, the consumed cost per unit (4 352 € for the Aéris 12) is almost exactly the bill of materials' cost (4 284 €).
+</details>
+
+**2.** The agent read `art_article` (query q4) but never used `art_prix_std`. Why does a column name like that not suffice, and what did step 42 add so it is used?
+
+<details><summary>Answer</summary>
+
+Nothing says what `art_prix_std` is: a standard *price* could be a selling price, and the agent's habit is to compute rather than trust a column it cannot define. The certified term of `art_article` now says it is the unit standard cost (one current value, none for services, 1,22 × the components for a finished product), and a certified metric gives the reference SQL of the gross margin that uses it. Same lesson as step 12: the gains come from definitions column names cannot give.
+</details>
+
+**3.** Why does the gross-margin metric's description say "ce n'est pas un bénéfice net", and why is "marge" also a business word?
+
+<details><summary>Answer</summary>
+
+The user asked for a *bénéfice* (profit). No database allocates overheads, sales costs or depreciation to products, so the honest answer is a gross margin at standard cost, named as such. And once the agent has a metric called "marge brute", it would read every "marge" as that one (the D68 lesson: a model does not find a word ambiguous when it has a metric for it). The business word makes the code offer the EBITDA margin and the net margin under an answer that gave only one.
+</details>
+
+**4.** The first wording of the metric ended with "La marge de toute l'entreprise est l'EBITDA ou le résultat (comptabilité)". Which test failed, and why does it matter?
+
+<details><summary>Answer</summary>
+
+`test_the_prompt_shows_only_what_the_role_reads`: the commercial role reads the ERP only, so it sees this ERP metric, and its description named EBITDA, an accounting notion that role is not shown. A description is prompt text: it must name nothing outside the tables of its own source, or it leaks what other roles can compute.
+</details>
+
+**5.** At temperature 0, the agent now answers the question with one correct query, but its text is only "Le graphique ci-dessus montre la marge brute par produit et par année." Is that a problem of the ontology?
+
+<details><summary>Answer</summary>
+
+No: the query is the certified one, grouped by year. The 10-row series triggers `make_chart`, and after a chart the model writes one sentence, skipping the prompt's "figure first, then the definition" rule, so the "not a net profit" caveat is lost too. That is the answer-writing step's problem, to fix in the prompt or in `finish`, and to measure separately.
+</details>
+
+## Step 43: the answer written before the chart
+
+**1.** For the top-5 margin question the agent's final text was only « Le graphique ci-dessus montre la marge brute par produit et par année. », yet the model had written the whole table. Where was it, and why did the agent drop it?
+
+<details><summary>Answer</summary>
+
+In the message that called `make_chart`: the model wrote its answer and asked for the chart in the same reply. After the tool result it wrote one more line, and `_check` and `_finish` took the answer from the last message only. The table was in the state all along; the code read the wrong message.
+</details>
+
+**2.** Why does `answer_text` return the make_chart message's text only when the last message holds no figure, rather than always joining the two?
+
+<details><summary>Answer</summary>
+
+When the model writes its answer after the chart, the earlier text is a draft of the same answer: joining them would print it twice. A last message with figures is an answer; one without (« Le graphique ci-dessus… ») is a caption, and the caption is what gets replaced. The test is `numbers()`, the same reader the grounding check uses.
+</details>
+
+**3.** `answer_text` stops its search at the first `HumanMessage`. Which two cases does that protect?
+
+<details><summary>Answer</summary>
+
+The grounding check's retry is a HumanMessage: if the model, asked to remove an unverified number, rewrites « Je ne sais pas. », that rewrite is the answer, and the draft holding the unverified number must not come back. And an earlier turn of the conversation ends with the user's new question (a HumanMessage, and before `history_len`): an old answer is never this question's answer.
+</details>
+
+**4.** Why only the text of a `make_chart` call, and not of any message that calls a tool?
+
+<details><summary>Answer</summary>
+
+Text written with `execute_sql` or `get_table_card` is a plan (« Je calcule 2025 et 2026. »), written before the results exist. A chart is drawn from a result already executed, so the text that comes with it is written after the figures are known: it is an answer, checked by the grounding check like any other.
+</details>

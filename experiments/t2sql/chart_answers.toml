@@ -1,0 +1,6 @@
+# experiments/t2sql/chart_answers.toml — step 43: when the model writes its answer with the make_chart call and then
+# only « Le graphique ci-dessus… », that answer is kept (agent.answer_text). Compared with run 40 (gross_margin).
+name = "chart_answers"
+
+[agent]
+use_ontology = true   # the only change is in code (agent.answer_text)

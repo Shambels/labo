@@ -11,7 +11,7 @@ def test_terms_are_found_by_source_and_table_without_case():
 
 def test_every_certified_term_and_metric_maps_to_a_source():
     data = ontology.load()
-    assert len(data["terms"]) == 28 and len(data["metrics"]) == 11
+    assert len(data["terms"]) == 29 and len(data["metrics"]) == 12
     assert {t["source"] for t in data["terms"] + data["metrics"]} == {"erp", "compta", "paie"}
 
 
@@ -51,3 +51,28 @@ def test_every_reading_of_a_business_word_is_usable():
     for word in ontology.load()["business_words"]:
         assert len(word["readings"]) >= 2 and word["patterns"]
         assert all(r["label"] and r["names"] and r["source"] in {"erp", "compta", "paie"} for r in word["readings"])
+
+
+def test_the_gross_margin_is_certified_with_its_standard_cost():
+    glossary = ontology.glossary()
+    assert "**Gross margin at standard cost (marge brute par produit, bénéfice d'un produit)** (erp, vte_fact_lig)" in glossary
+    assert "* a.art_prix_std AS cout_standard" in glossary and "pas un bénéfice net" in glossary
+    # its tables are the ERP's: a role without the ERP doesn't see it
+    assert "Gross margin" not in ontology.glossary({"compta": None})
+
+
+def test_the_bill_of_materials_warns_against_joining_consumption_through_it():
+    definition = ontology.terms_for("erp", "ART_NOMENC")[0]["definition"]
+    assert "jusqu'à 8" in definition and "stk_mvt.mvt_ref = prd_of.of_num" in definition
+    assert "1,22 fois" in ontology.terms_for("erp", "ART_ARTICLE")[0]["definition"]
+
+
+def test_a_margin_question_gets_the_other_margins():
+    note = ontology.other_readings("Quelle est notre marge sur le premier trimestre 2026 ?", "La marge brute est de 10 €.")
+    assert "marge d'EBITDA" in note and "marge nette" in note and "marge brute par produit" not in note
+    assert ontology.other_readings("Quelle est la marge brute par produit en 2025 ?", "10 €") == ""
+
+
+def test_best_products_offers_the_margin_ranking():
+    note = ontology.other_readings("Quels sont nos meilleurs produits ?", "Par chiffre d'affaires : Aéris 12.")
+    assert "classement par marge brute au coût standard" in note and "unités vendues" in note

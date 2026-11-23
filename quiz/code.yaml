@@ -652,3 +652,40 @@ questions:
     explain: >-
       Same rule as the translations of step 30g: an index never calls the LLM by accident, and a missing sentence
       stops the indexing instead of silently mixing chunks with and without context.
+
+  - id: code-certified-metric
+    node: agent_graph
+    type: order
+    prompt: "A metric added to ontology/certification.yaml: put in order how it reaches an answer."
+    steps:
+      - "ontology.load() reads the YAML once (cached per process: restart the MCP server and the endpoint)"
+      - "glossary(scope) keeps it only if the role can read every table its SQL names (from / join)"
+      - "system_prompt() puts its name, description and reference SQL in the « Indicateurs certifiés » section"
+      - "the model adapts the reference SQL (period, year, top N, T-SQL) and calls execute_sql"
+      - "finish: grounding check, then other_readings() appends the readings of a business word the answer left out"
+    files: [src/text2sql_calorvia/ontology.py, src/text2sql_calorvia/agent.py, ontology/certification.yaml]
+    explain: >-
+      The terms take another road: terms_for() puts them in each table card, built by the MCP server. Both are cached
+      per process, which is why step 42 ran its evaluation against a second MCP server started from the branch.
+
+  - id: code-answer-text
+    node: agent_graph
+    type: choice
+    prompt: "The model replied [text + make_chart call], then « Le graphique ci-dessus montre… ». What does answer_text() return?"
+    code: |
+      final = own_text(messages[-1].content)
+      if numbers(final):
+          return final
+      for message in reversed(messages[history_len:-1]):
+          if isinstance(message, HumanMessage):
+              break
+          ...  # an AIMessage whose calls are all make_chart, with figures in its text
+    correct: "The text written with the make_chart call: the last message has no figure."
+    wrong:
+      - "Both texts joined, the caption last."
+      - "The caption: the last message is always the answer."
+      - "Nothing: an answer without figures is replaced by « Je ne sais pas »."
+    files: [src/text2sql_calorvia/agent.py]
+    explain: >-
+      _check and _finish both call answer_text(), so the grounding check verifies the text that is shown. The search
+      never goes past a HumanMessage (the grounding retry, or the user's question) nor into earlier turns.

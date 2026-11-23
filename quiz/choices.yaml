@@ -610,3 +610,45 @@ step-41-q3:
     - "The entity search dropped the evidence document from the top 5."
     - "The entity card replaced extract [1]."
     - "The judge penalises answers that name an entity."
+
+step-42-q1:
+  correct: "A component is in up to 8 products, so each consumption counted once per product using it; link consumption through the production order (stk_mvt.mvt_ref = prd_of.of_num)."
+  wrong:
+    - "CONS quantities are negative, so the sum had the wrong sign."
+    - "The bill of materials has several versions per product, so each was counted twice."
+    - "art_prix_std is a selling price, so the cost was overstated."
+
+step-42-q2:
+  correct: "Nothing defined art_prix_std; the certified term now says it is the unit standard cost, and a certified metric uses it."
+  wrong:
+    - "The commercial role cannot read art_prix_std."
+    - "art_prix_std is empty for finished products."
+    - "The MCP server hides cost columns from the agent."
+
+step-42-q3:
+  correct: "No database allocates overheads to products, so the answer is a gross margin; and with a metric named marge brute, the model would read every marge as that one."
+  wrong:
+    - "The judge only accepts answers that contain the word bénéfice."
+    - "Net profit per product is in the accounting database but the agent cannot read it."
+    - "The business word makes the agent refuse margin questions."
+
+step-42-q4:
+  correct: "A metric visible to the commercial role named EBITDA, an accounting notion that role is not shown: descriptions are prompt text."
+  wrong:
+    - "The SQL of the metric did not parse on SQL Server."
+    - "The metric count in test_ontology.py was still 11."
+    - "The glossary is limited to 11 metrics."
+
+step-43-q1:
+  correct: "In the message that called make_chart; _check and _finish read only the last message, a one-line caption."
+  wrong:
+    - "The chart replaced the table because charts.py deletes Markdown tables."
+    - "The grounding check removed the table's unverified numbers."
+    - "The table was longer than rows_to_model, so it was truncated."
+
+step-43-q3:
+  correct: "A rewrite asked by the grounding check must win over the old draft, and an earlier turn's answer is never this question's."
+  wrong:
+    - "HumanMessages hold the chart's URL, which must not be in the answer."
+    - "The model cannot read past a HumanMessage."
+    - "It makes the search faster on long conversations; the result is the same."
