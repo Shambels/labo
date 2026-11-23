@@ -89,6 +89,8 @@ terms:
     name: Manufacturing Order (ordre de fabrication)
     description: >-
       Ordres de fabrication : un par produit fini, par semaine et par ligne de production (Seneffe, Gand).
+      of_num est le mvt_ref des mouvements de stock CONS (composants consommés) et PROD (produits finis sortis) de
+      l'ordre : c'est par lui qu'une consommation se rattache à son produit fini (prd_of.art_id).
   - database: gespro
     table: art_tarif
     was: Tariff
@@ -108,7 +110,8 @@ terms:
     description: >-
       Tous les mouvements de stock, quantités signées (entrée positive, sortie négative) : INIT, REC (réception),
       RET (retour au fournisseur), CONS, PROD, REB, EXP, RCL, TRF, INV (par_code TYPE_MVT). mvt_lot porte le numéro
-      de lot ; mvt_ref la pièce d'origine (réception, non-conformité NC-...).
+      de lot ; mvt_ref la pièce d'origine (réception, non-conformité NC-..., et pour CONS et PROD le numéro de
+      l'ordre de fabrication, prd_of.of_num).
   - database: gespro
     table: frn_fournisseur
     was: Supplier
@@ -131,7 +134,21 @@ terms:
     description: >-
       Les 62 articles. art_type (par_code TYPE_ART) : PF = produit fini fabriqué (les 8 pompes à chaleur Aéris et
       groupes Ventis : « produits finis »), NEG = négoce, COMP = composant, MP = matière première, SRV = prestation.
-      art_ligne et sit_id_prod : ligne et usine de production des produits finis.
+      art_ligne et sit_id_prod : ligne et usine de production des produits finis. art_prix_std est le coût standard
+      unitaire (une seule valeur, la valeur actuelle, sans historique ; vide pour les prestations SRV) : c'est le
+      coût de revient des articles. Pour un produit fini, il vaut 1,22 fois le coût de ses composants dans la
+      nomenclature (art_nomenc) : il couvre plus que les composants. Le prix de vente n'est pas ici : art_tarif ou
+      les factures.
+  - database: gespro
+    table: art_nomenc
+    was: Nomenclature
+    name: Bill of Materials (nomenclature)
+    description: >-
+      Composants de chaque produit fini : art_id_pf (le produit fini), art_id_comp (le composant), nom_qte (quantité
+      par unité produite). Un même composant entre dans plusieurs produits finis (jusqu'à 8) : ne jamais rattacher
+      des consommations (stk_mvt CONS) à un produit fini par la nomenclature, chacune serait comptée une fois par
+      produit fini qui utilise le composant. Les rattacher par l'ordre de fabrication (stk_mvt.mvt_ref =
+      prd_of.of_num).
   # --- Accounting ------------------------------------------------------------------------------------------------
   - database: compta
     table: immobilisation
@@ -239,6 +256,28 @@ metrics:
     expression: |
       SELECT SUM(CASE WHEN f.fac_type = 'F' THEN l.fl_qte WHEN f.fac_motif = 'RETOUR' THEN -l.fl_qte ELSE 0 END) AS unites
       FROM dbo.vte_fact_lig l JOIN dbo.vte_fact f ON f.fac_id = l.fac_id
+  - database: gespro
+    table: vte_fact_lig
+    name: Gross margin at standard cost (marge brute par produit, bénéfice d'un produit)
+    description: >-
+      Par article : chiffre d'affaires net facturé HT moins les unités vendues nettes des retours multipliées par
+      art_prix_std (coût standard). Filtrer la période sur fac_dt. C'est la réponse à une question de marge ou de
+      bénéfice par produit ; dire dans la réponse que c'est une marge brute au coût standard actuel, pas un
+      bénéfice net : aucune base ne répartit les frais généraux, commerciaux et les amortissements par produit. Les
+      prestations (SRV) n'ont pas de coût standard. Ce n'est pas la marge de toute l'entreprise.
+    expression: |
+      SELECT a.art_id, a.art_lib,
+             SUM(CASE WHEN f.fac_type = 'A' THEN -l.fl_mt_ht ELSE l.fl_mt_ht END) AS ca_net_ht,
+             SUM(CASE WHEN f.fac_type = 'F' THEN l.fl_qte WHEN f.fac_motif = 'RETOUR' THEN -l.fl_qte ELSE 0 END)
+               * a.art_prix_std AS cout_standard,
+             SUM(CASE WHEN f.fac_type = 'A' THEN -l.fl_mt_ht ELSE l.fl_mt_ht END)
+               - SUM(CASE WHEN f.fac_type = 'F' THEN l.fl_qte WHEN f.fac_motif = 'RETOUR' THEN -l.fl_qte ELSE 0 END)
+                 * a.art_prix_std AS marge_brute
+      FROM dbo.vte_fact_lig l
+      JOIN dbo.vte_fact f ON f.fac_id = l.fac_id
+      JOIN dbo.art_article a ON a.art_id = l.art_id
+      WHERE a.art_prix_std IS NOT NULL
+      GROUP BY a.art_id, a.art_lib, a.art_prix_std
   - database: compta
     table: ligne_ecriture
     name: Booked revenue (chiffre d'affaires comptable)
@@ -380,3 +419,18 @@ business_words:
       - label: classement par unités vendues
         source: erp
         names: [unites, quantite]
+      - label: classement par marge brute au coût standard
+        source: erp
+        names: [marge, benefice]
+  - word: marge
+    patterns: ["\\bmarges?\\b"]
+    readings:
+      - label: marge brute par produit au coût standard (ERP)
+        source: erp
+        names: [marge brute, cout standard, par produit, par article]
+      - label: marge d'EBITDA (EBITDA / comptes 70)
+        source: compta
+        names: [ebitda]
+      - label: marge nette (résultat net / comptes 70)
+        source: compta
+        names: [marge nette, resultat net]
