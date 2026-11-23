@@ -114,6 +114,7 @@ class AgentState(TypedDict, total=False):
     steps: list[dict]            # every tool call, for the footer and the progress stream
     tool_calls: int
     sql_errors: int
+    failed: dict[str, list]      # query_key -> the errors of a query that failed (step 44)
     history_len: int             # messages given by the client (system prompt included): the grounding corpus
     grounding_retry: bool
     unverified: list[str]
@@ -221,13 +222,17 @@ def as_tool_text(value: Any) -> str:
     return text
 
 
+def query_key(source: str | None, sql: str | None) -> str:
+    """A query as compared for repeats: source and text, up to spacing, a final ; and the row limit."""
+    sql = re.sub(r"\s+", " ", sql or "").strip().rstrip("; ")
+    sql = re.sub(r" LIMIT \d+$", "", sql, flags=re.I)
+    return f"{source}:{sql}"
+
+
 def same_query(results: dict[str, dict], args: dict) -> str | None:
     """The id of an earlier result of exactly this query (same source, same text up to spacing and the row limit)."""
-    def key(source, sql):
-        sql = re.sub(r"\s+", " ", sql or "").strip().rstrip("; ")
-        return source, re.sub(r" LIMIT \d+$", "", sql, flags=re.I)
-    wanted = key(args.get("source"), args.get("sql"))
-    return next((qid for qid, r in results.items() if key(r["source"], r["sql"]) == wanted), None)
+    wanted = query_key(args.get("source"), args.get("sql"))
+    return next((qid for qid, r in results.items() if query_key(r["source"], r["sql"]) == wanted), None)
 
 
 def for_model(qid: str, output: dict) -> dict:
@@ -360,7 +365,7 @@ class Agent:
         client: Client = config["configurable"]["client"]
         results, steps = dict(state.get("results", {})), list(state.get("steps", []))
         sql_errors, messages, drawn = state.get("sql_errors", 0), [], list(state.get("charts", []))
-        extracts = list(state.get("extracts", []))
+        extracts, failed = list(state.get("extracts", [])), dict(state.get("failed", {}))
         calls = state["messages"][-1].tool_calls
         for call in calls:
             name, args = call["name"], dict(call["args"])
@@ -390,6 +395,13 @@ class Agent:
                         "Utilisez ce résultat, changez d'approche, ou répondez avec ce que vous avez."]}
                     step.update(ok=False, stage="repeat", errors=output["errors"])
                     sql_errors += 1
+                elif name == "execute_sql" and (before := failed.get(query_key(args.get("source"), args.get("sql")))):
+                    # Seen in step 44's trace: the same failing query sent three times, each one 15-25 s of generation
+                    output = {"ok": False, "errors": [
+                        "Requête identique à une requête déjà refusée pour cette question, qui échouerait de nouveau "
+                        f"({' '.join(before)}). Changez la requête, ou répondez avec les résultats obtenus."]}
+                    step.update(ok=False, stage="repeat", errors=output["errors"])
+                    sql_errors += 1
                 else:
                     if state.get("access_token"):
                         args["access_token"] = state["access_token"]
@@ -405,6 +417,8 @@ class Agent:
                         step["errors"] = output.get("errors") or [output.get("error")]
                         # execute returns the SQL it ran only when validation passed: then the database refused it
                         step["stage"] = "execution" if name == "execute_sql" and "sql" in output else "validation"
+                        if name == "execute_sql":
+                            failed[query_key(call["args"].get("source"), call["args"].get("sql"))] = step["errors"]
                     if name == "get_table_card" and ok and not self.use_ontology:
                         output.pop("ontology_terms", None)
                     if name == "execute_sql" and ok:
@@ -417,7 +431,8 @@ class Agent:
             steps.append(step)
             messages.append(ToolMessage(as_tool_text(output), tool_call_id=call["id"], name=name))
         return {"messages": messages, "results": results, "steps": steps, "sql_errors": sql_errors,
-                "tool_calls": state.get("tool_calls", 0) + len(calls), "charts": drawn, "extracts": extracts}
+                "tool_calls": state.get("tool_calls", 0) + len(calls), "charts": drawn, "extracts": extracts,
+                "failed": failed}
 
     def _local_tool(self, name: str, args: dict, state: AgentState, results: dict, drawn: list) -> dict:
         """The tools that run in the agent: they read the state (results by id) or the memory tables."""
@@ -446,7 +461,10 @@ class Agent:
         instruction = HumanMessage(
             f"Limite atteinte ({why}). N'appelez plus d'outil. Répondez maintenant avec les seuls résultats obtenus ; "
             "s'ils ne suffisent pas, dites que vous ne savez pas et expliquez ce qui a bloqué.")
-        reply = await self.llm.ainvoke(fit(state["messages"] + pending + [instruction]), **tracing.llm_kwargs("wrap_up"))
+        # The same tools as every other call, with tool_choice="none": the tools are written at the start of the prompt,
+        # so without them the server's cache of the conversation is lost (step 44: 19.6k tokens read again, 54 s)
+        llm = self.llm.bind_tools(config["configurable"]["tools"], tool_choice="none")
+        reply = await llm.ainvoke(fit(state["messages"] + pending + [instruction]), **tracing.llm_kwargs("wrap_up"))
         return {"messages": pending + [instruction, reply]}
 
     @staticmethod
@@ -570,7 +588,7 @@ class Agent:
                 for m in messages if m["role"] in ("user", "assistant")]
             state = {"messages": history, "question": question, "session_id": session_id,
                      "results": {}, "steps": [], "tool_calls": 0, "sql_errors": 0,
-                     "history_len": len(history), "grounding_retry": False, "unverified": [],
+                     "history_len": len(history), "grounding_retry": False, "unverified": [], "failed": {},
                      "charts": [], "user": user, "conversation_id": conversation_id,
                      "access_token": access_token, "scope": scope,
                      "role": role, "documents": use_documents, "extracts": []}

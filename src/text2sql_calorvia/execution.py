@@ -16,7 +16,7 @@ from decimal import Decimal
 import psycopg
 import pymssql
 
-from text2sql_calorvia import access, overlap
+from text2sql_calorvia import access, overlap, sql_hints
 from text2sql_calorvia.config import settings
 from text2sql_calorvia.sources import SOURCES, connect, load_sql
 from text2sql_calorvia.validation import validate
@@ -163,8 +163,9 @@ def execute(source, sql, question=None, max_rows=None, session_id=None, tool="ex
     except (QueryTimeout, *DB_ERRORS) as error:
         message = str(error) if isinstance(error, QueryTimeout) else _db_message(error)
         log_finish(log_id, "error", validation.sql, message, ms())
+        advice = None if isinstance(error, QueryTimeout) else sql_hints.hint(source, validation.sql, message)
         return {"ok": False, "source": source, "sql": validation.sql,
-                "errors": [f"Erreur à l'exécution : {message}"]}
+                "errors": [f"Erreur à l'exécution : {message}", *([advice] if advice else [])]}
     log_finish(log_id, "ok", validation.sql, None, ms(), len(rows), truncated)
     return {"ok": True, "source": source, "sql": validation.sql, "columns": columns, "rows": rows,
             "row_count": len(rows), "truncated": truncated, "log_id": log_id,
