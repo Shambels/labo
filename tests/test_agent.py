@@ -23,8 +23,9 @@ class ScriptedLLM:
     def __init__(self, *replies):
         self.replies, self.calls = list(replies), []
 
-    def bind_tools(self, tools):
-        self.tools = tools
+    def bind_tools(self, tools, tool_choice=None):
+        self.tools, self.tool_choice = tools, tool_choice
+        self.choices = [*getattr(self, "choices", []), tool_choice]
         return self
 
     async def ainvoke(self, messages):

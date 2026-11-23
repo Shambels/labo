@@ -1,0 +1,7 @@
+# experiments/t2sql/efficiency.toml — step 44: hints after a database error (sql_hints.py), no second run of a failed
+# query, wrap_up with the same tools (tool_choice="none", the server's cache kept), method rule 6 (answer once a result
+# holds the figures; reshape in the answer, not by a new query). Compared with run 41 (chart_answers).
+name = "efficiency"
+
+[agent]
+use_ontology = true

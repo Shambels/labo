@@ -1,0 +1,6 @@
+# experiments/t2sql/efficiency_no_rule6.toml — step 44 as adopted: sql_hints, the failed-query guard and the cached
+# wrap_up, without method rule 6 (runs 43-45: rule 6 lost A01 and S02 every time; run 46 without it: both right).
+name = "efficiency_no_rule6"
+
+[agent]
+use_ontology = true

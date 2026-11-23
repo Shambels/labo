@@ -652,3 +652,31 @@ step-43-q3:
     - "HumanMessages hold the chart's URL, which must not be in the answer."
     - "The model cannot read past a HumanMessage."
     - "It makes the search faster on long conversations; the result is the same."
+
+step-44-q1:
+  correct: "In 17 sequential model calls; q8 held the answer at 138 s and the remaining 51 % went into reshaping it and a 54 s wrap_up."
+  wrong:
+    - "In the SQL Server queries, which each took 20 s."
+    - "In the table cards, which are fetched from auto-ontology."
+    - "In the grounding check, which re-ran every query."
+
+step-44-q3:
+  correct: "The template writes the tools at the start of the prompt: without them nothing matches the cache; same tools with tool_choice none keep the prefix and still forbid calls."
+  wrong:
+    - "tool_choice none makes the server skip the system prompt."
+    - "wrap_up used a different model, which has its own cache."
+    - "The cache is cleared after four failed queries."
+
+step-44-q4:
+  correct: "It is an alias of the SELECT used in an ORDER BY expression, which SQL forbids; the error names the column but not the rule, so the model repeated the query."
+  wrong:
+    - "The column does not exist in VTE_FACT_LIG."
+    - "SQL Server is case-sensitive and the alias was in lower case."
+    - "The query was cut by the row limit before the alias was defined."
+
+step-44-q6:
+  correct: "At its own target it asked which definition to use instead of giving q8's margins; the SQL hint ended the episode in 35 s instead."
+  wrong:
+    - "It did not stop the reshaping query at all."
+    - "It made the model run eight more queries."
+    - "The judge cannot score answers written after a rule."

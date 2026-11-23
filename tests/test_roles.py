@@ -173,7 +173,7 @@ class OneQuery:
         self.replies = [AIMessage("", tool_calls=[{"name": "execute_sql", "args": {"source": source, "sql": sql},
                                                    "id": "c1", "type": "tool_call"}]), AIMessage("Terminé.")]
 
-    def bind_tools(self, tools):
+    def bind_tools(self, tools, tool_choice=None):
         return self
 
     async def ainvoke(self, messages):
