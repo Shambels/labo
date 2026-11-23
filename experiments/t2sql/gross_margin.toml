@@ -1,0 +1,6 @@
+# experiments/t2sql/gross_margin.toml — step 42: the gross margin at standard cost certified, with the bill of
+# materials, art_prix_std and the production-order link, and "marge" as a business word. Compared with run 39 (final).
+name = "gross_margin"
+
+[agent]
+use_ontology = true   # the only change: ontology/certification.yaml
