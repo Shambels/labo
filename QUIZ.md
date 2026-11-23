@@ -2457,3 +2457,10 @@ The chat template writes the tool definitions at the very start of the prompt. `
 
 It compared the new query with the *results*, and a failed query has no result. The agent now keeps `failed` (query key → errors) for the question and answers a repeat at once with the earlier error. It still counts as a failed query: a model that loops reaches the budget sooner instead of spending 15–25 s per attempt.
 </details>
+
+**6.** Rule 6 (« dès qu'un résultat contient les chiffres demandés, répondez ») was tested at the point of the trace it was written for, by sending the model the exact messages it saw after q8. It stopped the reshaping query. Why was it still not adopted, and what did the job instead?
+
+<details><summary>Answer</summary>
+
+Instead of presenting q8's margins, the model asked which definition of « bénéfice » to use: the same stop-and-ask that lost S02 (no figure, the sales left for another turn) and A01's offer. A rule that saves a query by dropping the answer moves the round trip to the user. The SQL hint did the job: resumed at the first failure, the model fixed the alias with a subquery and finished in 35 s with 2 failures, against 145 s and 4 failures plus `wrap_up`.
+</details>

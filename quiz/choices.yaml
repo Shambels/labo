@@ -673,3 +673,10 @@ step-44-q4:
     - "The column does not exist in VTE_FACT_LIG."
     - "SQL Server is case-sensitive and the alias was in lower case."
     - "The query was cut by the row limit before the alias was defined."
+
+step-44-q6:
+  correct: "At its own target it asked which definition to use instead of giving q8's margins; the SQL hint ended the episode in 35 s instead."
+  wrong:
+    - "It did not stop the reshaping query at all."
+    - "It made the model run eight more queries."
+    - "The judge cannot score answers written after a rule."
