@@ -2420,3 +2420,40 @@ The grounding check's retry is a HumanMessage: if the model, asked to remove an 
 
 Text written with `execute_sql` or `get_table_card` is a plan (« Je calcule 2025 et 2026. »), written before the results exist. A chart is drawn from a result already executed, so the text that comes with it is written after the figures are known: it is an answer, checked by the grounding check like any other.
 </details>
+
+## Step 44: fewer wasted rounds
+
+**1.** Trace `9e57fa2f` took 283 s and 12 queries, yet all the SQL together ran in about 1 s. Where did the time go, and what share came after the answer was already in a result?
+
+<details><summary>Answer</summary>
+
+In the model: 17 calls in sequence, each 3–34 s (prefill of new tokens, then about 25 tokens a second of output). q8, at 138 s, already held the margin per product and year; the next 145 s (51 %) went into four failed attempts to pivot it into one column per year and a 54 s `wrap_up`.
+</details>
+
+**2.** The trace reported 255k tokens. Why is that number misleading, and which number measures the work?
+
+<details><summary>Answer</summary>
+
+`total` counts the whole prompt of every call, and each call resends the conversation: 213k of the 255k were `input_cache_read`, the prefix the server kept from the previous call and did not compute again. The work is the new input (37.6k) and the output (4.4k), and above all the calls that missed the cache.
+</details>
+
+**3.** `wrap_up` read 19.6k tokens with no cache hit, while the call just before it reused 20.8k. Why, and why does `tool_choice="none"` fix it rather than simply removing the tools?
+
+<details><summary>Answer</summary>
+
+The chat template writes the tool definitions at the very start of the prompt. `wrap_up` called the model without tools, so its prompt differed from the first token and nothing cached could be reused. With the same tools and `tool_choice="none"`, the prompt is identical up to the new instruction (tested against the server: 3 355 of 3 359 tokens cached, 0.2 s instead of 1.9 s), and the model still cannot call a tool.
+</details>
+
+**4.** SQL Server answered « Invalid column name 'benefice_2025' » to a query that defines `benefice_2025`. What was wrong, and why does the agent now add a hint instead of trusting the model to understand the error?
+
+<details><summary>Answer</summary>
+
+`benefice_2025` is an alias of the SELECT, used in `ORDER BY benefice_2025 + benefice_2026`: SQL allows an alias in ORDER BY only on its own, not in an expression (nor in WHERE or GROUP BY). The message names the column but not the rule, and the model sent the same query again twice. `sql_hints.hint()` recognises the case (the name is one of the outer SELECT's aliases) and gives the rewrite: repeat the expression, or wrap the query in a subquery.
+</details>
+
+**5.** `same_query()` already refused a repeat in step 14. Why did three identical failing queries still reach the database?
+
+<details><summary>Answer</summary>
+
+It compared the new query with the *results*, and a failed query has no result. The agent now keeps `failed` (query key → errors) for the question and answers a repeat at once with the earlier error. It still counts as a failed query: a model that loops reaches the budget sooner instead of spending 15–25 s per attempt.
+</details>

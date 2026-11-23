@@ -689,3 +689,18 @@ questions:
     explain: >-
       _check and _finish both call answer_text(), so the grounding check verifies the text that is shown. The search
       never goes past a HumanMessage (the grounding retry, or the user's question) nor into earlier turns.
+
+  - id: code-failed-repeat
+    node: agent_graph
+    type: order
+    prompt: "The model sends a query that fails, then the same query again (other spacing). Put in order what happens."
+    steps:
+      - "execute() validates, runs it, SQL Server refuses: « Erreur à l'exécution : … » plus a « Piste : » from sql_hints.hint()"
+      - "_tools records failed[query_key(source, sql)] = the errors, and counts one failed query"
+      - "the model sends the query again; query_key ignores spacing, a final ; and LIMIT n"
+      - "_tools answers at once « Requête identique à une requête déjà refusée … » with the earlier errors, without the database"
+      - "the repeat counts as a failed query: at max_sql_errors, wrap_up answers with the same tools and tool_choice none"
+    files: [src/text2sql_calorvia/agent.py, src/text2sql_calorvia/sql_hints.py, src/text2sql_calorvia/execution.py]
+    explain: >-
+      The hint is written in the MCP server (execution.py), so every client gets it; the repeat guard is in the agent,
+      which knows the question's history. Both come from trace 9e57fa2f.
