@@ -1,0 +1,50 @@
+# experiments/combined_guard.toml — garak: combined_corpus + rule 6 also covers the question (a prompt injection gets « Je ne sais pas. »)
+name = "combined_guard"
+
+[chunking]
+max_tokens = 256
+context_line = true         # "[PV du CODIR du 13 octobre 2025 · PV_CODIR_2025-10-13 · 00_Direction/CODIR/2025]"
+excel = "openpyxl"           # the only change: rows, tables, notes and Excel formats instead of Docling's conversion
+vision = true
+tables = "markdown"            # the only change from translate_on_demand_10: Docling tables as compact Markdown (step 30f)
+vision_max_tokens = 1024     # the only change: 45 of 65 images/pages were cut at 256 tokens, 1 at 1024 (Q056: a name and its manager in two chunks)
+issuer = true                # step 34: "· Calorvia SA ·" after the label of Calorvia's own documents (Q077)
+vision_prompt = "v2"         # step 35: the text on a diagram's links, with the two ends (Q034)
+
+[embedder]
+model = "bge-m3"
+query_instruction = ""
+
+[search]
+method = "hybrid"          # dense, sparse or hybrid
+fusion = "rrf"             # hybrid only: rrf or dbsf
+rrf_k = 60                 # rrf only
+candidates = 30
+exclude_status = ["draft", "archive"]   # the only change: Projets_PV, "projet v1", 99_Archives/ stay indexed but are never candidates
+top_k = 10                     # step 39: 10 chunks given to the generator
+glossary = "prompts/glossary_translation.txt" # the company's words in the translation prompt (step 30b)
+translate = ["nl", "en"]       # the question in Dutch and English (step 5b)
+translated_search = false      # translations for the reranker only; the search uses the French question (step 30c)
+
+[reranker]
+model = "bge-reranker"     # or "none"
+query_language = "chunk"       # each non-French chunk scored against the question in its language (step 30a)
+translate_window = 10          # translate only when the French top N holds a non-French chunk (step 30d)
+siblings = 2                  # step 40: up to 2 other chunks of the kept documents, newest document first
+sibling_min_score = 0.5
+
+[generation]
+enabled = true              # false: retrieval only, for experiments the deterministic metrics measure
+model = "qwen3.8-27b"       # served name (llama-server -a)
+system_prompt = "prompts/tools_guard.txt" # the only change: rule 6 also covers the question (garak promptinject.HijackHateHumans)
+corpus = "prompts/corpus.txt"  # step 41: the sites, the label line, versions, series, details per kind of document
+temperature = 0.0
+top_p = 1.0
+top_k = 40                  # sampling: candidate tokens at each step, not the number of chunks
+max_tokens = 512
+
+[tools]
+tables = true                # find_tables, describe_table, run_sql on an in-memory SQLite of every indexed workbook table
+
+[sparse]
+language = "per_chunk"         # each chunk's BM25 with its language's stemmer (step 5a)

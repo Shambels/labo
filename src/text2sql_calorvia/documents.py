@@ -11,6 +11,7 @@
 The role is the same as for the databases: `access.role_of(user)` with API keys, None (no filter) in local mode.
 Everything here is synchronous (HTTP to the embedder, the reranker, Qdrant, the generator): async callers use a thread.
 """
+import logging
 import re
 import time
 import tomllib
@@ -19,10 +20,15 @@ from functools import cache
 from text2sql_calorvia import access
 from text2sql_calorvia.config import settings
 
-MAX_EXTRACTS = 5          # extracts per search given to the agent's model (the RAG's top_k)
+logger = logging.getLogger(__name__)
+
+MAX_EXTRACTS = 5         # extracts per search given to the agent's model (the RAG's top_k)
 EXTRACT_CHARS = 1500      # a long transcribed image is cut: the context also holds the query results
 MAX_IMAGES = 3
 CITATION = re.compile(r"\[D(\d+)\]")
+DONT_KNOW = "Je ne sais pas."
+# Rule 7 of the prompt: an answer from the tables cites its source in parentheses (file and sheet), not [n]
+TABLE_SOURCE = re.compile(r"\([^)]*\.(?:xlsx|xlsm|xls|csv)\b[^)]*\)", re.IGNORECASE)
 IMAGE_LINK = re.compile(r"(/images/)([\w-]+\.[0-9a-f]{64})(\.jpg)")
 IMAGE_TAG = re.compile(r"\s*!\[[^\n]*?\]\([^)\s]*/images/[\w-]+\.[0-9a-f]{64}\.jpg\)")
 
@@ -78,6 +84,15 @@ def cited(answer: str, extracts: list[dict]) -> list[dict]:
     ids = list(dict.fromkeys(f"D{n}" for n in CITATION.findall(answer)))
     chosen = [by_id[i] for i in ids if i in by_id]
     return chosen or extracts
+
+
+def unsourced(answer: str) -> bool:
+    """True for an answer that is neither « Je ne sais pas. » nor cites a source ([Dn], or a table file in
+    parentheses). The prompt's rules 2, 5 and 7 allow nothing else, so such an answer did not come from the documents:
+    garak's promptinject (HijackHateHumans) got the bare "I hate humans" this way, 49 times in 512. On experiment 210's
+    127 answers, none is unsourced."""
+    answer = answer.strip()
+    return answer != DONT_KNOW and not CITATION.search(answer) and not TABLE_SOURCE.search(answer)
 
 
 def footer_lines(answer: str, extracts: list[dict]) -> list[str]:
@@ -139,11 +154,14 @@ def write_answer(question: str, context: list[dict], role: str | None) -> dict:
     The RAG cites [1], [2]: they become [D1], [D2] so the footer reads the same in every mode."""
     from rag_calorvia.rag.generate import generate
     from rag_calorvia.rag.images import answer_images
-    text = generate(question, context, rag_config(), role)["answer"] if context else "Je ne sais pas."
+    text = generate(question, context, rag_config(), role)["answer"] if context else DONT_KNOW
     pictures = answer_images(text, context, MAX_IMAGES)
     extracts = [{**extract(c), "id": f"D{n}"} for n, c in enumerate(context, 1)]
     text = re.sub(r"\[(\d+)\]", r"[D\1]", text)
+    if unsourced(text):   # an answer the documents don't back, e.g. text a prompt injection dictated
+        logger.warning("unsourced answer replaced by %r: %.200r", DONT_KNOW, text)
+        text, pictures = DONT_KNOW, []
     tags, images = image_tags([{"image": p, "page": g} for p, g in pictures])
-    lines = footer_lines(text, extracts) if context else []
+    lines = footer_lines(text, extracts) if context and text != DONT_KNOW else []
     foot = ("\n\n---\n**Documents utilisés**\n\n" + "\n\n".join(lines)) if lines else ""
     return {"answer": text + tags + foot, "extracts": extracts, "images": images}
