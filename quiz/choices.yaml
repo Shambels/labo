@@ -680,3 +680,17 @@ step-44-q6:
     - "It did not stop the reshaping query at all."
     - "It made the model run eight more queries."
     - "The judge cannot score answers written after a rule."
+
+step-45-q3:
+  correct: The guard can only judge a finished answer; holding text until its first citation means an uncited answer (a refusal or a hijack) is never shown half-written.
+  wrong:
+    - Open WebUI cannot display text without a citation.
+    - Sending tokens one by one would slow the model down.
+    - The citation tells the endpoint which images to attach before the text.
+
+step-45-q5:
+  correct: "generate() calls on_text(None): unsent text is forgotten; if some was sent, Release stops and the endpoint sends the whole answer under a rule."
+  wrong:
+    - The tool round's text is always shown, then the answer is appended to it.
+    - Streaming is disabled for table questions.
+    - The endpoint deletes the text already shown from the user's screen.

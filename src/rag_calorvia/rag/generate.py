@@ -2,8 +2,10 @@
 import logging
 from functools import cache
 from pathlib import Path
+from types import SimpleNamespace
 
 from openai import OpenAI
+from openai.types.chat import ChatCompletionMessage
 
 from rag_calorvia.config import settings
 
@@ -57,11 +59,39 @@ def uses_tools(config):
     return config.get("tools", {}).get("tables", False)
 
 
-def generate(question, chunks, config, role=None):
+def streamed(stream, on_text):
+    """One streamed completion read to the end (step 45): its text goes to on_text as it arrives; returned as the
+    same (choice, usage) a plain call gives, so the tool loop does not know the difference."""
+    text, calls, finish, usage = [], {}, None, None
+    for chunk in stream:
+        usage = chunk.usage or usage
+        if not chunk.choices:
+            continue
+        choice = chunk.choices[0]
+        finish = choice.finish_reason or finish
+        if choice.delta.content:
+            text.append(choice.delta.content)
+            on_text(choice.delta.content)
+        for call in choice.delta.tool_calls or []:   # a tool call arrives in pieces, by index
+            slot = calls.setdefault(call.index, {"id": "", "type": "function", "function": {"name": "", "arguments": ""}})
+            slot["id"] = call.id or slot["id"]
+            if call.function:
+                slot["function"]["name"] += call.function.name or ""
+                slot["function"]["arguments"] += call.function.arguments or ""
+    message = ChatCompletionMessage(role="assistant", content="".join(text) or None,
+                                    tool_calls=[calls[i] for i in sorted(calls)] or None)
+    return SimpleNamespace(message=message, finish_reason=finish), usage
+
+
+def generate(question, chunks, config, role=None, on_text=None):
     """The LLM's answer, with token counts and the tool calls it made (none without [tools]).
 
     With tools, the conversation loops: the LLM asks for tool calls, gets their results, and so on, up to
     MAX_TOOL_ROUNDS; then it must answer. No seed: at temperature > 0, repeated runs must be able to differ.
+
+    on_text (step 45): every call is streamed and its text given to on_text as it is written; on_text(None) says the
+    text given so far was not the answer (the round ended in tool calls, or in a tool call written as text). Without
+    it, nothing changes: the evaluation calls generate() as before.
     """
     params = config["generation"]
     messages = build_messages(question, chunks, config)
@@ -81,10 +111,13 @@ def generate(question, chunks, config, role=None):
             max_tokens=params["max_tokens"],
             extra_body={"top_k": params["top_k"]},  # llama-server parameter, not part of the OpenAI API
             **({"tools": tools, "tool_choice": tool_choice} if with_tools else {}),
+            **({"stream": True, "stream_options": {"include_usage": True}} if on_text else {}),
         )
-        prompt_tokens += response.usage.prompt_tokens
-        completion_tokens += response.usage.completion_tokens
-        return response.choices[0]
+        choice, usage = streamed(response, on_text) if on_text else (response.choices[0], response.usage)
+        if usage:
+            prompt_tokens += usage.prompt_tokens
+            completion_tokens += usage.completion_tokens
+        return choice
 
     for round_ in range(MAX_TOOL_ROUNDS + 1):
         last = round_ == MAX_TOOL_ROUNDS
@@ -94,12 +127,16 @@ def generate(question, chunks, config, role=None):
         if tools and raw_tool_call(choice.message.content) and not choice.message.tool_calls:
             # Asked once more, without the tools: the call written as text is never shown as the answer.
             logger.warning("tool call written as text, asked again without tools: %s", question)
+            if on_text:
+                on_text(None)
             messages.append({"role": "assistant", "content": choice.message.content})
             messages.append({"role": "user", "content": LAST_ROUND})
             choice = complete(False, None)
             break
         if not choice.message.tool_calls or last:
             break
+        if on_text:
+            on_text(None)
         messages.append(choice.message.model_dump(exclude_none=True))
         for call in choice.message.tool_calls:
             result = call_tool(store, call.function.name, call.function.arguments)

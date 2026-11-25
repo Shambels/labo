@@ -29,7 +29,7 @@ PHASES = {
     "A": ("RAG", -1, 9), "B": ("Text-to-SQL agent", 10, 17), "C": ("Improvements", 18, 24),
     "D": ("Role-based access", 25, 29), "E": ("RAG experiments", 30, 30), "F": ("One chat", 31, 31),
     "G": ("Monitoring & conversations", 32, 33), "H": ("Fixing the judged errors", 34, 41),
-    "I": ("What the agent knows and writes", 42, 44),
+    "I": ("What the agent knows and writes", 42, 44), "J": ("Speed", 45, 45),
     "Z": ("Code & pipeline", None, None),
 }
 CODE_PHASE = "Z"            # quiz/code.yaml's questions: about the app as it is, not about one step
@@ -42,7 +42,7 @@ NODE_OF_STEP = {
     25: "access", 26: "access", 27: "access", 28: "index", 29: "access", 30: "rerank", 31: "endpoint",
     32: "monitoring",
     33: "conversations", 34: "chunking", 35: "conversion", 36: "rerank", 37: "conversion",
-    38: "evaluation", 39: "generation",
+    38: "evaluation", 39: "generation", 45: "generation",
 }
 POINTS = {"right": 10, "partial": 3, "wrong": 0}
 RETRY_POINTS = 5            # right after an earlier miss
