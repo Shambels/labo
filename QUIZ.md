@@ -2510,3 +2510,31 @@ When a round ends in tool calls (or in a tool call written as text), `generate()
 
 Every experiment and evaluation calls `generate()` without `on_text`: the scores of earlier runs stay comparable, and only the endpoint pays for the new path. The streamed path is tested against the plain one: same answer, same tool calls, same messages sent back to the model, same token counts (`test_a_streamed_answer_is_the_answer_without_streaming`); live, 10 of 10 dev answers were identical.
 </details>
+
+**7.** Speculative decoding makes the 27B model write 2.2 times faster without a smaller model writing the answer. How? What does the model do with a guess it would not have written?
+
+<details><summary>Answer</summary>
+
+A cheap drafter (here the MTP layer) guesses the next 3 tokens; the 27B model reads them in one pass, as it reads a prompt, and checks each against what it would have written itself. It keeps the guesses up to the first one it disagrees with, and writes its own token there. Writing one token at a time is limited by reading the weights from memory, so checking 3 tokens costs about as much as writing one: when most guesses are right, several tokens come out per pass.
+</details>
+
+**8.** DFlash 2 drafts 7 tokens per block and is the fastest drafter in its benchmark. Why does this server use MTP instead?
+
+<details><summary>Answer</summary>
+
+DFlash's draft is a separate 1.1 GB model and the GPU had 1 080 MB too little: the generator, its 16k-token cache and the two vLLM servers (embedder, reranker) fill it. The MTP layer is already in the model file (`blk.64.nextn.*`, ~350 MB), loaded and unused until now, so it costs no new memory.
+</details>
+
+**9.** At temperature 0, speculative decoding should give exactly the model's own answer. Yet 6 of 30 answers changed. Why, and how was it decided that this did not cost accuracy?
+
+<details><summary>Answer</summary>
+
+Checking several tokens in one batch uses a different order of floating-point operations than writing them one at a time; the numbers differ very slightly, which is enough to tip a near-tie (« Selon » / « D'après »). So it was measured, not assumed: the dev run with MTP (229) was judged against the same configuration without it (226), verdicts copied for the 102 identical answers: correctness 0.917 against 0.915, one wrong answer against two.
+</details>
+
+**10.** Five guesses instead of three were tried. Why keep three?
+
+<details><summary>Answer</summary>
+
+Five gave 68.8 tokens/s against 64.9 (136 s against 140 s for 30 questions, about 2 %), but fewer guesses are accepted (70 % against 80 %), each rejected guess is wasted work, and more answers changed (20/30 identical against 24/30). A small gain in speed for more drift from the model's own answers.
+</details>

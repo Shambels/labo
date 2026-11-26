@@ -125,6 +125,7 @@ Companion file: `QUIZ.md` (one quiz per step, answers collapsed).
 | D99 | The answer written with the chart | `agent.answer_text()`: when the last message holds no figure, the answer is the text of the latest `make_chart` call of this question (never past a HumanMessage: the grounding retry, the user's question). Used by `_check` and `_finish`, so the check verifies what is shown | The model writes the whole answer with the chart call, then only « Le graphique ci-dessus… »; the agent kept that line (P05 in run 28; the top-5 margin question, every time at temperature 0). A code rule, not a prompt rule: the prompt already asks for the figure first |
 | D100 | Fewer wasted rounds | Adopted: `sql_hints.py` (a « Piste : » after a database error: an alias in WHERE/GROUP BY/an ORDER BY expression, ORDER BY 2 + 3, the source's name as a table prefix, a SELECT column outside GROUP BY, TOP with OFFSET), a failed query is not run again (`failed`, `query_key`), `wrap_up` with the same tools and `tool_choice="none"`. **Not adopted:** method rule 6 (answer once a result holds the figures) | Trace 9e57fa2f: 283 s, 12 queries, q8 held the answer at 138 s; then 4 failures (an alias in ORDER BY, twice the same query) and a 54 s `wrap_up` that read 19.6k tokens again (the template writes the tools first). Rule 6 lost A01 (no offer of the other reading) and S02 in runs 43, 44 and 45; both right without it (46) |
 | D101 | The documents' answer as it is written | `generate(on_text=…)` streams every call (tool rounds included) and returns what it returns without streaming; `documents.Release` sends the text only once it cites an extract, never half a citation nor a tool call written as text, and stops if a tool round follows text already sent; the endpoint then sends the rest (images, footer), or the whole answer under a rule if what was shown is not its start. Only the documents' route with `stream: true`; the evaluation does not stream | The answer appeared only once complete (~6 s of generation). Holding text until its first citation keeps the injection guard: an uncited answer, which the guard replaces, is never shown, even half-written |
+| D102 | Speculative decoding | `--spec-type draft-mtp --spec-draft-n-max 3` on the generator: the MTP layer stored in the model file (`blk.64.nextn.*`, ~350 MB, unused before) guesses 3 tokens, the model checks them in one pass. Run 229: answers 7.3 → 5.2 s, the dev run 928 → 661 s, correctness 0.917 (0.915 without it). **Not:** DFlash 2 (its 1.1 GB draft does not fit beside the two vLLM servers), 5 guesses (2 % faster, 20/30 answers unchanged instead of 24/30), n-gram (not needed: MTP fits) | Writing was half of an answer's time at 29.5 tokens/s; with MTP 64.9 tokens/s. Not strictly lossless here: checking a batch of tokens gives very slightly different numbers, which tips near-ties (24/30 answers identical, the others reworded), so it was judged, not assumed |
 | D9 | Porting strategy | Port each hospital_rag module **in the step that needs it** (step 0: config, db, logs; step 3: evaluation; step 4: ETL and RAG) | Nothing unused or untested sits in the repo |
 
 ### Open decisions (to settle with you when we reach them)
@@ -901,11 +902,31 @@ judged on the same 127 questions. None is made the configuration in use here: th
 
 ## Phase J: speed
 
-### 🔄 Step 45. Faster answers, and the documents' answer shown as it is written (branch `perf/step-45-speed`, not merged)
+### ✅ Step 45. Faster answers, and the documents' answer shown as it is written (branch `perf/step-45-speed`, not merged)
 - **Your request:** after the injection guard (`garak` promptinject.HijackHateHumans: 49 hijacks in 512; rule 6 extended to the question in `prompts/tools_guard.txt`, the `unsourced` check in `documents.py`), make answers faster without losing accuracy or safety: speculative decoding (DFlash 2, else MTP, else n-gram), then the answer shown as it is written.
 - **Where the time goes** (llama-server's `timings`, experiment 226): generation is 6.4 s of a 7.3 s answer. For a question without tools: ~2.2 s reading the new part of the prompt (about 2 300 tokens of extracts at 1 070 tokens/s; the 1 489 tokens of system prompt, tools and corpus come from the cache, so rule 6's new sentence costs nothing), ~3.2 s writing about 97 tokens at **29.8 tokens/s**; search, rerank and siblings 0.4 s. Benchmark of 30 dev questions on fixed extracts: 190.4 s, 71 s of prompt, 3 065 tokens written at 29.5 tokens/s.
 - **Part 2, done: the answer as it is written** (D101). `generate()` takes `on_text`; `streamed()` reads a streamed completion back into the same message a plain call gives (a tool call arrives in pieces, by index). `documents.Release` holds the text until its first citation, rewrites `[n]` as `[Dn]`, waits for a citation's `]`. `api.written()` runs `write_answer` in a thread and brings its text back through a queue; `rest_of()` sends what is left. Live, on 10 dev questions: the streamed answer is the plain one, 10/10, and what was shown is always the start of the final answer; the two « Je ne sais pas. » showed nothing early.
-- **Part 1, to measure: speculative decoding.** Needs llama-server restarted with a draft.
+- **Part 1, done: speculative decoding** (D102). Benchmark of 30 dev questions on the same fixed extracts (`timings` of every call):
+
+  | Server | Total | Writing speed | Draft tokens accepted | Answers identical to no draft |
+  |---|---|---|---|---|
+  | no draft | 190.4 s | 29.5 tokens/s | – | – |
+  | DFlash 2 Q4 (`draft-dflash`, 7 guesses) | does not start: 1 080 MB short | | | |
+  | **MTP, 3 guesses** | **139.8 s** | **64.9 tokens/s** | 2 154 / 2 679 | 24/30 |
+  | MTP, 5 guesses | 136.4 s | 68.8 tokens/s | 2 309 / 3 310 | 20/30 |
+
+  The MTP layer is in the model file already (`blk.64.nextn.*`, loaded and ignored until now), so it needs no memory the server did not hold. The six reworded answers say the same thing (« Selon » / « D'après », a citation more or less): batched checking changes the arithmetic slightly and tips near-ties.
+- **Evaluation** (dev, 127 questions; 229 is clean, 226 a trial; verdicts copied for identical answers, `reuse_judgments.py`, the rest judged):
+
+  | Run | Experiment | Server | Correctness | Wrong | Faithfulness | Answer time | Run |
+  |---|---|---|---|---|---|---|---|
+  | 210 | `combined_corpus` (rules as before) | no draft | 0.918 | 1 | 0.658 | 7.3 s | 874 s |
+  | 226 | `combined_guard` (rule 6 covers the question) | no draft | 0.915 | 2 | 0.643 | 7.3 s | 928 s |
+  | **229** | `combined_guard_mtp` | **MTP** | **0.917** | **1** | 0.650 | **5.2 s** | **661 s** |
+
+  MTP against 226: 102/127 answers word for word, three judged differently (Q001 +0.1, Q127 +0.2, Q079 −0.1). Refusals, citations, retrieval unchanged. Translation is faster too (2.7 → 1.7 s): it runs on the same server.
+- **Found on the way:** Q127 (« Distrinergie respecte-t-il son engagement de volume ? ») went from « Oui » (0.4) to « Non » (0.0) with the guard prompt (226), before MTP: it compares the 1 230 units with the T1 target, then with the year. Not fixed here: a prompt question, for the guard's own measurement.
+- **Not done:** `FINAL_CONFIG` still points to `combined_corpus`; the guard prompt (`combined_guard`) has not been switched on.
 - **Tests: 8 new** (876 in all).
 
 ---
@@ -1004,3 +1025,4 @@ judged on the same 127 questions. None is made the configuration in use here: th
 | 2026-11-23 | 44 | Branch `t2sql/step-44-efficiency`: trace 9e57fa2f analysed (283 s, q8 had the answer at 138 s); sql_hints, failed-query guard, cached wrap_up adopted (D100); rule 6 not adopted (lost A01, S02 three times); run 47: 32/33; left unmerged |
 | 2026-11-23 | 44 | Same branch: rule 6's losses checked (S02 real, A01 mostly the scorer); the trace resumed after q8 and after the first failure: rule 6 cuts the answer there too, a narrower wording and a code nudge do nothing, the hint alone ends the episode in 35 s instead of 145 s; rule 6 stays out |
 | 2026-11-25 | 45 | Branch `perf/step-45-speed`: time measured (generation 87 %: 2.2 s prompt, 3.2 s writing at 29.8 tokens/s); the documents' answer streamed as written, held until its first citation (D101), 10/10 answers identical live; speculative decoding waits for a llama-server restart; left unmerged |
+| 2026-11-26 | 45 | Same branch: DFlash 2 does not fit (1.1 GB short); MTP from the model file, 3 guesses (D102): 64.9 tokens/s instead of 29.5, run 229: answers 5.2 s instead of 7.3 s, correctness 0.917 (226: 0.915), README's generator command updated; Q127 lost by the guard prompt noted; left unmerged |

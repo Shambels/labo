@@ -57,8 +57,11 @@ export MODELS_PATH=~/models
   --dtype float16 --max-model-len 2048 --gpu-memory-utilization 0.10 --enforce-eager
 
 # Generator (8000): Qwen3.8-27B, Q4 (~17.5 GB of weights; with the two vLLM servers, ~21.7 GB of the 24 GB)
+# Step 45 (D102): speculative decoding with the MTP layer the model file already holds (no extra weights):
+# 2.2x the writing speed, answers 7.3 s -> 5.2 s, same judged correctness. A DFlash draft does not fit (1.1 GB short)
 ~/llama.cpp/build/bin/llama-server -m $MODELS_PATH/qwen3.8-27b/llama/Qwen3.8-27B-UD-Q4_K_XL.gguf \
-  -a qwen3.8-27b --port 8000 -ngl 99 -c 16384 -np 1 -fa on --reasoning off
+  -a qwen3.8-27b --port 8000 -ngl 99 -c 16384 -np 1 -fa on --reasoning off \
+  --spec-type draft-mtp --spec-draft-n-max 3
 
 # VLM (8003): Qwen3.5-9B with its vision projector (mmproj), for scripts/transcribe.py only (step 7).
 # It shares port 8003 with the judge: one or the other
