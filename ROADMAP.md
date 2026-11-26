@@ -13,7 +13,7 @@ Two chatbots for the fictional company **Calorvia SA**, built one after the othe
 | **G. Monitoring and conversations** | Langfuse traces; conversations users can manage | This roadmap |
 | **H. Fixing the judged errors** | The wrong answers of the RAG in use, one cause per step | This roadmap |
 | **I. What the agent knows and writes** | The knowledge the agent lacked and the answer it wrote | This roadmap |
-| **J. Speed** | The same answers, sooner: the generator and the stream | This roadmap |
+| **J. Speed and safety** | The same answers, sooner (the generator, the stream), and what the injection guard cost | This roadmap |
 
 Companion file: `QUIZ.md` (one quiz per step, answers collapsed).
 
@@ -126,6 +126,7 @@ Companion file: `QUIZ.md` (one quiz per step, answers collapsed).
 | D100 | Fewer wasted rounds | Adopted: `sql_hints.py` (a « Piste : » after a database error: an alias in WHERE/GROUP BY/an ORDER BY expression, ORDER BY 2 + 3, the source's name as a table prefix, a SELECT column outside GROUP BY, TOP with OFFSET), a failed query is not run again (`failed`, `query_key`), `wrap_up` with the same tools and `tool_choice="none"`. **Not adopted:** method rule 6 (answer once a result holds the figures) | Trace 9e57fa2f: 283 s, 12 queries, q8 held the answer at 138 s; then 4 failures (an alias in ORDER BY, twice the same query) and a 54 s `wrap_up` that read 19.6k tokens again (the template writes the tools first). Rule 6 lost A01 (no offer of the other reading) and S02 in runs 43, 44 and 45; both right without it (46) |
 | D101 | The documents' answer as it is written | `generate(on_text=…)` streams every call (tool rounds included) and returns what it returns without streaming; `documents.Release` sends the text only once it cites an extract, never half a citation nor a tool call written as text, and stops if a tool round follows text already sent; the endpoint then sends the rest (images, footer), or the whole answer under a rule if what was shown is not its start. Only the documents' route with `stream: true`; the evaluation does not stream | The answer appeared only once complete (~6 s of generation). Holding text until its first citation keeps the injection guard: an uncited answer, which the guard replaces, is never shown, even half-written |
 | D102 | Speculative decoding | `--spec-type draft-mtp --spec-draft-n-max 3` on the generator: the MTP layer stored in the model file (`blk.64.nextn.*`, ~350 MB, unused before) guesses 3 tokens, the model checks them in one pass. Run 229: answers 7.3 → 5.2 s, the dev run 928 → 661 s, correctness 0.917 (0.915 without it). **Not:** DFlash 2 (its 1.1 GB draft does not fit beside the two vLLM servers), 5 guesses (2 % faster, 20/30 answers unchanged instead of 24/30), n-gram (not needed: MTP fits) | Writing was half of an answer's time at 29.5 tokens/s; with MTP 64.9 tokens/s. Not strictly lossless here: checking a batch of tokens gives very slightly different numbers, which tips near-ties (24/30 answers identical, the others reworded), so it was judged, not assumed |
+| D103 | A conclusion an extract states | Rule 3 of `prompts/tools_stated.txt` adds « Si un extrait énonce lui-même la réponse (un constat, une conclusion), reprends-la : ne la remplace pas par ton propre calcul. » (`experiments/combined_stated.toml`). Dev (run 232 vs 229): correctness 0.917 → 0.925, wrong 1 → 0; fresh (234 vs 233): 0.897 → 0.903. Recommended, not switched | Q127: the model wrote « Non » as its first token (rule 4: the answer first), then compared 1 230 units with the year's 2 400, while extract [1] said « en ligne avec son engagement » and [9] gave 1 180 for mid-July. Placed elsewhere (rule 4, a rule 8) or softened, the sentence fixed Q127 or the details, never both |
 | D9 | Porting strategy | Port each hospital_rag module **in the step that needs it** (step 0: config, db, logs; step 3: evaluation; step 4: ETL and RAG) | Nothing unused or untested sits in the repo |
 
 ### Open decisions (to settle with you when we reach them)
@@ -900,7 +901,7 @@ judged on the same 127 questions. None is made the configuration in use here: th
 
 ---
 
-## Phase J: speed
+## Phase J: speed and safety
 
 ### ✅ Step 45. Faster answers, and the documents' answer shown as it is written (branch `perf/step-45-speed`, not merged)
 - **Your request:** after the injection guard (`garak` promptinject.HijackHateHumans: 49 hijacks in 512; rule 6 extended to the question in `prompts/tools_guard.txt`, the `unsourced` check in `documents.py`), make answers faster without losing accuracy or safety: speculative decoding (DFlash 2, else MTP, else n-gram), then the answer shown as it is written.
@@ -928,6 +929,28 @@ judged on the same 127 questions. None is made the configuration in use here: th
 - **Found on the way:** Q127 (« Distrinergie respecte-t-il son engagement de volume ? ») went from « Oui » (0.4) to « Non » (0.0) with the guard prompt (226), before MTP: it compares the 1 230 units with the T1 target, then with the year. Not fixed here: a prompt question, for the guard's own measurement.
 - **Switched on (your request):** `settings.final_config` is now `experiments/combined_guard_mtp.toml`: the guard prompt, with the generator served with MTP (D102). Q127's loss comes with it.
 - **Tests: 8 new** (876 in all).
+
+---
+
+### ✅ Step 46. A conclusion the extracts state (branch `rag/step-46-stated-conclusions`, not merged)
+- **Your request:** the answer now wrong with the guard prompt (Q127, « Distrinergie respecte-t-il son engagement de volume à fin mai 2026 ? »): why, and a fix.
+- **Not the guard:** on the MTP server the old prompt says « Non » too. Oui and Non are near-tied as the first token (9 % and 7 % behind a tool call at 63 % in the old prompt), so any change tips it; run 210's « Oui » was luck and scored 0.4 (compared with T1's 520).
+- **The cause:** (1) rule 4 puts the verdict first, so « Oui/Non » is chosen before any comparison, and the text then justifies it (one trial wrote that 1 230 is below 1 180); (2) the model replaces what extract [1] states (« en ligne avec son engagement ») with its own comparison against the year's 2 400 or T1, never T2's 1 180 at 15 July. The `find_tables` call finds an unrelated workbook and plays no part.
+- **Tried on Q127 alone:** A (keep a conclusion an extract states, in rule 3): « Oui », [1] quoted, T2's 1 180 given. B (compare with the milestones around the date): « Non », with 1 230 < 1 180. A+B: « Non ». C (figures before the verdict): « Non » while computing that Distrinergie is ahead: rule 4's answer-first wins.
+- **Evaluation** (MTP server; verdicts copied for identical answers, the rest judged):
+
+  | Set | Run | Experiment | Correctness | Wrong | ≥ 0.9 |
+  |---|---|---|---|---|---|
+  | dev (127) | 229 | `combined_guard_mtp` (in use) | 0.917 | 1 | 85 |
+  | dev (127) | **232** | `combined_stated` | **0.925** | **0** | **88** |
+  | fresh (35) | 214 | `combined_corpus` | 0.897 | 0 | 20 |
+  | fresh (35) | 233 | `combined_guard_mtp` | 0.897 | 0 | 20 |
+  | fresh (35) | **234** | `combined_stated` | **0.903** | 0 | **21** |
+
+  Dev: Q127 0.2 → 1.0, Q001 0.5 → 1.0, Q008 0.7 → 1.0; version traps unchanged (0.875), current decisions 0.886 → 0.900. Fresh: F030 (a version trap) 0.8 → 1.0, F027, F015 up; F007, F020 down a step.
+- **The cost:** answers are shorter (89 tokens against 97 on dev). Q014, Q084, Q128 now give the bare value (« 1120 °C [1]. », « 7 [1][2] ») without rule 4's details: −0.2 to −0.3 each, still right. Softer wordings (« ne la contredis pas », « tire lui-même une conclusion ») or other places (end of rule 4, a rule 8) were tried on Q127 + these three: each fixed one side, none both. Measured as written, not tuned further on dev.
+- **Not switched:** `settings.final_config` stays `combined_guard_mtp`; switching is `final_config` (or `FINAL_CONFIG`) → `experiments/combined_stated.toml`.
+- **Tests:** none new (a prompt and an experiment).
 
 ---
 
@@ -1027,3 +1050,4 @@ judged on the same 127 questions. None is made the configuration in use here: th
 | 2026-11-25 | 45 | Branch `perf/step-45-speed`: time measured (generation 87 %: 2.2 s prompt, 3.2 s writing at 29.8 tokens/s); the documents' answer streamed as written, held until its first citation (D101), 10/10 answers identical live; speculative decoding waits for a llama-server restart; left unmerged |
 | 2026-11-26 | 45 | Same branch: DFlash 2 does not fit (1.1 GB short); MTP from the model file, 3 guesses (D102): 64.9 tokens/s instead of 29.5, run 229: answers 5.2 s instead of 7.3 s, correctness 0.917 (226: 0.915), README's generator command updated; Q127 lost by the guard prompt noted; left unmerged |
 | 2026-11-26 | 45 | `combined_guard_mtp` made the configuration in use (your request); step 45 merged into `main`, pushed |
+| 2026-11-26 | 46 | Branch `rag/step-46-stated-conclusions`: Q127 traced (verdict before comparison, a stated conclusion overridden; not the guard); rule 3 keeps a conclusion an extract states (D103): dev 0.917 → 0.925 (run 232), fresh 0.897 → 0.903 (run 234); 3 bare-value answers; recommended, not switched; left unmerged |

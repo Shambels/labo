@@ -708,3 +708,17 @@ step-45-q9:
     - The draft model writes some of the answer's tokens itself, without checking.
     - MTP raises the temperature above 0.
     - The answers changed because the extracts were retrieved again.
+
+step-46-q2:
+  correct: The verdict is the first token, chosen before any comparison; the text then justifies it, even with wrong arithmetic (1 230 « below » 1 180).
+  wrong:
+    - Rule 4 forbids comparing figures, so the model cannot check the milestone.
+    - The model reads the extracts after writing the verdict, by design of the chat template.
+    - Answer-first makes the model call a tool before answering.
+
+step-46-q4:
+  correct: It could keep an outdated conclusion; the version-trap and current-decision questions held on dev, and the fresh held-out set also went up (0.897 → 0.903).
+  wrong:
+    - It could make the model refuse more; the refusal rate was checked on dev only.
+    - It could break the injection guard; garak was run again.
+    - Nothing: a prompt sentence cannot affect other questions.

@@ -2538,3 +2538,42 @@ Checking several tokens in one batch uses a different order of floating-point op
 
 Five gave 68.8 tokens/s against 64.9 (136 s against 140 s for 30 questions, about 2 %), but fewer guesses are accepted (70 % against 80 %), each rejected guess is wasted work, and more answers changed (20/30 identical against 24/30). A small gain in speed for more drift from the model's own answers.
 </details>
+
+---
+
+## Step 46: a conclusion the extracts state
+
+**1.** With the guard prompt Q127 went from « Oui » to « Non ». Why was the guard not the cause?
+
+<details><summary>Answer</summary>
+
+On the MTP server the old prompt also answers « Non ». Oui and Non were near-tied as the first token (9 % against 7 % in the old prompt), so any small change tips it: the guard sentence in run 226, MTP here. Run 210's « Oui » was luck, and it only scored 0.4: it compared the 1 230 units with T1's 520, not with the right milestone.
+</details>
+
+**2.** Rule 4 asks for « d'abord la réponse ». How does that make Q127 wrong, and what did a trial with fix B show?
+
+<details><summary>Answer</summary>
+
+For a yes/no question that needs a comparison, « Oui » or « Non » is the very first token: the model commits before comparing anything, then writes text that justifies the verdict. With fix B (compare with the milestones around the date), having written « Non » first, it claimed that 1 230 units were below 1 180. Asking for the figures before the verdict (fix C) did not help: answer-first won.
+</details>
+
+**3.** Extract [1] says « Distrinergie est en ligne avec son engagement : 1 230 unités achetées à fin mai ». Which sentence fixed Q127, and which rule of the prompt does it extend?
+
+<details><summary>Answer</summary>
+
+« Si un extrait énonce lui-même la réponse (un constat, une conclusion), reprends-la : ne la remplace pas par ton propre calcul. », added to rule 3 (no guessing, no deduction beyond the extracts): replacing a conclusion the documents state with one's own comparison is exactly a deduction beyond them.
+</details>
+
+**4.** The fix was tuned on one dev question. What could it break, and how was that checked?
+
+<details><summary>Answer</summary>
+
+Keeping « a conclusion an extract states » could keep an outdated one when a newer document supersedes it: the version-trap and current-decision questions test that. Dev: version traps unchanged, current decisions 0.886 → 0.900, correctness 0.917 → 0.925, no wrong answer. Then the fresh held-out set (35 questions nobody tuned on): 0.897 → 0.903, the one changed version trap up (F030 0.8 → 1.0).
+</details>
+
+**5.** Three simple answers became « 1120 °C [1]. » without the details rule 4 asks for. Why was the wording not tuned further until they came back?
+
+<details><summary>Answer</summary>
+
+Each alternative tried (softer wording, the sentence at the end of rule 4, a new rule 8) fixed one side and broke the other: Q127 or the details, never both. Tuning on the same dev questions until both pass would fit the wording to those questions (the step 44 lesson): the measured version is a net gain on dev and on the fresh set, and the bare answers are still right (0.6–0.8).
+</details>
