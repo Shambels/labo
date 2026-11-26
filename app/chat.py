@@ -71,7 +71,16 @@ mode = st.sidebar.radio("Chercher dans", list(MODES), help="Documents : procédu
 configs = sorted(Path("experiments").glob("*.toml"))
 default = next((i for i, p in enumerate(configs) if p == rag_settings.final_config), 0)
 if role is None and mode == "Documents":
-    config_path = st.sidebar.selectbox("Configuration", configs, index=default, format_func=lambda p: p.stem)
+    st.session_state.setdefault("config", configs[default])   # the widget's value, so the ★ button can set it
+    pick, reset = st.sidebar.columns([5, 1], vertical_alignment="bottom")
+    config_path = pick.selectbox(
+        "Configuration", configs, key="config",
+        format_func=lambda p: f"★ {p.stem} (par défaut)" if p == configs[default] else p.stem,
+        help="★ : la configuration en usage, celle du chat par défaut et de l'endpoint "
+             "(settings.final_config, FINAL_CONFIG dans .env).")
+    reset.button("★", key="config-default", help="Revenir à la configuration par défaut",
+                 disabled=config_path == configs[default],
+                 on_click=lambda: st.session_state.update(config=configs[default]))
 else:
     config_path = configs[default]
 if acting:

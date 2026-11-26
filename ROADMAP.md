@@ -1067,3 +1067,4 @@ judged on the same 127 questions. None is made the configuration in use here: th
 | 2026-11-26 | 46 | Branch `rag/step-46-stated-conclusions`: Q127 traced (verdict before comparison, a stated conclusion overridden; not the guard); rule 3 keeps a conclusion an extract states (D103): dev 0.917 → 0.925 (run 232), fresh 0.897 → 0.903 (run 234); 3 bare-value answers; recommended, not switched; left unmerged |
 | 2026-11-26 | 46 | `combined_stated` made the configuration in use (your request); step 46 merged into `main`, pushed |
 | 2026-11-26 | 47 | Branch `chat/step-47-act-as`: `ADMIN_USERS` and `X-Calorvia-Act-As`, checked by the endpoint (D104); « Agir en tant que » in the Streamlit chat; the simulated role has its own conversations and memory; 11 tests; left unmerged |
+| 2026-11-26 | 47 | Same branch: the chat's configuration list marks the configuration in use (« ★ … (par défaut) »), a ★ button beside it goes back to it (your request); 1 test |

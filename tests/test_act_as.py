@@ -124,3 +124,20 @@ def test_local_mode_has_the_selector(page, monkeypatch):
     app = page()
     assert not app.exception and selector(app) and selector(app)[0].value is None   # « — mon accès — » by default
     assert not app.sidebar.warning
+
+
+# --- the configuration selector -------------------------------------------------------------------------------------
+def test_the_default_configuration_is_marked_and_one_click_away(page, monkeypatch):
+    from rag_calorvia.config import settings as rag_settings
+    monkeypatch.setattr(settings, "api_keys", "")
+    app = page()
+    box = next(s for s in app.sidebar.selectbox if s.label == "Configuration")
+    star = next(b for b in app.sidebar.button if b.label == "★")
+    assert box.value == rag_settings.final_config and star.disabled          # the default, marked, nothing to reset
+    other = next(p for p in sorted(Path("experiments").glob("*.toml")) if p != rag_settings.final_config)
+    app = box.select(other).run()
+    star = next(b for b in app.sidebar.button if b.label == "★")
+    assert not app.exception and not star.disabled
+    app = star.click().run()
+    box = next(s for s in app.sidebar.selectbox if s.label == "Configuration")
+    assert not app.exception and box.value == rag_settings.final_config
