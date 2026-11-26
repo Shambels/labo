@@ -738,3 +738,18 @@ questions:
       Uncited text waits for a citation (the guard can only judge a finished answer); a raw tool call is never the
       answer; a citation is sent whole, as [D1], the way the final answer writes it.
 
+  - id: code-act-as
+    node: access
+    type: order
+    prompt: "alice (an admin) picks « rh » in the Streamlit sidebar and asks a databases question. Put in order what happens."
+    steps:
+      - "the selector's on_change starts a new conversation; owner becomes alice#as:rh"
+      - "Streamlit calls the endpoint with alice's key and X-Calorvia-Act-As: rh"
+      - "acting_role(): rh is a role of policy/roles.yaml, alice is in ADMIN_USERS (else 403)"
+      - "the user becomes alice#as:rh and a token is signed for rh"
+      - "the agent queries through rh's database login; the turn is saved under alice#as:rh"
+    files: [app/chat.py, src/text2sql_calorvia/api.py, src/text2sql_calorvia/auth.py]
+    explain: >-
+      The check is server side, so another client can't grant itself a role; the token is the same one a real rh user
+      gets, so the data layers enforce the simulation; the namespace keeps alice's memories and full-access answers out.
+

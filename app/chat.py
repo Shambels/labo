@@ -15,6 +15,10 @@ sent to the endpoint (X-Conversation-Id), so a conversation may mix the three mo
 The configuration is the final one (settings.final_config); another can be chosen in the sidebar.
 With API_KEYS set, the chat asks for a key and answers only from the documents of the user's role (D77); the settings
 of .streamlit/config.toml keep it on this machine otherwise.
+
+Step 47: an admin (ADMIN_USERS, or anyone in local mode) may act as any role from the sidebar: the documents are those
+of the role, the agent's endpoint gets X-Calorvia-Act-As (it checks the admin itself), and the conversations and memory
+are the simulated role's own (alice#as:finance). Changing the role starts a new conversation.
 """
 import tomllib
 import uuid
@@ -29,7 +33,7 @@ from rag_calorvia.config import settings as rag_settings
 from rag_calorvia.rag.images import answer_images, image_bytes
 from rag_calorvia.rag.permissions import identify
 from rag_calorvia.rag.pipeline import answer
-from text2sql_calorvia import conversations, memory, tracing
+from text2sql_calorvia import access, auth, conversations, memory, tracing
 from text2sql_calorvia.config import settings as agent_settings
 
 MODES = {"Documents": None, "Bases de données": "calorvia-sql", "Les deux": "calorvia-both"}
@@ -51,7 +55,16 @@ if st.session_state.identity is None:
                 st.rerun()
     st.stop()
 user, role = st.session_state.identity
-owner = user or "default"    # whose conversations: the key's name, or "default" in local mode, as at the endpoint
+me = user or "default"    # the key's name, or "default" in local mode, as at the endpoint
+acting = None
+if user is None or user in auth.names(agent_settings.admin_users):   # step 47: only an admin picks a role
+    acting = st.sidebar.selectbox(
+        "Agir en tant que", [None, *access.roles()], key="acting",
+        format_func=lambda r: "— mon accès —" if r is None else r,
+        help="Voir le chat comme un utilisateur de ce rôle : ses documents, ses bases, ses conversations.",
+        on_change=lambda: st.session_state.update(history=[], conversation_id=f"st-{uuid.uuid4().hex}"))
+role = acting or role
+owner = auth.acting_user(me, acting)   # whose conversations: the simulated role has its own (step 47)
 
 mode = st.sidebar.radio("Chercher dans", list(MODES), help="Documents : procédures, contrats, PV, tarifs... "
                         "Bases de données : ventes, comptabilité, paie. Les deux : l'agent choisit, et peut comparer.")
@@ -61,8 +74,10 @@ if role is None and mode == "Documents":
     config_path = st.sidebar.selectbox("Configuration", configs, index=default, format_func=lambda p: p.stem)
 else:
     config_path = configs[default]
-if role is not None:
-    st.sidebar.write(f"Connecté : {user} ({role})")
+if acting:
+    st.sidebar.warning(f"Vous agissez en tant que « {acting} » : réponses, sources et conversations de ce rôle.")
+if user is not None:
+    st.sidebar.write(f"Connecté : {user} ({st.session_state.identity[1]})")
     if st.sidebar.button("Se déconnecter"):
         st.session_state.clear()
         st.rerun()
@@ -230,8 +245,9 @@ def ask_agent(question, model):
                     api_key=st.session_state.get("key") or "local", timeout=600)
     messages = [m for t in st.session_state.history
                 for m in ({"role": "user", "content": t["question"]}, {"role": "assistant", "content": t["result"]["answer"]})]
+    headers = {"X-Conversation-Id": st.session_state.conversation_id, **({"X-Calorvia-Act-As": acting} if acting else {})}
     reply = client.chat.completions.create(model=model, messages=messages + [{"role": "user", "content": question}],
-                                           user=owner, extra_headers={"X-Conversation-Id": st.session_state.conversation_id})
+                                           user=me, extra_headers=headers)   # the endpoint adds the role to the owner
     return {"answer": conversations.MARKER.sub("", reply.choices[0].message.content)}   # the header names it
 
 

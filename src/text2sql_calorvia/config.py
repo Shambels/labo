@@ -48,6 +48,7 @@ class Settings(BaseSettings):
     api_keys: str = ""                # "name:key,name2:key2"; empty = local mode, loopback only
     trusted_gateways: str = ""        # names whose key may say which end user is asking (Open WebUI's header)
     user_roles: str = ""              # "alice:finance,webui/bob:rh"; anyone else gets the default role (Phase D)
+    admin_users: str = ""             # "alice,webui/bob": may act as any role (step 47); local mode always may
     chart_max_age_days: int = 30      # older chart files are deleted when a new chart is drawn
     chart_link_hours: int = 24        # how long a signed chart link works (step 29)
     overlap_max_rows: int = 200_000   # payroll: rows read to compare what two queries cover

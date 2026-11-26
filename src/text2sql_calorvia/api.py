@@ -211,11 +211,13 @@ def compacted(messages: list[dict], conversation_id: str) -> list[dict]:
         return messages
 
 
-def create_app(agent: Agent | None = None, api_keys: str | None = None, gateways: str | None = None) -> FastAPI:
+def create_app(agent: Agent | None = None, api_keys: str | None = None, gateways: str | None = None,
+               admins: str | None = None) -> FastAPI:
     app = FastAPI(title="Calorvia text-to-SQL agent")
     get_agent = (lambda: agent) if agent else default_agent
     keys = auth.parse_keys(settings.api_keys if api_keys is None else api_keys)
     trusted = auth.names(settings.trusted_gateways if gateways is None else gateways)
+    admin_users = auth.names(settings.admin_users if admins is None else admins)
 
     def caller(authorization: str | None = Header(default=None)) -> auth.Caller:
         found = auth.authenticate(authorization, keys, trusted)
@@ -224,7 +226,21 @@ def create_app(agent: Agent | None = None, api_keys: str | None = None, gateways
         return found
 
     def may_read(who: auth.Caller, user: str, conversation_id: str) -> bool:
-        return who.name is None or memory.conversation_owner(conversation_id) in (None, user)
+        """Local mode reads any conversation, except while acting as a role (step 47): then only the role's own, so
+        an answer given with full access never comes back into the simulated role's history."""
+        if who.name is None and auth.ACTING not in user:
+            return True
+        return memory.conversation_owner(conversation_id) in (None, user)
+
+    def acting_role(who: auth.Caller, user: str, requested: str | None) -> str | None:
+        """Step 47: the role an admin acts as (X-Calorvia-Act-As), checked here: a client can't grant itself one."""
+        if not requested:
+            return None
+        if requested not in access.roles():
+            raise HTTPException(400, f"Unknown role {requested!r}.")
+        if not auth.may_act_as(who, user, admin_users):
+            raise HTTPException(403, "Only an admin may act as another role.")
+        return requested
 
     @app.get("/v1/models", dependencies=[Depends(caller)])
     def models():
@@ -313,19 +329,22 @@ def create_app(agent: Agent | None = None, api_keys: str | None = None, gateways
 
     @app.post("/v1/chat/completions")
     async def chat(request: ChatRequest, x_conversation_id: str | None = Header(default=None),
-                   x_openwebui_user_id: str | None = Header(default=None), who: auth.Caller = Depends(caller)):
+                   x_openwebui_user_id: str | None = Header(default=None), who: auth.Caller = Depends(caller),
+                   x_calorvia_act_as: str | None = Header(default=None)):
         messages = conversation(request.messages)
         wanted = sources_of(request)
         completion_id, created = f"chatcmpl-{uuid.uuid4().hex}", int(time.time())
         session_id = completion_id
         user = auth.user_of(who, request.user, x_openwebui_user_id)
+        acting = acting_role(who, user, x_calorvia_act_as)
+        user = auth.acting_user(user, acting)   # step 47: the simulated role's own conversations and memory
         conversation_id = conversation_id_of(request.messages, x_conversation_id) or completion_id
         if not may_read(who, user, conversation_id):   # someone else's id: this becomes a new conversation
             conversation_id = completion_id
         marker = f"\n\n<!-- calorvia:conversation={conversation_id} -->"
-        # With keys, the agent works under the user's role (Phase D); in local mode, as agent_ro
-        extra = {"access_token": access.issue_token(access.role_of(user), user)} if who.name else {}
-        role = access.role_of(user) if who.name else None   # the documents' filter: the same role as the databases
+        # With keys, the agent works under the user's role (Phase D); in local mode, as agent_ro; acting, as that role
+        role = acting or (access.role_of(user) if who.name else None)   # the documents' filter: the same role
+        extra = {"access_token": access.issue_token(role, user)} if role else {}
         if wanted == {"sql", "docs"}:
             extra["use_documents"] = True
         if wanted != {"docs"}:   # the RAG alone reads the question only
@@ -343,7 +362,7 @@ def create_app(agent: Agent | None = None, api_keys: str | None = None, gateways
                                  session_id=conversation_id,
                                  tags=[request.model, "stream" if request.stream else "single",
                                        "openwebui" if x_openwebui_user_id else "api"],
-                                 metadata={"completion_id": completion_id, "role": role, "turn": str(len(messages) // 2 + 1)})
+                                 metadata={"completion_id": completion_id, "role": role, "acting_as": acting, "turn": str(len(messages) // 2 + 1)})
 
         def save(answer: str, steps: list[dict]):
             try:

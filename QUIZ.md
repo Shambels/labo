@@ -2577,3 +2577,35 @@ Keeping « a conclusion an extract states » could keep an outdated one when a n
 
 Each alternative tried (softer wording, the sentence at the end of rule 4, a new rule 8) fixed one side and broke the other: Q127 or the details, never both. Tuning on the same dev questions until both pass would fit the wording to those questions (the step 44 lesson): the measured version is a net gain on dev and on the fresh set, and the bare answers are still right (0.6–0.8).
 </details>
+
+---
+
+## Step 47: acting as a role
+
+**1.** Streamlit could simply pass the chosen role to the RAG and the agent. Why does the endpoint check the `X-Calorvia-Act-As` header against `ADMIN_USERS` itself?
+
+<details><summary>Answer</summary>
+
+Anyone with a key can call the endpoint with any client, not only through Streamlit: if the header were trusted as sent, a `commercial` key could add `X-Calorvia-Act-As: direction` and read everything. The endpoint knows who the key belongs to, so it decides: 403 for a non-admin, 400 for a role that `policy/roles.yaml` doesn't define.
+</details>
+
+**2.** Why does acting as `finance` sign a token for `finance` instead of just telling the model which role it plays?
+
+<details><summary>Answer</summary>
+
+The boundaries are enforced by the data layers, not by the model (D74): the token selects the role's database login, its row limits and the `allowed_roles` filter of the document search. Telling the model would be a request it could ignore or be talked out of; the token makes the simulation the real boundary a `finance` user gets.
+</details>
+
+**3.** While acting, alice's conversations and memory are stored as `alice#as:finance`. What would leak without this separate namespace?
+
+<details><summary>Answer</summary>
+
+Two things given with alice's own access: her memories (preferences, definitions, validated queries), which the agent puts in its prompt, and the earlier answers of a conversation she reopens, which are sent back as history. Either would show the simulated role figures or documents it cannot read. So the simulated role has its own conversations and memory, and changing the role starts a new conversation.
+</details>
+
+**4.** Local mode (no `API_KEYS`) always gets the selector, though nobody is listed in `ADMIN_USERS`. Why is that safe?
+
+<details><summary>Answer</summary>
+
+Local mode already reads every table and document, and the server only listens on loopback: whoever uses it is on this machine. Acting as a role can only see less. One rule is kept even there: a conversation of the full-access user is not continued while acting.
+</details>

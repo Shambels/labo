@@ -722,3 +722,17 @@ step-46-q4:
     - It could make the model refuse more; the refusal rate was checked on dev only.
     - It could break the injection guard; garak was run again.
     - Nothing: a prompt sentence cannot affect other questions.
+
+step-47-q1:
+  correct: Any key holder can call the endpoint with any client; a header trusted as sent would let a commercial key claim direction, so the endpoint checks the caller against ADMIN_USERS.
+  wrong:
+    - Streamlit cannot send custom headers.
+    - The role header is encrypted, so only the endpoint can read it.
+    - Checking it twice makes the request faster thanks to caching.
+
+step-47-q3:
+  correct: The admin's memories (put in the agent's prompt) and earlier answers of a reopened conversation, both given with full access.
+  wrong:
+    - The admin's API key, which would be stored with the conversation.
+    - Nothing; the namespace only keeps the sidebar tidy.
+    - The role's database password, kept in the conversation's steps.

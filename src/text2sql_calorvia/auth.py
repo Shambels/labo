@@ -54,6 +54,21 @@ def user_of(caller: Caller, requested: str | None, end_user: str | None) -> str:
     return caller.name
 
 
+ACTING = "#as:"   # step 47: "alice#as:finance", the conversations and memory of alice acting as finance
+
+
+def may_act_as(caller: Caller, user: str, admins: set[str]) -> bool:
+    """Step 47: an admin (ADMIN_USERS, by user name: a key's name, or gateway/user) may act as any role. So may local
+    mode: whoever is on this machine already sees everything, and a role can only see less."""
+    return caller.name is None or user in admins
+
+
+def acting_user(user: str, role: str | None) -> str:
+    """Whose conversations and memory, when `user` acts as `role`: a namespace of its own, so that nothing learned or
+    answered with the admin's access (memories, earlier answers in a conversation) reaches the simulated role."""
+    return f"{user}{ACTING}{role}" if role else user
+
+
 def is_loopback(host: str) -> bool:
     if host == "localhost":
         return True

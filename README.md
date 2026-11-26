@@ -206,6 +206,10 @@ Role-based access (Phase D of `ROADMAP.md`) is in place and tested on the course
 scripts/apply_roles.py` creates the role logins and row limits from `policy/roles.yaml` (run it again after restoring
 a source); `USER_ROLES=alice:finance` assigns roles. `uv run python scripts/apply_document_roles.py` writes the
 documents' roles on the RAG index (no re-embedding); with `API_KEYS` set, `app/chat.py` asks for a key.
+`ADMIN_USERS=alice` (step 47) lets alice pick a role in `app/chat.py`'s sidebar (« Agir en tant que »): she then sees
+the documents and databases of that role, in its own conversations (`alice#as:finance`); in local mode the selector is
+always there. Other clients send the role in an `X-Calorvia-Act-As` header; the endpoint refuses it (403) from anyone
+but an admin.
 `uv run python scripts/prove_access.py` checks every role with planted values, which it removes afterwards: run it
 with nothing else using the databases. `--role all` on `scripts/run_t2sql_eval.py` evaluates the agent under each role.
 

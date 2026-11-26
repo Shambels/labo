@@ -14,6 +14,7 @@ Two chatbots for the fictional company **Calorvia SA**, built one after the othe
 | **H. Fixing the judged errors** | The wrong answers of the RAG in use, one cause per step | This roadmap |
 | **I. What the agent knows and writes** | The knowledge the agent lacked and the answer it wrote | This roadmap |
 | **J. Speed and safety** | The same answers, sooner (the generator, the stream), and what the injection guard cost | This roadmap |
+| **K. Administration** | Seeing the chat as each role sees it | This roadmap |
 
 Companion file: `QUIZ.md` (one quiz per step, answers collapsed).
 
@@ -127,6 +128,7 @@ Companion file: `QUIZ.md` (one quiz per step, answers collapsed).
 | D101 | The documents' answer as it is written | `generate(on_text=…)` streams every call (tool rounds included) and returns what it returns without streaming; `documents.Release` sends the text only once it cites an extract, never half a citation nor a tool call written as text, and stops if a tool round follows text already sent; the endpoint then sends the rest (images, footer), or the whole answer under a rule if what was shown is not its start. Only the documents' route with `stream: true`; the evaluation does not stream | The answer appeared only once complete (~6 s of generation). Holding text until its first citation keeps the injection guard: an uncited answer, which the guard replaces, is never shown, even half-written |
 | D102 | Speculative decoding | `--spec-type draft-mtp --spec-draft-n-max 3` on the generator: the MTP layer stored in the model file (`blk.64.nextn.*`, ~350 MB, unused before) guesses 3 tokens, the model checks them in one pass. Run 229: answers 7.3 → 5.2 s, the dev run 928 → 661 s, correctness 0.917 (0.915 without it). **Not:** DFlash 2 (its 1.1 GB draft does not fit beside the two vLLM servers), 5 guesses (2 % faster, 20/30 answers unchanged instead of 24/30), n-gram (not needed: MTP fits) | Writing was half of an answer's time at 29.5 tokens/s; with MTP 64.9 tokens/s. Not strictly lossless here: checking a batch of tokens gives very slightly different numbers, which tips near-ties (24/30 answers identical, the others reworded), so it was judged, not assumed |
 | D103 | A conclusion an extract states | Rule 3 of `prompts/tools_stated.txt` adds « Si un extrait énonce lui-même la réponse (un constat, une conclusion), reprends-la : ne la remplace pas par ton propre calcul. » (`experiments/combined_stated.toml`). Dev (run 232 vs 229): correctness 0.917 → 0.925, wrong 1 → 0; fresh (234 vs 233): 0.897 → 0.903. Made the configuration in use (your request) | Q127: the model wrote « Non » as its first token (rule 4: the answer first), then compared 1 230 units with the year's 2 400, while extract [1] said « en ligne avec son engagement » and [9] gave 1 180 for mid-July. Placed elsewhere (rule 4, a rule 8) or softened, the sentence fixed Q127 or the details, never both |
+| D104 | Acting as a role | `ADMIN_USERS` (user names: a key's name, or gateway/user) may send `X-Calorvia-Act-As: <role>`; the endpoint checks it (403 for anyone else, 400 for an unknown role), signs the token for that role and searches the documents under it. Local mode always may: it already sees everything. The simulated role works as `user#as:role`: its own conversations and memory, and local mode may not continue a conversation of the full-access user while acting. `app/chat.py`: « Agir en tant que » in the sidebar for admins; changing the role starts a new conversation | To see the chat as each role sees it without a key per role. Checked server side so a client can't grant itself a role; the role goes through the same token and filters as a real user's, so the simulation is the real boundary. A separate namespace, because memories and earlier answers were given with the admin's access |
 | D9 | Porting strategy | Port each hospital_rag module **in the step that needs it** (step 0: config, db, logs; step 3: evaluation; step 4: ETL and RAG) | Nothing unused or untested sits in the repo |
 
 ### Open decisions (to settle with you when we reach them)
@@ -954,6 +956,18 @@ judged on the same 127 questions. None is made the configuration in use here: th
 
 ---
 
+## Phase K: administration
+
+### ✅ Step 47. Acting as a role (branch `chat/step-47-act-as`, not merged)
+- **Your request:** in the chat interface, let an admin user act as each of the roles. Your choices: the Streamlit chat (not Open WebUI), and admins named by a new `ADMIN_USERS` setting.
+- **Change** (D104): `auth.may_act_as()` and `auth.acting_user()`; the endpoint's `X-Calorvia-Act-As` header (`acting_role()` in `api.py`): role checked against `policy/roles.yaml`, caller against `ADMIN_USERS`; the role then gives the signed token (databases), the documents' filter and the trace's metadata. `app/chat.py`: a selector « Agir en tant que » for admins (and local mode), a warning while acting, Documents mode searched and images served under the role, the endpoint called with the header.
+- **Why a namespace of its own** (`alice#as:finance`): memories are keyed by user and put in the agent's prompt, and an earlier conversation holds answers given with full access; either would let the simulated role see what the real one can't. So the simulated role has its own conversations and memory, and in local mode a conversation of the full-access user is not continued while acting.
+- **Local mode included:** it already reads every table and document, so acting can only see less; and it is how this machine runs (no `API_KEYS`).
+- **Not done:** Open WebUI (it has no place for a selector: one model per role would be the way); the conversation routes (`GET /v1/conversations…`) take no role header, Streamlit reads the conversations from PostgreSQL itself. Not checked with `scripts/prove_access.py`: acting uses the same token and filters the proof checks.
+- **Tests: 11 new** (887 in all).
+
+---
+
 ## Progress log
 
 | Date | Step | What happened |
@@ -1052,3 +1066,4 @@ judged on the same 127 questions. None is made the configuration in use here: th
 | 2026-11-26 | 45 | `combined_guard_mtp` made the configuration in use (your request); step 45 merged into `main`, pushed |
 | 2026-11-26 | 46 | Branch `rag/step-46-stated-conclusions`: Q127 traced (verdict before comparison, a stated conclusion overridden; not the guard); rule 3 keeps a conclusion an extract states (D103): dev 0.917 → 0.925 (run 232), fresh 0.897 → 0.903 (run 234); 3 bare-value answers; recommended, not switched; left unmerged |
 | 2026-11-26 | 46 | `combined_stated` made the configuration in use (your request); step 46 merged into `main`, pushed |
+| 2026-11-26 | 47 | Branch `chat/step-47-act-as`: `ADMIN_USERS` and `X-Calorvia-Act-As`, checked by the endpoint (D104); « Agir en tant que » in the Streamlit chat; the simulated role has its own conversations and memory; 11 tests; left unmerged |
