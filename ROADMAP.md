@@ -926,7 +926,7 @@ judged on the same 127 questions. None is made the configuration in use here: th
 
   MTP against 226: 102/127 answers word for word, three judged differently (Q001 +0.1, Q127 +0.2, Q079 −0.1). Refusals, citations, retrieval unchanged. Translation is faster too (2.7 → 1.7 s): it runs on the same server.
 - **Found on the way:** Q127 (« Distrinergie respecte-t-il son engagement de volume ? ») went from « Oui » (0.4) to « Non » (0.0) with the guard prompt (226), before MTP: it compares the 1 230 units with the T1 target, then with the year. Not fixed here: a prompt question, for the guard's own measurement.
-- **Not done:** `FINAL_CONFIG` still points to `combined_corpus`; the guard prompt (`combined_guard`) has not been switched on.
+- **Switched on (your request):** `settings.final_config` is now `experiments/combined_guard_mtp.toml`: the guard prompt, with the generator served with MTP (D102). Q127's loss comes with it.
 - **Tests: 8 new** (876 in all).
 
 ---
@@ -1026,3 +1026,4 @@ judged on the same 127 questions. None is made the configuration in use here: th
 | 2026-11-23 | 44 | Same branch: rule 6's losses checked (S02 real, A01 mostly the scorer); the trace resumed after q8 and after the first failure: rule 6 cuts the answer there too, a narrower wording and a code nudge do nothing, the hint alone ends the episode in 35 s instead of 145 s; rule 6 stays out |
 | 2026-11-25 | 45 | Branch `perf/step-45-speed`: time measured (generation 87 %: 2.2 s prompt, 3.2 s writing at 29.8 tokens/s); the documents' answer streamed as written, held until its first citation (D101), 10/10 answers identical live; speculative decoding waits for a llama-server restart; left unmerged |
 | 2026-11-26 | 45 | Same branch: DFlash 2 does not fit (1.1 GB short); MTP from the model file, 3 guesses (D102): 64.9 tokens/s instead of 29.5, run 229: answers 5.2 s instead of 7.3 s, correctness 0.917 (226: 0.915), README's generator command updated; Q127 lost by the guard prompt noted; left unmerged |
+| 2026-11-26 | 45 | `combined_guard_mtp` made the configuration in use (your request); step 45 merged into `main`, pushed |

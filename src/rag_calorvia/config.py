@@ -34,8 +34,9 @@ class Settings(BaseSettings):
     # The configuration the chat, the agent's endpoint and the access proof use. Step 9's final evaluation was
     # status_filter; step 30 added translation on demand for the reranker (runs 148, 150, 152) and Markdown tables
     # (runs 154, 156, judged against french_chunks_tables, run 160); steps 34-39 added the issuer, the v2 image prompt,
-    # the fuller rule 4 and 10 chunks (run 187, D88); step 40 the siblings (run 196, D91)
-    final_config: Path = Path("experiments/combined_corpus.toml")
+    # the fuller rule 4 and 10 chunks (run 187, D88); step 40 the siblings (run 196, D91); step 41 the corpus
+    # description (run 210); the injection guard (rule 6 covers the question) served with MTP (run 229, D102)
+    final_config: Path = Path("experiments/combined_guard_mtp.toml")
 
     @property
     def docling_models_path(self):
