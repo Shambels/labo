@@ -4,10 +4,11 @@ Two chatbots for **Calorvia SA**, a fictional Belgian heat-pump manufacturer:
 
 1. **`rag_calorvia`**: a RAG over 393 documents from the company's shared drive. Done: final evaluation of
    `experiments/status_filter.toml` (step 9), results and analysis in `RAPPORT.md`, exports in `results/`. The
-   configuration in use is `experiments/combined_guard_mtp.toml` (step 30's `markdown_tables`, plus the issuer in
+   configuration in use is `experiments/combined_stated.toml` (step 30's `markdown_tables`, plus the issuer in
    the context line, the v2 image prompt, fuller answers, 10 chunks, up to 2 other chunks of the kept documents
-   (step 40), the corpus description (step 41), and a rule refusing instructions in the question (the injection
-   guard), meant for the generator served with MTP (step 45)); `FINAL_CONFIG` in `.env` changes it.
+   (step 40), the corpus description (step 41), a rule refusing instructions in the question (the injection
+   guard), a conclusion an extract states kept (step 46), meant for the generator served with MTP (step 45));
+   `FINAL_CONFIG` in `.env` changes it.
 2. **`text2sql_calorvia`**: a text-to-SQL agent over three business databases (phase B). Done: LangGraph agent
    behind an OpenAI-compatible endpoint, read-only MCP server, certified ontology; results and analysis in
    `RAPPORT_T2SQL.md`, exports in `results/t2sql/`. To run it: [Phase B in five steps](#phase-b-in-five-steps).
