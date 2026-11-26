@@ -680,3 +680,31 @@ step-44-q6:
     - "It did not stop the reshaping query at all."
     - "It made the model run eight more queries."
     - "The judge cannot score answers written after a rule."
+
+step-45-q3:
+  correct: The guard can only judge a finished answer; holding text until its first citation means an uncited answer (a refusal or a hijack) is never shown half-written.
+  wrong:
+    - Open WebUI cannot display text without a citation.
+    - Sending tokens one by one would slow the model down.
+    - The citation tells the endpoint which images to attach before the text.
+
+step-45-q5:
+  correct: "generate() calls on_text(None): unsent text is forgotten; if some was sent, Release stops and the endpoint sends the whole answer under a rule."
+  wrong:
+    - The tool round's text is always shown, then the answer is appended to it.
+    - Streaming is disabled for table questions.
+    - The endpoint deletes the text already shown from the user's screen.
+
+step-45-q8:
+  correct: The DFlash draft is a separate 1.1 GB model and the GPU was 1 080 MB short; the MTP layer is already in the model file, so it needs no new memory.
+  wrong:
+    - DFlash only works with vLLM, not with llama-server.
+    - DFlash changes the answers, MTP never does.
+    - MTP guesses more tokens per block than DFlash.
+
+step-45-q9:
+  correct: Checking tokens in a batch changes the floating-point arithmetic slightly, which tips near-ties; the run was judged (0.917 vs 0.915) instead of assuming it was lossless.
+  wrong:
+    - The draft model writes some of the answer's tokens itself, without checking.
+    - MTP raises the temperature above 0.
+    - The answers changed because the extracts were retrieved again.

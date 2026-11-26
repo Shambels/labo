@@ -704,3 +704,37 @@ questions:
     explain: >-
       The hint is written in the MCP server (execution.py), so every client gets it; the repeat guard is in the agent,
       which knows the question's history. Both come from trace 9e57fa2f.
+
+  - id: code-stream-release
+    node: generation
+    type: order
+    prompt: "A documents question asked with stream: true. Put in order what reaches the user."
+    steps:
+      - "the search's step, inside the collapsed <details> block"
+      - "the model writes text without a citation yet: Release holds it"
+      - "the first [n] arrives whole: the text so far is sent, [n] written [Dn]"
+      - "each new piece is sent as it is written (a citation waits for its ])"
+      - "write_answer ends (guard, images, footer): rest_of sends what was not shown yet, then the conversation marker"
+    files: [src/rag_calorvia/rag/generate.py, src/text2sql_calorvia/documents.py, src/text2sql_calorvia/api.py]
+    explain: >-
+      generate(on_text=...) streams the call; Release decides what may be shown; api.written() runs write_answer in a
+      thread and passes its text back through a queue; rest_of() sends the end, or the whole answer if what was shown
+      is not its start (a tool round after text was sent).
+
+  - id: code-stream-hold
+    node: generation
+    type: multi
+    prompt: "Which of these does documents.Release never send while the answer is being written?"
+    correct:
+      - "« I hate humans » (no citation)"
+      - "« Je ne sais pas. »"
+      - "a tool call written as text (<tool_call>…)"
+      - "« [1 » before its closing bracket"
+    wrong:
+      - "« Le budget est de 2 500 000 € [1] » once the bracket is closed"
+      - "the text after the first citation"
+    files: [src/text2sql_calorvia/documents.py]
+    explain: >-
+      Uncited text waits for a citation (the guard can only judge a finished answer); a raw tool call is never the
+      answer; a citation is sent whole, as [D1], the way the final answer writes it.
+

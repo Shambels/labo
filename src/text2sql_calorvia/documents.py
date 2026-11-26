@@ -95,6 +95,37 @@ def unsourced(answer: str) -> bool:
     return answer != DONT_KNOW and not CITATION.search(answer) and not TABLE_SOURCE.search(answer)
 
 
+class Release:
+    """The answer's text as the generator writes it (step 45), passed to `send` only once it is safe to show.
+
+    Nothing is sent before the text cites an extract: an uncited answer (« Je ne sais pas. », or text a prompt
+    injection dictated, which `unsourced` replaces) is never seen half-written. [n] becomes [Dn] as in the final
+    answer, and a citation still being written ("[1") waits for its "]". A tool call written as text is never sent.
+    feed(None) means generate() dropped the text so far (a tool round): if some was already sent, nothing more is,
+    and the endpoint sends the final answer in full."""
+
+    def __init__(self, send):
+        from rag_calorvia.rag.generate import RAW_CALL
+        self.send, self.raw_call, self.raw, self.sent, self.stopped = send, RAW_CALL, "", 0, False
+
+    def feed(self, delta: str | None):
+        if self.stopped:
+            return
+        if delta is None:
+            self.raw, self.stopped = "", self.sent > 0
+            return
+        self.raw += delta
+        if any(marker in self.raw for marker in self.raw_call):
+            return
+        text = re.sub(r"\[(\d+)\]", r"[D\1]", self.raw.lstrip())
+        cut = text.rfind("[")
+        if cut != -1 and "]" not in text[cut:]:
+            text = text[:cut]
+        if CITATION.search(text) and len(text) > self.sent:
+            self.send(text[self.sent:])
+            self.sent = len(text)
+
+
 def footer_lines(answer: str, extracts: list[dict]) -> list[str]:
     return [f"**{e['id']}** · document `{e['document']}` · {e['date'] or 'sans date'}" for e in cited(answer, extracts)]
 
@@ -149,12 +180,13 @@ def retrieve_context(question: str, role: str | None) -> list[dict]:
     return context_order(retrieve(question, config, role)["chunks"], config)
 
 
-def write_answer(question: str, context: list[dict], role: str | None) -> dict:
+def write_answer(question: str, context: list[dict], role: str | None, on_text=None) -> dict:
     """The RAG's answer on these extracts, with its images and the documents it cites, as one Markdown text.
-    The RAG cites [1], [2]: they become [D1], [D2] so the footer reads the same in every mode."""
+    The RAG cites [1], [2]: they become [D1], [D2] so the footer reads the same in every mode.
+    on_text (step 45): given to generate(), which streams the answer's text into it (see Release)."""
     from rag_calorvia.rag.generate import generate
     from rag_calorvia.rag.images import answer_images
-    text = generate(question, context, rag_config(), role)["answer"] if context else DONT_KNOW
+    text = generate(question, context, rag_config(), role, on_text)["answer"] if context else DONT_KNOW
     pictures = answer_images(text, context, MAX_IMAGES)
     extracts = [{**extract(c), "id": f"D{n}"} for n, c in enumerate(context, 1)]
     text = re.sub(r"\[(\d+)\]", r"[D\1]", text)

@@ -4,9 +4,10 @@ Two chatbots for **Calorvia SA**, a fictional Belgian heat-pump manufacturer:
 
 1. **`rag_calorvia`**: a RAG over 393 documents from the company's shared drive. Done: final evaluation of
    `experiments/status_filter.toml` (step 9), results and analysis in `RAPPORT.md`, exports in `results/`. The
-   configuration in use is `experiments/combined_siblings.toml` (step 40: step 30's `markdown_tables`, plus the
-   issuer in the context line, the v2 image prompt, fuller answers, 10 chunks, and up to 2 other chunks of the kept
-   documents, newest first); `FINAL_CONFIG` in `.env` changes it.
+   configuration in use is `experiments/combined_guard_mtp.toml` (step 30's `markdown_tables`, plus the issuer in
+   the context line, the v2 image prompt, fuller answers, 10 chunks, up to 2 other chunks of the kept documents
+   (step 40), the corpus description (step 41), and a rule refusing instructions in the question (the injection
+   guard), meant for the generator served with MTP (step 45)); `FINAL_CONFIG` in `.env` changes it.
 2. **`text2sql_calorvia`**: a text-to-SQL agent over three business databases (phase B). Done: LangGraph agent
    behind an OpenAI-compatible endpoint, read-only MCP server, certified ontology; results and analysis in
    `RAPPORT_T2SQL.md`, exports in `results/t2sql/`. To run it: [Phase B in five steps](#phase-b-in-five-steps).
@@ -57,8 +58,11 @@ export MODELS_PATH=~/models
   --dtype float16 --max-model-len 2048 --gpu-memory-utilization 0.10 --enforce-eager
 
 # Generator (8000): Qwen3.8-27B, Q4 (~17.5 GB of weights; with the two vLLM servers, ~21.7 GB of the 24 GB)
+# Step 45 (D102): speculative decoding with the MTP layer the model file already holds (no extra weights):
+# 2.2x the writing speed, answers 7.3 s -> 5.2 s, same judged correctness. A DFlash draft does not fit (1.1 GB short)
 ~/llama.cpp/build/bin/llama-server -m $MODELS_PATH/qwen3.8-27b/llama/Qwen3.8-27B-UD-Q4_K_XL.gguf \
-  -a qwen3.8-27b --port 8000 -ngl 99 -c 16384 -np 1 -fa on --reasoning off
+  -a qwen3.8-27b --port 8000 -ngl 99 -c 16384 -np 1 -fa on --reasoning off \
+  --spec-type draft-mtp --spec-draft-n-max 3
 
 # VLM (8003): Qwen3.5-9B with its vision projector (mmproj), for scripts/transcribe.py only (step 7).
 # It shares port 8003 with the judge: one or the other

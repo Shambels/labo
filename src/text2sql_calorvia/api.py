@@ -117,8 +117,30 @@ def sources_of(request: ChatRequest) -> set[str]:
     return MODELS[model]
 
 
-async def documents_only(question: str, role: str | None):
-    """The RAG of phase A, as the same (node, change) events as the agent: the search, then the answer."""
+async def written(question: str, context: list[dict], role: str | None):
+    """Step 45: ("text", delta) events while the answer is written (see documents.Release), then ("done", result).
+    write_answer runs in a thread; its text comes back to the event loop through a queue, in order."""
+    loop, queue, done = asyncio.get_running_loop(), asyncio.Queue(), object()
+    release = documents.Release(lambda text: loop.call_soon_threadsafe(queue.put_nowait, text))
+    task = asyncio.ensure_future(asyncio.to_thread(documents.write_answer, question, context, role, release.feed))
+    task.add_done_callback(lambda _: queue.put_nowait(done))
+    while (item := await queue.get()) is not done:
+        yield "text", item
+    yield "done", task.result()
+
+
+def rest_of(answer: str, streamed: str) -> str:
+    """What is left to send once `streamed` was shown: the end of the answer (images, footer), or, when the final
+    answer does not continue what was shown (a tool round after text was sent), the whole answer under a rule."""
+    if answer.startswith(streamed):
+        return answer[len(streamed):]
+    print(f"streamed text not kept in the answer: {streamed[:200]!r}", flush=True)
+    return "\n\n---\n\n" + answer
+
+
+async def documents_only(question: str, role: str | None, stream: bool = False):
+    """The RAG of phase A, as the same (node, change) events as the agent: the search, then the answer.
+    With stream (step 45), ("text", delta) events come before "finish" as the answer is written."""
     with tracing.observe("search_documents", as_type="retriever", input={"query": question}) as observed:
         context = await asyncio.to_thread(documents.retrieve_context, question, role)
         observed.update(output=[{"document": c["document"], "date": c.get("doc_date"), "text": c["text"]} for c in context])
@@ -127,7 +149,14 @@ async def documents_only(question: str, role: str | None):
     yield "tools", {"steps": [step]}
     with tracing.observe("write_answer", as_type="generation", input=question,
                          model=documents.rag_config().get("generation", {}).get("model")) as observed:
-        result = await asyncio.to_thread(documents.write_answer, question, context, role)
+        if not stream:
+            result = await asyncio.to_thread(documents.write_answer, question, context, role)
+        else:
+            async for node, change in written(question, context, role):
+                if node == "text":
+                    yield node, change
+                else:
+                    result = change
         observed.update(output=result["answer"])
     shown = [{"tool": "show_images", "args": {}, "ok": True, "images": result["images"]}] if result["images"] else []
     yield "finish", {"answer": result["answer"], "steps": [step, *shown]}
@@ -305,7 +334,7 @@ def create_app(agent: Agent | None = None, api_keys: str | None = None, gateways
         def run():
             """The (node, change) events of this request: the RAG alone, or the agent."""
             if wanted == {"docs"}:
-                return documents_only(messages[-1]["content"], role)
+                return documents_only(messages[-1]["content"], role, request.stream)
             return get_agent().stream(messages, session_id, user, conversation_id, **extra)
 
         def traced():
@@ -347,11 +376,17 @@ def create_app(agent: Agent | None = None, api_keys: str | None = None, gateways
 
         async def events():
             yield chunk({"role": "assistant", "content": ""})
-            opened, shown, steps = False, 0, []
+            opened, shown, steps, streamed = False, 0, [], ""
             with traced() as trace:
                 try:
                     async for node, change in run():
-                        if node == "tools":
+                        if node == "text":   # step 45: the answer as it is written (documents only)
+                            if opened:
+                                yield chunk({"content": "\n</details>\n\n"})
+                                opened = False
+                            yield chunk({"content": change})
+                            streamed += change
+                        elif node == "tools":
                             steps = change["steps"]
                             if not opened:
                                 yield chunk({"content": "<details>\n<summary>Étapes de l'agent</summary>\n\n"})
@@ -363,7 +398,7 @@ def create_app(agent: Agent | None = None, api_keys: str | None = None, gateways
                             if opened:
                                 yield chunk({"content": "\n</details>\n\n"})
                                 opened = False
-                            yield chunk({"content": change["answer"] + marker})
+                            yield chunk({"content": rest_of(change["answer"], streamed) + marker})
                             trace.update(output=change["answer"])
                             save(change["answer"], change.get("steps", steps))
                 except Exception as error:   # the client gets a readable end, not a cut stream

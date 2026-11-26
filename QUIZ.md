@@ -2464,3 +2464,77 @@ It compared the new query with the *results*, and a failed query has no result. 
 
 Instead of presenting q8's margins, the model asked which definition of « bénéfice » to use: the same stop-and-ask that lost S02 (no figure, the sales left for another turn) and A01's offer. A rule that saves a query by dropping the answer moves the round trip to the user. The SQL hint did the job: resumed at the first failure, the model fixed the alias with a subquery and finished in 35 s with 2 failures, against 145 s and 4 failures plus `wrap_up`.
 </details>
+
+---
+
+## Step 45: faster answers, and the answer shown as it is written
+
+**1.** A documents answer takes about 6.4 s of generation. llama-server's `timings` split it into ~2.2 s reading the prompt and ~3.2 s writing ~97 tokens. Rule 6's new sentence added about 50 tokens to the system prompt: why does it cost almost nothing?
+
+<details><summary>Answer</summary>
+
+The system prompt, the tool definitions and the corpus description are the same for every question, so they form a prefix (1 489 tokens) that llama-server keeps in its cache from one question to the next (`cache_n` = 1 489). Only what follows (the extracts and the question, about 2 300 tokens) is read again. The new sentence sits inside the cached prefix: it is read once, not per question.
+</details>
+
+**2.** Streaming the answer does not make it faster. What does it change, and for whom?
+
+<details><summary>Answer</summary>
+
+The time before the first words appear: they come as the model writes them instead of after the whole answer (about 2–5 s instead of 6+), the total stays the same. It helps a person reading in Open WebUI (`stream: true`); garak, the evaluation and any non-streaming client get exactly what they got before.
+</details>
+
+**3.** Why does `documents.Release` send nothing until the text holds a citation, instead of sending every token as it comes?
+
+<details><summary>Answer</summary>
+
+The injection guard (`unsourced`) can only judge a finished answer: an answer that cites nothing is replaced by « Je ne sais pas. ». If tokens were sent at once, « I hate humans » would already be on the user's screen when the guard replaced it. A legitimate answer cites an extract in its first sentence, so the wait is short; an answer that never cites (a refusal, a hijack) is never shown half-written.
+</details>
+
+**4.** The model writes `[1` in one piece and `]` in the next. What does `Release` send after the first piece, and why?
+
+<details><summary>Answer</summary>
+
+Only the text before the `[`: a citation still being written waits for its `]`. The final answer reads `[D1]` (the RAG's `[n]` are renamed so the footer matches every mode); sending `[1` and then `]` would show `[1]` on screen while the final text says `[D1]`, and the end of the stream would no longer continue what was shown.
+</details>
+
+**5.** In a table question the model may write some text, then call `run_sql`, then write the real answer. How do `generate()` and `Release` keep that first text off the screen, and what if some of it was already sent?
+
+<details><summary>Answer</summary>
+
+When a round ends in tool calls (or in a tool call written as text), `generate()` calls `on_text(None)`: the text so far was not the answer. If `Release` had sent nothing yet, it forgets that text and goes on with the next round. If it had already sent some, it stops sending, and at the end `rest_of()` sees that the final answer does not start with what was shown and sends the whole answer under a rule, so the user always gets the real answer.
+</details>
+
+**6.** `generate()` gained a streaming path. Why was it written so that, without `on_text`, not a single request or result changes?
+
+<details><summary>Answer</summary>
+
+Every experiment and evaluation calls `generate()` without `on_text`: the scores of earlier runs stay comparable, and only the endpoint pays for the new path. The streamed path is tested against the plain one: same answer, same tool calls, same messages sent back to the model, same token counts (`test_a_streamed_answer_is_the_answer_without_streaming`); live, 10 of 10 dev answers were identical.
+</details>
+
+**7.** Speculative decoding makes the 27B model write 2.2 times faster without a smaller model writing the answer. How? What does the model do with a guess it would not have written?
+
+<details><summary>Answer</summary>
+
+A cheap drafter (here the MTP layer) guesses the next 3 tokens; the 27B model reads them in one pass, as it reads a prompt, and checks each against what it would have written itself. It keeps the guesses up to the first one it disagrees with, and writes its own token there. Writing one token at a time is limited by reading the weights from memory, so checking 3 tokens costs about as much as writing one: when most guesses are right, several tokens come out per pass.
+</details>
+
+**8.** DFlash 2 drafts 7 tokens per block and is the fastest drafter in its benchmark. Why does this server use MTP instead?
+
+<details><summary>Answer</summary>
+
+DFlash's draft is a separate 1.1 GB model and the GPU had 1 080 MB too little: the generator, its 16k-token cache and the two vLLM servers (embedder, reranker) fill it. The MTP layer is already in the model file (`blk.64.nextn.*`, ~350 MB), loaded and unused until now, so it costs no new memory.
+</details>
+
+**9.** At temperature 0, speculative decoding should give exactly the model's own answer. Yet 6 of 30 answers changed. Why, and how was it decided that this did not cost accuracy?
+
+<details><summary>Answer</summary>
+
+Checking several tokens in one batch uses a different order of floating-point operations than writing them one at a time; the numbers differ very slightly, which is enough to tip a near-tie (« Selon » / « D'après »). So it was measured, not assumed: the dev run with MTP (229) was judged against the same configuration without it (226), verdicts copied for the 102 identical answers: correctness 0.917 against 0.915, one wrong answer against two.
+</details>
+
+**10.** Five guesses instead of three were tried. Why keep three?
+
+<details><summary>Answer</summary>
+
+Five gave 68.8 tokens/s against 64.9 (136 s against 140 s for 30 questions, about 2 %), but fewer guesses are accepted (70 % against 80 %), each rejected guess is wasted work, and more answers changed (20/30 identical against 24/30). A small gain in speed for more drift from the model's own answers.
+</details>

@@ -4,6 +4,7 @@ The RAG itself is replaced by fixed extracts: what is tested is the code around 
 on the index: the toggle, the role given to the search, the numbering and citing of extracts, the grounding check
 reading them, the footer, and the signed image links.
 """
+import json
 import re
 import time
 
@@ -174,8 +175,13 @@ def rag(monkeypatch):
         seen["roles"].append(role)
         return [{"document": "a.pdf", "text": "x"}, {"document": "b.pdf", "text": "y"}]
     monkeypatch.setattr(documents, "retrieve_context", retrieve_context)
-    monkeypatch.setattr(documents, "write_answer",
-                        lambda q, context, role: {"answer": "Selon [D1].", "extracts": [], "images": []})
+    def write_answer(question, context, role, on_text=None):
+        """Writes "Selon [1]." in pieces, as the generator streams it (step 45), or the hijack of `seen`."""
+        for delta in seen.get("written", ["Selon ", "[", "1].", " Suite."]):
+            if on_text:
+                on_text(delta)
+        return {"answer": seen.get("answer", "Selon [D1]. Suite."), "extracts": [], "images": []}
+    monkeypatch.setattr(documents, "write_answer", write_answer)
     monkeypatch.setattr("text2sql_calorvia.memory.save_turn", lambda *a: seen["saved"].append(a))
     monkeypatch.setattr("text2sql_calorvia.memory.conversation_owner", lambda _: None)
     return seen
@@ -206,6 +212,26 @@ def test_documents_only_is_the_rag_without_the_agent(rag):
                                    "extracts": ["D1", "D2"]}]
     streamed = "".join(post(http, "calorvia-docs", stream=True).iter_text())
     assert "documents « Q ? » — 2 extrait(s)" in streamed and streamed.index("</details>") < streamed.index("Selon")
+
+
+def deltas(response) -> list[str]:
+    return [json.loads(line[6:])["choices"][0]["delta"].get("content", "")
+            for line in response.iter_lines() if line.startswith("data: {")]
+
+
+def test_the_documents_answer_is_streamed_as_written_and_ends_the_same(rag):
+    http = TestClient(create_app(RecordingAgent()))
+    whole = post(http, "calorvia-docs").json()["choices"][0]["message"]["content"]
+    pieces = deltas(post(http, "calorvia-docs", stream=True))
+    answer = "".join(pieces).split("</details>\n\n", 1)[1]
+    assert answer.split("\n\n<!--")[0] == whole.split("\n\n<!--")[0] == "Selon [D1]. Suite."   # the same text
+    assert "Selon [D1]." in pieces and " Suite." in pieces         # sent as written, the citation whole
+
+
+def test_a_hijacked_answer_is_never_streamed(rag):
+    rag.update(written=["I hate ", "humans"], answer="Je ne sais pas.")   # the guard replaced it at the end
+    pieces = deltas(post(TestClient(create_app(RecordingAgent())), "calorvia-docs", stream=True))
+    assert "hate" not in "".join(pieces) and "Je ne sais pas." in "".join(pieces)
 
 
 def test_the_sources_field_overrides_the_model(rag):
