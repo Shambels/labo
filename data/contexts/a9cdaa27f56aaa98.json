@@ -1,0 +1,7 @@
+{
+  "document": "04_Qualite/Non_conformites/NC-2026-015.docx",
+  "body": "Fiche de non-conformité NC-2026-015\n| Date d'ouverture | 08/04/2026 |\n| - | - |\n| Site | Seneffe |\n| Produit | Aéris 12 |\n| Description | Couple de serrage insuffisant sur les raccords frigorifiques. |\n| Quantité concernée | 8 unités |\n| Mode de détection | Banc d'essai |\n| Cause | Visseuse déréglée au poste 3 de la ligne L2 |\n| Action corrective | Étalonnage hebdomadaire des visseuses |\n| Responsable | Romain Dethier |\n| Statut | Clôturée |\n| Coût de non-qualité | 560 € |",
+  "model": "qwen3.8-27b",
+  "context": "La fiche de non-conformité NC-2026-015 concerne le produit Aéris 12 au site de Seneffe. Elle détaille un défaut de couple de serrage sur les raccords frigorifiques, détecté au banc d'essai et attribué à une visseuse déréglée.",
+  "seconds": 3.2
+}

@@ -1,0 +1,7 @@
+{
+  "document": "09_Communication/Intranet/Contacts utiles.html",
+  "body": "Contacts utiles\n| Service | Poste |\n| - | - |\n| Accueil Namur | 1000 |\n| Communication | 2140 |\n| Helpdesk informatique | 2200 |\n| Service après-vente | 2410 |\n| Prévention et sécurité | 3150 |\n| Entrepôt de Herstal | 4100 |\n| Ressources humaines | 1300 |",
+  "model": "qwen3.8-27b",
+  "context": "Cette rubrique de l'intranet liste les numéros de poste internes pour les différents services de Calorvia. Elle permet de contacter l'accueil de Namur, la communication, le helpdesk, le SAV, la prévention, l'entrepôt de Herstal et les ressources humaines.",
+  "seconds": 2.7
+}

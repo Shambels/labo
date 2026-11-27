@@ -1,0 +1,7 @@
+{
+  "document": "00_Direction/CODIR/2026/2026-03-23 CODIR PV.docx",
+  "body": "Procès-verbal du Comité de direction\n3. Suivi des actions\n| **N°** | **Action** | **Responsable** | **Échéance** | **Statut / commentaire** |\n| - | - | - | - | - |\n| A-25-020 | Suivre l'avancement des interventions du rappel Aéris 12 | AV | 31/03/2026 | En cours. 211 unités réparées sur 214. |\n| A-26-005 | Organiser la campagne de sensibilisation à l'hameçonnage | KM | 31/03/2026 | En cours. Sessions planifiées du 9 au 27 mars. |\n| A-26-009 | Clôturer les deux non-conformités mineures de l'audit ISO 9001 | AV | 30/04/2026 | En cours |",
+  "model": "qwen3.8-27b",
+  "context": "La rubrique « Suivi des actions » du procès-verbal détaille l'avancement des interventions liées au rappel Aéris 12, de la campagne de sensibilisation à l'hameçonnage et de la clôture des non-conformités de l'audit ISO 9001.",
+  "seconds": 2.7
+}

@@ -1,0 +1,7 @@
+{
+  "document": "06_Achats/Fournisseurs/Supply agreement Valtek Components 2025.pdf",
+  "body": "5. Field recalls\nIn the event of a field recall attributable to a defect of the Products, the Supplier shall bear the costs of the recall in proportion to its responsibility, up to a maximum of EUR 250,000 per event.",
+  "model": "qwen3.8-27b",
+  "context": "Cette clause figure dans la section relative aux rappels sur le terrain du contrat d'approvisionnement. Elle précise la prise en charge des coûts par le fournisseur en cas de défaut des vannes.",
+  "seconds": 1.8
+}

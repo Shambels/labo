@@ -1,0 +1,7 @@
+{
+  "document": "03_Production/Procedures/Procedure consignation des energies LOTO.pdf",
+  "body": "Principe\nToute intervention de maintenance sur une machine se fait machine consignée : séparation, condamnation par cadenas personnel, identification, vérification d'absence d'énergie.",
+  "model": "qwen3.8-27b",
+  "context": "Cette section expose le principe général de la procédure de consignation des énergies. Elle décrit les étapes obligatoires de séparation et de condamnation lors d'une intervention de maintenance.",
+  "seconds": 1.6
+}

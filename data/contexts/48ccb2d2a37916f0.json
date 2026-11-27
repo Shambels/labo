@@ -1,0 +1,7 @@
+{
+  "document": "00_Direction/Conseil_administration/PV_signes/PV CA 2026-03-17.pdf",
+  "body": "3. Situation financière à fin février 2026\nLe chiffre d'affaires de février 2026 s'élève à 13 500 k€. Le chiffre d'affaires cumulé à fin février 2026 atteint 27 800 k€, soit 2,2 % en dessous du budget (28 421 k€).\nL'EBITDA cumulé s'élève à 2 486 k€, soit 8,9 % du chiffre d'affaires, pour un objectif budgétaire de 9,5 %.",
+  "model": "qwen3.8-27b",
+  "context": "Point 3 du procès-verbal du conseil d'administration. Il détaille la situation financière de l'entreprise à fin février 2026.",
+  "seconds": 1.7
+}

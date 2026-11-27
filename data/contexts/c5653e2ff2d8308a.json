@@ -1,0 +1,7 @@
+{
+  "document": "06_Achats/Bons_de_livraison/2026-04-07 Leveringsbon Pakmatic.jpg",
+  "body": "Image\n**Pakmatic NV**  \nNijverheidslaan 4, 8540 Deerlijk  \nLeveringsbon  \n\nLeveringsbon: **PK-26-1290**  \nDatum: **07/04/2026**  \nLeveringsadres: **Calorvia SA - site Gent**\n\n| Art.   | Omschrijving                     | Aantal |\n|--------|----------------------------------|--------|\n| SF-23  | Stretchfolie 23 micron (rol)     | 180    |\n| HB-50  | Hoekbeschermers (doos van 50)    | 40     |\n\n---\n\n**Description**  \nIl s’agit d’une facture de livraison (leveringsbon) émise par Pakmatic NV pour Calorvia SA à Gent. Le document liste deux articles avec leurs quantités et inclut une zone de réception manuelle ainsi qu’une annotation manuscrite de validation. La date de livraison est indiquée comme étant le 7 avril 2026.",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait correspond à l'intégralité du bon de livraison émis par Pakmatic NV pour le site de Gent. Il détaille la réception de stretchfolie et de protecteurs d'angles.",
+  "seconds": 2.5
+}

@@ -1,0 +1,13 @@
+{
+  "document": "07_IT/Securite/Procedure MFA v1.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Yannick Dupuis",
+      "type": "personne",
+      "alias": [],
+      "description": "propriétaire de la procédure IT-12"
+    }
+  ],
+  "seconds": 1.2
+}

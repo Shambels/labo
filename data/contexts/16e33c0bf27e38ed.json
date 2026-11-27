@@ -1,0 +1,7 @@
+{
+  "document": "04_Qualite/Audits/Rapport audit ISO 9001 surveillance 2026.pdf",
+  "body": "Constats\n| Type | Constat | Site |\n| - | - | - |\n| Observation | Bonne pratique : affichage des vitesses et circulation dans l'entrepôt | Gand |\nLes actions correctives des deux non-conformités mineures doivent être transmises dans les 90 jours.",
+  "model": "qwen3.8-27b",
+  "context": "Cette section, située à la fin du rapport, présente une observation positive concernant l'organisation de l'entrepôt du site de Gand. Elle conclut le document en rappelant le délai de transmission des actions correctives liées aux non-conformités mineures.",
+  "seconds": 2.4
+}

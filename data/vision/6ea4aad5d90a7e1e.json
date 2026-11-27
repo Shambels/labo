@@ -1,0 +1,10 @@
+{
+  "path": "10_RSE/Consommation energie par site 2025.png",
+  "kind": "image",
+  "page": null,
+  "index": null,
+  "model": "qwen3.8-27b",
+  "prompt": "Tu transcris des documents d'entreprise pour un moteur de recherche.\n1. Recopie tout le texte visible, exactement comme il est écrit : nombres, codes, dates, unités et\n   annotations manuscrites compris. Rends les tableaux en Markdown.\n2. Dans un organigramme ou une arborescence, regroupe chaque case sous la case dont elle dépend : écris la case\n   supérieure (son texte complet, par exemple le nom et la fonction), puis, juste en dessous, chaque case qui lui\n   est rattachée sur une ligne qui commence par « - ». Ne recopie jamais les cases rangée par rangée : une case n'a\n   de sens qu'avec celle dont elle dépend.\n3. Dans un schéma ou un plan, recopie chaque texte posé sur un lien, une flèche ou un trait (débit, distance,\n   type de connexion), sur une ligne qui commence par le nom des deux éléments reliés, tels qu'ils sont écrits sur\n   l'image, séparés par un tiret, puis deux-points et le texte. N'écris rien pour un lien sans texte.\n4. Puis, sous le titre « Description », décris en trois phrases au plus le type d'image (organigramme,\n   plan, graphique, photo, facture...) et ce qu'elle montre qui n'est pas écrit : la valeur la plus haute d'un\n   graphique, la position des éléments d'un plan.\nN'invente rien : si un élément est illisible, écris [illisible].",
+  "seconds": 8.6,
+  "text": "Consommation d'énergie par site en 2025 (MWh)\n\n7000\n6000\n5000\n4000\n3000\n2000\n1000\n0\n\nNamur : 410 MWh\nSeneffe : 6 820 MWh\nGand : 3 950 MWh\nLille : 60 MWh\n\nChargée de mission RSE - factures d'énergie 2025\n\nDescription\nGraphique en barres verticales représentant la consommation d'énergie annuelle de quatre sites industriels. Le graphique met en évidence que le site de Seneffe est le plus grand consommateur, avec une valeur proche de 7000 MWh, tandis que le site de Lille est le plus faible. Les barres sont toutes de la même couleur bleu foncé sur un fond blanc."
+}

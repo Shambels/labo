@@ -1,0 +1,734 @@
+{
+  "schema_name": "DoclingDocument",
+  "version": "1.11.0",
+  "name": "PV CA 2026-03-17",
+  "origin": {
+    "mimetype": "application/pdf",
+    "binary_hash": 10349172996374235150,
+    "filename": "PV CA 2026-03-17.pdf"
+  },
+  "furniture": {
+    "self_ref": "#/furniture",
+    "children": [],
+    "content_layer": "furniture",
+    "name": "_root_",
+    "label": "unspecified"
+  },
+  "body": {
+    "self_ref": "#/body",
+    "children": [
+      {
+        "$ref": "#/texts/0"
+      },
+      {
+        "$ref": "#/texts/1"
+      },
+      {
+        "$ref": "#/texts/2"
+      },
+      {
+        "$ref": "#/texts/3"
+      },
+      {
+        "$ref": "#/texts/4"
+      },
+      {
+        "$ref": "#/texts/5"
+      },
+      {
+        "$ref": "#/texts/6"
+      },
+      {
+        "$ref": "#/texts/7"
+      },
+      {
+        "$ref": "#/texts/8"
+      },
+      {
+        "$ref": "#/texts/9"
+      },
+      {
+        "$ref": "#/texts/10"
+      },
+      {
+        "$ref": "#/texts/11"
+      },
+      {
+        "$ref": "#/texts/12"
+      },
+      {
+        "$ref": "#/texts/13"
+      },
+      {
+        "$ref": "#/texts/14"
+      },
+      {
+        "$ref": "#/texts/15"
+      },
+      {
+        "$ref": "#/texts/16"
+      },
+      {
+        "$ref": "#/texts/17"
+      },
+      {
+        "$ref": "#/texts/18"
+      },
+      {
+        "$ref": "#/groups/0"
+      },
+      {
+        "$ref": "#/texts/20"
+      }
+    ],
+    "content_layer": "body",
+    "name": "_root_",
+    "label": "unspecified"
+  },
+  "groups": [
+    {
+      "self_ref": "#/groups/0",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/19"
+        }
+      ],
+      "content_layer": "body",
+      "name": "group",
+      "label": "key_value_area"
+    }
+  ],
+  "texts": [
+    {
+      "self_ref": "#/texts/0",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "furniture",
+      "label": "page_header",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 62.3622,
+            "t": 813.0068128,
+            "r": 233.22157520000005,
+            "b": 806.1630624000001,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            54
+          ]
+        }
+      ],
+      "orig": "Calorvia SA \u00b7 Conseil d'administration \u00b7 Proc\u00e8s-verbal",
+      "text": "Calorvia SA \u00b7 Conseil d'administration \u00b7 Proc\u00e8s-verbal"
+    },
+    {
+      "self_ref": "#/texts/1",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 773.5719,
+            "r": 434.9247088000001,
+            "b": 759.7385666666667,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            55
+          ]
+        }
+      ],
+      "orig": "Proc\u00e8s-verbal de la r\u00e9union du conseil d'administration",
+      "text": "Proc\u00e8s-verbal de la r\u00e9union du conseil d'administration",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/2",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 747.4337168000001,
+            "r": 526.9133790499998,
+            "b": 630.4512944,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            644
+          ]
+        }
+      ],
+      "orig": "R\u00e9union du mardi 17 mars 2026, au si\u00e8ge social \u00e0 Namur, de 16 h 00 \u00e0 18 h 45. Administrateurs pr\u00e9sents : Jean-Fran\u00e7ois Delcourt (Pr\u00e9sident, administrateur ind\u00e9pendant) ; H\u00e9l\u00e8ne Marchal (Administratrice d\u00e9l\u00e9gu\u00e9e) ; Philippe Rasquin (Administrateur, repr\u00e9sentant de Rasquin Participations SA) ; Val\u00e9rie Rasquin (Administratrice, repr\u00e9sentante de Rasquin Participations SA) ; Olivier Thiry (Administrateur, repr\u00e9sentant de Mosane Capital) ; Martine Claessens (Administratrice ind\u00e9pendante) ; Dirk Peeters (Administrateur ind\u00e9pendant). Invit\u00e9s : Laurent Dewit (directeur financier) ; Fr\u00e9d\u00e9ric Lenoir (commissaire, Vandenberghe & Associ\u00e9s, point 2).",
+      "text": "R\u00e9union du mardi 17 mars 2026, au si\u00e8ge social \u00e0 Namur, de 16 h 00 \u00e0 18 h 45. Administrateurs pr\u00e9sents : Jean-Fran\u00e7ois Delcourt (Pr\u00e9sident, administrateur ind\u00e9pendant) ; H\u00e9l\u00e8ne Marchal (Administratrice d\u00e9l\u00e9gu\u00e9e) ; Philippe Rasquin (Administrateur, repr\u00e9sentant de Rasquin Participations SA) ; Val\u00e9rie Rasquin (Administratrice, repr\u00e9sentante de Rasquin Participations SA) ; Olivier Thiry (Administrateur, repr\u00e9sentant de Mosane Capital) ; Martine Claessens (Administratrice ind\u00e9pendante) ; Dirk Peeters (Administrateur ind\u00e9pendant). Invit\u00e9s : Laurent Dewit (directeur financier) ; Fr\u00e9d\u00e9ric Lenoir (commissaire, Vandenberghe & Associ\u00e9s, point 2)."
+    },
+    {
+      "self_ref": "#/texts/3",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 620.4337168000001,
+            "r": 459.3949144499999,
+            "b": 611.4512944,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            92
+          ]
+        }
+      ],
+      "orig": "Secr\u00e9taire du conseil : Caroline Hendrickx. Le conseil, valablement compos\u00e9, peut d\u00e9lib\u00e9rer.",
+      "text": "Secr\u00e9taire du conseil : Caroline Hendrickx. Le conseil, valablement compos\u00e9, peut d\u00e9lib\u00e9rer."
+    },
+    {
+      "self_ref": "#/texts/4",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 597.80236875,
+            "r": 365.1273400000001,
+            "b": 586.9950770833334,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            55
+          ]
+        }
+      ],
+      "orig": "1. Approbation du proc\u00e8s-verbal de la s\u00e9ance pr\u00e9c\u00e9dente",
+      "text": "1. Approbation du proc\u00e8s-verbal de la s\u00e9ance pr\u00e9c\u00e9dente",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/5",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 578.4337168000001,
+            "r": 393.10853309999993,
+            "b": 569.4512944,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            76
+          ]
+        }
+      ],
+      "orig": "Le proc\u00e8s-verbal de la s\u00e9ance du 17 f\u00e9vrier 2026 est approuv\u00e9 \u00e0 l'unanimit\u00e9.",
+      "text": "Le proc\u00e8s-verbal de la s\u00e9ance du 17 f\u00e9vrier 2026 est approuv\u00e9 \u00e0 l'unanimit\u00e9."
+    },
+    {
+      "self_ref": "#/texts/6",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 555.80236875,
+            "r": 253.95790375,
+            "b": 544.9950770833334,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            34
+          ]
+        }
+      ],
+      "orig": "2. Arr\u00eat\u00e9 des comptes annuels 2025",
+      "text": "2. Arr\u00eat\u00e9 des comptes annuels 2025",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/7",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 536.4337168000001,
+            "r": 526.2196150499999,
+            "b": 513.4512944,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            120
+          ]
+        }
+      ],
+      "orig": "Le conseil arr\u00eate les comptes annuels de l'exercice 2025 : chiffre d'affaires de 148 200 k\u20ac et b\u00e9n\u00e9fice net de 5 412 k\u20ac.",
+      "text": "Le conseil arr\u00eate les comptes annuels de l'exercice 2025 : chiffre d'affaires de 148 200 k\u20ac et b\u00e9n\u00e9fice net de 5 412 k\u20ac."
+    },
+    {
+      "self_ref": "#/texts/8",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 503.4337168,
+            "r": 519.9237110999999,
+            "b": 480.45129440000005,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            120
+          ]
+        }
+      ],
+      "orig": "Il proposera \u00e0 l'assembl\u00e9e g\u00e9n\u00e9rale un dividende brut de 0,80 \u20ac par action, soit 1 600 000 \u20ac pour les 2 000 000 actions.",
+      "text": "Il proposera \u00e0 l'assembl\u00e9e g\u00e9n\u00e9rale un dividende brut de 0,80 \u20ac par action, soit 1 600 000 \u20ac pour les 2 000 000 actions."
+    },
+    {
+      "self_ref": "#/texts/9",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 470.4337168,
+            "r": 460.6766473499998,
+            "b": 461.45129440000005,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            92
+          ]
+        }
+      ],
+      "orig": "L'assembl\u00e9e g\u00e9n\u00e9rale ordinaire est convoqu\u00e9e le mardi 9 juin 2026 \u00e0 17 h 00 au si\u00e8ge social.",
+      "text": "L'assembl\u00e9e g\u00e9n\u00e9rale ordinaire est convoqu\u00e9e le mardi 9 juin 2026 \u00e0 17 h 00 au si\u00e8ge social."
+    },
+    {
+      "self_ref": "#/texts/10",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 447.80236875,
+            "r": 273.6112212500001,
+            "b": 436.99507708333334,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            42
+          ]
+        }
+      ],
+      "orig": "3. Situation financi\u00e8re \u00e0 fin f\u00e9vrier 2026",
+      "text": "3. Situation financi\u00e8re \u00e0 fin f\u00e9vrier 2026",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/11",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 428.4337168,
+            "r": 526.9133779499999,
+            "b": 405.45129440000005,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            170
+          ]
+        }
+      ],
+      "orig": "Le chiffre d'affaires de f\u00e9vrier 2026 s'\u00e9l\u00e8ve \u00e0 13 500 k\u20ac. Le chiffre d'affaires cumul\u00e9 \u00e0 fin f\u00e9vrier 2026 atteint 27 800 k\u20ac, soit 2,2 % en dessous du budget (28 421 k\u20ac).",
+      "text": "Le chiffre d'affaires de f\u00e9vrier 2026 s'\u00e9l\u00e8ve \u00e0 13 500 k\u20ac. Le chiffre d'affaires cumul\u00e9 \u00e0 fin f\u00e9vrier 2026 atteint 27 800 k\u20ac, soit 2,2 % en dessous du budget (28 421 k\u20ac)."
+    },
+    {
+      "self_ref": "#/texts/12",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 395.4337168,
+            "r": 512.8075040999998,
+            "b": 386.45129440000005,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            107
+          ]
+        }
+      ],
+      "orig": "L'EBITDA cumul\u00e9 s'\u00e9l\u00e8ve \u00e0 2 486 k\u20ac, soit 8,9 % du chiffre d'affaires, pour un objectif budg\u00e9taire de 9,5 %.",
+      "text": "L'EBITDA cumul\u00e9 s'\u00e9l\u00e8ve \u00e0 2 486 k\u20ac, soit 8,9 % du chiffre d'affaires, pour un objectif budg\u00e9taire de 9,5 %."
+    },
+    {
+      "self_ref": "#/texts/13",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 372.80236875,
+            "r": 187.8507275,
+            "b": 361.99507708333334,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            23
+          ]
+        }
+      ],
+      "orig": "4. Points d'information",
+      "text": "4. Points d'information",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/14",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 353.4337168,
+            "r": 464.00404274999994,
+            "b": 330.45129440000005,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            137
+          ]
+        }
+      ],
+      "orig": "La MFA prot\u00e8ge d\u00e9sormais 100 % des comptes, y compris les terminaux partag\u00e9s des ateliers (authentification par badge depuis le 13 mars).",
+      "text": "La MFA prot\u00e8ge d\u00e9sormais 100 % des comptes, y compris les terminaux partag\u00e9s des ateliers (authentification par badge depuis le 13 mars)."
+    },
+    {
+      "self_ref": "#/texts/15",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 320.43371680000007,
+            "r": 526.9133637000001,
+            "b": 297.45129440000005,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            114
+          ]
+        }
+      ],
+      "orig": "La campagne de rappel de l'A\u00e9ris 12 sera cl\u00f4tur\u00e9e le 31 mars. Valtek prend en charge 65 % du co\u00fbt, soit 117 000 \u20ac.",
+      "text": "La campagne de rappel de l'A\u00e9ris 12 sera cl\u00f4tur\u00e9e le 31 mars. Valtek prend en charge 65 % du co\u00fbt, soit 117 000 \u20ac."
+    },
+    {
+      "self_ref": "#/texts/16",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 287.43371680000007,
+            "r": 519.4417883999997,
+            "b": 278.45129440000005,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            103
+          ]
+        }
+      ],
+      "orig": "L'installation photovolta\u00efque de Seneffe (520 kWc) a \u00e9t\u00e9 command\u00e9e \u00e0 H\u00e9liosol SRL dans le budget pr\u00e9vu.",
+      "text": "L'installation photovolta\u00efque de Seneffe (520 kWc) a \u00e9t\u00e9 command\u00e9e \u00e0 H\u00e9liosol SRL dans le budget pr\u00e9vu."
+    },
+    {
+      "self_ref": "#/texts/17",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 264.80236875,
+            "r": 176.33339375,
+            "b": 253.99507708333329,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            20
+          ]
+        }
+      ],
+      "orig": "5. Prochaine r\u00e9union",
+      "text": "5. Prochaine r\u00e9union",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/18",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 245.43371680000007,
+            "r": 195.2389038,
+            "b": 236.45129439999994,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            30
+          ]
+        }
+      ],
+      "orig": "Mardi 21 avril 2026 \u00e0 16 h 00.",
+      "text": "Mardi 21 avril 2026 \u00e0 16 h 00."
+    },
+    {
+      "self_ref": "#/texts/19",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 76.86614,
+            "t": 200.97124440000005,
+            "r": 199.16594479999998,
+            "b": 193.27202520000003,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            33
+          ]
+        },
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 228.04724,
+            "t": 211.97124440000005,
+            "r": 345.8250713,
+            "b": 204.27202520000003,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            34,
+            65
+          ]
+        },
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 228.04724,
+            "t": 200.97124440000005,
+            "r": 261.7181381,
+            "b": 193.27202520000003,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            66,
+            74
+          ]
+        },
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 379.22834,
+            "t": 200.97124440000005,
+            "r": 488.84113279999997,
+            "b": 193.27202520000003,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            75,
+            105
+          ]
+        }
+      ],
+      "orig": "Jean-Fran\u00e7ois Delcourt, pr\u00e9sident H\u00e9l\u00e8ne Marchal, administratrice d\u00e9l\u00e9gu\u00e9e Caroline Hendrickx, secr\u00e9taire",
+      "text": "Jean-Fran\u00e7ois Delcourt, pr\u00e9sident H\u00e9l\u00e8ne Marchal, administratrice d\u00e9l\u00e9gu\u00e9e Caroline Hendrickx, secr\u00e9taire"
+    },
+    {
+      "self_ref": "#/texts/20",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "furniture",
+      "label": "page_footer",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 204.7511,
+            "t": 33.47927279999999,
+            "r": 390.52453760000003,
+            "b": 26.635522400000013,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            61
+          ]
+        }
+      ],
+      "orig": "Calorvia SA (entreprise fictive) \u00b7 Diffusion interne \u00b7 page 1",
+      "text": "Calorvia SA (entreprise fictive) \u00b7 Diffusion interne \u00b7 page 1"
+    }
+  ],
+  "pictures": [],
+  "tables": [],
+  "key_value_items": [],
+  "form_items": [],
+  "pages": {
+    "1": {
+      "size": {
+        "width": 595.2756,
+        "height": 841.8898
+      },
+      "page_no": 1
+    }
+  }
+}

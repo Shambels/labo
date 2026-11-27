@@ -1,0 +1,7 @@
+{
+  "document": "03_Production/Gent/Fotos_installaties/IMG_20251122_Heftruck_nr_9.jpg",
+  "body": "Image\n**Lyftec**  \nElektrische heftruck nr. 9  \n\n| Type                  | LE-20              |\n|-----------------------|--------------------|\n| Serienummer           | LE20-2016-04112    |\n| Bouwjaar              | 2016               |\n| Nominale capaciteit   | 2000 kg            |\n| Lastzwaartepunt       | 500 mm             |\n| Eigen gewicht         | 3310 kg            |\n| Batterij              | 48 V               |\n\nCE\n\n---\n\n**Description**  \nIl s’agit d’une plaque technique métallique fixée sur un véhicule, probablement une fourche élévatrice électrique. Elle affiche les spécifications techniques et l’identification du matériel, y compris le type, le numéro de série, l’année de construction, la capacité nominale, le point de chargement, le poids à vide et la tension de la batterie. Le marquage CE indique la conformité aux normes européennes de sécurité.",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait se trouve dans la rubrique des photos de production à Gent. Il présente la plaque technique d'une chariot élévateur électrique Lyftec.",
+  "seconds": 2.1
+}

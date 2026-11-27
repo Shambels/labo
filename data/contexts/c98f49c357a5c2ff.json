@@ -1,0 +1,7 @@
+{
+  "document": "01_Finance/Investissements/Demande capex CAPEX-2025-014 - Ligne d_assemblage L4.docx",
+  "body": "Demande d'investissement CAPEX-2025-014\nCircuit d'approbation\n| **Étape** | **Responsable** | **Statut** |\n| - | - | - |\n| Avis du contrôle de gestion | Sarah Vandamme | Favorable |\n| Validation CODIR | Hélène Marchal | Validé |\n| Conseil d'administration (au-delà de 250 000 €) | Président du conseil | Requis |",
+  "model": "qwen3.8-27b",
+  "context": "La rubrique « Circuit d'approbation » détaille les étapes de validation de la demande d'investissement pour la ligne d'assemblage L4. Elle précise les responsables et le statut des avis du contrôle de gestion, de la CODIR et du conseil d'administration.",
+  "seconds": 2.5
+}

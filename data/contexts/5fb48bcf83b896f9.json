@@ -1,0 +1,7 @@
+{
+  "document": "10_RSE/Bilan carbone 2025.xlsx",
+  "body": "onglet « Émissions 2025 » · Bilan carbone 2025 (tonnes équivalent CO2) · Poste : Carburant des véhicules ; Scope : Scope 1 ; Émissions : 410",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait se trouve dans l'onglet « Émissions 2025 » du bilan carbone. Il détaille les émissions de Scope 1 liées au carburant des véhicules.",
+  "seconds": 1.8
+}

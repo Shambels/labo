@@ -1,0 +1,7 @@
+{
+  "document": "03_Production/Gent/Veiligheid/Affiche snelheid magazijn.jpg",
+  "body": "Image\nVEILIGHEID VOOR ALLES\n\nMAX 6 km/u  \nin de gangen\n\nMAX 10 km/u  \nop de hoofdverkeersweg\n\nBLAUW LICHT  \n= heftruck in aantocht\n\nVOETGANGERS  \nenkel via de oversteekplaats\n\nMagazijn Gent · geldig vanaf 22 januari 2026\n\n---\n\n**Description**  \nIl s’agit d’un affiche de sécurité industrielle, présentée sous forme de blocs horizontaux sur fond jaune vif. Elle indique des règles de circulation et de sécurité dans un entrepôt (Magazijn Gent), avec des vitesses maximales selon les zones, un signal lumineux pour les chariots élévateurs et une consigne pour les piétons. L’affiche est valable à partir du 22 janvier 2026.",
+  "model": "qwen3.8-27b",
+  "context": "Cette section présente les consignes de sécurité et de circulation applicables dans l'entrepôt de Gand. Elle détaille les règles relatives aux vitesses maximales, au signal des chariots élévateurs et au passage des piétons.",
+  "seconds": 2.7
+}

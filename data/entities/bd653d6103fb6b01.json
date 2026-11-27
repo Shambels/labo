@@ -1,0 +1,55 @@
+{
+  "document": "09_Communication/Newsletter/Calorvia Info 2026-06.html",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Atlas",
+      "type": "produit",
+      "alias": [],
+      "description": "gamme en production depuis juin 2026"
+    },
+    {
+      "nom": "Namur",
+      "type": "site",
+      "alias": [],
+      "description": "site de production d'Atlas"
+    },
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "site de production et d'accueil public"
+    },
+    {
+      "nom": "Lille",
+      "type": "site",
+      "alias": [],
+      "description": "site de production d'Atlas"
+    },
+    {
+      "nom": "Gand",
+      "type": "site",
+      "alias": [],
+      "description": "site de production d'Atlas"
+    },
+    {
+      "nom": "Yasmine Collignon",
+      "type": "personne",
+      "alias": [],
+      "description": "nouvelle collaboratrice en ressources humaines"
+    },
+    {
+      "nom": "Arnaud Mathy",
+      "type": "personne",
+      "alias": [],
+      "description": "nouveau collaborateur du site d'Herstal"
+    },
+    {
+      "nom": "Herstal",
+      "type": "site",
+      "alias": [],
+      "description": "site d'affectation d'Arnaud Mathy"
+    }
+  ],
+  "seconds": 7.7
+}

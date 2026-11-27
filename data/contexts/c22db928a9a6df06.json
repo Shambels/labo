@@ -1,0 +1,7 @@
+{
+  "document": "02_RH/Politiques/Politique teletravail v3 (2026).docx",
+  "body": "Politique de télétravail (RH-04), version 3\n6. Sécurité informatique\nLa connexion à distance se fait exclusivement par le VPN de l'entreprise, avec l'authentification multifacteur obligatoire depuis le 28 février 2026. L'usage d'un réseau Wi-Fi public est interdit sans VPN.",
+  "model": "qwen3.8-27b",
+  "context": "Cette section détaille les règles de sécurité informatique applicables au télétravail. Elle précise les exigences de connexion via le VPN et d'authentification multifacteur.",
+  "seconds": 1.8
+}

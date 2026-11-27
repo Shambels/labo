@@ -1,0 +1,19 @@
+{
+  "document": "03_Production/Seneffe/Photos_equipements/IMG_20260311_Presse_plieuse.jpg",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Brevik Machines",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "fabricant de la presse plieuse hydraulique"
+    },
+    {
+      "nom": "PB-135/3100",
+      "type": "équipement",
+      "alias": [],
+      "description": "presse plieuse hydraulique de 135 t"
+    }
+  ],
+  "seconds": 3.1
+}

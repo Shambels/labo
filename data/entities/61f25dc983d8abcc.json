@@ -1,0 +1,91 @@
+{
+  "document": "04_Qualite/Reclamations/Registre reclamations clients 2025-2026.xlsx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Habitat Confort SA",
+      "type": "client",
+      "alias": [],
+      "description": "client de Calorvia"
+    },
+    {
+      "nom": "Aéris 9",
+      "type": "produit",
+      "alias": [],
+      "description": "pompe à chaleur"
+    },
+    {
+      "nom": "Klimaat Partners NV",
+      "type": "client",
+      "alias": [],
+      "description": "client de Calorvia"
+    },
+    {
+      "nom": "Ventis D450",
+      "type": "produit",
+      "alias": [],
+      "description": "produit de ventilation"
+    },
+    {
+      "nom": "Bouwgroep Verhaegen",
+      "type": "client",
+      "alias": [],
+      "description": "client de Calorvia"
+    },
+    {
+      "nom": "Ventis D300",
+      "type": "produit",
+      "alias": [],
+      "description": "produit de ventilation"
+    },
+    {
+      "nom": "Énergies du Condroz SRL",
+      "type": "client",
+      "alias": [],
+      "description": "client de Calorvia"
+    },
+    {
+      "nom": "Aéris 6",
+      "type": "produit",
+      "alias": [],
+      "description": "pompe à chaleur"
+    },
+    {
+      "nom": "Clim'Expert Hainaut",
+      "type": "client",
+      "alias": [],
+      "description": "client de Calorvia"
+    },
+    {
+      "nom": "Aéris 12",
+      "type": "produit",
+      "alias": [],
+      "description": "pompe à chaleur"
+    },
+    {
+      "nom": "Distrinergie",
+      "type": "client",
+      "alias": [],
+      "description": "client de Calorvia"
+    },
+    {
+      "nom": "Ventis D450 Pro",
+      "type": "produit",
+      "alias": [],
+      "description": "produit de ventilation"
+    },
+    {
+      "nom": "Thermo Services Lille SARL",
+      "type": "client",
+      "alias": [],
+      "description": "client de Calorvia"
+    },
+    {
+      "nom": "Aéris Pro 16",
+      "type": "produit",
+      "alias": [],
+      "description": "pompe à chaleur"
+    }
+  ],
+  "seconds": 10.8
+}

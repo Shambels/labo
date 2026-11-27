@@ -1,0 +1,21 @@
+{
+  "document": "02_RH/Recrutement/Offres/REC-2026-021 Logistiek bediende.html",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Gent",
+      "type": "site",
+      "alias": [],
+      "description": "site de Calorvia pour le poste de logisticien"
+    },
+    {
+      "nom": "Praxio",
+      "type": "équipement",
+      "alias": [
+        "ERP"
+      ],
+      "description": "nouveau ERP pour la gestion des livraisons"
+    }
+  ],
+  "seconds": 2.5
+}

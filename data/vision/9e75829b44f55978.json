@@ -1,0 +1,10 @@
+{
+  "path": "07_IT/Projet_Atlas_ERP/Planning/Planning Atlas v3.png",
+  "kind": "image",
+  "page": null,
+  "index": null,
+  "model": "qwen3.5-9b",
+  "prompt": "Tu transcris des documents d'entreprise pour un moteur de recherche.\n1. Recopie tout le texte visible, exactement comme il est écrit : nombres, codes, dates, unités et\n   annotations manuscrites compris. Rends les tableaux en Markdown.\n2. Puis, sous le titre « Description », décris en trois phrases au plus le type d'image (organigramme,\n   plan, graphique, photo, facture...) et ce qu'elle montre qui n'est pas écrit : les rattachements\n   d'un organigramme, la valeur la plus haute d'un graphique, la position des éléments d'un plan.\nN'invente rien : si un élément est illisible, écris [illisible].",
+  "seconds": 4.8,
+  "text": "**Projet Atlas • planning directeur • version 3 du 19/05/2026 (démarrage en deux temps)**  \nGand 15/06  \nGo-live 01/06  \n\n| Tâche                          | Période         |\n|--------------------------------|-----------------|\n| Formation des utilisateurs     | 04/05 – 27/05   |\n| Bascule Namur, Seneffe, Lille  | 29/05 – 31/05   |\n| Correction interface WMS Gand  | 19/05 – 10/06   |\n| Bascule Gand                   | 12/06 – 14/06   |\n| Hypercare                      | 01/06 – 30/06   |\n\n---\n\n**Description**  \nIl s’agit d’un diagramme de Gantt montrant le planning directeur du projet Atlas, avec des barres colorées représentant les périodes d’exécution de chaque tâche. Les lignes verticales pointillées indiquent des jalons clés : « Gand 15/06 » et « Go-live 01/06 ». La valeur la plus haute du graphique est la date du 30/06/2026, correspondant à la fin de la phase Hypercare. Les éléments sont positionnés chronologiquement sur une échelle allant de décembre 2025 à juillet 2026, avec des annotations manuscrites ou imprimées pour les dates et lieux spécifiques."
+}

@@ -1,0 +1,7 @@
+{
+  "document": "01_Finance/Budget_2026/Budget 2026 v2.xlsx",
+  "body": "onglet « Investissements » · Budget d'investissements 2026 (k€)\n| Projet | Montant |\n|---|---|\n| Nouvelle ligne d'assemblage L4 (Seneffe) | 1250 |\n| Remplacement de l'ERP (projet Atlas) | 680 |\n| Infrastructure informatique (serveurs, réseau) | 120 |\n| Sécurité entrepôt de Gand (éclairage, marquage, limiteurs) | 85 |\n| Maintenance lourde et renouvellement d'outillages | 300 |\n| Installation photovoltaïque (Seneffe) | 410 |\n| Total | 2845 |",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait se trouve dans l'onglet « Investissements » du budget 2026. Il détaille les projets d'investissement prévus, notamment la nouvelle ligne d'assemblage à Seneffe et le remplacement de l'ERP.",
+  "seconds": 2.5
+}

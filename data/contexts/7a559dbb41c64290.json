@@ -1,0 +1,7 @@
+{
+  "document": "06_Achats/Appel_offres_ERP/Synthese demonstrations ERP.docx",
+  "body": "Projet Atlas : synthèse des démonstrations du 3 au 7 novembre 2025\nKerneo (note moyenne : 3,9)\n- Points forts : ergonomie, tableaux de bord financiers.\n- Points faibles : interface néerlandaise incomplète, pas de connecteur WMS standard.",
+  "model": "qwen3.8-27b",
+  "context": "Cette section détaille l'évaluation de la solution Kerneo dans le cadre du projet Atlas. Elle met en avant ses atouts en matière d'ergonomie et de tableaux de bord, ainsi que ses limites concernant l'interface néerlandaise et l'absence de connecteur WMS standard.",
+  "seconds": 2.6
+}

@@ -1,0 +1,135 @@
+{
+  "document": "00_Direction/CODIR/2025/PV_CODIR_2025-11-10.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Hélène Marchal",
+      "type": "personne",
+      "alias": [
+        "CEO"
+      ],
+      "description": "administratrice déléguée et présidente du comité de direction"
+    },
+    {
+      "nom": "Laurent Dewit",
+      "type": "personne",
+      "alias": [
+        "CFO"
+      ],
+      "description": "directeur financier de l'entreprise"
+    },
+    {
+      "nom": "Thomas Lambert",
+      "type": "personne",
+      "alias": [
+        "COO"
+      ],
+      "description": "directeur des opérations de l'entreprise"
+    },
+    {
+      "nom": "Nadia Benali",
+      "type": "personne",
+      "alias": [],
+      "description": "directrice des ressources humaines"
+    },
+    {
+      "nom": "Pierre-Yves Collard",
+      "type": "personne",
+      "alias": [
+        "PYC"
+      ],
+      "description": "directeur commercial de l'entreprise"
+    },
+    {
+      "nom": "Kevin Mertens",
+      "type": "personne",
+      "alias": [
+        "KM"
+      ],
+      "description": "directeur des systèmes d'information"
+    },
+    {
+      "nom": "Anne Vercammen",
+      "type": "personne",
+      "alias": [],
+      "description": "directrice qualité de l'entreprise"
+    },
+    {
+      "nom": "Pieter De Smet",
+      "type": "personne",
+      "alias": [
+        "PDS"
+      ],
+      "description": "directeur du site de Gand"
+    },
+    {
+      "nom": "Julie Renard",
+      "type": "personne",
+      "alias": [],
+      "description": "secrétaire du comité de direction"
+    },
+    {
+      "nom": "Namur",
+      "type": "site",
+      "alias": [],
+      "description": "lieu de la séance du comité de direction"
+    },
+    {
+      "nom": "Salle Meuse",
+      "type": "site",
+      "alias": [],
+      "description": "salle de réunion à Namur"
+    },
+    {
+      "nom": "Gand",
+      "type": "site",
+      "alias": [],
+      "description": "site de production de groupes de ventilation"
+    },
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "site de production de pompes à chaleur"
+    },
+    {
+      "nom": "Pompes à chaleur",
+      "type": "produit",
+      "alias": [],
+      "description": "produit fabriqué sur le site de Seneffe"
+    },
+    {
+      "nom": "Groupes de ventilation",
+      "type": "produit",
+      "alias": [],
+      "description": "produit fabriqué sur le site de Gand"
+    },
+    {
+      "nom": "Ligne L4",
+      "type": "équipement",
+      "alias": [],
+      "description": "ligne de production faisant l'objet d'un business case"
+    },
+    {
+      "nom": "Projet Atlas",
+      "type": "projet",
+      "alias": [],
+      "description": "projet de sélection d'un éditeur de logiciel"
+    },
+    {
+      "nom": "Praxio",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "éditeur présélectionné pour le projet Atlas"
+    },
+    {
+      "nom": "Comité de direction",
+      "type": "instance",
+      "alias": [
+        "CODIR"
+      ],
+      "description": "instance de direction de l'entreprise"
+    }
+  ],
+  "seconds": 16.2
+}

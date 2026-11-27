@@ -1,0 +1,7 @@
+{
+  "document": "10_RSE/Bilan carbone 2025.xlsx",
+  "body": "onglet « Énergie 2025 » · Consommation d'énergie 2025 (MWh)\n| Site | Consommation |\n|---|---|\n| Namur | 410 |\n| Seneffe | 6820 |\n| Gand | 3950 |\n| Lille | 60 |\n| Total | 11240 |",
+  "model": "qwen3.8-27b",
+  "context": "Cette section, située dans l'onglet « Énergie 2025 », détaille la consommation d'énergie annuelle par site. Elle présente les données relatives aux installations de Namur, Seneffe, Gand et Lille.",
+  "seconds": 2.2
+}

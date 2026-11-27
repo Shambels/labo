@@ -1,0 +1,7 @@
+{
+  "document": "00_Direction/CODIR/Annexes/2026-04-13 Annexe - Resultats enquete teletravail.pdf",
+  "body": "Graphique de la page 1\n**Jour de présence commun souhaité (% des répondants)**  \n| Lundi   | 9 % |  \n| Mardi   | 46 % |  \n| Mercredi| 12 % |  \n| Jeudi   | 31 % |  \n| Vendredi| 2 %  |  \n\n0 — 10 — 20 — 30 — 40\n\nEnquête du 16 au 27 mars 2026\n\n**Description**  \nIl s’agit d’un graphique en barres horizontales montrant la répartition des réponses à une enquête sur le jour de présence commun souhaité par les répondants. La barre la plus longue correspond au mardi (46 %), suivi du jeudi (31 %) et du mercredi (12 %). Les jours lundi et vendredi sont nettement moins demandés, avec respectivement 9 % et 2 %.",
+  "model": "qwen3.8-27b",
+  "context": "Ce graphique, situé dans la section des résultats de l'enquête sur le pilote de télétravail, détaille le jour de présence commun souhaité par les collaborateurs.",
+  "seconds": 1.8
+}

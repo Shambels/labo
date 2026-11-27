@@ -1,0 +1,7 @@
+{
+  "document": "05_Commercial/Tarifs/Tarif 2026 - projet v1.xlsx",
+  "body": "onglet « Tarif » · Tarif 2026 · PROJET v1 du 01/10/2025 (hausse uniforme de 4 %) · lignes 6 à 8\n| Code | Produit | Gamme | Prix 2025 | Prix 2026 | Hausse |\n|---|---|---|---|---|---|\n| VD30 | Ventis D300 | standard | 3290 | 3420 | 4,0 % |\n| VD45 | Ventis D450 | standard | 4180 | 4350 | 4,1 % |\n| VP45 | Ventis D450 Pro | premium | 5640 | 5870 | 4,1 % |",
+  "model": "qwen3.8-27b",
+  "context": "Cette section du tableau tarifaire présente les modèles de la gamme Ventis. Elle détaille les prix 2025 et 2026 ainsi que les hausses pour les références D300, D450 et D450 Pro.",
+  "seconds": 2.4
+}

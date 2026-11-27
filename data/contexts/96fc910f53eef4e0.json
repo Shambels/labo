@@ -1,0 +1,7 @@
+{
+  "document": "03_Production/Procedures/WI-GNT-09 Dagelijkse controle heftruck.pdf",
+  "body": "Doel\nElke chauffeur controleert zijn heftruck bij het begin van de ploeg.",
+  "model": "qwen3.8-27b",
+  "context": "Cette section définit l'objectif de la procédure de contrôle quotidien des chariots élévateurs. Elle précise que chaque conducteur doit inspecter son véhicule au début de son quart de travail.",
+  "seconds": 1.7
+}

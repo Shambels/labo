@@ -1,0 +1,7 @@
+{
+  "document": "07_IT/Projet_Atlas_ERP/COPIL/COPIL_Atlas_06_20260305.docx",
+  "body": "Projet Atlas : compte rendu du comité de pilotage n° 6\n1. Météo du projet par chantier\n| **Chantier** | **Statut** |\n| - | - |\n| Finance et comptabilité | Vert |\n| Achats | Vert |\n| Ventes et facturation | Vert |\n| Production (Seneffe) | Vert |\n| Logistique et WMS (Gand) | Orange |\n| Reprise des données | Orange |\n| Interfaces | Vert |\n| Formation et conduite du changement | Vert |",
+  "model": "qwen3.8-27b",
+  "context": "La rubrique « Météo du projet par chantier » du compte rendu du comité de pilotage n° 6 détaille l'état d'avancement des différents modules du projet Atlas.",
+  "seconds": 1.9
+}

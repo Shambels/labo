@@ -1,0 +1,7 @@
+{
+  "document": "02_RH/Enquetes/Enquete teletravail - reponses brutes.xlsx",
+  "body": "onglet « Réponses » · lignes 31 à 36\n| N° | Service | Site | Satisfaction (1-10) | Souhaite continuer | Commentaire |\n|---|---|---|---|---|---|\n| 31 | Direction | Namur | 10 | oui | Réunions hybrides à améliorer |\n| 32 | RH | Namur | 8 | oui | Gain de temps de trajet important |\n| 33 | RH | Namur | 9 | oui | Gain de temps de trajet important |\n| 34 | Direction | Namur | 6 | oui | Écran supplémentaire nécessaire à domicile |\n| 35 | Achats | Namur | 8 | oui | Gain de temps de trajet important |\n| 36 | Qualité | Namur | 9 | oui |  |",
+  "model": "qwen3.8-27b",
+  "context": "Ces lignes 31 à 36 de l'onglet « Réponses » concernent les retours des employés des services Direction, RH, Achats et Qualité basés à Namur.",
+  "seconds": 2.1
+}

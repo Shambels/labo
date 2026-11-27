@@ -1,0 +1,7 @@
+{
+  "document": "04_Qualite/Audits/Rapport audit ISO 9001 surveillance 2026.pdf",
+  "body": "Constats\n| Type | Constat | Site |\n| - | - | - |\n| Non-conformité mineure | Enregistrements d'étalonnage absents pour deux clés dynamométriques | Seneffe |\n| Non-conformité mineure | Suivi des formations des caristes incomplet (11 dossiers) | Gand |\n| Observation | Le traitement du rappel de l'Aéris 12 est bien documenté (8D) | Seneffe |\n| Observation | Les objectifs qualité 2026 ne sont pas encore déclinés par site | Namur |\n| Observation | Les fiches de données de sécurité du R290 sont à mettre à jour | Seneffe |\n| Observation | Les revues de direction ne mentionnent pas les risques liés au projet ERP | Namur |\n",
+  "model": "qwen3.8-27b",
+  "context": "Cette section détaille les constats d'audit relevés sur les sites de Seneffe, Gand et Namur. Elle recense les non-conformités mineures ainsi que les observations concernant la documentation qualité, les formations et les revues de direction.",
+  "seconds": 2.5
+}

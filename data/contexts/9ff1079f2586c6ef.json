@@ -1,0 +1,7 @@
+{
+  "document": "00_Direction/Conseil_administration/Projets_PV/Projet PV CA 2026-02-17 v1.docx",
+  "body": "Procès-verbal de la réunion du conseil d'administration\nRéunion du mardi 17 février 2026, au siège social à Namur, de 16 h 00 à 18 h 45.\nAdministrateurs présents : Jean-François Delcourt (Président, administrateur indépendant) ; Hélène Marchal (Administratrice déléguée) ; Philippe Rasquin (Administrateur, représentant de Rasquin Participations SA) ; Valérie Rasquin (Administratrice, représentante de Rasquin Participations SA) ; Olivier Thiry (Administrateur, représentant de Mosane Capital) ; Martine Claessens (Administratrice indépendante) ; Dirk Peeters (Administrateur indépendant).\nInvités : Laurent Dewit (directeur financier) ; Thomas Lambert (COO, point 4).\nSecrétaire du conseil : Caroline Hendrickx. Le conseil, valablement composé, peut délibérer.",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait se situe dans l'en-tête du procès-verbal, juste avant l'ordre du jour. Il liste les administrateurs présents, les invités et la secrétaire lors de la réunion du conseil d'administration.",
+  "seconds": 3.0
+}

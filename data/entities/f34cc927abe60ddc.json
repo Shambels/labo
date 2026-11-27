@@ -1,0 +1,25 @@
+{
+  "document": "02_RH/Notes_de_service/2025-12-04 NS-2025-02 Pilote de télétravail à deux jours par semaine.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Nadia Benali",
+      "type": "personne",
+      "alias": [],
+      "description": "émettrice de la note de service"
+    },
+    {
+      "nom": "Namur",
+      "type": "site",
+      "alias": [],
+      "description": "site du personnel administratif"
+    },
+    {
+      "nom": "Lille",
+      "type": "site",
+      "alias": [],
+      "description": "site du personnel administratif"
+    }
+  ],
+  "seconds": 3.1
+}

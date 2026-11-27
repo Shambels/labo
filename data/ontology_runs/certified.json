@@ -1,0 +1,253 @@
+{
+ "1": {
+  "answer": {
+   "response": "Le chiffre d'affaires net facturé HT de mars 2026 est la somme des montants HT des factures clients (fac_type = 'F') moins les avoirs (fac_type = 'A'), sur la date d'émission fac_dt du mois de mars 2026, dans la table dbo.vte_fact.",
+   "sql_code": "SELECT SUM(CASE WHEN fac_type = 'A' THEN -fac_mt_ht ELSE fac_mt_ht END) AS chiffre_affaires_net_ht FROM dbo.vte_fact WHERE fac_dt >= '2026-03-01' AND fac_dt < '2026-04-01'",
+   "sql_columns": [],
+   "custom_analyses_used": [],
+   "sql_response_from_db": [
+    "[{\"chiffre_affaires_net_ht\":13599646.6300000008}]"
+   ],
+   "thoughts": "- Searching the data and writing SQL: Looking up the catalog: chiffre d'affaires net facturé hors taxes\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Searching for: vte_fact fac_dt fac_type fac_mt_ht\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Submitting the final query."
+  },
+  "error": null,
+  "steps": [
+   "react_sql_agent",
+   "format_and_respond"
+  ],
+  "seconds": 23.7,
+  "missing": [],
+  "ok": true
+ },
+ "2": {
+  "answer": {
+   "response": "2817",
+   "sql_code": "SELECT SUM(CASE WHEN f.fac_type = 'F' THEN l.fl_qte\n                WHEN f.fac_motif = 'RETOUR' THEN -l.fl_qte\n                ELSE 0 END) AS unites\nFROM dbo.vte_fact_lig l\nJOIN dbo.vte_fact f ON f.fac_id = l.fac_id\nWHERE f.cli_id = (SELECT cli_id FROM dbo.cli_client WHERE cli_nom = 'Distrinergie SA')\n  AND f.fac_dt BETWEEN '2026-01-01' AND '2026-05-31'",
+   "sql_columns": [],
+   "custom_analyses_used": [],
+   "sql_response_from_db": [
+    "[{\"unites\":2817.0}]"
+   ],
+   "thoughts": "- Searching the data and writing SQL: Searching for: achats d'unités de produits finis Distrinergie\n- Searching the data and writing SQL: Searching for: ach_recep_lig réception achats quantité unités\n- Searching the data and writing SQL: Searching for: ach_cde_lig lignes commandes fournisseur quantité\n- Searching the data and writing SQL: Searching for: frn_fournisseur nom Distrinergie\n- Searching the data and writing SQL: Searching for: art_article catégorie produit fini\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Searching for: logistique expéditions livraisons client entrepôt\n- Searching the data and writing SQL: Searching for: produit fini art_type PF achat négoce\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Submitting the final query."
+  },
+  "error": null,
+  "steps": [
+   "react_sql_agent",
+   "format_and_respond"
+  ],
+  "seconds": 63.5,
+  "missing": [
+   "1230"
+  ],
+  "ok": false
+ },
+ "3": {
+  "answer": {
+   "response": "Here is the result of the query.",
+   "sql_code": "SELECT SUM(CASE WHEN m.mvt_type = 'REC' THEN m.mvt_qte ELSE 0 END) AS qte_recue,\n       SUM(CASE WHEN m.mvt_type = 'RET' THEN -m.mvt_qte ELSE 0 END) AS qte_retournee_fournisseur\nFROM dbo.stk_mvt m\nJOIN dbo.art_article a ON a.art_id = m.art_id\nWHERE m.mvt_lot = 'V-2544' AND a.fam_code = 'VAN' AND m.mvt_type IN ('REC','RET')",
+   "sql_columns": [],
+   "custom_analyses_used": [],
+   "sql_response_from_db": [
+    "[{\"qte_recue\":600.0,\"qte_retournee_fournisseur\":386.0}]"
+   ],
+   "thoughts": "- Searching the data and writing SQL: Searching for: vannes lot reçues retournées fournisseur\n- Searching the data and writing SQL: Searching for: retours fournisseurs article vannes quantité retournée lot\n- Searching the data and writing SQL: Searching for: article vannes art_article nom référence\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Submitting the final query."
+  },
+  "error": null,
+  "steps": [
+   "react_sql_agent",
+   "format_and_respond"
+  ],
+  "seconds": 35.5,
+  "missing": [
+   "2025-11-19",
+   "2025-12-03"
+  ],
+  "ok": false
+ },
+ "4": {
+  "answer": {
+   "response": "placeholder",
+   "sql_code": "SELECT\n  (SELECT acl.acl_qte FROM dbo.ach_cde_lig acl WHERE acl.acl_id = 2261)\n  -\n  (SELECT COALESCE(SUM(rl.rl_qte_recue), 0) FROM dbo.ach_recep_lig rl WHERE rl.rec_id = 966) AS qte_manquante,\n  (SELECT MIN(r.rec_dt) FROM dbo.ach_recep r\n   JOIN dbo.ach_recep_lig rl ON rl.rec_id = r.rec_id\n   WHERE r.ac_id = 907 AND r.rec_dt > '2026-03-03'\n     AND rl.acl_id = 2261) AS date_arrivee",
+   "sql_columns": [],
+   "custom_analyses_used": [],
+   "sql_response_from_db": [
+    "[{\"qte_manquante\":20.0,\"date_arrivee\":\"2026-03-10T00:00:00.000\"}]"
+   ],
+   "thoughts": "- Searching the data and writing SQL: Searching for: compresseurs livraison Kompra\n- Searching the data and writing SQL: Searching for: lignes de réception détail quantités réceptionnées commandées\n- Searching the data and writing SQL: Searching for: relivraison compresseurs reçus après livraison incomplète\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Searching for: dbo.art_article\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Submitting the final query."
+  },
+  "error": null,
+  "steps": [
+   "react_sql_agent",
+   "format_and_respond"
+  ],
+  "seconds": 68.3,
+  "missing": [],
+  "ok": true
+ },
+ "5": {
+  "answer": {
+   "response": "Le résultat net de l'exercice 2025 est calculé comme la somme des produits (comptes de classe 7) moins les charges (comptes de classe 6), à partir des lignes d'écriture validées des périodes rattachées à l'exercice 2025.",
+   "sql_code": "SELECT SUM(l.credit - l.debit) AS resultat_net\nFROM public.ligne_ecriture l\nJOIN public.ecriture e ON e.id_ecriture = l.id_ecriture\nJOIN public.periode p ON p.code_periode = e.code_periode\nWHERE e.statut = 'VALIDEE'\n  AND left(l.numero_compte, 1) IN ('6', '7')\n  AND l.numero_compte <> '693000'\n  AND p.code_exercice = '2025'",
+   "sql_columns": [],
+   "custom_analyses_used": [],
+   "sql_response_from_db": [
+    "[{\"resultat_net\":5412000.0}]"
+   ],
+   "thoughts": "- Searching the data and writing SQL: Searching for: résultat net exercice 2025\n- Searching the data and writing SQL: Searching for: Net result (résultat net)\n- Searching the data and writing SQL: Searching for: comptes de charges 6 et produits 7 résultat net\n- Searching the data and writing SQL: Searching for: ATTRIBUTE Net result (résultat net) of Accounting Entry Line\n- Searching the data and writing SQL: Searching for: periode code_periode exercice\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Submitting the final query."
+  },
+  "error": null,
+  "steps": [
+   "react_sql_agent",
+   "format_and_respond"
+  ],
+  "seconds": 37.2,
+  "missing": [],
+  "ok": true
+ },
+ "6": {
+  "answer": {
+   "response": "En mars 2026, l'EBITDA s'élève à 1 278 366,78 € et la marge d'EBITDA (EBITDA / chiffre d'affaires comptable, comptes 70) à 9,4 %.",
+   "sql_code": "SELECT\n  SUM(l.credit - l.debit) FILTER (WHERE left(l.numero_compte,2) IN ('60','61','62','64','70','71','72','73','74')) AS ebitda,\n  ROUND(100.0 * SUM(l.credit - l.debit) FILTER (WHERE left(l.numero_compte,2) IN ('60','61','62','64','70','71','72','73','74'))\n        / NULLIF(SUM(l.credit - l.debit) FILTER (WHERE left(l.numero_compte,2) = '70'), 0), 1) AS marge_ebitda_pct\nFROM public.ligne_ecriture l\nJOIN public.ecriture e ON e.id_ecriture = l.id_ecriture\nWHERE e.statut = 'VALIDEE'\n  AND e.code_periode = '2026-03'",
+   "sql_columns": [],
+   "custom_analyses_used": [],
+   "sql_response_from_db": [
+    "[{\"ebitda\":1278366.78,\"marge_ebitda_pct\":9.4}]"
+   ],
+   "thoughts": "- Searching the data and writing SQL: Searching for: EBITDA marge EBITDA\n- Searching the data and writing SQL: Searching for: EBITDA\n- Searching the data and writing SQL: Searching for: Booked revenue chiffre d'affaires comptable\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Submitting the final query."
+  },
+  "error": null,
+  "steps": [
+   "react_sql_agent",
+   "format_and_respond"
+  ],
+  "seconds": 31.5,
+  "missing": [],
+  "ok": true
+ },
+ "7": {
+  "answer": {
+   "response": "239 amortissements ont été comptabilisés en 2025, selon la table public.amortissement (périodes 2025-01 à 2025-12).",
+   "sql_code": "SELECT COUNT(*) AS nb_amortissements\nFROM public.amortissement\nWHERE code_periode LIKE '2025-%'",
+   "sql_columns": [],
+   "custom_analyses_used": [],
+   "sql_response_from_db": [
+    "[{\"nb_amortissements\":239}]"
+   ],
+   "thoughts": "- Searching the data and writing SQL: Searching for: amortissement comptabilisé\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Submitting the final query."
+  },
+  "error": null,
+  "steps": [
+   "react_sql_agent",
+   "format_and_respond"
+  ],
+  "seconds": 10.7,
+  "missing": [
+   "3310589.37"
+  ],
+  "ok": false
+ },
+ "8": {
+  "answer": {
+   "response": "Nombre de personnes sous contrat le 31/05/2026 par site : nombre distinct d'employés dont une ligne de contrat couvre cette date (start_date <= 31/05/2026 et end_date NULL ou >= 31/05/2026), regroupé par site via le département. Résultat : GENT 190, HERSTAL 6, NAMUR 126, SENEFFE 287.",
+   "sql_code": "SELECT d.site_code, COUNT(DISTINCT c.employee_id) AS personnes FROM public.contracts c JOIN public.departments d ON d.department_code = c.department_code WHERE c.start_date <= DATE '2026-05-31' AND (c.end_date IS NULL OR c.end_date >= DATE '2026-05-31') GROUP BY d.site_code",
+   "sql_columns": [],
+   "custom_analyses_used": [],
+   "sql_response_from_db": [
+    "[{\"site_code\":\"GENT\",\"personnes\":190},{\"site_code\":\"HERSTAL\",\"personnes\":6},{\"site_code\":\"NAMUR\",\"personnes\":126},{\"site_code\":\"SENEFFE\",\"personnes\":287}]"
+   ],
+   "thoughts": "- Searching the data and writing SQL: Searching for: personnes sous contrat contrats actifs site\n- Searching the data and writing SQL: Searching for: public.contracts columns end_date site\n- Searching the data and writing SQL: Searching for: Headcount on a date effectif definition\n- Searching the data and writing SQL: Searching for: Headcount on a date effectif definition SQL\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Submitting the final query."
+  },
+  "error": null,
+  "steps": [
+   "react_sql_agent",
+   "format_and_respond"
+  ],
+  "seconds": 29.2,
+  "missing": [],
+  "ok": true
+ },
+ "9": {
+  "answer": {
+   "response": "L'absence pour accident du travail (code ACC) survenue à Gand (site GENT) en novembre 2025 a duré 12 jours ouvrés, du 13 au 28 novembre 2025, pour l'employé M14017.",
+   "sql_code": "SELECT COUNT(*) AS nombre_de_jours\nFROM public.timesheets t\nJOIN public.contracts c USING (employee_id)\nJOIN public.departments d USING (department_code)\nWHERE t.absence_code = 'ACC'\n  AND d.site_code = 'GENT'\n  AND t.work_date BETWEEN '2025-11-01' AND '2025-11-30'",
+   "sql_columns": [],
+   "custom_analyses_used": [],
+   "sql_response_from_db": [
+    "[{\"nombre_de_jours\":12}]"
+   ],
+   "thoughts": "- Searching the data and writing SQL: Searching for: absence accident du travail durée jours\n- Searching the data and writing SQL: Searching for: work_sites site Gand\n- Searching the data and writing SQL: Searching for: employees columns site location\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Submitting the final query."
+  },
+  "error": null,
+  "steps": [
+   "react_sql_agent",
+   "format_and_respond"
+  ],
+  "seconds": 25.5,
+  "missing": [],
+  "ok": true
+ },
+ "10": {
+  "answer": {
+   "response": "Nombre de jours de télétravail (lignes de timesheets avec work_location = 'TELE') prestés entre le 1er avril et le 31 mai 2026.",
+   "sql_code": "SELECT COUNT(*) AS jours_teletravail\nFROM public.timesheets\nWHERE work_location = 'TELE'\n  AND work_date BETWEEN '2026-04-01' AND '2026-05-31'",
+   "sql_columns": [],
+   "custom_analyses_used": [],
+   "sql_response_from_db": [
+    "[{\"jours_teletravail\":823}]"
+   ],
+   "thoughts": "- Searching the data and writing SQL: Searching for: jours de télétravail prestés\n- Searching the data and writing SQL: Searching for: Telework days jours de télétravail attribute definition\n- Searching the data and writing SQL: Submitting the final query."
+  },
+  "error": null,
+  "steps": [
+   "react_sql_agent",
+   "format_and_respond"
+  ],
+  "seconds": 15.2,
+  "missing": [
+   "292",
+   "531"
+  ],
+  "ok": false
+ },
+ "11": {
+  "answer": {
+   "response": "I couldn't write a query that answers this question from the data I could find. Try rephrasing it, or name the table or measure you mean.",
+   "sql_code": "",
+   "sql_columns": [],
+   "custom_analyses_used": [],
+   "sql_response_from_db": null,
+   "thoughts": "- Searching the data and writing SQL: Searching for: chiffre d'affaires ventes ERP comptabilité\n- Searching the data and writing SQL: Searching for: chiffre d'affaires comptable booked revenue ligne d'écriture\n- Searching the data and writing SQL: Searching for: chiffre d'affaires net facturé HT definition\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Searching for: plan_comptable\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Submitting the final query.\n- Searching the data and writing SQL: Searching for: factures avoirs clients vte_fact\n- Searching the data and writing SQL: Submitting the final query.\n- Searching the data and writing SQL: Searching for: dbo.vte_fact\n- Searching the data and writing SQL: Submitting the final query.\n- Searching the data and writing SQL: Searching for: facture client avoir fac_type fac_mt_ht fac_dt\n- Searching the data and writing SQL: Submitting the final query.\n- Searching the data and writing SQL: Searching for: lignes d'écriture journal VEN ventes chiffre d'affaires\n- Searching the data and writing SQL: Submitting the final query.\n- Searching the data and writing SQL: Answering an information question.\n- Searching the data and writing SQL: Submitting the final query.\n- Searching the data and writing SQL: Looking up the catalog: chiffre d'affaires\n- Searching the data and writing SQL: Submitting the final query.\n- Searching the data and writing SQL: Searching for: factures avoirs clients\n- Searching the data and writing SQL: Submitting the final query.\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Submitting the final query."
+  },
+  "error": null,
+  "steps": [
+   "react_sql_agent",
+   "unconstructable_sql_response"
+  ],
+  "seconds": 240.7,
+  "missing": [
+   "11299581.08",
+   "10947075.29"
+  ],
+  "ok": false
+ },
+ "12": {
+  "answer": {
+   "response": "Sur sa fiche de paie de mars 2026, Joris Claes a reçu une commission (ligné COMMISSION) de 731,38 €, calculée sur une base de 731 384,61 € de ventes du mois précédent, à un taux de 10 %.",
+   "sql_code": "SELECT pl.amount AS commission, pl.quantity AS base_ventes_mois_prec, pl.rate AS taux\nFROM public.payslip_lines pl\nJOIN public.payslips p ON p.payslip_id = pl.payslip_id\nJOIN public.payroll_runs r ON r.run_id = p.run_id\nJOIN public.employees e ON e.employee_id = p.employee_id\nWHERE e.first_name = 'Joris' AND e.last_name = 'Claes'\n  AND pl.element_code = 'COMMISSION'\n  AND r.period_month = '2026-03-01'",
+   "sql_columns": [],
+   "custom_analyses_used": [],
+   "sql_response_from_db": [
+    "[{\"commission\":731.38,\"base_ventes_mois_prec\":731384.61,\"taux\":0.1}]"
+   ],
+   "thoughts": "- Searching the data and writing SQL: Searching for: fiches de paie commissions salaires employés\n- Searching the data and writing SQL: Searching for: commission base calculation employee payslip\n- Searching the data and writing SQL: Searching for: employees employee name first last\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Submitting the final query."
+  },
+  "error": null,
+  "steps": [
+   "react_sql_agent",
+   "format_and_respond"
+  ],
+  "seconds": 40.7,
+  "missing": [],
+  "ok": true
+ }
+}

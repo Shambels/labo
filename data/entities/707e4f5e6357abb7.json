@@ -1,0 +1,21 @@
+{
+  "document": "05_Commercial/Offres/DV-2026-0248 Bouwgroep.pdf",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Bouwgroep Verhaegen",
+      "type": "client",
+      "alias": [
+        "Bouwgroep"
+      ],
+      "description": "client de l'offre de prix"
+    },
+    {
+      "nom": "Ventis D450 Pro",
+      "type": "produit",
+      "alias": [],
+      "description": "produit de la gamme standard"
+    }
+  ],
+  "seconds": 2.8
+}

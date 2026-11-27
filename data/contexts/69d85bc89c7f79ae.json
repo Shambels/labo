@@ -1,0 +1,7 @@
+{
+  "document": "06_Achats/Appel_offres_ERP/Grille evaluation ERP v3.xlsx",
+  "body": "onglet « Grille » · Projet Atlas · grille d'évaluation des éditeurs ERP (notes sur 10) · Critère : Coût total sur 5 ans ; Poids : 15 ; Praxio : 7 ; Kerneo : 8 ; Sylvan Suite : 8",
+  "model": "qwen3.8-27b",
+  "context": "Cette ligne se trouve dans l'onglet « Grille » du projet Atlas. Elle détaille la note attribuée au critère du coût total sur cinq ans pour les éditeurs Praxio, Kerneo et Sylvan Suite.",
+  "seconds": 2.1
+}

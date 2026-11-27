@@ -1,0 +1,13 @@
+{
+  "document": "07_IT/Projet_Atlas_ERP/Documentation/Resultats recette 2.xlsx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Projet Atlas",
+      "type": "projet",
+      "alias": [],
+      "description": "projet de déploiement ERP de Calorvia"
+    }
+  ],
+  "seconds": 2.1
+}

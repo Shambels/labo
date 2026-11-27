@@ -1,0 +1,7 @@
+{
+  "document": "05_Commercial/Tarifs/Tarif 2026.xlsx",
+  "body": "onglet « Tarif »\nException : conditions particulières pour Distrinergie (avenant du 29/01/2026).",
+  "model": "qwen3.8-27b",
+  "context": "Cette rubrique, située à la fin de l'onglet Tarif, détaille les conditions particulières applicables au distributeur Distrinergie.",
+  "seconds": 1.4
+}

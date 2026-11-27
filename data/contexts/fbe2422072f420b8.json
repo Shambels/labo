@@ -1,0 +1,7 @@
+{
+  "document": "04_Qualite/Rappel_Aeris12/Liste numeros de serie concernes.xlsx",
+  "body": "onglet « Unités concernées » · lignes 173 à 176\n| Numéro de série | Date de production | Installateur | Région | Statut | Date d'intervention |\n|---|---|---|---|---|---|\n| AE12-25-4673 | 17/11/2025 | Distrinergie | Liège | Réparée | 14/02/2026 |\n| AE12-25-4674 | 17/11/2025 | Énergies du Condroz SRL | Namur | Réparée | 17/12/2025 |\n| AE12-25-4675 | 17/11/2025 | Habitat Confort SA | Brabant wallon | Réparée | 07/01/2026 |\n| AE12-25-4676 | 17/11/2025 | Thermo Services Lille SARL | Hauts-de-France | Réparée | 18/12/2025 |",
+  "model": "qwen3.8-27b",
+  "context": "Ces lignes figurent dans l'onglet « Unités concernées » du classeur de rappel. Elles détaillent le suivi des interventions sur des unités produites le 17 novembre 2025, installées par Distrinergie, Énergies du Condroz, Habitat Confort et Thermo Services.",
+  "seconds": 3.1
+}

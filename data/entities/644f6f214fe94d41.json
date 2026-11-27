@@ -1,0 +1,27 @@
+{
+  "document": "06_Achats/Bons_de_livraison/2026-03-03 BL Kompra.jpg",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Kompra GmbH",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "fournisseur de compresseurs scroll et palettes"
+    },
+    {
+      "nom": "KX-16S",
+      "type": "produit",
+      "alias": [],
+      "description": "compresseur scroll R32 de 16 kW"
+    },
+    {
+      "nom": "Seneffe plant",
+      "type": "site",
+      "alias": [
+        "SENEFFE"
+      ],
+      "description": "site de réception des marchandises"
+    }
+  ],
+  "seconds": 3.7
+}

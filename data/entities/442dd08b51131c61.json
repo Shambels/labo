@@ -1,0 +1,13 @@
+{
+  "document": "02_RH/Recrutement/Offres/REC-2026-005 Opérateur de production.html",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Aéris",
+      "type": "produit",
+      "alias": [],
+      "description": "gamme de pompes à chaleur assemblées sur ligne"
+    }
+  ],
+  "seconds": 1.5
+}

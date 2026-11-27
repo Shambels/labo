@@ -1,0 +1,7 @@
+{
+  "document": "05_Commercial/Comptes_cles/Plan de compte Distrinergie 2026.docx",
+  "body": "Plan de compte 2026 : Distrinergie\nRevues trimestrielles des volumes\n| **Revue** | **Date** | **Volume cumulé attendu** |\n| - | - | - |\n| T1 | 15 avril 2026 | 520 unités |\n| T2 | 15 juillet 2026 | 1 180 unités |\n| T3 | 15 octobre 2026 | 1 700 unités |\n| T4 | 15 janvier 2027 | 2 400 unités |",
+  "model": "qwen3.8-27b",
+  "context": "Cette section détaille le calendrier des revues trimestrielles et les volumes cumulés attendus pour le distributeur Distrinergie. Elle s'inscrit dans le plan de compte 2026 de ce premier client de Calorvia.",
+  "seconds": 2.3
+}

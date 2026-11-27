@@ -1,0 +1,219 @@
+{
+  "document": "00_Direction/CODIR/2025/PV_CODIR_2025-10-06.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Hélène Marchal",
+      "type": "personne",
+      "alias": [
+        "CEO"
+      ],
+      "description": "administratrice déléguée et présidente du comité"
+    },
+    {
+      "nom": "Laurent Dewit",
+      "type": "personne",
+      "alias": [
+        "CFO, LD"
+      ],
+      "description": "directeur financier"
+    },
+    {
+      "nom": "Thomas Lambert",
+      "type": "personne",
+      "alias": [
+        "COO, TL"
+      ],
+      "description": "directeur des opérations"
+    },
+    {
+      "nom": "Nadia Benali",
+      "type": "personne",
+      "alias": [],
+      "description": "directrice des ressources humaines"
+    },
+    {
+      "nom": "Pierre-Yves Collard",
+      "type": "personne",
+      "alias": [
+        "PYC"
+      ],
+      "description": "directeur commercial"
+    },
+    {
+      "nom": "Kevin Mertens",
+      "type": "personne",
+      "alias": [
+        "KM"
+      ],
+      "description": "directeur des systèmes d'information"
+    },
+    {
+      "nom": "Anne Vercammen",
+      "type": "personne",
+      "alias": [],
+      "description": "directrice qualité"
+    },
+    {
+      "nom": "Pieter De Smet",
+      "type": "personne",
+      "alias": [
+        "PDS"
+      ],
+      "description": "directeur du site de Gand"
+    },
+    {
+      "nom": "Julie Renard",
+      "type": "personne",
+      "alias": [],
+      "description": "secrétaire du comité de direction"
+    },
+    {
+      "nom": "Namur",
+      "type": "site",
+      "alias": [],
+      "description": "lieu de la séance du comité"
+    },
+    {
+      "nom": "Salle Meuse",
+      "type": "site",
+      "alias": [],
+      "description": "salle de réunion à Namur"
+    },
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "site de production de pompes à chaleur"
+    },
+    {
+      "nom": "Gand",
+      "type": "site",
+      "alias": [],
+      "description": "site de production de groupes de ventilation"
+    },
+    {
+      "nom": "Pompes à chaleur",
+      "type": "produit",
+      "alias": [],
+      "description": "produits fabriqués à Seneffe"
+    },
+    {
+      "nom": "Groupes de ventilation",
+      "type": "produit",
+      "alias": [],
+      "description": "produits fabriqués à Gand"
+    },
+    {
+      "nom": "Gamme standard",
+      "type": "produit",
+      "alias": [],
+      "description": "gamme de produits standard"
+    },
+    {
+      "nom": "Gamme premium",
+      "type": "produit",
+      "alias": [],
+      "description": "gamme de produits premium"
+    },
+    {
+      "nom": "Aéris 6",
+      "type": "produit",
+      "alias": [],
+      "description": "modèle de pompe à chaleur standard"
+    },
+    {
+      "nom": "Aéris 9",
+      "type": "produit",
+      "alias": [],
+      "description": "modèle de pompe à chaleur standard"
+    },
+    {
+      "nom": "Aéris 12",
+      "type": "produit",
+      "alias": [],
+      "description": "modèle de pompe à chaleur standard"
+    },
+    {
+      "nom": "Ventis D300",
+      "type": "produit",
+      "alias": [],
+      "description": "modèle de groupe de ventilation standard"
+    },
+    {
+      "nom": "Ventis D450",
+      "type": "produit",
+      "alias": [],
+      "description": "modèle de groupe de ventilation standard"
+    },
+    {
+      "nom": "Aéris Pro",
+      "type": "produit",
+      "alias": [],
+      "description": "modèle de pompe à chaleur premium"
+    },
+    {
+      "nom": "Ventis D450 Pro",
+      "type": "produit",
+      "alias": [],
+      "description": "modèle de groupe de ventilation premium"
+    },
+    {
+      "nom": "Klimaat Partners",
+      "type": "client",
+      "alias": [],
+      "description": "client augmentant sa commande annuelle"
+    },
+    {
+      "nom": "Praxio",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "éditeur de logiciel ERP"
+    },
+    {
+      "nom": "Kerneo",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "éditeur de logiciel ERP"
+    },
+    {
+      "nom": "Sylvan Suite",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "éditeur de logiciel ERP"
+    },
+    {
+      "nom": "NovaGest",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "éditeur de logiciel ERP"
+    },
+    {
+      "nom": "Orbis ERP",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "éditeur de logiciel ERP"
+    },
+    {
+      "nom": "Projet Atlas",
+      "type": "projet",
+      "alias": [],
+      "description": "projet de sélection d'éditeur ERP"
+    },
+    {
+      "nom": "Ligne L4",
+      "type": "équipement",
+      "alias": [],
+      "description": "ligne de production faisant l'objet d'offres"
+    },
+    {
+      "nom": "Comité de direction",
+      "type": "instance",
+      "alias": [
+        "CODIR"
+      ],
+      "description": "instance de direction de l'entreprise"
+    }
+  ],
+  "seconds": 22.7
+}

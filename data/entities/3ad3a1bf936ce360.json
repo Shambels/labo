@@ -1,0 +1,109 @@
+{
+  "document": "00_Direction/Conseil_administration/PV_signes/PV CA 2025-09-23 signé.pdf",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Jean-François Delcourt",
+      "type": "personne",
+      "alias": [],
+      "description": "Président et administrateur indépendant"
+    },
+    {
+      "nom": "Hélène Marchal",
+      "type": "personne",
+      "alias": [],
+      "description": "Administratrice déléguée"
+    },
+    {
+      "nom": "Philippe Rasquin",
+      "type": "personne",
+      "alias": [],
+      "description": "Administrateur représentant Rasquin Participations SA"
+    },
+    {
+      "nom": "Valérie Rasquin",
+      "type": "personne",
+      "alias": [],
+      "description": "Administratrice représentant Rasquin Participations SA"
+    },
+    {
+      "nom": "Olivier Thiry",
+      "type": "personne",
+      "alias": [],
+      "description": "Administrateur représentant Mosane Capital"
+    },
+    {
+      "nom": "Martine Claessens",
+      "type": "personne",
+      "alias": [],
+      "description": "Administratrice indépendante"
+    },
+    {
+      "nom": "Dirk Peeters",
+      "type": "personne",
+      "alias": [],
+      "description": "Administrateur indépendant"
+    },
+    {
+      "nom": "Laurent Dewit",
+      "type": "personne",
+      "alias": [],
+      "description": "Directeur financier"
+    },
+    {
+      "nom": "Caroline Hendrickx",
+      "type": "personne",
+      "alias": [],
+      "description": "Secrétaire du conseil"
+    },
+    {
+      "nom": "Namur",
+      "type": "site",
+      "alias": [
+        "siège social"
+      ],
+      "description": "Lieu de la réunion du conseil"
+    },
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "Site où des accidents de travail ont eu lieu"
+    },
+    {
+      "nom": "Rasquin Participations SA",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "Actionnaire représenté au conseil d'administration"
+    },
+    {
+      "nom": "Mosane Capital",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "Actionnaire représenté au conseil d'administration"
+    },
+    {
+      "nom": "GesPro 7",
+      "type": "produit",
+      "alias": [
+        "ERP"
+      ],
+      "description": "Logiciel de gestion d'entreprise à remplacer"
+    },
+    {
+      "nom": "Remplacement de l'ERP",
+      "type": "projet",
+      "alias": [],
+      "description": "Consultation pour remplacer le système GesPro 7"
+    },
+    {
+      "nom": "Conseil d'administration",
+      "type": "instance",
+      "alias": [
+        "CA"
+      ],
+      "description": "Organe de direction de Calorvia SA"
+    }
+  ],
+  "seconds": 12.8
+}

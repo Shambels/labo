@@ -1,0 +1,19 @@
+{
+  "document": "06_Achats/Appel_offres_ERP/Presentation Kerneo.pptx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Kerneo",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "éditeur de la solution ERP proposée"
+    },
+    {
+      "nom": "Bruxelles",
+      "type": "site",
+      "alias": [],
+      "description": "localisation du centre de données"
+    }
+  ],
+  "seconds": 1.9
+}

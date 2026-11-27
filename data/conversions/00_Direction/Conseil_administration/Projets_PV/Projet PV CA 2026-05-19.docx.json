@@ -1,0 +1,722 @@
+{
+  "schema_name": "DoclingDocument",
+  "version": "1.11.0",
+  "name": "Projet PV CA 2026-05-19",
+  "origin": {
+    "mimetype": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "binary_hash": 11414505356793769999,
+    "filename": "Projet PV CA 2026-05-19.docx"
+  },
+  "furniture": {
+    "self_ref": "#/furniture",
+    "children": [],
+    "content_layer": "furniture",
+    "name": "_root_",
+    "label": "unspecified"
+  },
+  "body": {
+    "self_ref": "#/body",
+    "children": [
+      {
+        "$ref": "#/groups/0"
+      },
+      {
+        "$ref": "#/groups/1"
+      },
+      {
+        "$ref": "#/groups/2"
+      }
+    ],
+    "content_layer": "body",
+    "name": "_root_",
+    "label": "unspecified"
+  },
+  "groups": [
+    {
+      "self_ref": "#/groups/0",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/0"
+        }
+      ],
+      "content_layer": "body",
+      "name": "header-0",
+      "label": "section"
+    },
+    {
+      "self_ref": "#/groups/1",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/21"
+        }
+      ],
+      "content_layer": "furniture",
+      "name": "page header",
+      "label": "section"
+    },
+    {
+      "self_ref": "#/groups/2",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/22"
+        }
+      ],
+      "content_layer": "furniture",
+      "name": "page footer",
+      "label": "section"
+    }
+  ],
+  "texts": [
+    {
+      "self_ref": "#/texts/0",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/1"
+        },
+        {
+          "$ref": "#/texts/2"
+        },
+        {
+          "$ref": "#/texts/3"
+        },
+        {
+          "$ref": "#/texts/4"
+        },
+        {
+          "$ref": "#/texts/5"
+        },
+        {
+          "$ref": "#/texts/7"
+        },
+        {
+          "$ref": "#/texts/9"
+        },
+        {
+          "$ref": "#/texts/12"
+        },
+        {
+          "$ref": "#/texts/14"
+        },
+        {
+          "$ref": "#/texts/16"
+        },
+        {
+          "$ref": "#/texts/18"
+        }
+      ],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [],
+      "orig": "Proc\u00e8s-verbal de la r\u00e9union du conseil d'administration",
+      "text": "Proc\u00e8s-verbal de la r\u00e9union du conseil d'administration",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/1",
+      "parent": {
+        "$ref": "#/texts/0"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [],
+      "orig": "R\u00e9union du mardi 19 mai 2026, au si\u00e8ge social \u00e0 Namur, de 16 h 00 \u00e0 18 h 45.",
+      "text": "R\u00e9union du mardi 19 mai 2026, au si\u00e8ge social \u00e0 Namur, de 16 h 00 \u00e0 18 h 45.",
+      "formatting": {
+        "bold": false,
+        "italic": false,
+        "underline": false,
+        "strikethrough": false,
+        "script": "baseline"
+      }
+    },
+    {
+      "self_ref": "#/texts/2",
+      "parent": {
+        "$ref": "#/texts/0"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [],
+      "orig": "Administrateurs pr\u00e9sents : Jean-Fran\u00e7ois Delcourt (Pr\u00e9sident, administrateur ind\u00e9pendant) ; H\u00e9l\u00e8ne Marchal (Administratrice d\u00e9l\u00e9gu\u00e9e) ; Philippe Rasquin (Administrateur, repr\u00e9sentant de Rasquin Participations SA) ; Val\u00e9rie Rasquin (Administratrice, repr\u00e9sentante de Rasquin Participations SA) ; Olivier Thiry (Administrateur, repr\u00e9sentant de Mosane Capital) ; Martine Claessens (Administratrice ind\u00e9pendante) ; Dirk Peeters (Administrateur ind\u00e9pendant).",
+      "text": "Administrateurs pr\u00e9sents : Jean-Fran\u00e7ois Delcourt (Pr\u00e9sident, administrateur ind\u00e9pendant) ; H\u00e9l\u00e8ne Marchal (Administratrice d\u00e9l\u00e9gu\u00e9e) ; Philippe Rasquin (Administrateur, repr\u00e9sentant de Rasquin Participations SA) ; Val\u00e9rie Rasquin (Administratrice, repr\u00e9sentante de Rasquin Participations SA) ; Olivier Thiry (Administrateur, repr\u00e9sentant de Mosane Capital) ; Martine Claessens (Administratrice ind\u00e9pendante) ; Dirk Peeters (Administrateur ind\u00e9pendant).",
+      "formatting": {
+        "bold": false,
+        "italic": false,
+        "underline": false,
+        "strikethrough": false,
+        "script": "baseline"
+      }
+    },
+    {
+      "self_ref": "#/texts/3",
+      "parent": {
+        "$ref": "#/texts/0"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [],
+      "orig": "Invit\u00e9s : Sarah Vandamme (directrice financi\u00e8re a.i.).",
+      "text": "Invit\u00e9s : Sarah Vandamme (directrice financi\u00e8re a.i.).",
+      "formatting": {
+        "bold": false,
+        "italic": false,
+        "underline": false,
+        "strikethrough": false,
+        "script": "baseline"
+      }
+    },
+    {
+      "self_ref": "#/texts/4",
+      "parent": {
+        "$ref": "#/texts/0"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [],
+      "orig": "Secr\u00e9taire du conseil : Caroline Hendrickx. Le conseil, valablement compos\u00e9, peut d\u00e9lib\u00e9rer.",
+      "text": "Secr\u00e9taire du conseil : Caroline Hendrickx. Le conseil, valablement compos\u00e9, peut d\u00e9lib\u00e9rer.",
+      "formatting": {
+        "bold": false,
+        "italic": false,
+        "underline": false,
+        "strikethrough": false,
+        "script": "baseline"
+      }
+    },
+    {
+      "self_ref": "#/texts/5",
+      "parent": {
+        "$ref": "#/texts/0"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/6"
+        }
+      ],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [],
+      "orig": "1. Approbation du proc\u00e8s-verbal de la s\u00e9ance pr\u00e9c\u00e9dente",
+      "text": "1. Approbation du proc\u00e8s-verbal de la s\u00e9ance pr\u00e9c\u00e9dente",
+      "level": 2
+    },
+    {
+      "self_ref": "#/texts/6",
+      "parent": {
+        "$ref": "#/texts/5"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [],
+      "orig": "Le proc\u00e8s-verbal de la s\u00e9ance du 21 avril 2026 est approuv\u00e9 \u00e0 l'unanimit\u00e9.",
+      "text": "Le proc\u00e8s-verbal de la s\u00e9ance du 21 avril 2026 est approuv\u00e9 \u00e0 l'unanimit\u00e9.",
+      "formatting": {
+        "bold": false,
+        "italic": false,
+        "underline": false,
+        "strikethrough": false,
+        "script": "baseline"
+      }
+    },
+    {
+      "self_ref": "#/texts/7",
+      "parent": {
+        "$ref": "#/texts/0"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/8"
+        }
+      ],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [],
+      "orig": "2. Nomination de la directrice financi\u00e8re",
+      "text": "2. Nomination de la directrice financi\u00e8re",
+      "level": 2
+    },
+    {
+      "self_ref": "#/texts/8",
+      "parent": {
+        "$ref": "#/texts/7"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [],
+      "orig": "Sur proposition de la CEO, le conseil nomme Isabelle G\u00e9rard au poste de directrice financi\u00e8re \u00e0 partir du 1er juillet 2026. Elle sera membre du comit\u00e9 de direction.",
+      "text": "Sur proposition de la CEO, le conseil nomme Isabelle G\u00e9rard au poste de directrice financi\u00e8re \u00e0 partir du 1er juillet 2026. Elle sera membre du comit\u00e9 de direction.",
+      "formatting": {
+        "bold": false,
+        "italic": false,
+        "underline": false,
+        "strikethrough": false,
+        "script": "baseline"
+      }
+    },
+    {
+      "self_ref": "#/texts/9",
+      "parent": {
+        "$ref": "#/texts/0"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/10"
+        },
+        {
+          "$ref": "#/texts/11"
+        }
+      ],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [],
+      "orig": "3. Situation financi\u00e8re \u00e0 fin avril 2026",
+      "text": "3. Situation financi\u00e8re \u00e0 fin avril 2026",
+      "level": 2
+    },
+    {
+      "self_ref": "#/texts/10",
+      "parent": {
+        "$ref": "#/texts/9"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [],
+      "orig": "Le chiffre d'affaires d'avril 2026 s'\u00e9l\u00e8ve \u00e0 12 100 k\u20ac. Le chiffre d'affaires cumul\u00e9 \u00e0 fin avril 2026 atteint 53 500 k\u20ac, soit 0,1 % au-dessus du budget (53 473 k\u20ac).",
+      "text": "Le chiffre d'affaires d'avril 2026 s'\u00e9l\u00e8ve \u00e0 12 100 k\u20ac. Le chiffre d'affaires cumul\u00e9 \u00e0 fin avril 2026 atteint 53 500 k\u20ac, soit 0,1 % au-dessus du budget (53 473 k\u20ac).",
+      "formatting": {
+        "bold": false,
+        "italic": false,
+        "underline": false,
+        "strikethrough": false,
+        "script": "baseline"
+      }
+    },
+    {
+      "self_ref": "#/texts/11",
+      "parent": {
+        "$ref": "#/texts/9"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [],
+      "orig": "L'EBITDA cumul\u00e9 s'\u00e9l\u00e8ve \u00e0 4 938 k\u20ac, soit 9,2 % du chiffre d'affaires, pour un objectif budg\u00e9taire de 9,5 %.",
+      "text": "L'EBITDA cumul\u00e9 s'\u00e9l\u00e8ve \u00e0 4 938 k\u20ac, soit 9,2 % du chiffre d'affaires, pour un objectif budg\u00e9taire de 9,5 %.",
+      "formatting": {
+        "bold": false,
+        "italic": false,
+        "underline": false,
+        "strikethrough": false,
+        "script": "baseline"
+      }
+    },
+    {
+      "self_ref": "#/texts/12",
+      "parent": {
+        "$ref": "#/texts/0"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/13"
+        }
+      ],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [],
+      "orig": "4. Projet ERP : go/no-go",
+      "text": "4. Projet ERP : go/no-go",
+      "level": 2
+    },
+    {
+      "self_ref": "#/texts/13",
+      "parent": {
+        "$ref": "#/texts/12"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [],
+      "orig": "Le comit\u00e9 de direction a donn\u00e9 son feu vert le 18 mai : mise en production le 1er juin 2026 \u00e0 Namur, Seneffe et Lille, et le 15 juin 2026 \u00e0 Gand.",
+      "text": "Le comit\u00e9 de direction a donn\u00e9 son feu vert le 18 mai : mise en production le 1er juin 2026 \u00e0 Namur, Seneffe et Lille, et le 15 juin 2026 \u00e0 Gand.",
+      "formatting": {
+        "bold": false,
+        "italic": false,
+        "underline": false,
+        "strikethrough": false,
+        "script": "baseline"
+      }
+    },
+    {
+      "self_ref": "#/texts/14",
+      "parent": {
+        "$ref": "#/texts/0"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/15"
+        }
+      ],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [],
+      "orig": "5. Op\u00e9rations",
+      "text": "5. Op\u00e9rations",
+      "level": 2
+    },
+    {
+      "self_ref": "#/texts/15",
+      "parent": {
+        "$ref": "#/texts/14"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [],
+      "orig": "L'entrep\u00f4t de Herstal est op\u00e9rationnel depuis le 18 mai 2026. La livraison de la ligne L4 a pris trois semaines de retard ; sa mise en service est pr\u00e9vue le 6 juillet 2026.",
+      "text": "L'entrep\u00f4t de Herstal est op\u00e9rationnel depuis le 18 mai 2026. La livraison de la ligne L4 a pris trois semaines de retard ; sa mise en service est pr\u00e9vue le 6 juillet 2026.",
+      "formatting": {
+        "bold": false,
+        "italic": false,
+        "underline": false,
+        "strikethrough": false,
+        "script": "baseline"
+      }
+    },
+    {
+      "self_ref": "#/texts/16",
+      "parent": {
+        "$ref": "#/texts/0"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/17"
+        }
+      ],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [],
+      "orig": "6. Assembl\u00e9e g\u00e9n\u00e9rale du 9 juin",
+      "text": "6. Assembl\u00e9e g\u00e9n\u00e9rale du 9 juin",
+      "level": 2
+    },
+    {
+      "self_ref": "#/texts/17",
+      "parent": {
+        "$ref": "#/texts/16"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [],
+      "orig": "Le conseil approuve le rapport de gestion et l'ordre du jour de l'assembl\u00e9e g\u00e9n\u00e9rale ordinaire.",
+      "text": "Le conseil approuve le rapport de gestion et l'ordre du jour de l'assembl\u00e9e g\u00e9n\u00e9rale ordinaire.",
+      "formatting": {
+        "bold": false,
+        "italic": false,
+        "underline": false,
+        "strikethrough": false,
+        "script": "baseline"
+      }
+    },
+    {
+      "self_ref": "#/texts/18",
+      "parent": {
+        "$ref": "#/texts/0"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/19"
+        },
+        {
+          "$ref": "#/texts/20"
+        },
+        {
+          "$ref": "#/tables/0"
+        }
+      ],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [],
+      "orig": "7. Prochaine r\u00e9union",
+      "text": "7. Prochaine r\u00e9union",
+      "level": 2
+    },
+    {
+      "self_ref": "#/texts/19",
+      "parent": {
+        "$ref": "#/texts/18"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [],
+      "orig": "Mardi 16 juin 2026 \u00e0 16 h 00.",
+      "text": "Mardi 16 juin 2026 \u00e0 16 h 00.",
+      "formatting": {
+        "bold": false,
+        "italic": false,
+        "underline": false,
+        "strikethrough": false,
+        "script": "baseline"
+      }
+    },
+    {
+      "self_ref": "#/texts/20",
+      "parent": {
+        "$ref": "#/texts/18"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [],
+      "orig": "",
+      "text": ""
+    },
+    {
+      "self_ref": "#/texts/21",
+      "parent": {
+        "$ref": "#/groups/1"
+      },
+      "children": [],
+      "content_layer": "furniture",
+      "label": "text",
+      "prov": [],
+      "orig": "Calorvia SA \u00b7 Conseil d'administration \u00b7 Proc\u00e8s-verbal",
+      "text": "Calorvia SA \u00b7 Conseil d'administration \u00b7 Proc\u00e8s-verbal",
+      "formatting": {
+        "bold": false,
+        "italic": false,
+        "underline": false,
+        "strikethrough": false,
+        "script": "baseline"
+      }
+    },
+    {
+      "self_ref": "#/texts/22",
+      "parent": {
+        "$ref": "#/groups/2"
+      },
+      "children": [],
+      "content_layer": "furniture",
+      "label": "text",
+      "prov": [],
+      "orig": "Calorvia SA (entreprise fictive) \u00b7 Diffusion interne",
+      "text": "Calorvia SA (entreprise fictive) \u00b7 Diffusion interne",
+      "formatting": {
+        "bold": false,
+        "italic": false,
+        "underline": false,
+        "strikethrough": false,
+        "script": "baseline"
+      }
+    }
+  ],
+  "pictures": [],
+  "tables": [
+    {
+      "self_ref": "#/tables/0",
+      "parent": {
+        "$ref": "#/texts/18"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "table",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "data": {
+        "table_cells": [
+          {
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 0,
+            "end_row_offset_idx": 1,
+            "start_col_offset_idx": 0,
+            "end_col_offset_idx": 1,
+            "text": "Jean-Fran\u00e7ois Delcourt, pr\u00e9sident",
+            "column_header": true,
+            "row_header": false,
+            "row_section": false,
+            "fillable": false
+          },
+          {
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 0,
+            "end_row_offset_idx": 1,
+            "start_col_offset_idx": 1,
+            "end_col_offset_idx": 2,
+            "text": "H\u00e9l\u00e8ne Marchal, administratrice d\u00e9l\u00e9gu\u00e9e",
+            "column_header": true,
+            "row_header": false,
+            "row_section": false,
+            "fillable": false
+          },
+          {
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 0,
+            "end_row_offset_idx": 1,
+            "start_col_offset_idx": 2,
+            "end_col_offset_idx": 3,
+            "text": "Caroline Hendrickx, secr\u00e9taire",
+            "column_header": true,
+            "row_header": false,
+            "row_section": false,
+            "fillable": false
+          },
+          {
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 1,
+            "end_row_offset_idx": 2,
+            "start_col_offset_idx": 0,
+            "end_col_offset_idx": 1,
+            "text": "\n\n(signature)",
+            "column_header": false,
+            "row_header": false,
+            "row_section": false,
+            "fillable": false
+          },
+          {
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 1,
+            "end_row_offset_idx": 2,
+            "start_col_offset_idx": 1,
+            "end_col_offset_idx": 2,
+            "text": "\n\n(signature)",
+            "column_header": false,
+            "row_header": false,
+            "row_section": false,
+            "fillable": false
+          },
+          {
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 1,
+            "end_row_offset_idx": 2,
+            "start_col_offset_idx": 2,
+            "end_col_offset_idx": 3,
+            "text": "\n\n(signature)",
+            "column_header": false,
+            "row_header": false,
+            "row_section": false,
+            "fillable": false
+          }
+        ],
+        "num_rows": 2,
+        "num_cols": 3,
+        "orientation": "rot_0",
+        "grid": [
+          [
+            {
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "Jean-Fran\u00e7ois Delcourt, pr\u00e9sident",
+              "column_header": true,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "H\u00e9l\u00e8ne Marchal, administratrice d\u00e9l\u00e9gu\u00e9e",
+              "column_header": true,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "Caroline Hendrickx, secr\u00e9taire",
+              "column_header": true,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            }
+          ],
+          [
+            {
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "\n\n(signature)",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "\n\n(signature)",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "\n\n(signature)",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            }
+          ]
+        ]
+      },
+      "annotations": []
+    }
+  ],
+  "key_value_items": [],
+  "form_items": [],
+  "pages": {}
+}

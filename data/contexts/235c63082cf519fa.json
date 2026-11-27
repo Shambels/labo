@@ -1,0 +1,7 @@
+{
+  "document": "07_IT/Securite/Procedure MFA v2.docx",
+  "body": "Procédure IT-12 : activer l'authentification multifacteur (version 2)\n2. Comptes personnels\n1. Installer l'application d'authentification sur le smartphone professionnel.\n2. Se connecter au portail https://mfa.calorvia.example avec son identifiant habituel.\n3. Scanner le QR code affiché avec l'application.\n4. Saisir le code à six chiffres pour confirmer.\n5. Enregistrer les codes de secours dans le coffre-fort de mots de passe.",
+  "model": "qwen3.8-27b",
+  "context": "Cette section détaille les étapes d'activation de l'authentification multifacteur pour les comptes personnels. Elle décrit la procédure d'installation de l'application sur le smartphone professionnel et la configuration via le portail dédié.",
+  "seconds": 2.1
+}

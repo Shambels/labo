@@ -1,0 +1,620 @@
+{
+  "schema_name": "DoclingDocument",
+  "version": "1.11.0",
+  "name": "Rapport 8D Aeris 12 vanne 4 voies",
+  "origin": {
+    "mimetype": "application/pdf",
+    "binary_hash": 10431343226032420763,
+    "filename": "Rapport 8D Aeris 12 vanne 4 voies.pdf"
+  },
+  "furniture": {
+    "self_ref": "#/furniture",
+    "children": [],
+    "content_layer": "furniture",
+    "name": "_root_",
+    "label": "unspecified"
+  },
+  "body": {
+    "self_ref": "#/body",
+    "children": [
+      {
+        "$ref": "#/texts/0"
+      },
+      {
+        "$ref": "#/texts/1"
+      },
+      {
+        "$ref": "#/texts/2"
+      },
+      {
+        "$ref": "#/texts/3"
+      },
+      {
+        "$ref": "#/texts/4"
+      },
+      {
+        "$ref": "#/texts/5"
+      },
+      {
+        "$ref": "#/texts/6"
+      },
+      {
+        "$ref": "#/texts/7"
+      },
+      {
+        "$ref": "#/texts/8"
+      },
+      {
+        "$ref": "#/texts/9"
+      },
+      {
+        "$ref": "#/texts/10"
+      },
+      {
+        "$ref": "#/texts/11"
+      },
+      {
+        "$ref": "#/texts/12"
+      },
+      {
+        "$ref": "#/texts/13"
+      },
+      {
+        "$ref": "#/texts/14"
+      },
+      {
+        "$ref": "#/texts/15"
+      },
+      {
+        "$ref": "#/texts/16"
+      },
+      {
+        "$ref": "#/texts/17"
+      },
+      {
+        "$ref": "#/texts/18"
+      }
+    ],
+    "content_layer": "body",
+    "name": "_root_",
+    "label": "unspecified"
+  },
+  "groups": [],
+  "texts": [
+    {
+      "self_ref": "#/texts/0",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "furniture",
+      "label": "page_header",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 62.3622,
+            "t": 813.0068128,
+            "r": 189.7371967999999,
+            "b": 806.1630624000001,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            38
+          ]
+        }
+      ],
+      "orig": "Calorvia SA \u00b7 Rapport 8D \u00b7 NC-2025-047",
+      "text": "Calorvia SA \u00b7 Rapport 8D \u00b7 NC-2025-047"
+    },
+    {
+      "self_ref": "#/texts/1",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 773.5719,
+            "r": 420.84658079999997,
+            "b": 759.7385666666667,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            56
+          ]
+        }
+      ],
+      "orig": "Rapport 8D : fuites de fluide frigorig\u00e8ne sur l'A\u00e9ris 12",
+      "text": "Rapport 8D : fuites de fluide frigorig\u00e8ne sur l'A\u00e9ris 12",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/2",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 746.80236875,
+            "r": 124.325335,
+            "b": 735.9950770833334,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            10
+          ]
+        }
+      ],
+      "orig": "D1. \u00c9quipe",
+      "text": "D1. \u00c9quipe",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/3",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 727.4337168000001,
+            "r": 516.1349005499997,
+            "b": 718.4512944,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            103
+          ]
+        }
+      ],
+      "orig": "Anne Vercammen (pilote), Romain Dethier, C\u00e9line Moreau, Fabrice Collin, un ing\u00e9nieur qualit\u00e9 de Valtek.",
+      "text": "Anne Vercammen (pilote), Romain Dethier, C\u00e9line Moreau, Fabrice Collin, un ing\u00e9nieur qualit\u00e9 de Valtek."
+    },
+    {
+      "self_ref": "#/texts/4",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 704.80236875,
+            "r": 217.65419624999998,
+            "b": 693.9950770833334,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            27
+          ]
+        }
+      ],
+      "orig": "D2. Description du probl\u00e8me",
+      "text": "D2. Description du probl\u00e8me",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/5",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 685.4337168000001,
+            "r": 517.8575525999996,
+            "b": 662.4512944,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            158
+          ]
+        }
+      ],
+      "orig": "9 r\u00e9clamations re\u00e7ues entre le 24 novembre et le 1er d\u00e9cembre 2025 : fuite de R32 au niveau de la vanne quatre voies, quelques jours apr\u00e8s la mise en service.",
+      "text": "9 r\u00e9clamations re\u00e7ues entre le 24 novembre et le 1er d\u00e9cembre 2025 : fuite de R32 au niveau de la vanne quatre voies, quelques jours apr\u00e8s la mise en service."
+    },
+    {
+      "self_ref": "#/texts/6",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 648.80236875,
+            "r": 212.20375375,
+            "b": 637.9950770833334,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            26
+          ]
+        }
+      ],
+      "orig": "D3. Actions de confinement",
+      "text": "D3. Actions de confinement",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/7",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 629.4337168000001,
+            "r": 518.7957864000001,
+            "b": 606.4512944,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            124
+          ]
+        }
+      ],
+      "orig": "Blocage du stock de vannes du lot V-2544 (386 pi\u00e8ces restantes). Contr\u00f4le \u00e0 100 % des A\u00e9ris 12 en stock \u00e0 Seneffe et \u00e0 Gand.",
+      "text": "Blocage du stock de vannes du lot V-2544 (386 pi\u00e8ces restantes). Contr\u00f4le \u00e0 100 % des A\u00e9ris 12 en stock \u00e0 Seneffe et \u00e0 Gand."
+    },
+    {
+      "self_ref": "#/texts/8",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 592.80236875,
+            "r": 154.256975,
+            "b": 581.9950770833334,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            16
+          ]
+        }
+      ],
+      "orig": "D4. Cause racine",
+      "text": "D4. Cause racine",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/9",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 573.4337168000001,
+            "r": 523.2203446499997,
+            "b": 536.4512944,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            249
+          ]
+        }
+      ],
+      "orig": "Brasage incomplet du raccord de la vanne chez Valtek : un four de brasage du fournisseur a fonctionn\u00e9 6 jours avec une temp\u00e9rature trop basse. Le d\u00e9faut n'est pas visible au test d'\u00e9tanch\u00e9it\u00e9 \u00e0 42 bar ; il appara\u00eet apr\u00e8s plusieurs cycles thermiques.",
+      "text": "Brasage incomplet du raccord de la vanne chez Valtek : un four de brasage du fournisseur a fonctionn\u00e9 6 jours avec une temp\u00e9rature trop basse. Le d\u00e9faut n'est pas visible au test d'\u00e9tanch\u00e9it\u00e9 \u00e0 42 bar ; il appara\u00eet apr\u00e8s plusieurs cycles thermiques."
+    },
+    {
+      "self_ref": "#/texts/10",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 522.80236875,
+            "r": 187.1488225,
+            "b": 511.99507708333334,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            23
+          ]
+        }
+      ],
+      "orig": "D5. Actions correctives",
+      "text": "D5. Actions correctives",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/11",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 503.4337168,
+            "r": 497.37024974999974,
+            "b": 480.45129440000005,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            149
+          ]
+        }
+      ],
+      "orig": "Rappel pr\u00e9ventif des unit\u00e9s \u00e9quip\u00e9es du lot V-2544 ; contr\u00f4le visuel \u00e0 100 % des brasures de vanne \u00e0 Seneffe ; essai destructif tous les 50 brasages.",
+      "text": "Rappel pr\u00e9ventif des unit\u00e9s \u00e9quip\u00e9es du lot V-2544 ; contr\u00f4le visuel \u00e0 100 % des brasures de vanne \u00e0 Seneffe ; essai destructif tous les 50 brasages."
+    },
+    {
+      "self_ref": "#/texts/12",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 466.80236875,
+            "r": 166.5616625,
+            "b": 455.99507708333334,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            17
+          ]
+        }
+      ],
+      "orig": "D6. Mise en \u0153uvre",
+      "text": "D6. Mise en \u0153uvre",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/13",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 447.4337168,
+            "r": 476.74451280000005,
+            "b": 424.45129440000005,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            147
+          ]
+        }
+      ],
+      "orig": "214 unit\u00e9s concern\u00e9es, produites du 3 au 21 novembre 2025 (num\u00e9ros de s\u00e9rie AE12-25-4501 \u00e0 AE12-25-4714). Interventions confi\u00e9es aux installateurs.",
+      "text": "214 unit\u00e9s concern\u00e9es, produites du 3 au 21 novembre 2025 (num\u00e9ros de s\u00e9rie AE12-25-4501 \u00e0 AE12-25-4714). Interventions confi\u00e9es aux installateurs."
+    },
+    {
+      "self_ref": "#/texts/14",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 410.80236875,
+            "r": 145.87685,
+            "b": 399.99507708333334,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            14
+          ]
+        }
+      ],
+      "orig": "D7. Pr\u00e9vention",
+      "text": "D7. Pr\u00e9vention",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/15",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 391.4337168,
+            "r": 526.6400256,
+            "b": 382.45129440000005,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            103
+          ]
+        }
+      ],
+      "orig": "R\u00e9vision C du mode op\u00e9ratoire MO-SEN-07. Audit du processus de brasage de Valtek pr\u00e9vu en f\u00e9vrier 2026.",
+      "text": "R\u00e9vision C du mode op\u00e9ratoire MO-SEN-07. Audit du processus de brasage de Valtek pr\u00e9vu en f\u00e9vrier 2026."
+    },
+    {
+      "self_ref": "#/texts/16",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 368.80236875,
+            "r": 126.92543375,
+            "b": 357.99507708333334,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            11
+          ]
+        }
+      ],
+      "orig": "D8. Cl\u00f4ture",
+      "text": "D8. Cl\u00f4ture",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/17",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 349.4337168,
+            "r": 285.5348045999999,
+            "b": 340.45129440000005,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            50
+          ]
+        }
+      ],
+      "orig": "\u00c0 prononcer apr\u00e8s la fin de la campagne de rappel.",
+      "text": "\u00c0 prononcer apr\u00e8s la fin de la campagne de rappel."
+    },
+    {
+      "self_ref": "#/texts/18",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "furniture",
+      "label": "page_footer",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 204.7511,
+            "t": 33.47927279999999,
+            "r": 390.52453760000003,
+            "b": 26.635522400000013,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            61
+          ]
+        }
+      ],
+      "orig": "Calorvia SA (entreprise fictive) \u00b7 Diffusion interne \u00b7 page 1",
+      "text": "Calorvia SA (entreprise fictive) \u00b7 Diffusion interne \u00b7 page 1"
+    }
+  ],
+  "pictures": [],
+  "tables": [],
+  "key_value_items": [],
+  "form_items": [],
+  "pages": {
+    "1": {
+      "size": {
+        "width": 595.2756,
+        "height": 841.8898
+      },
+      "page_no": 1
+    }
+  }
+}

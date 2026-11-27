@@ -1,0 +1,19 @@
+{
+  "document": "02_RH/Notes_de_service/2026-04-21 NS-2026-05 Journée portes ouvertes de Seneffe.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Lucie Bastin",
+      "type": "personne",
+      "alias": [],
+      "description": "émettrice de la note de service"
+    },
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "usine accueillant la journée portes ouvertes"
+    }
+  ],
+  "seconds": 2.1
+}

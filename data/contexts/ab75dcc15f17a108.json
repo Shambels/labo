@@ -1,0 +1,7 @@
+{
+  "document": "03_Production/Gent/Fotos_installaties/IMG_20251124_Batterijlader.jpg",
+  "body": "Image\nVoltis  \nBatterijlader heftrucks  \nType  \nCB-48/150  \nSerienummer  \nVC-2021-8840  \nBouwjaar  \n2021  \nUitgangsspanning  \n48 V  \nLaadstroom  \n150 A  \nCE  \n\n| Type | CB-48/150 |\n|------|-----------|\n| Serienummer | VC-2021-8840 |\n| Bouwjaar | 2021 |\n| Uitgangsspanning | 48 V |\n| Laadstroom | 150 A |\n\nDescription  \nIl s’agit d’une plaque technique métallique fixée sur un appareil, probablement un chargeur de batterie pour chariot élévateur. Elle affiche les spécifications techniques du produit : type, numéro de série, année de fabrication, tension de sortie et courant de charge. Le logo CE en bas à droite indique la conformité aux normes européennes de sécurité.",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait se trouve dans la rubrique des photos d'installations de production à Gent. Il détaille les caractéristiques techniques d'un chargeur de batterie pour chariot élévateur Voltis.",
+  "seconds": 2.3
+}

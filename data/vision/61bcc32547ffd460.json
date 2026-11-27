@@ -1,0 +1,10 @@
+{
+  "path": "00_Direction/Conseil_administration/PV_signes/PV CA 2025-11-18 signé.pdf",
+  "kind": "scan_page",
+  "page": 1,
+  "index": null,
+  "model": "qwen3.8-27b",
+  "prompt": "Tu transcris des documents d'entreprise pour un moteur de recherche.\n1. Recopie tout le texte visible, exactement comme il est écrit : nombres, codes, dates, unités et\n   annotations manuscrites compris. Rends les tableaux en Markdown.\n2. Dans un organigramme ou une arborescence, regroupe chaque case sous la case dont elle dépend : écris la case\n   supérieure (son texte complet, par exemple le nom et la fonction), puis, juste en dessous, chaque case qui lui\n   est rattachée sur une ligne qui commence par « - ». Ne recopie jamais les cases rangée par rangée : une case n'a\n   de sens qu'avec celle dont elle dépend.\n3. Dans un schéma ou un plan, recopie chaque texte posé sur un lien, une flèche ou un trait (débit, distance,\n   type de connexion), sur une ligne qui commence par le nom des deux éléments reliés, tels qu'ils sont écrits sur\n   l'image, séparés par un tiret, puis deux-points et le texte. N'écris rien pour un lien sans texte.\n4. Puis, sous le titre « Description », décris en trois phrases au plus le type d'image (organigramme,\n   plan, graphique, photo, facture...) et ce qu'elle montre qui n'est pas écrit : la valeur la plus haute d'un\n   graphique, la position des éléments d'un plan.\nN'invente rien : si un élément est illisible, écris [illisible].",
+  "seconds": 9.0,
+  "text": "Calorvia SA · Conseil d'administration · Procès-verbal\n\nJean-François Delcourt, président\n[signature manuscrite]\n\nHélène Marchal, administratrice déléguée\n[signature manuscrite]\n\nCaroline Hendrickx, secrétaire\n[signature manuscrite]\n\nCalorvia SA (entreprise fictive) · Diffusion interne · page 2\n\nDescription\nIl s'agit de la page de signatures d'un document administratif, probablement la dernière page d'un procès-verbal. L'image montre trois signatures manuscrites illisibles, chacune apposée sous le nom et la fonction d'un membre du conseil d'administration. La page est majoritairement vide, ne contenant que les en-têtes et pieds de page."
+}

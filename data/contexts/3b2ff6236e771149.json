@@ -1,0 +1,7 @@
+{
+  "document": "03_Production/Gent/Maandrapporten/Productierapport Gent 2026-05.xlsx",
+  "body": "onglet « Productie » · Productierapport · site Gent · mei 2026 · Lijn : V1 ; Producten : Ventis D300 ; Geproduceerde eenheden : 1357 ; Stilstand (u) : 6.4 ; Uitval (%) : 1.5 ; OEE (%) : 71.3",
+  "model": "qwen3.8-27b",
+  "context": "Cette ligne de données se trouve dans l'onglet « Productie » du rapport mensuel du site de Gent. Elle détaille les indicateurs de production de la ligne V1 pour le modèle Ventis D300.",
+  "seconds": 2.2
+}

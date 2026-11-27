@@ -1,0 +1,7 @@
+{
+  "document": "00_Direction/CODIR/2025/PV_CODIR_2025-10-06.docx",
+  "body": "Procès-verbal du Comité de direction\n3. Suivi des actions\n| **N°** | **Action** | **Responsable** | **Échéance** | **Statut / commentaire** |\n| - | - | - | - | - |\n| A-25-001 | Envoyer les canevas budgétaires 2026 aux responsables de département | LD | 12/09/2025 | Clôturée. Canevas envoyés le 10 septembre. |\n| A-25-003 | Finaliser le cahier des charges ERP et l'envoyer à cinq éditeurs | KM | 03/10/2025 | Clôturée. Cahier des charges envoyé le 3 octobre à cinq éditeurs. |\n| A-25-004 | Obtenir au moins deux offres fermes pour la ligne L4 | TL | 17/10/2025 | En cours |\n",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait se situe dans la rubrique « Suivi des actions » du procès-verbal. Il détaille l'état d'avancement des tâches relatives aux canevas budgétaires, au cahier des charges ERP et aux offres pour la ligne L4.",
+  "seconds": 2.4
+}

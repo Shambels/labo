@@ -1,0 +1,7 @@
+{
+  "document": "06_Achats/Appel_offres_ERP/Presentation Kerneo.pptx",
+  "body": "Notre proposition\n• Solution modulaire pour les PME industrielles.\n• Hébergement dans un centre de données à Bruxelles.\n• Tableaux de bord financiers intégrés.\n• Déploiement en 20 semaines.",
+  "model": "qwen3.8-27b",
+  "context": "Cette section détaille les caractéristiques techniques et logistiques de la solution ERP proposée par Kerneo. Elle décrit l'architecture modulaire, l'hébergement à Bruxelles et le calendrier de déploiement.",
+  "seconds": 1.8
+}

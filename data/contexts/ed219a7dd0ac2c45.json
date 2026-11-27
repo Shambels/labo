@@ -1,0 +1,7 @@
+{
+  "document": "03_Production/Seneffe/Rapports_mensuels/Rapport production Seneffe 2025-12.xlsx",
+  "body": "onglet « Production » · Rapport de production · usine de Seneffe · décembre 2025\n| Ligne | Produits | Unités produites | Arrêts (h) | Rebut (%) | TRS (%) |\n|---|---|---|---|---|---|\n| L1 | Aéris 6 / 9 | 897 | 19.3 | 1.7 | 74.1 |\n| L2 | Aéris 12 | 778 | 41.5 | 3.4 | 72 |\n| L3 | Aéris Pro 16 / 22 | 544 | 16.2 | 1.6 | 76.3 |\n| Total |  | 2219 | 77 |  |  |",
+  "model": "qwen3.8-27b",
+  "context": "Cette section présente le tableau récapitulatif des indicateurs de production mensuelle de l'usine de Seneffe. Elle détaille les volumes fabriqués, les arrêts, le taux de rebut et le TRS pour les lignes L1, L2 et L3.",
+  "seconds": 3.2
+}

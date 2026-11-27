@@ -1,0 +1,43 @@
+{
+  "document": "03_Production/Gent/Veiligheid/Actieplan veiligheid magazijn Gent.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Els Van den Broeck",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable des actions de sécurité du magasin"
+    },
+    {
+      "nom": "Pieter De Smet",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable des actions de sécurité du magasin"
+    },
+    {
+      "nom": "Olivier Hardy",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable des actions de sécurité du magasin"
+    },
+    {
+      "nom": "Ann Wouters",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable de la formation circulation"
+    },
+    {
+      "nom": "magasin Gent",
+      "type": "site",
+      "alias": [],
+      "description": "site de production et de stockage de Calorvia"
+    },
+    {
+      "nom": "Actieplan veiligheid magazijn Gent",
+      "type": "projet",
+      "alias": [],
+      "description": "plan d'action sécurité du magasin de Gand"
+    }
+  ],
+  "seconds": 5.6
+}

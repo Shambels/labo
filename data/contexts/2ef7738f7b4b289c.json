@@ -1,0 +1,7 @@
+{
+  "document": "01_Finance/Reporting_mensuel/Reporting 2026-03.xlsx",
+  "body": "onglet « Ventes par gamme » · Chiffre d&apos;affaires par gamme (k€) · Gamme : Ventis (standard) ; CA du mois : 2583",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait se trouve dans l'onglet « Ventes par gamme » du reporting mensuel. Il détaille le chiffre d'affaires mensuel de la gamme Ventis standard.",
+  "seconds": 1.8
+}

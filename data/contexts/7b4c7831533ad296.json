@@ -1,0 +1,7 @@
+{
+  "document": "07_IT/Projet_Atlas_ERP/Documentation/Resultats recette 2.xlsx",
+  "body": "onglet « Recette 2 » · Projet Atlas · résultats de la recette 2 (du 8 au 17 avril 2026) · Domaine : Total ; Cas de test : 320 ; Conformes : 298 ; Non conformes : 22 ; Taux de conformité : 93,1 %",
+  "model": "qwen3.8-27b",
+  "context": "Cette ligne récapitule les résultats globaux de la recette 2 du projet Atlas. Elle se trouve dans le tableau de synthèse des domaines fonctionnels testés.",
+  "seconds": 1.6
+}

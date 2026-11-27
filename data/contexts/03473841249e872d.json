@@ -1,0 +1,7 @@
+{
+  "document": "06_Achats/Appel_offres_ERP/Synthese demonstrations ERP.docx",
+  "body": "Projet Atlas : synthèse des démonstrations du 3 au 7 novembre 2025\nPraxio (note moyenne : 4,3)\n- Points forts : module de gestion d'entrepôt natif et connecteur LogiPath existant, interface trilingue.\n- Points faibles : intégrateur unique en Belgique (Intégra Conseil), coût d'intégration élevé.",
+  "model": "qwen3.8-27b",
+  "context": "Cette section détaille l'évaluation de la solution Praxio dans le cadre du projet Atlas. Elle met en avant ses atouts logistiques ainsi que les contraintes liées à son intégration en Belgique.",
+  "seconds": 1.9
+}

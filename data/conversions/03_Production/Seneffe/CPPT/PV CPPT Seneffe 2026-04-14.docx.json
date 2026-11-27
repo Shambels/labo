@@ -1,0 +1,277 @@
+{
+  "schema_name": "DoclingDocument",
+  "version": "1.11.0",
+  "name": "PV CPPT Seneffe 2026-04-14",
+  "origin": {
+    "mimetype": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "binary_hash": 10954761433013737358,
+    "filename": "PV CPPT Seneffe 2026-04-14.docx"
+  },
+  "furniture": {
+    "self_ref": "#/furniture",
+    "children": [],
+    "content_layer": "furniture",
+    "name": "_root_",
+    "label": "unspecified"
+  },
+  "body": {
+    "self_ref": "#/body",
+    "children": [
+      {
+        "$ref": "#/groups/0"
+      },
+      {
+        "$ref": "#/groups/2"
+      },
+      {
+        "$ref": "#/groups/3"
+      }
+    ],
+    "content_layer": "body",
+    "name": "_root_",
+    "label": "unspecified"
+  },
+  "groups": [
+    {
+      "self_ref": "#/groups/0",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/0"
+        }
+      ],
+      "content_layer": "body",
+      "name": "header-0",
+      "label": "section"
+    },
+    {
+      "self_ref": "#/groups/1",
+      "parent": {
+        "$ref": "#/texts/4"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/5"
+        },
+        {
+          "$ref": "#/texts/6"
+        }
+      ],
+      "content_layer": "body",
+      "name": "list",
+      "label": "list"
+    },
+    {
+      "self_ref": "#/groups/2",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/7"
+        }
+      ],
+      "content_layer": "furniture",
+      "name": "page header",
+      "label": "section"
+    },
+    {
+      "self_ref": "#/groups/3",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/8"
+        }
+      ],
+      "content_layer": "furniture",
+      "name": "page footer",
+      "label": "section"
+    }
+  ],
+  "texts": [
+    {
+      "self_ref": "#/texts/0",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/1"
+        },
+        {
+          "$ref": "#/texts/2"
+        },
+        {
+          "$ref": "#/texts/4"
+        }
+      ],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [],
+      "orig": "Comit\u00e9 pour la pr\u00e9vention et la protection au travail \u00b7 Seneffe \u00b7 14 avril 2026",
+      "text": "Comit\u00e9 pour la pr\u00e9vention et la protection au travail \u00b7 Seneffe \u00b7 14 avril 2026",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/1",
+      "parent": {
+        "$ref": "#/texts/0"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [],
+      "orig": "Pr\u00e9sents : Marc Delhaye (pr\u00e9sident), Olivier Hardy (conseiller en pr\u00e9vention), Fabrice Collin, cinq d\u00e9l\u00e9gu\u00e9s du personnel.",
+      "text": "Pr\u00e9sents : Marc Delhaye (pr\u00e9sident), Olivier Hardy (conseiller en pr\u00e9vention), Fabrice Collin, cinq d\u00e9l\u00e9gu\u00e9s du personnel.",
+      "formatting": {
+        "bold": false,
+        "italic": false,
+        "underline": false,
+        "strikethrough": false,
+        "script": "baseline"
+      }
+    },
+    {
+      "self_ref": "#/texts/2",
+      "parent": {
+        "$ref": "#/texts/0"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/3"
+        }
+      ],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [],
+      "orig": "1. Accidents du premier trimestre 2026",
+      "text": "1. Accidents du premier trimestre 2026",
+      "level": 2
+    },
+    {
+      "self_ref": "#/texts/3",
+      "parent": {
+        "$ref": "#/texts/2"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [],
+      "orig": "Nombre d'accidents avec arr\u00eat de travail : 1.",
+      "text": "Nombre d'accidents avec arr\u00eat de travail : 1.",
+      "formatting": {
+        "bold": false,
+        "italic": false,
+        "underline": false,
+        "strikethrough": false,
+        "script": "baseline"
+      }
+    },
+    {
+      "self_ref": "#/texts/4",
+      "parent": {
+        "$ref": "#/texts/0"
+      },
+      "children": [
+        {
+          "$ref": "#/groups/1"
+        }
+      ],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [],
+      "orig": "2. Points trait\u00e9s",
+      "text": "2. Points trait\u00e9s",
+      "level": 2
+    },
+    {
+      "self_ref": "#/texts/5",
+      "parent": {
+        "$ref": "#/groups/1"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "list_item",
+      "prov": [],
+      "orig": "Un accident avec arr\u00eat le 19 mars : coupure \u00e0 la main en t\u00f4lerie, cinq jours d'arr\u00eat. Le port des gants anti-coupure de niveau F est d\u00e9sormais obligatoire pour toute manipulation de t\u00f4les.",
+      "text": "Un accident avec arr\u00eat le 19 mars : coupure \u00e0 la main en t\u00f4lerie, cinq jours d'arr\u00eat. Le port des gants anti-coupure de niveau F est d\u00e9sormais obligatoire pour toute manipulation de t\u00f4les.",
+      "formatting": {
+        "bold": false,
+        "italic": false,
+        "underline": false,
+        "strikethrough": false,
+        "script": "baseline"
+      },
+      "enumerated": false,
+      "marker": ""
+    },
+    {
+      "self_ref": "#/texts/6",
+      "parent": {
+        "$ref": "#/groups/1"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "list_item",
+      "prov": [],
+      "orig": "Travaux de la ligne L4 : la zone sera balis\u00e9e et interdite d'acc\u00e8s de mai \u00e0 juillet 2026.",
+      "text": "Travaux de la ligne L4 : la zone sera balis\u00e9e et interdite d'acc\u00e8s de mai \u00e0 juillet 2026.",
+      "formatting": {
+        "bold": false,
+        "italic": false,
+        "underline": false,
+        "strikethrough": false,
+        "script": "baseline"
+      },
+      "enumerated": false,
+      "marker": ""
+    },
+    {
+      "self_ref": "#/texts/7",
+      "parent": {
+        "$ref": "#/groups/2"
+      },
+      "children": [],
+      "content_layer": "furniture",
+      "label": "text",
+      "prov": [],
+      "orig": "Calorvia SA \u00b7 CPPT \u00b7 usine de Seneffe",
+      "text": "Calorvia SA \u00b7 CPPT \u00b7 usine de Seneffe",
+      "formatting": {
+        "bold": false,
+        "italic": false,
+        "underline": false,
+        "strikethrough": false,
+        "script": "baseline"
+      }
+    },
+    {
+      "self_ref": "#/texts/8",
+      "parent": {
+        "$ref": "#/groups/3"
+      },
+      "children": [],
+      "content_layer": "furniture",
+      "label": "text",
+      "prov": [],
+      "orig": "Calorvia SA (entreprise fictive) \u00b7 Diffusion interne",
+      "text": "Calorvia SA (entreprise fictive) \u00b7 Diffusion interne",
+      "formatting": {
+        "bold": false,
+        "italic": false,
+        "underline": false,
+        "strikethrough": false,
+        "script": "baseline"
+      }
+    }
+  ],
+  "pictures": [],
+  "tables": [],
+  "key_value_items": [],
+  "form_items": [],
+  "pages": {}
+}

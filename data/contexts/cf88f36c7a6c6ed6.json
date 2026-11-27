@@ -1,0 +1,7 @@
+{
+  "document": "00_Direction/CODIR/2025/PV_CODIR_2025-10-27.docx",
+  "body": "Procès-verbal du Comité de direction\n4. Télétravail : proposition de pilote\n*Présenté par Nadia Benali.*\nLa politique actuelle (version 2 de 2023) autorise un jour de télétravail par semaine. Nadia Benali propose de passer à deux jours, en commençant par un pilote.\nLes fonctions de production, de logistique et de maintenance, qui exigent une présence sur site, ne sont pas concernées.",
+  "model": "qwen3.8-27b",
+  "context": "Point 4 du procès-verbal, présenté par Nadia Benali. Il détaille la proposition d'élargir le télétravail à deux jours par semaine via un pilote, en excluant les fonctions nécessitant une présence sur site.",
+  "seconds": 2.3
+}

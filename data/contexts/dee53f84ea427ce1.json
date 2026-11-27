@@ -1,0 +1,7 @@
+{
+  "document": "04_Qualite/Non_conformites/NC-2025-041.docx",
+  "body": "Fiche de non-conformité NC-2025-041\n| Date d'ouverture | 02/10/2025 |\n| - | - |\n| Site | Gand |\n| Produit | Ventis D450 |\n| Description | Balourd du ventilateur : vibrations au contrôle final. |\n| Quantité concernée | 14 unités |\n| Mode de détection | Contrôle final |\n| Cause | Équilibrage non réalisé sur un lot de ventilateurs |\n| Action corrective | Contrôle d'équilibrage à 100 % |\n| Responsable | Lien Maes |\n| Statut | Clôturée |\n| Coût de non-qualité | 2 300 € |",
+  "model": "qwen3.8-27b",
+  "context": "Cette fiche de non-conformité concerne le produit Ventis D450 sur le site de Gand. Elle détaille les vibrations du ventilateur détectées lors du contrôle final et les actions correctives associées.",
+  "seconds": 2.4
+}

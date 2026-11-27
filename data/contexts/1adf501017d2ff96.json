@@ -1,0 +1,7 @@
+{
+  "document": "06_Achats/Fournisseurs/Evaluation fournisseurs 2025.xlsx",
+  "body": "onglet « Évaluation 2025 » · Évaluation annuelle des fournisseurs 2025 (notes sur 100)\n| Fournisseur | Qualité | Délais | Prix | Score global | Décision |\n|---|---|---|---|---|---|\n| Kompra GmbH | 78 | 84 | 72 | 79 | Maintenu ; double source à étudier |\n| Valtek Components Ltd | 41 | 80 | 76 | 60 | Sous surveillance (rappel Aéris 12) |\n| Tôlerie Mosane SRL | 86 | 90 | 70 | 84 | Maintenu |\n| Elcora Electronics BV | 74 | 88 | 81 | 80 | Maintenu |\n| TransArdenne SA | 90 | 82 | 79 | 85 | Maintenu |",
+  "model": "qwen3.8-27b",
+  "context": "Cette section présente le tableau récapitulatif des notes attribuées aux fournisseurs pour l'année 2025. Elle détaille les scores de qualité, de délais et de prix ainsi que la décision finale pour chaque entreprise évaluée.",
+  "seconds": 2.9
+}

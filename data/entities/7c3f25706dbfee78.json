@@ -1,0 +1,61 @@
+{
+  "document": "03_Production/Gent/Veiligheid/Comite PBW/Verslag Comite PBW Gent 2026-02-19.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Pieter De Smet",
+      "type": "personne",
+      "alias": [],
+      "description": "président du comité de prévention et de protection au travail"
+    },
+    {
+      "nom": "Olivier Hardy",
+      "type": "personne",
+      "alias": [],
+      "description": "conseiller en prévention"
+    },
+    {
+      "nom": "Ann Wouters",
+      "type": "personne",
+      "alias": [],
+      "description": "membre du comité de prévention et de protection au travail"
+    },
+    {
+      "nom": "Els Van den Broeck",
+      "type": "personne",
+      "alias": [],
+      "description": "membre du comité de prévention et de protection au travail"
+    },
+    {
+      "nom": "Gent",
+      "type": "site",
+      "alias": [
+        "Gand"
+      ],
+      "description": "site de production de Calorvia"
+    },
+    {
+      "nom": "Comité voor Preventie en Bescherming op het Werk",
+      "type": "instance",
+      "alias": [
+        "Comité PBW"
+      ],
+      "description": "comité de prévention et de protection au travail"
+    },
+    {
+      "nom": "ISO 9001",
+      "type": "autre",
+      "alias": [],
+      "description": "norme de management de la qualité"
+    },
+    {
+      "nom": "heftruck",
+      "type": "équipement",
+      "alias": [
+        "chariot élévateur"
+      ],
+      "description": "véhicule de manutention soumis à audit"
+    }
+  ],
+  "seconds": 7.4
+}

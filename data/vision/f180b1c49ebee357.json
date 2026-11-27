@@ -1,0 +1,10 @@
+{
+  "path": "01_Finance/Comptabilite/Factures_fournisseurs/2026-01-31 Resto Pro 2026-01.jpg",
+  "kind": "image",
+  "page": null,
+  "index": null,
+  "model": "qwen3.5-9b",
+  "prompt": "Tu transcris des documents d'entreprise pour un moteur de recherche.\n1. Recopie tout le texte visible, exactement comme il est écrit : nombres, codes, dates, unités et\n   annotations manuscrites compris. Rends les tableaux en Markdown.\n2. Puis, sous le titre « Description », décris en trois phrases au plus le type d'image (organigramme,\n   plan, graphique, photo, facture...) et ce qu'elle montre qui n'est pas écrit : les rattachements\n   d'un organigramme, la valeur la plus haute d'un graphique, la position des éléments d'un plan.\nN'invente rien : si un élément est illisible, écris [illisible].",
+  "seconds": 6.2,
+  "text": "**Recopie du texte visible :**\n\nResto'Pro SRL  \nRue de Bruxelles 55, 7180 Seneffe  \nTVA BE 0539.117.264  \n\nFacture n°  \nRP-2026-0117  \n\nDate  \n31/01/2026  \n\nÉchéance  \n15/02/2026  \n\nClient  \nCalovia SA - restaurant d'entreprise de Seneffe  \n\n| Code | Prestation                     | Qté  | Prix unit. | Total HT     |\n|------|--------------------------------|------|------------|--------------|\n| REP  | Repas servis en janvier 2026   | 3480 | 6,85       | 23 838,00    |\n| CAF  | Service café et réunions       | 1    | 612,00     | 612,00       |\n\nTotal HT  \n24 450,00 €  \n\nTVA 12 %  \n2 934,00 €  \n\nTotal TTC  \n27 384,00 €  \n\nIBAN BE10 1030 5266 7144.\n\n---\n\n**Description**\n\nIl s’agit d’une facture commerciale émise par Resto'Pro SRL, un prestataire de services alimentaires et événementiels.  \nLe document détaille deux prestations : des repas servis en janvier 2026 et un service café et réunions, avec leurs quantités, prix unitaires et totaux HT.  \nLes montants sont calculés avec TVA à 12 %, aboutissant à un total TTC de 27 384,00 €, incluant les coordonnées bancaires pour le paiement."
+}

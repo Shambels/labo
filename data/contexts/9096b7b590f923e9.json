@@ -1,0 +1,7 @@
+{
+  "document": "06_Achats/Bons_de_livraison/2025-11-19 BL Valtek.jpg",
+  "body": "Image\nValtek Components Ltd  \nUnit 4, Riverside Park, Coventry  \nDelivery note  \n\nDelivery note  \nDN-25-77412  \nDate  \n19/11/2025  \nShip to  \nCalorvia SA - Seneffe plant  \nPO  \nPO-2025-10988  \n\n| Item   | Description                          | Qty  |\n|--------|--------------------------------------|------|\n| V4W-12 | Four-way valve 12 kW - batch V-2544  | 600  |\n| SV-38  | Service valve 3/8                    | 1200 |\n\nReçu le 19/11 - lot V-2544  \n600 pcs OK - F. Collin  \n\nMerci de vérifier la marchandise à la réception.\n\n---\n\n**Description**  \nIl s’agit d’une facture de livraison (delivery note) de Valtek Components Ltd adressée à Calorvia SA à Seneffe. Le document liste deux articles avec leurs quantités et inclut une mention manuscrite de réception partielle (600 pièces sur 600 du lot V-2544 validées par F. Collin). Un encadré « RÉCEPTION SENEFFE » indique le point de livraison.",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait correspond à l'intégralité du bon de livraison émis par Valtek Components Ltd pour l'usine de Seneffe. Il détaille la commande de vannes et la validation de la réception par F. Collin.",
+  "seconds": 2.8
+}

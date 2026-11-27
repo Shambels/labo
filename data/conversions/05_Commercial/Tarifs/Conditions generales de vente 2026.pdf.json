@@ -1,0 +1,498 @@
+{
+  "schema_name": "DoclingDocument",
+  "version": "1.11.0",
+  "name": "Conditions generales de vente 2026",
+  "origin": {
+    "mimetype": "application/pdf",
+    "binary_hash": 9434173247242020015,
+    "filename": "Conditions generales de vente 2026.pdf"
+  },
+  "furniture": {
+    "self_ref": "#/furniture",
+    "children": [],
+    "content_layer": "furniture",
+    "name": "_root_",
+    "label": "unspecified"
+  },
+  "body": {
+    "self_ref": "#/body",
+    "children": [
+      {
+        "$ref": "#/texts/0"
+      },
+      {
+        "$ref": "#/texts/1"
+      },
+      {
+        "$ref": "#/texts/2"
+      },
+      {
+        "$ref": "#/texts/3"
+      },
+      {
+        "$ref": "#/texts/4"
+      },
+      {
+        "$ref": "#/texts/5"
+      },
+      {
+        "$ref": "#/texts/6"
+      },
+      {
+        "$ref": "#/texts/7"
+      },
+      {
+        "$ref": "#/texts/8"
+      },
+      {
+        "$ref": "#/texts/9"
+      },
+      {
+        "$ref": "#/texts/10"
+      },
+      {
+        "$ref": "#/texts/11"
+      },
+      {
+        "$ref": "#/texts/12"
+      },
+      {
+        "$ref": "#/texts/13"
+      },
+      {
+        "$ref": "#/texts/14"
+      }
+    ],
+    "content_layer": "body",
+    "name": "_root_",
+    "label": "unspecified"
+  },
+  "groups": [],
+  "texts": [
+    {
+      "self_ref": "#/texts/0",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "furniture",
+      "label": "page_header",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 62.3622,
+            "t": 813.0068128,
+            "r": 202.69032480000007,
+            "b": 806.1630624000001,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            43
+          ]
+        }
+      ],
+      "orig": "Calorvia SA \u00b7 Conditions g\u00e9n\u00e9rales de vente",
+      "text": "Calorvia SA \u00b7 Conditions g\u00e9n\u00e9rales de vente"
+    },
+    {
+      "self_ref": "#/texts/1",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 773.5719,
+            "r": 367.5731423999998,
+            "b": 759.7385666666667,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            44
+          ]
+        }
+      ],
+      "orig": "Conditions g\u00e9n\u00e9rales de vente (version 2026)",
+      "text": "Conditions g\u00e9n\u00e9rales de vente (version 2026)",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/2",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 746.80236875,
+            "r": 145.400775,
+            "b": 735.9950770833334,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            12
+          ]
+        }
+      ],
+      "orig": "1. Commandes",
+      "text": "1. Commandes",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/3",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 727.4337168000001,
+            "r": 522.3128768999998,
+            "b": 704.4512944,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            148
+          ]
+        }
+      ],
+      "orig": "Toute commande doit \u00eatre confirm\u00e9e par \u00e9crit. Le minimum de commande est de 1 500 \u20ac HT ; en dessous, des frais administratifs de 45 \u20ac sont factur\u00e9s.",
+      "text": "Toute commande doit \u00eatre confirm\u00e9e par \u00e9crit. Le minimum de commande est de 1 500 \u20ac HT ; en dessous, des frais administratifs de 45 \u20ac sont factur\u00e9s."
+    },
+    {
+      "self_ref": "#/texts/4",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 690.80236875,
+            "r": 100.77186875000001,
+            "b": 679.9950770833334,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            7
+          ]
+        }
+      ],
+      "orig": "2. Prix",
+      "text": "2. Prix",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/5",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 671.4337168000001,
+            "r": 507.1319663999999,
+            "b": 662.4512944,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            106
+          ]
+        }
+      ],
+      "orig": "Les prix s'entendent hors TVA, d\u00e9part usine. La livraison est gratuite en Belgique \u00e0 partir de 5 000 \u20ac HT.",
+      "text": "Les prix s'entendent hors TVA, d\u00e9part usine. La livraison est gratuite en Belgique \u00e0 partir de 5 000 \u20ac HT."
+    },
+    {
+      "self_ref": "#/texts/6",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 648.80236875,
+            "r": 130.55092125000002,
+            "b": 637.9950770833334,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            11
+          ]
+        }
+      ],
+      "orig": "3. Paiement",
+      "text": "3. Paiement",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/7",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 629.4337168000001,
+            "r": 488.85437909999973,
+            "b": 606.4512944,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            175
+          ]
+        }
+      ],
+      "orig": "Les factures sont payables \u00e0 30 jours fin de mois. Tout retard entra\u00eene un int\u00e9r\u00eat de 8 % l'an et une indemnit\u00e9 forfaitaire de 10 % du montant impay\u00e9, avec un minimum de 75 \u20ac.",
+      "text": "Les factures sont payables \u00e0 30 jours fin de mois. Tout retard entra\u00eene un int\u00e9r\u00eat de 8 % l'an et une indemnit\u00e9 forfaitaire de 10 % du montant impay\u00e9, avec un minimum de 75 \u20ac."
+    },
+    {
+      "self_ref": "#/texts/8",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 592.80236875,
+            "r": 126.0160075,
+            "b": 581.9950770833334,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            11
+          ]
+        }
+      ],
+      "orig": "4. Garantie",
+      "text": "4. Garantie",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/9",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 573.4337168000001,
+            "r": 526.9133666,
+            "b": 550.4512944,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            168
+          ]
+        }
+      ],
+      "orig": "Les pompes \u00e0 chaleur sont garanties 5 ans sur le compresseur et 2 ans sur les autres pi\u00e8ces, \u00e0 condition que la mise en service soit r\u00e9alis\u00e9e par un installateur agr\u00e9\u00e9.",
+      "text": "Les pompes \u00e0 chaleur sont garanties 5 ans sur le compresseur et 2 ans sur les autres pi\u00e8ces, \u00e0 condition que la mise en service soit r\u00e9alis\u00e9e par un installateur agr\u00e9\u00e9."
+    },
+    {
+      "self_ref": "#/texts/10",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 536.80236875,
+            "r": 150.82069625,
+            "b": 525.9950770833334,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            15
+          ]
+        }
+      ],
+      "orig": "5. R\u00e9clamations",
+      "text": "5. R\u00e9clamations",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/11",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 517.4337168000001,
+            "r": 494.3453519999997,
+            "b": 494.45129440000005,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            140
+          ]
+        }
+      ],
+      "orig": "Les r\u00e9clamations relatives aux dommages de transport doivent \u00eatre not\u00e9es sur le bon de livraison et confirm\u00e9es par \u00e9crit dans les 48 heures.",
+      "text": "Les r\u00e9clamations relatives aux dommages de transport doivent \u00eatre not\u00e9es sur le bon de livraison et confirm\u00e9es par \u00e9crit dans les 48 heures."
+    },
+    {
+      "self_ref": "#/texts/12",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 480.80236875,
+            "r": 113.82728875000001,
+            "b": 469.99507708333334,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            10
+          ]
+        }
+      ],
+      "orig": "6. Litiges",
+      "text": "6. Litiges",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/13",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 461.4337168,
+            "r": 395.8412000999999,
+            "b": 452.45129440000005,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            76
+          ]
+        }
+      ],
+      "orig": "Le droit belge est applicable. Les tribunaux de Namur sont seuls comp\u00e9tents.",
+      "text": "Le droit belge est applicable. Les tribunaux de Namur sont seuls comp\u00e9tents."
+    },
+    {
+      "self_ref": "#/texts/14",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "furniture",
+      "label": "page_footer",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 204.7511,
+            "t": 33.47927279999999,
+            "r": 390.52453760000003,
+            "b": 26.635522400000013,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            61
+          ]
+        }
+      ],
+      "orig": "Calorvia SA (entreprise fictive) \u00b7 Diffusion interne \u00b7 page 1",
+      "text": "Calorvia SA (entreprise fictive) \u00b7 Diffusion interne \u00b7 page 1"
+    }
+  ],
+  "pictures": [],
+  "tables": [],
+  "key_value_items": [],
+  "form_items": [],
+  "pages": {
+    "1": {
+      "size": {
+        "width": 595.2756,
+        "height": 841.8898
+      },
+      "page_no": 1
+    }
+  }
+}

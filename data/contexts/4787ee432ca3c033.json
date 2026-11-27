@@ -1,0 +1,7 @@
+{
+  "document": "01_Finance/Budget_2026/Budget 2026 - version approuvee CA 16-12-2025.xlsx",
+  "body": "onglet « Hypothèses » · Budget 2026 · version approuvée par le conseil d'administration du 16/12/2025\n| Hypothèse | Valeur retenue |\n|---|---|\n| Hausse des prix de vente au 1er janvier | 3,5 % gamme standard, 5 % gamme premium |\n| Indexation salariale | 3,4 % |\n| Volume pompes à chaleur | +2,5 % |\n| Volume ventilation | +2 % |\n| Prix de l'acier | +4 % |",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait se trouve dans l'onglet « Hypothèses » du budget 2026. Il détaille les paramètres macroéconomiques et commerciaux retenus, tels que la hausse des prix de vente, l'indexation salariale et les volumes attendus pour les pompes à chaleur et la ventilation.",
+  "seconds": 5.3
+}

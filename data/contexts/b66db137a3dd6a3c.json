@@ -1,0 +1,7 @@
+{
+  "document": "03_Production/Seneffe/Rapports_mensuels/Rapport production Seneffe 2026-02.xlsx",
+  "body": "onglet « Production » · Rapport de production · usine de Seneffe · février 2026 · Ligne : L2 ; Produits : Aéris 12 ; Unités produites : 730 ; Arrêts (h) : 9.8 ; Rebut (%) : 1.7 ; TRS (%) : 72.3",
+  "model": "qwen3.8-27b",
+  "context": "Cette ligne du tableau de production détaille les performances de la ligne L2 de l'usine de Seneffe. Elle concerne spécifiquement la fabrication du modèle Aéris 12.",
+  "seconds": 1.9
+}

@@ -1,0 +1,7 @@
+{
+  "document": "04_Qualite/Non_conformites/NC-2026-003.docx",
+  "body": "Fiche de non-conformité NC-2026-003\n| Date d'ouverture | 14/01/2026 |\n| - | - |\n| Site | Gand |\n| Produit | Ventis D450 Pro |\n| Description | Filtre F7 manquant dans le colis. |\n| Quantité concernée | 31 unités |\n| Mode de détection | Réclamation client |\n| Cause | Rupture de stock non signalée au poste d'emballage |\n| Action corrective | Contrôle du kit d'accessoires par pesée |\n| Responsable | Lien Maes |\n| Statut | Clôturée |\n| Coût de non-qualité | 740 € |",
+  "model": "qwen3.8-27b",
+  "context": "La fiche de non-conformité NC-2026-003 concerne le produit Ventis D450 Pro au site de Gand. Elle détaille l'incident lié à un filtre F7 manquant, détecté par réclamation client et géré par Lien Maes.",
+  "seconds": 2.9
+}

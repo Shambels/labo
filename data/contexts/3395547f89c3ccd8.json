@@ -1,0 +1,7 @@
+{
+  "document": "07_IT/Securite/Rapport incident securite 2026-01-13.pdf",
+  "body": "Rapport d'incident : compromission d'une boîte aux lettres et tentative de fraude\n| Référence | SEC-2026-001 |\n| - | - |\n| Gravité | Élevée (tentative de fraude financière) |\n| Rédacteur | Yannick Dupuis |\n| Date du rapport | 15/01/2026 |",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait se situe dans l'en-tête du rapport d'incident. Il présente les informations administratives de référence, la gravité de l'événement et l'identité du rédacteur.",
+  "seconds": 2.8
+}

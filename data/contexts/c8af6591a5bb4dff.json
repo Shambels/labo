@@ -1,0 +1,7 @@
+{
+  "document": "01_Finance/Tresorerie/Prevision tresorerie 2026.xlsx",
+  "body": "onglet « Prévision »\nLigne de crédit disponible : 6 000 k€ (Banque Mosane), non utilisée au 31/12/2025.",
+  "model": "qwen3.8-27b",
+  "context": "Cette note figure en fin d'onglet « Prévision » et précise la ligne de crédit disponible auprès de la Banque Mosane. Elle indique que cette facilité n'était pas utilisée au 31 décembre 2025.",
+  "seconds": 2.1
+}

@@ -1,0 +1,49 @@
+{
+  "document": "07_IT/Projet_Atlas_ERP/Documentation/Strategie de reprise des donnees.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Projet Atlas",
+      "type": "projet",
+      "alias": [],
+      "description": "stratégie de reprise des données"
+    },
+    {
+      "nom": "Marc Delhaye",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable reprise fiches articles et nomenclatures"
+    },
+    {
+      "nom": "Pierre-Yves Collard",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable extraction automatique des clients"
+    },
+    {
+      "nom": "Sarah Vandamme",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable fournisseurs et écritures comptables"
+    },
+    {
+      "nom": "Els Van den Broeck",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable saisie des stocks"
+    },
+    {
+      "nom": "GesPro 7",
+      "type": "autre",
+      "alias": [],
+      "description": "système de gestion consultable en lecture seule"
+    },
+    {
+      "nom": "FIN-07",
+      "type": "autre",
+      "alias": [],
+      "description": "procédure de contrôle des IBAN"
+    }
+  ],
+  "seconds": 5.0
+}

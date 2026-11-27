@@ -1,0 +1,43 @@
+{
+  "document": "03_Production/Gent/Veiligheid/Plattegrond magazijn Gent - circulatie 2026-01.png",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Magazijn Gent",
+      "type": "site",
+      "alias": [],
+      "description": "entrepôt de Calorvia à Gand"
+    },
+    {
+      "nom": "Hoofdverkeersweg",
+      "type": "équipement",
+      "alias": [],
+      "description": "voie principale du magasin"
+    },
+    {
+      "nom": "Laadstation heftrucks",
+      "type": "équipement",
+      "alias": [],
+      "description": "station de chargement des chariots"
+    },
+    {
+      "nom": "Kantoren",
+      "type": "équipement",
+      "alias": [],
+      "description": "bureaux du magasin"
+    },
+    {
+      "nom": "Verzamelplaats parking bezoekers",
+      "type": "équipement",
+      "alias": [],
+      "description": "parking visiteurs du magasin"
+    },
+    {
+      "nom": "Laadkades 1-8",
+      "type": "équipement",
+      "alias": [],
+      "description": "quais de chargement du magasin"
+    }
+  ],
+  "seconds": 4.7
+}

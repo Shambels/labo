@@ -1,0 +1,7 @@
+{
+  "document": "01_Finance/Comptabilite/Factures_fournisseurs/2026-04-30 Bureau Plus BP-26-4410.jpg",
+  "body": "Image\nBureau Plus SRL  \nChaussée de Louvain 180, 5000 Namur  \nTVA BE 0455.880.312  \n\nFacture n° BP-26-4410  \nDate 30/04/2026  \nÉchéance 30/05/2026  \nClient Calorvia SA, 5100 Namur  \n\n| Réf.     | Désignation                          | Qté | Prix unit. | Total HT   |\n|----------|--------------------------------------|-----|------------|------------|\n| PAP-A4   | Papier A4 80 g (carton de 5 ramettes) | 60  | 21,40      | 1 284,00   |\n| TON-MF   | Toner imprimante multifonction       | 12  | 86,00      | 1 032,00   |\n\nTotal HT 2 316,00 €  \nTVA 21 % 486,36 €  \nTotal TTC 2 802,36 €  \n\nIBAN BE33 0682 1173 9946.\n\nDescription  \nIl s’agit d’une facture commerciale émise par Bureau Plus SRL à l’adresse de Calorvia SA. Elle détaille deux articles vendus : du papier A4 et du toner pour imprimante multifonction, avec leurs quantités, prix unitaires et totaux HT. Le document inclut également le calcul de la TVA à 21 % et le total TTC, ainsi que les coordonnées bancaires du vendeur.",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait correspond à l'intégralité du document, qui détaille l'achat de fournitures de bureau auprès du fournisseur Bureau Plus SRL.",
+  "seconds": 2.3
+}

@@ -1,0 +1,73 @@
+{
+  "document": "01_Finance/Reporting_mensuel/Reporting 2026-05.xlsx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Aéris (standard)",
+      "type": "produit",
+      "alias": [],
+      "description": "gamme de produits standard"
+    },
+    {
+      "nom": "Aéris Pro (premium)",
+      "type": "produit",
+      "alias": [],
+      "description": "gamme de produits premium"
+    },
+    {
+      "nom": "Ventis (standard)",
+      "type": "produit",
+      "alias": [],
+      "description": "gamme de produits standard"
+    },
+    {
+      "nom": "Ventis Pro (premium)",
+      "type": "produit",
+      "alias": [],
+      "description": "gamme de produits premium"
+    },
+    {
+      "nom": "Pièces et services",
+      "type": "produit",
+      "alias": [],
+      "description": "gamme de pièces et services"
+    },
+    {
+      "nom": "Namur",
+      "type": "site",
+      "alias": [],
+      "description": "site de Calorvia"
+    },
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "site de Calorvia"
+    },
+    {
+      "nom": "Gand",
+      "type": "site",
+      "alias": [],
+      "description": "site de Calorvia"
+    },
+    {
+      "nom": "Lille",
+      "type": "site",
+      "alias": [],
+      "description": "site de Calorvia"
+    },
+    {
+      "nom": "Herstal",
+      "type": "site",
+      "alias": [],
+      "description": "site de Calorvia"
+    },
+    {
+      "nom": "Entrepôt de Herstal",
+      "type": "équipement",
+      "alias": [],
+      "description": "entrepôt loué par Calorvia"
+    }
+  ],
+  "seconds": 13.7
+}

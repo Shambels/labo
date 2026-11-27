@@ -1,0 +1,161 @@
+{
+  "document": "00_Direction/CODIR/2026/2026-02-02 CODIR PV.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Hélène Marchal",
+      "type": "personne",
+      "alias": [
+        "CEO"
+      ],
+      "description": "administratrice déléguée et présidente du comité de direction"
+    },
+    {
+      "nom": "Laurent Dewit",
+      "type": "personne",
+      "alias": [
+        "CFO"
+      ],
+      "description": "directeur financier de l'entreprise"
+    },
+    {
+      "nom": "Thomas Lambert",
+      "type": "personne",
+      "alias": [
+        "COO"
+      ],
+      "description": "directeur des opérations de l'entreprise"
+    },
+    {
+      "nom": "Nadia Benali",
+      "type": "personne",
+      "alias": [],
+      "description": "directrice des ressources humaines"
+    },
+    {
+      "nom": "Pierre-Yves Collard",
+      "type": "personne",
+      "alias": [],
+      "description": "directeur commercial de l'entreprise"
+    },
+    {
+      "nom": "Kevin Mertens",
+      "type": "personne",
+      "alias": [],
+      "description": "directeur des systèmes d'information"
+    },
+    {
+      "nom": "Anne Vercammen",
+      "type": "personne",
+      "alias": [],
+      "description": "directrice qualité de l'entreprise"
+    },
+    {
+      "nom": "Pieter De Smet",
+      "type": "personne",
+      "alias": [],
+      "description": "directeur du site de Gand"
+    },
+    {
+      "nom": "Julie Renard",
+      "type": "personne",
+      "alias": [],
+      "description": "secrétaire du comité de direction"
+    },
+    {
+      "nom": "Namur",
+      "type": "site",
+      "alias": [],
+      "description": "ville d'accueil de la séance du CODIR"
+    },
+    {
+      "nom": "Salle Meuse",
+      "type": "site",
+      "alias": [],
+      "description": "salle de réunion du comité de direction"
+    },
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "site de production des pompes à chaleur"
+    },
+    {
+      "nom": "Gand",
+      "type": "site",
+      "alias": [],
+      "description": "site de production des groupes de ventilation"
+    },
+    {
+      "nom": "Herstal",
+      "type": "site",
+      "alias": [],
+      "description": "localisation de l'entrepôt logistique proposé"
+    },
+    {
+      "nom": "Namur Expo",
+      "type": "site",
+      "alias": [],
+      "description": "lieu du salon Énergie+"
+    },
+    {
+      "nom": "Pompes à chaleur",
+      "type": "produit",
+      "alias": [],
+      "description": "produits fabriqués sur le site de Seneffe"
+    },
+    {
+      "nom": "Groupes de ventilation",
+      "type": "produit",
+      "alias": [],
+      "description": "produits fabriqués sur le site de Gand"
+    },
+    {
+      "nom": "Aéris 12",
+      "type": "produit",
+      "alias": [],
+      "description": "produit faisant l'objet d'un rappel"
+    },
+    {
+      "nom": "Valtek",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "fournisseur faisant l'objet d'une réclamation financière"
+    },
+    {
+      "nom": "Distrinergie",
+      "type": "client",
+      "alias": [],
+      "description": "client concerné par un avenant tarifaire"
+    },
+    {
+      "nom": "Énergie+",
+      "type": "projet",
+      "alias": [],
+      "description": "salon professionnel prévu en mars"
+    },
+    {
+      "nom": "Comité de direction",
+      "type": "instance",
+      "alias": [
+        "CODIR"
+      ],
+      "description": "instance dirigeante de l'entreprise"
+    },
+    {
+      "nom": "Conseil d'administration",
+      "type": "instance",
+      "alias": [
+        "CA"
+      ],
+      "description": "instance devant approuver le bail de l'entrepôt"
+    },
+    {
+      "nom": "Audit ISO 9001",
+      "type": "projet",
+      "alias": [],
+      "description": "audit de surveillance de la qualité"
+    }
+  ],
+  "seconds": 19.6
+}

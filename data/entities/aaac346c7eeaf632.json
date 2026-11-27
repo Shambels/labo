@@ -1,0 +1,99 @@
+{
+  "document": "01_Finance/Budget_2026/Budget 2026 v2.xlsx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Gamme standard",
+      "type": "produit",
+      "alias": [],
+      "description": "gamme de produits avec hausse de prix de 3,5 %"
+    },
+    {
+      "nom": "Gamme premium",
+      "type": "produit",
+      "alias": [],
+      "description": "gamme de produits avec hausse de prix de 5 %"
+    },
+    {
+      "nom": "Pompes à chaleur",
+      "type": "produit",
+      "alias": [],
+      "description": "produit dont le volume est budgété à +2 %"
+    },
+    {
+      "nom": "Ventilation",
+      "type": "produit",
+      "alias": [],
+      "description": "produit dont le volume est budgété à +2 %"
+    },
+    {
+      "nom": "Acier",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "matière première dont le prix est budgété à +4 %"
+    },
+    {
+      "nom": "Nouvelle ligne d'assemblage L4 (Seneffe)",
+      "type": "projet",
+      "alias": [],
+      "description": "projet d'investissement pour une nouvelle ligne d'assemblage"
+    },
+    {
+      "nom": "Remplacement de l'ERP (projet Atlas)",
+      "type": "projet",
+      "alias": [
+        "Atlas"
+      ],
+      "description": "projet de remplacement du système ERP"
+    },
+    {
+      "nom": "Infrastructure informatique (serveurs, réseau)",
+      "type": "projet",
+      "alias": [],
+      "description": "projet d'investissement pour les serveurs et le réseau"
+    },
+    {
+      "nom": "Sécurité entrepôt de Gand (éclairage, marquage, limiteurs)",
+      "type": "projet",
+      "alias": [],
+      "description": "projet d'investissement pour la sécurité de l'entrepôt"
+    },
+    {
+      "nom": "Maintenance lourde et renouvellement d'outillages",
+      "type": "projet",
+      "alias": [],
+      "description": "projet de maintenance et renouvellement des outillages"
+    },
+    {
+      "nom": "Installation photovoltaïque (Seneffe)",
+      "type": "projet",
+      "alias": [],
+      "description": "projet d'installation photovoltaïque"
+    },
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "site de production et d'installation photovoltaïque"
+    },
+    {
+      "nom": "Gand",
+      "type": "site",
+      "alias": [],
+      "description": "site de production, logistique et entrepôt"
+    },
+    {
+      "nom": "Namur",
+      "type": "site",
+      "alias": [],
+      "description": "site des fonctions support"
+    },
+    {
+      "nom": "Lille",
+      "type": "site",
+      "alias": [],
+      "description": "site du bureau commercial"
+    }
+  ],
+  "seconds": 18.1
+}

@@ -1,0 +1,45 @@
+{
+  "document": "03_Production/Procedures/MO-SEN-07 Brasage des vannes 4 voies rev C.pdf",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Aéris 6",
+      "type": "produit",
+      "alias": [],
+      "description": "modèle de circuit frigorifique"
+    },
+    {
+      "nom": "Aéris 9",
+      "type": "produit",
+      "alias": [],
+      "description": "modèle de circuit frigorifique"
+    },
+    {
+      "nom": "Aéris 12",
+      "type": "produit",
+      "alias": [],
+      "description": "modèle de circuit frigorifique"
+    },
+    {
+      "nom": "vanne quatre voies",
+      "type": "produit",
+      "alias": [
+        "vanne 4 voies"
+      ],
+      "description": "composant brasé sur circuit frigorifique"
+    },
+    {
+      "nom": "baguette à 15 % d'argent",
+      "type": "produit",
+      "alias": [],
+      "description": "métal d'apport pour brasage"
+    },
+    {
+      "nom": "azote",
+      "type": "produit",
+      "alias": [],
+      "description": "gaz de balayage pendant brasage"
+    }
+  ],
+  "seconds": 4.6
+}

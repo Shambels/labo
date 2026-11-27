@@ -1,0 +1,25 @@
+{
+  "document": "03_Production/Maintenance/Fiches_intervention/2025-10-09 INT-2025-585 Banc dessai L2.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Banc d'essai L2",
+      "type": "équipement",
+      "alias": [],
+      "description": "banc d'essai de production"
+    },
+    {
+      "nom": "Fabrice Collin",
+      "type": "personne",
+      "alias": [],
+      "description": "intervenant sur le banc d'essai"
+    },
+    {
+      "nom": "Testra PS-45",
+      "type": "produit",
+      "alias": [],
+      "description": "capteur de pression remplacé"
+    }
+  ],
+  "seconds": 3.7
+}

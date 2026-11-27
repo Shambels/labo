@@ -1,0 +1,7 @@
+{
+  "document": "04_Qualite/Non_conformites/NC-2026-017.docx",
+  "body": "Fiche de non-conformité NC-2026-017\n| Date d'ouverture | 06/05/2026 |\n| - | - |\n| Site | Gand |\n| Produit | Ventis D450 |\n| Description | Notice d'installation en français seulement dans des colis destinés à la Flandre. |\n| Quantité concernée | 60 unités |\n| Mode de détection | Réclamation client |\n| Cause | Erreur de référence de notice |\n| Action corrective | Notice bilingue unique |\n| Responsable | Lien Maes |\n| Statut | Clôturée |\n| Coût de non-qualité | 300 € |",
+  "model": "qwen3.8-27b",
+  "context": "Cette fiche de non-conformité concerne le produit Ventis D450 au site de Gand. Elle détaille l'erreur de notice d'installation détectée par réclamation client et les actions correctives associées.",
+  "seconds": 2.5
+}

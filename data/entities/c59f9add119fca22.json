@@ -1,0 +1,121 @@
+{
+  "document": "00_Direction/Conseil_administration/PV_signes/PV CA 2026-06-16.pdf",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Jean-François Delcourt",
+      "type": "personne",
+      "alias": [],
+      "description": "Président, administrateur indépendant"
+    },
+    {
+      "nom": "Hélène Marchal",
+      "type": "personne",
+      "alias": [],
+      "description": "Administratrice déléguée"
+    },
+    {
+      "nom": "Philippe Rasquin",
+      "type": "personne",
+      "alias": [],
+      "description": "Administrateur, représentant de Rasquin Participations SA"
+    },
+    {
+      "nom": "Valérie Rasquin",
+      "type": "personne",
+      "alias": [],
+      "description": "Administratrice, représentante de Rasquin Participations SA"
+    },
+    {
+      "nom": "Olivier Thiry",
+      "type": "personne",
+      "alias": [],
+      "description": "Administrateur, représentant de Mosane Capital"
+    },
+    {
+      "nom": "Martine Claessens",
+      "type": "personne",
+      "alias": [],
+      "description": "Administratrice indépendante"
+    },
+    {
+      "nom": "Dirk Peeters",
+      "type": "personne",
+      "alias": [],
+      "description": "Administrateur indépendant"
+    },
+    {
+      "nom": "Isabelle Gérard",
+      "type": "personne",
+      "alias": [],
+      "description": "Directrice financière"
+    },
+    {
+      "nom": "Caroline Hendrickx",
+      "type": "personne",
+      "alias": [],
+      "description": "Secrétaire du conseil"
+    },
+    {
+      "nom": "Namur",
+      "type": "site",
+      "alias": [
+        "siège social"
+      ],
+      "description": "Siège social de l'entreprise"
+    },
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "Site de production ou d'activité"
+    },
+    {
+      "nom": "Lille",
+      "type": "site",
+      "alias": [],
+      "description": "Site de production ou d'activité"
+    },
+    {
+      "nom": "Gand",
+      "type": "site",
+      "alias": [],
+      "description": "Site de production ou d'activité"
+    },
+    {
+      "nom": "Praxio",
+      "type": "équipement",
+      "alias": [
+        "ERP"
+      ],
+      "description": "Système de gestion d'entreprise en production"
+    },
+    {
+      "nom": "Rasquin Participations SA",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "Actionnaire représenté au conseil d'administration"
+    },
+    {
+      "nom": "Mosane Capital",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "Actionnaire représenté au conseil d'administration"
+    },
+    {
+      "nom": "Conseil d'administration",
+      "type": "instance",
+      "alias": [
+        "CA"
+      ],
+      "description": "Organe de gouvernance de l'entreprise"
+    },
+    {
+      "nom": "Comité de direction",
+      "type": "instance",
+      "alias": [],
+      "description": "Organe de direction de l'entreprise"
+    }
+  ],
+  "seconds": 13.9
+}

@@ -1,0 +1,10 @@
+{
+  "path": "07_IT/Architecture/Schema reseau inter-sites.png",
+  "kind": "image",
+  "page": null,
+  "index": null,
+  "model": "qwen3.5-9b",
+  "prompt": "Tu transcris des documents d'entreprise pour un moteur de recherche.\n1. Recopie tout le texte visible, exactement comme il est écrit : nombres, codes, dates, unités et\n   annotations manuscrites compris. Rends les tableaux en Markdown.\n2. Puis, sous le titre « Description », décris en trois phrases au plus le type d'image (organigramme,\n   plan, graphique, photo, facture...) et ce qu'elle montre qui n'est pas écrit : les rattachements\n   d'un organigramme, la valeur la plus haute d'un graphique, la position des éléments d'un plan.\nN'invente rien : si un élément est illisible, écris [illisible].",
+  "seconds": 2.8,
+  "text": "Calorvia • réseau inter-sites (mai 2026)\n\nGand (usine et entrepôt)  \nLille (bureau commercial)  \nNamur (siège)  \nsalle serveurs  \npare-feu principal  \nHerstal (entrepôt)  \nSeneffe (usine)  \nInternet et services cloud  \n(ERP Praxio, messagerie)\n\n---\n\n**Description**  \nIl s’agit d’un organigramme de réseau inter-sites de l’entreprise Calorvia, daté de mai 2026.  \nLe diagramme montre les connexions physiques et logiques entre cinq sites (Gand, Lille, Namur, Herstal, Seneffe) et un accès Internet/cloud centralisé.  \nLe siège à Namur est le nœud central, relié aux autres sites via des liaisons fibre ou VPN, avec une indication de secours 5G pour Herstal."
+}

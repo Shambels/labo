@@ -1,0 +1,7 @@
+{
+  "document": "05_Commercial/Tarifs/Tarif 2026 - projet v1.xlsx",
+  "body": "onglet « Tarif » · Tarif 2026 · PROJET v1 du 01/10/2025 (hausse uniforme de 4 %) · lignes 1 à 5\n| Code | Produit | Gamme | Prix 2025 | Prix 2026 | Hausse |\n|---|---|---|---|---|---|\n| AE06 | Aéris 6 | standard | 6890 | 7170 | 4,1 % |\n| AE09 | Aéris 9 | standard | 8450 | 8790 | 4,0 % |\n| AE12 | Aéris 12 | standard | 9980 | 10380 | 4,0 % |\n| AP16 | Aéris Pro 16 | premium | 13900 | 14460 | 4,0 % |\n| AP22 | Aéris Pro 22 | premium | 17250 | 17940 | 4,0 % |",
+  "model": "qwen3.8-27b",
+  "context": "Cette section du tableau tarifaire présente les prix des pompes à chaleur de la gamme Aéris, incluant les modèles standard et premium.",
+  "seconds": 2.8
+}

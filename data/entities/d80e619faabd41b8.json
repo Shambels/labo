@@ -1,0 +1,31 @@
+{
+  "document": "05_Commercial/Offres/DV-2026-0201 Logis.pdf",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Logis Wallonie Promotion",
+      "type": "client",
+      "alias": [],
+      "description": "client de l'offre de prix"
+    },
+    {
+      "nom": "Ventis D450",
+      "type": "produit",
+      "alias": [],
+      "description": "produit de la gamme standard"
+    },
+    {
+      "nom": "Aéris 9",
+      "type": "produit",
+      "alias": [],
+      "description": "produit de la gamme standard"
+    },
+    {
+      "nom": "Aéris Pro",
+      "type": "produit",
+      "alias": [],
+      "description": "gamme de produits"
+    }
+  ],
+  "seconds": 3.5
+}

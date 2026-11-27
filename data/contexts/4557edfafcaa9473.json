@@ -1,0 +1,7 @@
+{
+  "document": "07_IT/Projet_Atlas_ERP/COPIL/COPIL_Atlas_13_20260611.docx",
+  "body": "Projet Atlas : compte rendu du comité de pilotage n° 13\n1. Météo du projet par chantier\n| **Chantier** | **Statut** |\n| - | - |\n| Finance et comptabilité | Vert |\n| Achats | Orange |\n| Ventes et facturation | Orange |\n| Production (Seneffe) | Vert |\n| Logistique et WMS (Gand) | Vert |\n| Reprise des données | Vert |\n| Interfaces | Vert |\n| Formation et conduite du changement | Vert |",
+  "model": "qwen3.8-27b",
+  "context": "Cette section présente la météo du projet par chantier. Elle détaille le statut de chaque module, notamment les achats et les ventes qui sont en alerte.",
+  "seconds": 1.7
+}

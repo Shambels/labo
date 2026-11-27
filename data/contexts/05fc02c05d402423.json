@@ -1,0 +1,7 @@
+{
+  "document": "07_IT/Securite/Rapport incident securite 2026-01-13.pdf",
+  "body": "Chronologie du mardi 13 janvier 2026\n| Heure | Événement |\n| - | - |\n| 15 h 30 | Alerte de la sécurité informatique. |\n| 16 h 10 | Réinitialisation du mot de passe, suppression de la règle et révocation des sessions. |",
+  "model": "qwen3.8-27b",
+  "context": "Cette section détaille les mesures de containment prises en fin de journée lors de l'incident de compromission de la messagerie. Elle décrit la chronologie des actions de la sécurité informatique, notamment l'alerte et la réinitialisation des accès.",
+  "seconds": 2.2
+}

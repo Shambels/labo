@@ -1,0 +1,7 @@
+{
+  "document": "03_Production/Gent/Maandrapporten/Productierapport Gent 2026-03.xlsx",
+  "body": "onglet « Productie » · Productierapport · site Gent · maart 2026\n| Lijn | Producten | Geproduceerde eenheden | Stilstand (u) | Uitval (%) | OEE (%) |\n|---|---|---|---|---|---|\n| V1 | Ventis D300 | 1375 | 18.2 | 1.8 | 81.1 |\n| V2 | Ventis D450 / D450 Pro | 1343 | 20.8 | 1.1 | 78.6 |\n| Totaal |  | 2718 | 39 |  |  |",
+  "model": "qwen3.8-27b",
+  "context": "Cette section du rapport de production du site de Gent présente le tableau récapitulatif des lignes V1 et V2. Elle détaille les unités produites, les arrêts et les indicateurs de performance pour les modèles Ventis D300 et D450.",
+  "seconds": 3.0
+}

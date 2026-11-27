@@ -1,0 +1,7 @@
+{
+  "document": "04_Qualite/Non_conformites/NC-2025-047.docx",
+  "body": "Fiche de non-conformité NC-2025-047\n| Date d'ouverture | 02/12/2025 |\n| - | - |\n| Site | Seneffe |\n| Produit | Aéris 12 |\n| Description | Fuite de fluide R32 au niveau de la vanne quatre voies chez des clients finaux. |\n| Quantité concernée | 214 unités (lot de vannes V-2544) |\n| Mode de détection | Réclamations clients (9) |\n| Cause | Brasage défectueux sur le lot de vannes V-2544 livré par Valtek |\n| Action corrective | Rappel préventif et révision C du MO-SEN-07 |\n| Responsable | Anne Vercammen |\n| Statut | Clôturée le 31/03/2026 |\n",
+  "model": "qwen3.8-27b",
+  "context": "Cette section détaille la non-conformité concernant une fuite de fluide R32 sur le produit Aéris 12 au site de Seneffe. Elle précise la cause liée au brasage des vannes, l'action corrective entreprise et le responsable du dossier.",
+  "seconds": 2.8
+}

@@ -1,0 +1,7 @@
+{
+  "document": "02_RH/Effectifs/Effectifs mensuels 2025-2026.xlsx",
+  "body": "onglet « ETP par site » · Effectifs en fin de mois (ETP) · lignes 1 à 3\n| Site | 09/2025 | 10/2025 | 11/2025 | 12/2025 | 01/2026 | 02/2026 | 03/2026 | 04/2026 | 05/2026 | 06/2026 |\n|---|---|---|---|---|---|---|---|---|---|---|\n| Namur | 128 | 128 | 128 | 128 | 128 | 128 | 128 | 126 | 126 | 128 |\n| Seneffe | 286 | 286 | 286 | 286 | 287 | 287 | 288 | 288 | 289 | 289 |\n| Gand | 192 | 192 | 192 | 192 | 193 | 193 | 193 | 193 | 191 | 191 |",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait se trouve dans l'onglet « ETP par site » du classeur RH. Il détaille les effectifs mensuels des sites de Namur, Seneffe et Gand.",
+  "seconds": 3.6
+}

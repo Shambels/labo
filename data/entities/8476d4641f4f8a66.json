@@ -1,0 +1,79 @@
+{
+  "document": "02_RH/Politiques/Politique teletravail v3 (2026).docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Namur",
+      "type": "site",
+      "alias": [],
+      "description": "site de Calorvia soumis à la politique de télétravail"
+    },
+    {
+      "nom": "Lille",
+      "type": "site",
+      "alias": [],
+      "description": "site de Calorvia soumis à la politique de télétravail"
+    },
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "site de Calorvia soumis à la politique de télétravail"
+    },
+    {
+      "nom": "Gand",
+      "type": "site",
+      "alias": [],
+      "description": "site de Calorvia soumis à la politique de télétravail"
+    },
+    {
+      "nom": "Comité de direction",
+      "type": "instance",
+      "alias": [],
+      "description": "instance ayant décidé de la politique de télétravail"
+    },
+    {
+      "nom": "Direction des ressources humaines",
+      "type": "instance",
+      "alias": [],
+      "description": "propriétaire de la politique de télétravail"
+    },
+    {
+      "nom": "Ordinateur portable",
+      "type": "équipement",
+      "alias": [],
+      "description": "équipement mis à disposition pour le télétravail"
+    },
+    {
+      "nom": "Écran",
+      "type": "équipement",
+      "alias": [],
+      "description": "équipement mis à disposition pour le télétravail"
+    },
+    {
+      "nom": "Casque",
+      "type": "équipement",
+      "alias": [],
+      "description": "équipement mis à disposition pour le télétravail"
+    },
+    {
+      "nom": "Chaise ergonomique",
+      "type": "équipement",
+      "alias": [],
+      "description": "équipement pouvant être fourni sur avis du conseiller"
+    },
+    {
+      "nom": "VPN",
+      "type": "équipement",
+      "alias": [],
+      "description": "outil de connexion à distance sécurisé"
+    },
+    {
+      "nom": "Charte du droit à la déconnexion",
+      "type": "autre",
+      "alias": [],
+      "description": "document régissant les plages de disponibilité"
+    }
+  ],
+  "seconds": 13.7
+}

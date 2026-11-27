@@ -1,0 +1,10 @@
+{
+  "path": "04_Qualite/Reclamations/Courrier Énergies 2025-11-18.pdf",
+  "kind": "scan_page",
+  "page": 0,
+  "index": null,
+  "model": "qwen3.5-9b",
+  "prompt": "Tu transcris des documents d'entreprise pour un moteur de recherche.\n1. Recopie tout le texte visible, exactement comme il est écrit : nombres, codes, dates, unités et\n   annotations manuscrites compris. Rends les tableaux en Markdown.\n2. Puis, sous le titre « Description », décris en trois phrases au plus le type d'image (organigramme,\n   plan, graphique, photo, facture...) et ce qu'elle montre qui n'est pas écrit : les rattachements\n   d'un organigramme, la valeur la plus haute d'un graphique, la position des éléments d'un plan.\nN'invente rien : si un élément est illisible, écris [illisible].",
+  "seconds": 5.5,
+  "text": "Énergies du Condroz SRL  \nRoute de Dinant 7, 5590 Ciney  \nCalorvia SA, service qualité, Rue des Artisans 42, 5100 Namur · le 18 novembre 2025  \nObjet : Retard de livraison  \nMadame, Monsieur,  \n\nNotre commande CMD-25-4471 de 12 Aéris 6, confirmée pour le 24 octobre, n'a été livrée que le 14 novembre, soit avec trois semaines de retard.  \n\nCe retard nous a obligés à reporter quatre chantiers. Nous vous demandons un geste commercial sur cette commande.  \n\nVeuillez agréer nos salutations distinguées.  \nSandrine Collard, administratrice  \n\nCalorvia SA (entreprise fictive) · Diffusion interne · page 1  \n\n---\n\n**Description**  \nIl s’agit d’une lettre formelle de réclamation adressée par Énergies du Condroz SRL à Calorvia SA concernant un retard de livraison. Le document mentionne une commande spécifique (CMD-25-4471) de 12 Aéris 6, confirmée pour le 24 octobre mais livrée le 14 novembre, soit trois semaines en retard. Ce délai a entraîné le report de quatre chantiers, et l’expéditeur sollicite un geste commercial en conséquence."
+}

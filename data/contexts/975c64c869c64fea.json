@@ -1,0 +1,7 @@
+{
+  "document": "10_RSE/Bilan carbone 2025.xlsx",
+  "body": "onglet « Énergie 2025 » · Consommation d'énergie 2025 (MWh) · Site : Total ; Consommation : 11240",
+  "model": "qwen3.8-27b",
+  "context": "Cette ligne figure dans l'onglet « Énergie 2025 » du bilan carbone. Elle indique la consommation d'énergie totale de l'ensemble des sites de Calorvia.",
+  "seconds": 1.8
+}

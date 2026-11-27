@@ -1,0 +1,558 @@
+{
+  "schema_name": "DoclingDocument",
+  "version": "1.11.0",
+  "name": "Bail commercial entrepot Herstal",
+  "origin": {
+    "mimetype": "application/pdf",
+    "binary_hash": 11714007591022730255,
+    "filename": "Bail commercial entrepot Herstal.pdf"
+  },
+  "furniture": {
+    "self_ref": "#/furniture",
+    "children": [],
+    "content_layer": "furniture",
+    "name": "_root_",
+    "label": "unspecified"
+  },
+  "body": {
+    "self_ref": "#/body",
+    "children": [
+      {
+        "$ref": "#/texts/0"
+      },
+      {
+        "$ref": "#/texts/1"
+      },
+      {
+        "$ref": "#/texts/2"
+      },
+      {
+        "$ref": "#/texts/3"
+      },
+      {
+        "$ref": "#/texts/4"
+      },
+      {
+        "$ref": "#/texts/5"
+      },
+      {
+        "$ref": "#/texts/6"
+      },
+      {
+        "$ref": "#/texts/7"
+      },
+      {
+        "$ref": "#/texts/8"
+      },
+      {
+        "$ref": "#/texts/9"
+      },
+      {
+        "$ref": "#/texts/10"
+      },
+      {
+        "$ref": "#/texts/11"
+      },
+      {
+        "$ref": "#/texts/12"
+      },
+      {
+        "$ref": "#/texts/13"
+      },
+      {
+        "$ref": "#/texts/14"
+      },
+      {
+        "$ref": "#/texts/15"
+      },
+      {
+        "$ref": "#/texts/16"
+      }
+    ],
+    "content_layer": "body",
+    "name": "_root_",
+    "label": "unspecified"
+  },
+  "groups": [],
+  "texts": [
+    {
+      "self_ref": "#/texts/0",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "furniture",
+      "label": "page_header",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 62.3622,
+            "t": 813.0068128,
+            "r": 184.90516959999997,
+            "b": 806.1630624000001,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            39
+          ]
+        }
+      ],
+      "orig": "Calorvia SA \u00b7 Bail commercial \u00b7 Herstal",
+      "text": "Calorvia SA \u00b7 Bail commercial \u00b7 Herstal"
+    },
+    {
+      "self_ref": "#/texts/1",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 773.5719,
+            "r": 174.2293904,
+            "b": 759.7385666666667,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            15
+          ]
+        }
+      ],
+      "orig": "Bail commercial",
+      "text": "Bail commercial",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/2",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 747.4337168000001,
+            "r": 499.7235254999998,
+            "b": 724.4512944,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            128
+          ]
+        }
+      ],
+      "orig": "Entre Hauts-Sarts Logistics SA, bailleresse, et Calorvia SA, preneuse, repr\u00e9sent\u00e9e par H\u00e9l\u00e8ne Marchal, administratrice d\u00e9l\u00e9gu\u00e9e.",
+      "text": "Entre Hauts-Sarts Logistics SA, bailleresse, et Calorvia SA, preneuse, repr\u00e9sent\u00e9e par H\u00e9l\u00e8ne Marchal, administratrice d\u00e9l\u00e9gu\u00e9e."
+    },
+    {
+      "self_ref": "#/texts/3",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 710.80236875,
+            "r": 147.88490625,
+            "b": 699.9950770833334,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            17
+          ]
+        }
+      ],
+      "orig": "Article 1 : objet",
+      "text": "Article 1 : objet",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/4",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 691.4337168000001,
+            "r": 464.41931775,
+            "b": 682.4512944,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            92
+          ]
+        }
+      ],
+      "orig": "Entrep\u00f4t de 4200 m\u00b2 et 4 quais de chargement, Parc industriel des Hauts-Sarts, 4040 Herstal.",
+      "text": "Entrep\u00f4t de 4200 m\u00b2 et 4 quais de chargement, Parc industriel des Hauts-Sarts, 4040 Herstal."
+    },
+    {
+      "self_ref": "#/texts/5",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 668.80236875,
+            "r": 151.08314875000002,
+            "b": 657.9950770833334,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            17
+          ]
+        }
+      ],
+      "orig": "Article 2 : dur\u00e9e",
+      "text": "Article 2 : dur\u00e9e",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/6",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 649.4337168000001,
+            "r": 523.0614071999997,
+            "b": 626.4512944,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            171
+          ]
+        }
+      ],
+      "orig": "Neuf ans \u00e0 compter du 1er mai 2026. La preneuse peut mettre fin au bail \u00e0 l'expiration de chaque triennat, moyennant un pr\u00e9avis de six mois notifi\u00e9 par lettre recommand\u00e9e.",
+      "text": "Neuf ans \u00e0 compter du 1er mai 2026. La preneuse peut mettre fin au bail \u00e0 l'expiration de chaque triennat, moyennant un pr\u00e9avis de six mois notifi\u00e9 par lettre recommand\u00e9e."
+    },
+    {
+      "self_ref": "#/texts/7",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 612.80236875,
+            "r": 147.08534625,
+            "b": 601.9950770833334,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            17
+          ]
+        }
+      ],
+      "orig": "Article 3 : loyer",
+      "text": "Article 3 : loyer",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/8",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 593.4337168000001,
+            "r": 509.3570633999997,
+            "b": 570.4512944,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            172
+          ]
+        }
+      ],
+      "orig": "Le loyer annuel est fix\u00e9 \u00e0 98 700 \u20ac hors charges, soit 23,50 \u20ac par m\u00b2, payable par mois et d'avance. Il est index\u00e9 chaque ann\u00e9e \u00e0 la date anniversaire selon l'indice sant\u00e9.",
+      "text": "Le loyer annuel est fix\u00e9 \u00e0 98 700 \u20ac hors charges, soit 23,50 \u20ac par m\u00b2, payable par mois et d'avance. Il est index\u00e9 chaque ann\u00e9e \u00e0 la date anniversaire selon l'indice sant\u00e9."
+    },
+    {
+      "self_ref": "#/texts/9",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 556.80236875,
+            "r": 163.75404625,
+            "b": 545.9950770833334,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            20
+          ]
+        }
+      ],
+      "orig": "Article 4 : garantie",
+      "text": "Article 4 : garantie",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/10",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 537.4337168000001,
+            "r": 505.66053314999976,
+            "b": 528.4512944,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            106
+          ]
+        }
+      ],
+      "orig": "Une garantie bancaire de trois mois de loyer, soit 24 675 \u20ac, est constitu\u00e9e avant l'entr\u00e9e dans les lieux.",
+      "text": "Une garantie bancaire de trois mois de loyer, soit 24 675 \u20ac, est constitu\u00e9e avant l'entr\u00e9e dans les lieux."
+    },
+    {
+      "self_ref": "#/texts/11",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 514.80236875,
+            "r": 160.3971125,
+            "b": 503.99507708333334,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            19
+          ]
+        }
+      ],
+      "orig": "Article 5 : charges",
+      "text": "Article 5 : charges",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/12",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 495.4337168,
+            "r": 497.9701063499999,
+            "b": 472.45129440000005,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            149
+          ]
+        }
+      ],
+      "orig": "Les charges communes (gardiennage du parc, entretien des voiries) sont refactur\u00e9es au prorata de la surface, avec une provision mensuelle de 1 150 \u20ac.",
+      "text": "Les charges communes (gardiennage du parc, entretien des voiries) sont refactur\u00e9es au prorata de la surface, avec une provision mensuelle de 1 150 \u20ac."
+    },
+    {
+      "self_ref": "#/texts/13",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 458.80236875,
+            "r": 200.85731875,
+            "b": 447.99507708333334,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            24
+          ]
+        }
+      ],
+      "orig": "Article 6 : am\u00e9nagements",
+      "text": "Article 6 : am\u00e9nagements",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/14",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 439.4337168,
+            "r": 497.12928524999984,
+            "b": 397.45129440000005,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            167
+          ]
+        }
+      ],
+      "orig": "La preneuse peut installer des rayonnages \u00e0 ses frais. Ils seront d\u00e9mont\u00e9s \u00e0 la fin du bail, sauf accord contraire. Fait \u00e0 Herstal le 4 mars 2026, en deux exemplaires.",
+      "text": "La preneuse peut installer des rayonnages \u00e0 ses frais. Ils seront d\u00e9mont\u00e9s \u00e0 la fin du bail, sauf accord contraire. Fait \u00e0 Herstal le 4 mars 2026, en deux exemplaires."
+    },
+    {
+      "self_ref": "#/texts/15",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 76.86614,
+            "t": 372.9712444,
+            "r": 365.622703,
+            "b": 365.2720252,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            36
+          ]
+        }
+      ],
+      "orig": "Pour la bailleresse Pour la preneuse",
+      "text": "Pour la bailleresse Pour la preneuse"
+    },
+    {
+      "self_ref": "#/texts/16",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "furniture",
+      "label": "page_footer",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 204.7511,
+            "t": 33.47927279999999,
+            "r": 390.52453760000003,
+            "b": 26.635522400000013,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            61
+          ]
+        }
+      ],
+      "orig": "Calorvia SA (entreprise fictive) \u00b7 Diffusion interne \u00b7 page 1",
+      "text": "Calorvia SA (entreprise fictive) \u00b7 Diffusion interne \u00b7 page 1"
+    }
+  ],
+  "pictures": [],
+  "tables": [],
+  "key_value_items": [],
+  "form_items": [],
+  "pages": {
+    "1": {
+      "size": {
+        "width": 595.2756,
+        "height": 841.8898
+      },
+      "page_no": 1
+    }
+  }
+}

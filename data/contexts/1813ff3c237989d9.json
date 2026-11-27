@@ -1,0 +1,7 @@
+{
+  "document": "01_Finance/Procedures/Procedure modification coordonnees bancaires fournisseurs.pdf",
+  "body": "2. Étapes\n- 1 La comptabilité fournisseurs enregistre la demande dans le registre des modifications bancaires.\n- 2 Elle rappelle le fournisseur au numéro de téléphone figurant dans le dossier fournisseur, et jamais au numéro indiqué dans la demande.\n- 3 Elle obtient la confirmation orale du nouvel IBAN auprès d'un contact connu et note le nom de la personne, la date et l'heure de l'appel.\n- 4 Une deuxième personne de la direction financière valide la modification dans l'ERP (principe des quatre yeux).\n- 5 Pour tout paiement supérieur à 10 000 € vers un IBAN modifié depuis moins de 30 jours, la directrice ou le directeur financier valide personnellement le paiement.",
+  "model": "qwen3.8-27b",
+  "context": "Cette section détaille les étapes de validation des modifications de coordonnées bancaires des fournisseurs. Elle décrit le processus de confirmation téléphonique et les contrôles internes requis par la direction financière.",
+  "seconds": 1.8
+}

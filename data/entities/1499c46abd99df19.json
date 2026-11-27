@@ -1,0 +1,55 @@
+{
+  "document": "04_Qualite/Audits/Rapport audit ISO 9001 surveillance 2026.pdf",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Certiqual Belgium",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "organisme certificateur ISO 9001"
+    },
+    {
+      "nom": "Namur",
+      "type": "site",
+      "alias": [],
+      "description": "site audité par Certiqual"
+    },
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "site audité par Certiqual"
+    },
+    {
+      "nom": "Gand",
+      "type": "site",
+      "alias": [],
+      "description": "site audité par Certiqual"
+    },
+    {
+      "nom": "Marc Vanderstraeten",
+      "type": "personne",
+      "alias": [],
+      "description": "auditeur principal de l'audit"
+    },
+    {
+      "nom": "Aéris 12",
+      "type": "produit",
+      "alias": [],
+      "description": "produit faisant l'objet d'un rappel"
+    },
+    {
+      "nom": "R290",
+      "type": "produit",
+      "alias": [],
+      "description": "fluide frigorigène concerné par les fiches de sécurité"
+    },
+    {
+      "nom": "ERP",
+      "type": "projet",
+      "alias": [],
+      "description": "projet informatique mentionné dans les revues de direction"
+    }
+  ],
+  "seconds": 7.1
+}

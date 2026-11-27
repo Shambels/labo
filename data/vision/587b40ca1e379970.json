@@ -1,0 +1,10 @@
+{
+  "path": "04_Qualite/Reclamations/Courrier Habitat 2025-09-12.pdf",
+  "kind": "scan_page",
+  "page": 0,
+  "index": null,
+  "model": "qwen3.5-9b",
+  "prompt": "Tu transcris des documents d'entreprise pour un moteur de recherche.\n1. Recopie tout le texte visible, exactement comme il est écrit : nombres, codes, dates, unités et\n   annotations manuscrites compris. Rends les tableaux en Markdown.\n2. Puis, sous le titre « Description », décris en trois phrases au plus le type d'image (organigramme,\n   plan, graphique, photo, facture...) et ce qu'elle montre qui n'est pas écrit : les rattachements\n   d'un organigramme, la valeur la plus haute d'un graphique, la position des éléments d'un plan.\nN'invente rien : si un élément est illisible, écris [illisible].",
+  "seconds": 5.7,
+  "text": "Habitat Confort SA  \nRue de Namur 112, 1300 Wavre  \nCalorvia SA, service qualité, Rue des Artisans 42, 5100 Namur · le 12 septembre 2025  \nObjet : Aérïs 9 installée chez M. et Mme Dubois à Wavre  \nMadame, Monsieur,  \n\nNous vous signalons que l'unité extérieure de l'Aérïs 9 (numéro de série AE09-25-2207) installée le 28 août produit un bruit de 58 dB(A) mesuré à un mètre, alors que la fiche technique annonce 52 dB(A).  \nNos clients se plaignent du bruit la nuit. Nous vous demandons l'intervention d'un technicien dans les plus brefs délais.  \n\nVeuillez agréer nos salutations distinguées.  \nChristophe Lemaire, gérant  \n\nCalorvia SA (entreprise fictive) · Diffusion interne · page 1  \n\n---\n\n**Description**  \nIl s’agit d’une lettre formelle de réclamation adressée par Habitat Confort SA à Calorvia SA. Elle signale un problème de bruit excessif émis par une unité extérieure d’un système de ventilation (Aérïs 9), installée chez des clients à Wavre. La lettre demande une intervention technique urgente en raison des plaintes reçues des occupants."
+}

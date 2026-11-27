@@ -1,0 +1,93 @@
+{
+  "document": "00_Direction/CODIR/2026/2026-01-14 CODIR extraordinaire PV.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Hélène Marchal",
+      "type": "personne",
+      "alias": [
+        "CEO"
+      ],
+      "description": "administratrice déléguée et présidente du comité"
+    },
+    {
+      "nom": "Laurent Dewit",
+      "type": "personne",
+      "alias": [
+        "CFO"
+      ],
+      "description": "directeur financier"
+    },
+    {
+      "nom": "Thomas Lambert",
+      "type": "personne",
+      "alias": [
+        "COO"
+      ],
+      "description": "directeur des opérations"
+    },
+    {
+      "nom": "Nadia Benali",
+      "type": "personne",
+      "alias": [],
+      "description": "directrice des ressources humaines"
+    },
+    {
+      "nom": "Pierre-Yves Collard",
+      "type": "personne",
+      "alias": [],
+      "description": "directeur commercial"
+    },
+    {
+      "nom": "Kevin Mertens",
+      "type": "personne",
+      "alias": [],
+      "description": "directeur des systèmes d'information"
+    },
+    {
+      "nom": "Anne Vercammen",
+      "type": "personne",
+      "alias": [],
+      "description": "directrice qualité"
+    },
+    {
+      "nom": "Pieter De Smet",
+      "type": "personne",
+      "alias": [],
+      "description": "directeur du site de Gand"
+    },
+    {
+      "nom": "Yannick Dupuis",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable de la sécurité informatique"
+    },
+    {
+      "nom": "Julie Renard",
+      "type": "personne",
+      "alias": [],
+      "description": "secrétaire du comité de direction"
+    },
+    {
+      "nom": "Tôlerie Mosane SRL",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "fournisseur de tôlerie"
+    },
+    {
+      "nom": "Comité de direction",
+      "type": "instance",
+      "alias": [
+        "CODIR"
+      ],
+      "description": "instance de direction de l'entreprise"
+    },
+    {
+      "nom": "Site de Gand",
+      "type": "site",
+      "alias": [],
+      "description": "site industriel dirigé par Pieter De Smet"
+    }
+  ],
+  "seconds": 10.8
+}

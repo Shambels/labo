@@ -1,0 +1,7 @@
+{
+  "document": "04_Qualite/Audits/Rapport audit ISO 9001 surveillance 2026.pdf",
+  "body": "Rapport d'audit de surveillance ISO 9001:2015\n| Organisme | Certiqual Belgium |\n| - | - |\n| Dates | du 2 au 4 février 2026 |\n| Sites audités | Namur, Seneffe, Gand |\n| Auditeur principal | Marc Vanderstraeten |\n| Conclusion | Maintien de la certification recommandé |",
+  "model": "qwen3.8-27b",
+  "context": "Il s'agit de l'en-tête du rapport d'audit de surveillance ISO 9001:2015. Cette rubrique présente les informations générales de l'audit, notamment l'organisme certificateur, les sites audités et la conclusion finale.",
+  "seconds": 2.9
+}

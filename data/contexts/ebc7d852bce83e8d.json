@@ -1,0 +1,7 @@
+{
+  "document": "02_RH/Effectifs/Effectifs mensuels 2025-2026.xlsx",
+  "body": "onglet « ETP par site » · Effectifs en fin de mois (ETP) · Site : Namur ; 09/2025 : 128 ; 10/2025 : 128 ; 11/2025 : 128 ; 12/2025 : 128 ; 01/2026 : 128 ; 02/2026 : 128 ; 03/2026 : 128 ; 04/2026 : 126 ; 05/2026 : 126 ; 06/2026 : 128",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait se trouve dans l'onglet « ETP par site » du classeur RH. Il détaille l'évolution mensuelle des effectifs du site de Namur.",
+  "seconds": 1.8
+}

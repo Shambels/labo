@@ -1,0 +1,7 @@
+{
+  "document": "00_Direction/Conseil_administration/PV_signes/PV CA 2026-06-16.pdf",
+  "body": "4. Situation financière à fin mai 2026\nLe chiffre d'affaires de mai 2026 s'élève à 11 300 k€. Le chiffre d'affaires cumulé à fin mai 2026 atteint 64 800 k€, soit 0,6 % au-dessus du budget (64 420 k€). L'EBITDA cumulé s'élève à 6 057 k€, soit 9,3 % du chiffre d'affaires, pour un objectif budgétaire de 9,5 %.",
+  "model": "qwen3.8-27b",
+  "context": "Cette section du procès-verbal détaille la situation financière de l'entreprise à fin mai 2026. Elle présente les résultats du chiffre d'affaires et de l'EBITDA par rapport au budget.",
+  "seconds": 2.1
+}

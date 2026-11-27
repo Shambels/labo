@@ -1,0 +1,7 @@
+{
+  "document": "03_Production/Seneffe/Rapports_mensuels/Rapport production Seneffe 2025-10.xlsx",
+  "body": "onglet « Production »\nFaits marquants\n09/10 : arrêt de la ligne L2 pendant 6 heures (panne du capteur de pression du banc d'essai).",
+  "model": "qwen3.8-27b",
+  "context": "Cette section des faits marquants du rapport de production de l'usine de Seneffe détaille l'arrêt de la ligne L2 survenu le 9 octobre.",
+  "seconds": 1.7
+}

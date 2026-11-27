@@ -1,0 +1,31 @@
+{
+  "document": "00_Direction/CODIR/Annexes/2026-02-02 Annexe - Etude logistique entrepot.pptx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Entrepôt de Gand",
+      "type": "site",
+      "alias": [],
+      "description": "Site logistique saturé nécessitant une extension ou un délestage"
+    },
+    {
+      "nom": "Herstal",
+      "type": "site",
+      "alias": [],
+      "description": "Site de location recommandé pour la logistique"
+    },
+    {
+      "nom": "Clients de la province de Liège",
+      "type": "client",
+      "alias": [],
+      "description": "Clients situés en province de Liège"
+    },
+    {
+      "nom": "Allemagne",
+      "type": "client",
+      "alias": [],
+      "description": "Marché client situé en Allemagne"
+    }
+  ],
+  "seconds": 5.5
+}

@@ -1,0 +1,83 @@
+{
+  "document": "01_Finance/Investissements/Suivi capex 2026.xlsx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Ligne d'assemblage L4 (Seneffe)",
+      "type": "projet",
+      "alias": [
+        "L4"
+      ],
+      "description": "ligne d'assemblage mise en service en juillet 2026"
+    },
+    {
+      "nom": "Remplacement de l'ERP (projet Atlas)",
+      "type": "projet",
+      "alias": [
+        "Atlas"
+      ],
+      "description": "remplacement du système ERP en production"
+    },
+    {
+      "nom": "Infrastructure informatique",
+      "type": "projet",
+      "alias": [],
+      "description": "infrastructure informatique terminée"
+    },
+    {
+      "nom": "Sécurité entrepôt de Gand",
+      "type": "projet",
+      "alias": [],
+      "description": "projet de sécurité pour l'entrepôt de Gand"
+    },
+    {
+      "nom": "Maintenance lourde et outillages",
+      "type": "projet",
+      "alias": [],
+      "description": "maintenance lourde et outillages en cours"
+    },
+    {
+      "nom": "Installation photovoltaïque (Seneffe)",
+      "type": "projet",
+      "alias": [],
+      "description": "installation photovoltaïque en cours de travaux"
+    },
+    {
+      "nom": "Rayonnages Herstal (hors budget)",
+      "type": "projet",
+      "alias": [],
+      "description": "rayonnages pour le site de Herstal"
+    },
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "site accueillant la ligne L4 et le photovoltaïque"
+    },
+    {
+      "nom": "Gand",
+      "type": "site",
+      "alias": [],
+      "description": "site de l'entrepôt sécurisé"
+    },
+    {
+      "nom": "Herstal",
+      "type": "site",
+      "alias": [],
+      "description": "site des rayonnages"
+    },
+    {
+      "nom": "ERP",
+      "type": "équipement",
+      "alias": [],
+      "description": "système de gestion d'entreprise remplacé"
+    },
+    {
+      "nom": "Conseil",
+      "type": "instance",
+      "alias": [],
+      "description": "instance ayant approuvé le surcoût ERP"
+    }
+  ],
+  "seconds": 12.7
+}

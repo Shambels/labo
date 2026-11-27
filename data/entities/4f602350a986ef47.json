@@ -1,0 +1,31 @@
+{
+  "document": "10_RSE/Consommation energie par site 2025.png",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Namur",
+      "type": "site",
+      "alias": [],
+      "description": "site de production de Calorvia"
+    },
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "site de production de Calorvia"
+    },
+    {
+      "nom": "Gand",
+      "type": "site",
+      "alias": [],
+      "description": "site de production de Calorvia"
+    },
+    {
+      "nom": "Lille",
+      "type": "site",
+      "alias": [],
+      "description": "site de production de Calorvia"
+    }
+  ],
+  "seconds": 2.9
+}

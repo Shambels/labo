@@ -1,0 +1,7 @@
+{
+  "document": "06_Achats/Bons_de_livraison/2026-02-12 BL Elcora.jpg",
+  "body": "Image\nElcora Electronics BV  \nIndustriestone Noord 8, 2800 Mechelen  \nLeveringsbon  \n\nLeveringsbon: LB-26-01877  \nDatum: 12/02/2026  \nLeveringsadres: Calorvia SA - Seneffe  \n\n| Art.   | Omschrijving                     | Aantal |\n|--------|----------------------------------|--------|\n| RC-40  | Regelkaart Aéris (versie 4.0.3)  | 2400   |\n| DS-2   | Display module 2,8 inch          | 600    |\n\nRÉCEPTION SENEFFE  \n\nReçu le 12/02 - 2 cartons abîmés  \nphotos envoyées - R. Dethier  \n\nMerci de vérifier la marchandise à la réception.\n\n---\n\n**Description**  \nIl s’agit d’une facture de livraison (leveringsbon) émise par Elcora Electronics BV pour Calorvia SA à Seneffe. Le document liste deux articles avec leurs quantités et inclut une mention manuscrite indiquant que deux cartons ont été abîmés lors de la réception, accompagnée d’une signature et d’une note sur l’envoi de photos. La date de la facture est le 12 février 2026, et un espace réservé pour la signature de réception est présent en bas à droite.",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait correspond à l'intégralité du bon de livraison émis par Elcora Electronics BV pour Calorvia SA à Seneffe. Il détaille la réception de cartes de régulation et de modules d'affichage, ainsi que la constatation de cartons abîmés par R. Dethier.",
+  "seconds": 3.4
+}

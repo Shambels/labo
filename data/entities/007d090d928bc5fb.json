@@ -1,0 +1,19 @@
+{
+  "document": "03_Production/Maintenance/Fiches_intervention/2025-11-27 INT-2025-375 Four de brasage.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Four de brasage",
+      "type": "équipement",
+      "alias": [],
+      "description": "four de production avec dérive de température"
+    },
+    {
+      "nom": "Fabrice Collin",
+      "type": "personne",
+      "alias": [],
+      "description": "intervenant sur le four de brasage"
+    }
+  ],
+  "seconds": 2.0
+}

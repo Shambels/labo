@@ -1,0 +1,7 @@
+{
+  "document": "05_Commercial/Reunions_commerciales/CR reunion commerciale 2026-03-11.docx",
+  "body": "Réunion commerciale mensuelle du 11 mars 2026\n1. Ventes de février 2026\nChiffre d'affaires du mois : 13 500 k€. Prises de commandes : 13 400 k€.\n| **Région** | **Chiffre d'affaires (k€)** |\n| - | - |\n| Wallonie | 4 672 |\n| Bruxelles | 1 146 |\n| Flandre | 4 281 |\n| France | 2 760 |\n| Autres pays | 641 |",
+  "model": "qwen3.8-27b",
+  "context": "Cette section détaille les résultats commerciaux de février 2026, en présentant le chiffre d'affaires et les prises de commandes. Elle inclut également un tableau récapitulatif des ventes par région.",
+  "seconds": 2.0
+}

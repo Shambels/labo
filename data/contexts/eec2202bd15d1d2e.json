@@ -1,0 +1,7 @@
+{
+  "document": "05_Commercial/Reunions_commerciales/CR reunion commerciale 2025-12-10.docx",
+  "body": "Réunion commerciale mensuelle du 10 décembre 2025\n1. Ventes de novembre 2025\nChiffre d'affaires du mois : 15 800 k€. Prises de commandes : 17 180 k€.\n| **Région** | **Chiffre d'affaires (k€)** |\n| - | - |\n| Wallonie | 5 876 |\n| Bruxelles | 1 348 |\n| Flandre | 4 641 |\n| France | 3 119 |\n| Autres pays | 816 |",
+  "model": "qwen3.8-27b",
+  "context": "Cette section détaille les résultats commerciaux de novembre 2025, en présentant le chiffre d'affaires et les prises de commandes. Elle inclut également un tableau récapitulatif des ventes par région.",
+  "seconds": 2.1
+}

@@ -1,0 +1,31 @@
+{
+  "document": "09_Communication/Newsletter/Calorvia Info 2025-11.html",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Entrepôt de Gand",
+      "type": "site",
+      "alias": [],
+      "description": "lieu de stockage et d'expédition des produits"
+    },
+    {
+      "nom": "Usine de Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "site de production des équipements"
+    },
+    {
+      "nom": "Elise Dufour",
+      "type": "personne",
+      "alias": [],
+      "description": "collaboratrice en charge des ventes France"
+    },
+    {
+      "nom": "Yasmine Collignon",
+      "type": "personne",
+      "alias": [],
+      "description": "collaboratrice en charge des ressources humaines"
+    }
+  ],
+  "seconds": 4.1
+}

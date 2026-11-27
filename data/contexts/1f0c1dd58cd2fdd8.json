@@ -1,0 +1,7 @@
+{
+  "document": "03_Production/Gent/Veiligheid/Incidentrapport 2025-11-12 heftruck gang 7.pdf",
+  "body": "Oorzaken\n- Geen gemarkeerde oversteekplaats voor voetgangers in de gangen.\n- Beperkt zicht aan de hoeken van de rekken.\n- Toegelaten snelheid (12 km/u) te hoog voor zones met voetgangers.\n- Printer voor etiketten opgesteld aan de overkant van de gang.",
+  "model": "qwen3.8-27b",
+  "context": "Cette rubrique détaille les causes de l'accident survenu dans le magasin de Gand. Elle identifie les facteurs de risque liés à l'infrastructure et à la circulation des chariots élévateurs.",
+  "seconds": 2.0
+}

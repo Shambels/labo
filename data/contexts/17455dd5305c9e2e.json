@@ -1,0 +1,7 @@
+{
+  "document": "03_Production/Maintenance/Fiches_intervention/2025-10-09 INT-2025-585 Banc dessai L2.docx",
+  "body": "Fiche d'intervention INT-2025-585\n| Date | 09/10/2025 |\n| - | - |\n| Équipement | Banc d'essai L2 |\n| Description | Panne du capteur de pression (lecture figée à 0 bar). Remplacement du capteur. |\n| Durée d'arrêt | 6 h 00 |\n| Pièces et coûts | Capteur Testra PS-45 : 1 240 € |\n| Intervenant | Fabrice Collin |",
+  "model": "qwen3.8-27b",
+  "context": "Cette fiche d'intervention concerne le banc d'essai L2. Elle détaille le remplacement du capteur de pression effectué par Fabrice Collin.",
+  "seconds": 1.8
+}

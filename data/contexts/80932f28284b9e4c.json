@@ -1,0 +1,7 @@
+{
+  "document": "06_Achats/Appel_offres_ERP/Presentation Praxio.pptx",
+  "body": "Notre proposition\n• Éditeur français fondé en 2004, 1 900 clients industriels.\n• Hébergement en Europe (Francfort et Paris).\n• Module WMS natif et connecteur LogiPath certifié.\n• Méthode de déploiement en 16 semaines.\n• Interface disponible en 14 langues, dont le néerlandais.",
+  "model": "qwen3.8-27b",
+  "context": "Cette section détaille les atouts de l'éditeur Praxio, notamment son hébergement européen et ses modules logistiques. Elle présente les caractéristiques techniques et le planning de déploiement proposés à Calorvia.",
+  "seconds": 1.9
+}

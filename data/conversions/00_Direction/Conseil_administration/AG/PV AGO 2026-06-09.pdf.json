@@ -1,0 +1,424 @@
+{
+  "schema_name": "DoclingDocument",
+  "version": "1.11.0",
+  "name": "PV AGO 2026-06-09",
+  "origin": {
+    "mimetype": "application/pdf",
+    "binary_hash": 2373956206421342369,
+    "filename": "PV AGO 2026-06-09.pdf"
+  },
+  "furniture": {
+    "self_ref": "#/furniture",
+    "children": [],
+    "content_layer": "furniture",
+    "name": "_root_",
+    "label": "unspecified"
+  },
+  "body": {
+    "self_ref": "#/body",
+    "children": [
+      {
+        "$ref": "#/texts/0"
+      },
+      {
+        "$ref": "#/texts/1"
+      },
+      {
+        "$ref": "#/texts/2"
+      },
+      {
+        "$ref": "#/texts/3"
+      },
+      {
+        "$ref": "#/groups/0"
+      },
+      {
+        "$ref": "#/texts/8"
+      },
+      {
+        "$ref": "#/texts/9"
+      },
+      {
+        "$ref": "#/texts/10"
+      }
+    ],
+    "content_layer": "body",
+    "name": "_root_",
+    "label": "unspecified"
+  },
+  "groups": [
+    {
+      "self_ref": "#/groups/0",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/4"
+        },
+        {
+          "$ref": "#/texts/5"
+        },
+        {
+          "$ref": "#/texts/6"
+        },
+        {
+          "$ref": "#/texts/7"
+        }
+      ],
+      "content_layer": "body",
+      "name": "list",
+      "label": "list"
+    }
+  ],
+  "texts": [
+    {
+      "self_ref": "#/texts/0",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "furniture",
+      "label": "page_header",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 62.3622,
+            "t": 813.0068128,
+            "r": 251.23720080000012,
+            "b": 806.1630624000001,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            58
+          ]
+        }
+      ],
+      "orig": "Calorvia SA \u00b7 Assembl\u00e9e g\u00e9n\u00e9rale ordinaire \u00b7 Proc\u00e8s-verbal",
+      "text": "Calorvia SA \u00b7 Assembl\u00e9e g\u00e9n\u00e9rale ordinaire \u00b7 Proc\u00e8s-verbal"
+    },
+    {
+      "self_ref": "#/texts/1",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 773.5719,
+            "r": 498.9247120000001,
+            "b": 759.7385666666667,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            64
+          ]
+        }
+      ],
+      "orig": "Proc\u00e8s-verbal de l'assembl\u00e9e g\u00e9n\u00e9rale ordinaire des actionnaires",
+      "text": "Proc\u00e8s-verbal de l'assembl\u00e9e g\u00e9n\u00e9rale ordinaire des actionnaires",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/2",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 747.4337168000001,
+            "r": 504.1532129999996,
+            "b": 705.4512944,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            282
+          ]
+        }
+      ],
+      "orig": "Assembl\u00e9e tenue le mardi 9 juin 2026 \u00e0 17 h 00 au si\u00e8ge social, Rue des Artisans 42 \u00e0 Namur. Bureau : Jean-Fran\u00e7ois Delcourt, pr\u00e9sident ; Caroline Hendrickx, secr\u00e9taire ; Philippe Rasquin et Olivier Thiry, scrutateurs. 1 962 400 actions sur 2 000 000 sont pr\u00e9sentes ou repr\u00e9sent\u00e9es.",
+      "text": "Assembl\u00e9e tenue le mardi 9 juin 2026 \u00e0 17 h 00 au si\u00e8ge social, Rue des Artisans 42 \u00e0 Namur. Bureau : Jean-Fran\u00e7ois Delcourt, pr\u00e9sident ; Caroline Hendrickx, secr\u00e9taire ; Philippe Rasquin et Olivier Thiry, scrutateurs. 1 962 400 actions sur 2 000 000 sont pr\u00e9sentes ou repr\u00e9sent\u00e9es."
+    },
+    {
+      "self_ref": "#/texts/3",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 691.80236875,
+            "r": 128.9945275,
+            "b": 680.9950770833334,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            11
+          ]
+        }
+      ],
+      "orig": "R\u00e9solutions",
+      "text": "R\u00e9solutions",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/4",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "list_item",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 66.3622,
+            "t": 672.9713144,
+            "r": 521.8184932499996,
+            "b": 649.4512944,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            112
+          ]
+        }
+      ],
+      "orig": "1 L'assembl\u00e9e approuve les comptes annuels de l'exercice 2025, qui se cl\u00f4turent par un b\u00e9n\u00e9fice net de 5 412 k\u20ac.",
+      "text": "1 L'assembl\u00e9e approuve les comptes annuels de l'exercice 2025, qui se cl\u00f4turent par un b\u00e9n\u00e9fice net de 5 412 k\u20ac.",
+      "enumerated": false,
+      "marker": ""
+    },
+    {
+      "self_ref": "#/texts/5",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "list_item",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 66.3622,
+            "t": 639.9713144,
+            "r": 512.7437810999998,
+            "b": 616.4512944,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            118
+          ]
+        }
+      ],
+      "orig": "2 L'assembl\u00e9e approuve la distribution d'un dividende brut de 0,80 \u20ac par action, payable \u00e0 partir du 1er juillet 2026.",
+      "text": "2 L'assembl\u00e9e approuve la distribution d'un dividende brut de 0,80 \u20ac par action, payable \u00e0 partir du 1er juillet 2026.",
+      "enumerated": false,
+      "marker": ""
+    },
+    {
+      "self_ref": "#/texts/6",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "list_item",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 66.3622,
+            "t": 606.9713144,
+            "r": 462.6842173499999,
+            "b": 597.4512944,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            88
+          ]
+        }
+      ],
+      "orig": "3 L'assembl\u00e9e donne d\u00e9charge aux administrateurs et au commissaire pour l'exercice 2025.",
+      "text": "3 L'assembl\u00e9e donne d\u00e9charge aux administrateurs et au commissaire pour l'exercice 2025.",
+      "enumerated": false,
+      "marker": ""
+    },
+    {
+      "self_ref": "#/texts/7",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "list_item",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 66.3622,
+            "t": 587.9713144,
+            "r": 524.9613143999998,
+            "b": 564.4512944,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            154
+          ]
+        }
+      ],
+      "orig": "4 L'assembl\u00e9e renouvelle le mandat d'administratrice ind\u00e9pendante de Martine Claessens pour une dur\u00e9e de quatre ans, jusqu'\u00e0 l'assembl\u00e9e g\u00e9n\u00e9rale de 2030.",
+      "text": "4 L'assembl\u00e9e renouvelle le mandat d'administratrice ind\u00e9pendante de Martine Claessens pour une dur\u00e9e de quatre ans, jusqu'\u00e0 l'assembl\u00e9e g\u00e9n\u00e9rale de 2030.",
+      "enumerated": false,
+      "marker": ""
+    },
+    {
+      "self_ref": "#/texts/8",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 554.4337168000001,
+            "r": 368.69911379999996,
+            "b": 545.4512944,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            70
+          ]
+        }
+      ],
+      "orig": "Toutes les r\u00e9solutions sont adopt\u00e9es \u00e0 l'unanimit\u00e9 des voix exprim\u00e9es.",
+      "text": "Toutes les r\u00e9solutions sont adopt\u00e9es \u00e0 l'unanimit\u00e9 des voix exprim\u00e9es."
+    },
+    {
+      "self_ref": "#/texts/9",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 76.86614,
+            "t": 520.9712443999999,
+            "r": 122.04192080000001,
+            "b": 513.2720252,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            12
+          ]
+        },
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 228.04724,
+            "t": 520.9712443999999,
+            "r": 274.6029044,
+            "b": 513.2720252,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            13,
+            26
+          ]
+        },
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 379.22834,
+            "t": 520.9712443999999,
+            "r": 434.4412304,
+            "b": 513.2720252,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            27,
+            42
+          ]
+        }
+      ],
+      "orig": "Le pr\u00e9sident La secr\u00e9taire Les scrutateurs",
+      "text": "Le pr\u00e9sident La secr\u00e9taire Les scrutateurs"
+    },
+    {
+      "self_ref": "#/texts/10",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "furniture",
+      "label": "page_footer",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 204.7511,
+            "t": 33.47927279999999,
+            "r": 390.52453760000003,
+            "b": 26.635522400000013,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            61
+          ]
+        }
+      ],
+      "orig": "Calorvia SA (entreprise fictive) \u00b7 Diffusion interne \u00b7 page 1",
+      "text": "Calorvia SA (entreprise fictive) \u00b7 Diffusion interne \u00b7 page 1"
+    }
+  ],
+  "pictures": [],
+  "tables": [],
+  "key_value_items": [],
+  "form_items": [],
+  "pages": {
+    "1": {
+      "size": {
+        "width": 595.2756,
+        "height": 841.8898
+      },
+      "page_no": 1
+    }
+  }
+}

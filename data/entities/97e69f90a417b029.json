@@ -1,0 +1,19 @@
+{
+  "document": "00_Direction/CODIR/Annexes/2025-11-17 Annexe - Business case L4 revise.pptx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "L4",
+      "type": "projet",
+      "alias": [],
+      "description": "projet phasé d'assemblage, tests et emballage robotisé"
+    },
+    {
+      "nom": "Linetech",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "fournisseur de l'offre pour la phase 1"
+    }
+  ],
+  "seconds": 2.4
+}

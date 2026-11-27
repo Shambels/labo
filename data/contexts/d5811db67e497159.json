@@ -1,0 +1,7 @@
+{
+  "document": "01_Finance/Reporting_mensuel/Reporting 2026-05.xlsx",
+  "body": "onglet « Effectifs » · Effectif par site en fin de mois (ETP)\n| Site | ETP |\n|---|---|\n| Namur | 126 |\n| Seneffe | 289 |\n| Gand | 191 |\n| Lille | 14 |\n| Herstal | 6 |\n| Total | 626 |",
+  "model": "qwen3.8-27b",
+  "context": "Cette section de l'onglet « Effectifs » détaille la répartition de l'effectif en équivalents temps plein par site. Elle couvre les implantations de Namur, Seneffe, Gand, Lille et Herstal.",
+  "seconds": 2.3
+}

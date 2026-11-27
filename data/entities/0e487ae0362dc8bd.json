@@ -1,0 +1,203 @@
+{
+  "document": "99_Archives/2024/Organigramme direction 2024.png",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Hélène Marchal",
+      "type": "personne",
+      "alias": [],
+      "description": "administratrice déléguée de Calorvia SA"
+    },
+    {
+      "nom": "Caroline Hendrickx",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable juridique du staff de direction"
+    },
+    {
+      "nom": "Lucie Bastin",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable communication du staff de direction"
+    },
+    {
+      "nom": "Camille Lemaire",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable RSE du staff de direction"
+    },
+    {
+      "nom": "Julie Renard",
+      "type": "personne",
+      "alias": [],
+      "description": "assistante du staff de direction"
+    },
+    {
+      "nom": "Laurent Dewit",
+      "type": "personne",
+      "alias": [],
+      "description": "directeur financier de Calorvia SA"
+    },
+    {
+      "nom": "Sarah Vandamme",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable contrôle de gestion"
+    },
+    {
+      "nom": "Bruno Hanssens",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable comptabilité"
+    },
+    {
+      "nom": "Inès Rahmani",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable trésorerie"
+    },
+    {
+      "nom": "Céline Moreau",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable achats"
+    },
+    {
+      "nom": "Thomas Lambert",
+      "type": "personne",
+      "alias": [],
+      "description": "directeur des opérations"
+    },
+    {
+      "nom": "Marc Delhaye",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable du site de Seneffe"
+    },
+    {
+      "nom": "Pieter De Smet",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable du site de Gand"
+    },
+    {
+      "nom": "Olivier Hardy",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable prévention"
+    },
+    {
+      "nom": "Nadia Benali",
+      "type": "personne",
+      "alias": [],
+      "description": "directrice des ressources humaines"
+    },
+    {
+      "nom": "Christelle Masson",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable paie"
+    },
+    {
+      "nom": "Ann Wouters",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable RH de Gand"
+    },
+    {
+      "nom": "Hugo Lambotte",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable formation"
+    },
+    {
+      "nom": "Pierre-Yves Collard",
+      "type": "personne",
+      "alias": [],
+      "description": "directeur commercial"
+    },
+    {
+      "nom": "Benoît Gillet",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable commercial Wallonie-Bruxelles"
+    },
+    {
+      "nom": "Joris Claes",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable commercial Vlaanderen"
+    },
+    {
+      "nom": "Mathilde Roux",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable commercial France"
+    },
+    {
+      "nom": "Lucas Fontana",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable marketing"
+    },
+    {
+      "nom": "Kevin Mertens",
+      "type": "personne",
+      "alias": [],
+      "description": "directeur des systèmes d'information"
+    },
+    {
+      "nom": "Nicolas Gilson",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable support informatique"
+    },
+    {
+      "nom": "Yannick Dupuis",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable sécurité IT"
+    },
+    {
+      "nom": "Anne Vercammen",
+      "type": "personne",
+      "alias": [],
+      "description": "directrice qualité"
+    },
+    {
+      "nom": "Romain Dethier",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable qualité de Seneffe"
+    },
+    {
+      "nom": "Lien Maes",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable qualité de Gand"
+    },
+    {
+      "nom": "Grégory Pirard",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable service après-vente"
+    },
+    {
+      "nom": "Site de Seneffe",
+      "type": "site",
+      "alias": [
+        "Seneffe"
+      ],
+      "description": "site opérationnel de Calorvia SA"
+    },
+    {
+      "nom": "Site de Gand",
+      "type": "site",
+      "alias": [
+        "Gand"
+      ],
+      "description": "site opérationnel de Calorvia SA"
+    }
+  ],
+  "seconds": 16.1
+}

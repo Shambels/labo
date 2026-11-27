@@ -1,0 +1,7 @@
+{
+  "document": "00_Direction/CODIR/2026/2026-06-01 CODIR PV.docx",
+  "body": "Procès-verbal du Comité de direction\nSéance du lundi 1er juin 2026, Namur, salle Meuse, de 8 h 30 à 11 h 30.\nPrésents : Hélène Marchal, administratrice déléguée (CEO) ; Sarah Vandamme, directrice financière a.i. ; Thomas Lambert, directeur des opérations (COO) ; Nadia Benali, directrice des ressources humaines ; Pierre-Yves Collard, directeur commercial ; Kevin Mertens, directeur des systèmes d'information ; Anne Vercammen, directrice qualité ; Pieter De Smet, directeur du site de Gand.\nInvité(e)s : Sophie Lejeune (cheffe de projet ERP, point 4).\nPrésidence : Hélène Marchal. Secrétariat : Julie Renard.",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait se situe dans l'en-tête du procès-verbal et liste les participants à la séance du comité de direction. Il précise la composition de l'assemblée, incluant les directeurs et l'invitée Sophie Lejeune.",
+  "seconds": 3.2
+}

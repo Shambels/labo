@@ -1,0 +1,10 @@
+{
+  "path": "06_Achats/Bons_de_livraison/2026-01-20 BL Tolerie Mosane.jpg",
+  "kind": "image",
+  "page": null,
+  "index": null,
+  "model": "qwen3.5-9b",
+  "prompt": "Tu transcris des documents d'entreprise pour un moteur de recherche.\n1. Recopie tout le texte visible, exactement comme il est écrit : nombres, codes, dates, unités et\n   annotations manuscrites compris. Rends les tableaux en Markdown.\n2. Dans un schéma, un plan ou un organigramme, recopie aussi chaque texte posé sur un lien, une flèche ou un\n   trait (débit, distance, type de connexion, rattachement), sur une ligne qui commence par le nom des deux\n   éléments reliés, tels qu'ils sont écrits sur l'image, séparés par un tiret, puis deux-points et le texte.\n   Un tel texte n'a de sens qu'avec les deux éléments qu'il relie.\n3. Puis, sous le titre « Description », décris en trois phrases au plus le type d'image (organigramme,\n   plan, graphique, photo, facture...) et ce qu'elle montre qui n'est pas écrit : les rattachements\n   d'un organigramme, la valeur la plus haute d'un graphique, la position des éléments d'un plan.\nN'invente rien : si un élément est illisible, écris [illisible].",
+  "seconds": 5.0,
+  "text": "Tôlerie Mosane SRL  \nZoning de Sclaigneaux 14, 5300 Andenne  \nBon de livraison  \n\nBon de livraison  \nBL-TM-26-0061  \nDate  \n20/01/2026  \nLivré à  \nCalorvia SA - Seneffe  \n\n| Réf.   | Désignation                     | Qté |\n|--------|----------------------------------|-----|\n| TG15   | Tôle galvanisée 1,5 mm (tonne)   | 12  |\n| TG20   | Tôle galvanisée 2,0 mm (tonne)   | 2   |\n\nRÉCEPTION  \nSENEFFE  \n\nReçu conforme 20/01  \nR. Dethier  \n\nMerci de vérifier la marchandise à la réception.\n\n---\n\n**Description**  \nIl s’agit d’un bon de livraison imprimé par la Tôlerie Mosane SRL, destiné à Calorvia SA à Seneffe. Le document liste deux références de tôles galvanisées avec leurs quantités respectives en tonnes. En bas, une mention manuscrite confirme la réception conforme le 20/01, signée par R. Dethier, et un encadré indique « RÉCEPTION SENEFFE »."
+}

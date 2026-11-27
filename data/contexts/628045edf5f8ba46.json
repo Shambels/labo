@@ -1,0 +1,7 @@
+{
+  "document": "04_Qualite/Indicateurs/Rebut par ligne decembre 2025.png",
+  "body": "Image\nTaux de rebut par ligne • décembre 2025 (%)  \n3.5  \n3.0  \n2.5  \n2.0  \n1.5  \n1.0  \n0.5  \n0.0  \nL1 — 1,7 %  \nL2 — 3,4 %  \nL3 — 1,6 %  \n\nUsine de Seneffe - rapport de production\n\nDescription  \nIl s’agit d’un graphique en barres montrant le taux de rebut par ligne de production pour décembre 2025.  \nLes trois lignes (L1, L2, L3) sont représentées avec des hauteurs proportionnelles à leurs taux respectifs.  \nLa valeur la plus élevée est observée sur la ligne L2 (3,4 %), suivie de L1 (1,7 %) et L3 (1,6 %).",
+  "model": "qwen3.8-27b",
+  "context": "Le graphique se trouve dans la rubrique « Rebut par ligne » du tableau de bord de décembre 2025. Il présente les taux de rebut des lignes de production L1, L2 et L3 de l'usine de Seneffe.",
+  "seconds": 2.6
+}

@@ -1,0 +1,31 @@
+{
+  "document": "07_IT/Support/Export tickets hypercare 2026-06.csv",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "site de Calorvia"
+    },
+    {
+      "nom": "Namur",
+      "type": "site",
+      "alias": [],
+      "description": "site de Calorvia"
+    },
+    {
+      "nom": "Lille",
+      "type": "site",
+      "alias": [],
+      "description": "site de Calorvia"
+    },
+    {
+      "nom": "Gand",
+      "type": "site",
+      "alias": [],
+      "description": "site de Calorvia"
+    }
+  ],
+  "seconds": 5.3
+}

@@ -1,0 +1,7 @@
+{
+  "document": "09_Communication/Communiques_presse/2026-01-29 CP Ligne L4 Seneffe.docx",
+  "body": "Calorvia investit 1,25 million d'euros dans une nouvelle ligne à Seneffe\nNamur, le 29 janvier 2026\nCalorvia, fabricant belge de pompes à chaleur et de systèmes de ventilation, annonce la création d'une quatrième ligne d'assemblage dans son usine de Seneffe. L'investissement de 1,25 million d'euros bénéficie d'une aide de la Région wallonne de 375 000 euros.\nLa nouvelle ligne sera dédiée à la gamme Aéris Pro, dont les ventes ont progressé de 18 % en 2025. Sa mise en service est prévue à la mi-2026 et s'accompagnera de la création d'une douzaine d'emplois.\nContact presse : Lucie Bastin, presse@calorvia.example\n*À propos de Calorvia : fabricant belge de pompes à chaleur et de groupes de ventilation, 620 collaborateurs, sites à Namur, Seneffe, Gand, Herstal et Lille.*",
+  "model": "qwen3.8-27b",
+  "context": "Il s'agit du corps principal du communiqué de presse, qui détaille l'investissement dans la quatrième ligne d'assemblage de l'usine de Seneffe. Le texte précise que cette ligne est destinée à la gamme Aéris Pro et s'accompagnera de la création d'emplois.",
+  "seconds": 3.2
+}

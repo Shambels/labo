@@ -1,0 +1,7 @@
+{
+  "document": "10_RSE/Bilan carbone 2025.xlsx",
+  "body": "onglet « Émissions 2025 » · Bilan carbone 2025 (tonnes équivalent CO2)\n| Poste | Scope | Émissions |\n|---|---|---|\n| Gaz naturel (chauffage des sites) | Scope 1 | 640 |\n| Carburant des véhicules | Scope 1 | 410 |\n| Fuites de fluides frigorigènes (ateliers) | Scope 1 | 130 |\n| Électricité achetée | Scope 2 | 2240 |\n| Achats de composants et matières | Scope 3 | 21400 |\n| Transport amont et aval | Scope 3 | 3900 |\n| Utilisation des produits vendus (part attribuée) | Scope 3 | 12300 |\n| Déplacements domicile-travail | Scope 3 | 1000 |\n| Total |  | 42020 |",
+  "model": "qwen3.8-27b",
+  "context": "Cette section présente le détail des émissions de gaz à effet de serre de l'entreprise, classées par postes d'activité et par scopes. Elle couvre l'ensemble des sources d'émissions, allant du chauffage des sites et des carburants aux achats de composants et à l'utilisation des produits vendus.",
+  "seconds": 3.7
+}

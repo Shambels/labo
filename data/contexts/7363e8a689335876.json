@@ -1,0 +1,7 @@
+{
+  "document": "00_Direction/Strategie/Plan strategique 2026-2028 v1.pptx",
+  "body": "Trajectoire financière (M€)\n|  | 2025 | 2026 | 2027 | 2028 |\n| - | - | - | - | - |\n| Chiffre d'affaires | 148 | 156 | 170 | 190 |\n| EBITDA (%) | 8,4 | 9,5 | 10,3 | 11,5 |",
+  "model": "qwen3.8-27b",
+  "context": "Cette section présente la trajectoire financière de l'entreprise sur la période 2025-2028. Elle détaille l'évolution prévue du chiffre d'affaires et de la marge EBITDA.",
+  "seconds": 2.2
+}

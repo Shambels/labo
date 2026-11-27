@@ -1,0 +1,13 @@
+{
+  "document": "05_Commercial/Tarifs/Conditions generales de vente 2026.pdf",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "pompes à chaleur",
+      "type": "produit",
+      "alias": [],
+      "description": "produits garantis 5 ans sur le compresseur"
+    }
+  ],
+  "seconds": 1.5
+}

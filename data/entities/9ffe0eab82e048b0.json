@@ -1,0 +1,55 @@
+{
+  "document": "05_Commercial/Courriers/Brief prijsverhoging 2026.pdf",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Aéris 6",
+      "type": "produit",
+      "alias": [],
+      "description": "modèle du gamma standard"
+    },
+    {
+      "nom": "Aéris 9",
+      "type": "produit",
+      "alias": [],
+      "description": "modèle du gamma standard"
+    },
+    {
+      "nom": "Aéris 12",
+      "type": "produit",
+      "alias": [],
+      "description": "modèle du gamma standard"
+    },
+    {
+      "nom": "Ventis D300",
+      "type": "produit",
+      "alias": [],
+      "description": "modèle du gamma standard"
+    },
+    {
+      "nom": "Ventis D450",
+      "type": "produit",
+      "alias": [],
+      "description": "modèle du gamma standard"
+    },
+    {
+      "nom": "Aéris Pro",
+      "type": "produit",
+      "alias": [],
+      "description": "modèle du gamma premium"
+    },
+    {
+      "nom": "Ventis D450 Pro",
+      "type": "produit",
+      "alias": [],
+      "description": "modèle du gamma premium"
+    },
+    {
+      "nom": "Pierre-Yves Collard",
+      "type": "personne",
+      "alias": [],
+      "description": "directeur commercial"
+    }
+  ],
+  "seconds": 5.5
+}

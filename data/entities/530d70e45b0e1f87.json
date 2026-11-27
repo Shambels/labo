@@ -1,0 +1,27 @@
+{
+  "document": "03_Production/Gent/Fotos_installaties/IMG_20251123_Wikkelmachine.jpg",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Pakmatic",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "marque de la machine d'ensachage"
+    },
+    {
+      "nom": "Wikkelmachine voor pallets",
+      "type": "équipement",
+      "alias": [
+        "PW-2000"
+      ],
+      "description": "machine d'ensachage pour palettes"
+    },
+    {
+      "nom": "Gent",
+      "type": "site",
+      "alias": [],
+      "description": "site de production de Calorvia"
+    }
+  ],
+  "seconds": 2.9
+}

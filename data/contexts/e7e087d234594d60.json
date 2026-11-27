@@ -1,0 +1,7 @@
+{
+  "document": "01_Finance/Investissements/Demande capex CAPEX-2026-005 - Rayonnages de l_entrepôt de Herstal.docx",
+  "body": "Demande d'investissement CAPEX-2026-005\nCircuit d'approbation\n| **Étape** | **Responsable** | **Statut** |\n| - | - | - |\n| Avis du contrôle de gestion | Sarah Vandamme | Favorable |\n| Validation CODIR | Hélène Marchal | Validé |\n| Conseil d'administration (au-delà de 250 000 €) | Président du conseil | Non requis |",
+  "model": "qwen3.8-27b",
+  "context": "Cette section détaille le circuit d'approbation de la demande d'investissement pour les rayonnages de l'entrepôt de Herstal. Elle liste les responsables et le statut de validation pour le contrôle de gestion, le CODIR et le conseil d'administration.",
+  "seconds": 2.5
+}

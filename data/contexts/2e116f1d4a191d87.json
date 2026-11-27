@@ -1,0 +1,7 @@
+{
+  "document": "07_IT/Support/FAQ helpdesk.html",
+  "body": "Helpdesk informatique : questions fréquentes\nJ'ai perdu mon smartphone : comment me connecter ?\nAppelez le support : après vérification de votre identité, un code temporaire valable 24 heures vous sera communiqué.",
+  "model": "qwen3.8-27b",
+  "context": "Cette rubrique de la FAQ du helpdesk informatique détaille la procédure à suivre pour se connecter après la perte d'un smartphone.",
+  "seconds": 1.3
+}

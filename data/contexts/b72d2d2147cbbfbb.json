@@ -1,0 +1,7 @@
+{
+  "document": "02_RH/Confidentiel/Grille salariale 2026.xlsx",
+  "body": "onglet « Grille 2026 » · Grille salariale 2026 (salaire mensuel brut, après indexation de 3,4 %) · Classe : E2 - Ouvrier qualifié ; Minimum : 2650 ; Médiane : 3127 ; Maximum : 3604",
+  "model": "qwen3.8-27b",
+  "context": "Cette ligne détaille les salaires mensuels bruts de la classe E2 - Ouvrier qualifié. Elle se trouve dans l'onglet « Grille 2026 » du classeur RH.",
+  "seconds": 2.0
+}

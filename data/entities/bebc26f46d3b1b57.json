@@ -1,0 +1,43 @@
+{
+  "document": "09_Communication/Newsletter/Calorvia Info 2026-03.html",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Laurent Dewit",
+      "type": "personne",
+      "alias": [],
+      "description": "directeur financier partant fin mars"
+    },
+    {
+      "nom": "Sarah Vandamme",
+      "type": "personne",
+      "alias": [],
+      "description": "assure l'intérim de la direction financière"
+    },
+    {
+      "nom": "Bart Goossens",
+      "type": "personne",
+      "alias": [],
+      "description": "nouvel employé au magasin de Gand"
+    },
+    {
+      "nom": "Lotte Janssens",
+      "type": "personne",
+      "alias": [],
+      "description": "nouvelle employée des ventes en Flandre"
+    },
+    {
+      "nom": "Namur Expo",
+      "type": "site",
+      "alias": [],
+      "description": "lieu du stand pour l'événement Énergie+ 2026"
+    },
+    {
+      "nom": "Énergie+ 2026",
+      "type": "projet",
+      "alias": [],
+      "description": "événement professionnel générant des contacts qualifiés"
+    }
+  ],
+  "seconds": 5.8
+}

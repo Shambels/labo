@@ -1,0 +1,25 @@
+{
+  "document": "01_Finance/Reporting_mensuel/Commentaires de gestion T4 2025.pdf",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "site de production avec samedis de production"
+    },
+    {
+      "nom": "Aéris 12",
+      "type": "produit",
+      "alias": [],
+      "description": "produit faisant l'objet d'un rappel"
+    },
+    {
+      "nom": "Gand",
+      "type": "site",
+      "alias": [],
+      "description": "site avec entrepôt et frais de personnel intérimaire"
+    }
+  ],
+  "seconds": 4.6
+}

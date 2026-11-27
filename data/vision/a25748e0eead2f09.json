@@ -1,0 +1,10 @@
+{
+  "path": "03_Production/Gent/Fotos_installaties/IMG_20251121_Heftruck_nr_7.jpg",
+  "kind": "image",
+  "page": null,
+  "index": null,
+  "model": "qwen3.5-9b",
+  "prompt": "Tu transcris des documents d'entreprise pour un moteur de recherche.\n1. Recopie tout le texte visible, exactement comme il est écrit : nombres, codes, dates, unités et\n   annotations manuscrites compris. Rends les tableaux en Markdown.\n2. Puis, sous le titre « Description », décris en trois phrases au plus le type d'image (organigramme,\n   plan, graphique, photo, facture...) et ce qu'elle montre qui n'est pas écrit : les rattachements\n   d'un organigramme, la valeur la plus haute d'un graphique, la position des éléments d'un plan.\nN'invente rien : si un élément est illisible, écris [illisible].",
+  "seconds": 3.9,
+  "text": "**Lyftec**  \nElektrische heftruck nr. 7  \n\n| Type              | LE-25                  |\n|-------------------|------------------------|\n| Serienummer       | LE25-2018-06631        |\n| Bouwjaar          | 2018                   |\n| Nominale capaciteit | 2500 kg               |\n| Lastzwaartepunt   | 500 mm                 |\n| Eigen gewicht     | 3840 kg                |\n| Batterij          | 48 V                   |\n\nCE\n\n---\n\n**Description**  \nIl s’agit d’une plaque technique métallique fixée sur un équipement industriel, probablement une fourche élévatrice électrique. Elle affiche des spécifications techniques détaillées telles que le type, le numéro de série, l’année de construction, la capacité nominale, le point de charge, le poids à vide et la tension de la batterie. Le marquage CE en bas à droite indique la conformité aux normes européennes de sécurité."
+}

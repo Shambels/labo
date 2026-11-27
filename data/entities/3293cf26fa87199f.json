@@ -1,0 +1,37 @@
+{
+  "document": "05_Commercial/Comptes_cles/Plan de compte Distrinergie 2026.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Distrinergie",
+      "type": "client",
+      "alias": [],
+      "description": "Distributeur en Wallonie et Bruxelles, premier client de Calorvia"
+    },
+    {
+      "nom": "Pierre-Yves Collard",
+      "type": "personne",
+      "alias": [],
+      "description": "Responsable du compte Distrinergie"
+    },
+    {
+      "nom": "Vincent Hallet",
+      "type": "personne",
+      "alias": [],
+      "description": "Acheteur chez Distrinergie"
+    },
+    {
+      "nom": "Aéris Pro 22",
+      "type": "produit",
+      "alias": [],
+      "description": "Pompe à chaleur formant les installateurs Distrinergie"
+    },
+    {
+      "nom": "Herstal",
+      "type": "site",
+      "alias": [],
+      "description": "Entrepôt accueillant le stock avancé"
+    }
+  ],
+  "seconds": 4.9
+}

@@ -1,0 +1,61 @@
+{
+  "document": "06_Achats/Appel_offres_ERP/Cahier des charges ERP Atlas.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Projet Atlas",
+      "type": "projet",
+      "alias": [],
+      "description": "remplacement de l'ERP GesPro 7"
+    },
+    {
+      "nom": "GesPro 7",
+      "type": "produit",
+      "alias": [],
+      "description": "ERP actuel utilisé depuis 2011"
+    },
+    {
+      "nom": "LogiPath",
+      "type": "produit",
+      "alias": [],
+      "description": "WMS du site de Gand"
+    },
+    {
+      "nom": "Gand",
+      "type": "site",
+      "alias": [],
+      "description": "site possédant le WMS LogiPath"
+    },
+    {
+      "nom": "Calorvia SA",
+      "type": "client",
+      "alias": [],
+      "description": "entité juridique principale"
+    },
+    {
+      "nom": "Succursale de Lille",
+      "type": "site",
+      "alias": [],
+      "description": "entité juridique secondaire"
+    },
+    {
+      "nom": "Plateforme de Herstal",
+      "type": "site",
+      "alias": [],
+      "description": "future plateforme logistique"
+    },
+    {
+      "nom": "CODIR",
+      "type": "instance",
+      "alias": [],
+      "description": "comité de direction"
+    },
+    {
+      "nom": "Conseil d'administration",
+      "type": "instance",
+      "alias": [],
+      "description": "organe de décision finale"
+    }
+  ],
+  "seconds": 6.2
+}

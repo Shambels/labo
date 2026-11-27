@@ -1,0 +1,7 @@
+{
+  "document": "03_Production/Seneffe/Photos_equipements/IMG_20260315_Robot_de_soudure.jpg",
+  "body": "Image\nWeldon Robotics  \nRobot de soudage à l'arc  \n\nType                          WR-6 Arc  \nN° de série                   WR6-2020-1153  \nAnnée                         2020  \nCharge utile                  6 kg  \nPortée                        1440 mm  \nAxes                          6  \n\nCE  \n\nDescription  \nIl s’agit d’une plaque d’identification métallique d’un robot de soudage à l’arc. Elle affiche les spécifications techniques du modèle WR-6 Arc, incluant son numéro de série, année de fabrication, charge utile, portée et nombre d’axes. Le marquage CE indique la conformité aux normes européennes de sécurité.",
+  "model": "qwen3.8-27b",
+  "context": "La rubrique « Photos équipements » du site de Seneffe présente la plaque d’identification du robot de soudage à l’arc Weldon Robotics WR-6 Arc.",
+  "seconds": 2.1
+}

@@ -1,0 +1,37 @@
+{
+  "document": "02_RH/Notes_de_service/2026-05-20 NS-2026-09 Nomination de la directrice financière.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Isabelle Gérard",
+      "type": "personne",
+      "alias": [],
+      "description": "directrice financière de Calorvia"
+    },
+    {
+      "nom": "Hélène Marchal",
+      "type": "personne",
+      "alias": [],
+      "description": "émettrice de la note de service"
+    },
+    {
+      "nom": "Sarah Vandamme",
+      "type": "personne",
+      "alias": [],
+      "description": "assure l'intérim de la direction financière"
+    },
+    {
+      "nom": "Conseil d'administration",
+      "type": "instance",
+      "alias": [],
+      "description": "organe nommant la directrice financière"
+    },
+    {
+      "nom": "Comité de direction",
+      "type": "instance",
+      "alias": [],
+      "description": "instance rejoignant la nouvelle directrice"
+    }
+  ],
+  "seconds": 3.6
+}

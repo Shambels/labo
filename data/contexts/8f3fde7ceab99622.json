@@ -1,0 +1,7 @@
+{
+  "document": "07_IT/Securite/Procedure MFA v2.docx",
+  "body": "Procédure IT-12 : activer l'authentification multifacteur (version 2)\n3. Terminaux partagés des ateliers\nLes opérateurs s'authentifient en présentant leur badge d'accès devant le lecteur installé sur le terminal, puis en saisissant leur code PIN à quatre chiffres. Le badge remplace l'application mobile.",
+  "model": "qwen3.8-27b",
+  "context": "Cette section détaille la méthode d'authentification spécifique aux terminaux partagés des ateliers. Elle explique que les opérateurs utilisent leur badge d'accès et un code PIN à la place de l'application mobile.",
+  "seconds": 2.1
+}

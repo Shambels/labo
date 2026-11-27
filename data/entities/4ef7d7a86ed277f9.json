@@ -1,0 +1,49 @@
+{
+  "document": "03_Production/Seneffe/Ligne_L4/PV presérie L4 2026-06-18.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Marc Delhaye",
+      "type": "personne",
+      "alias": [],
+      "description": "participant au procès-verbal de présérie"
+    },
+    {
+      "nom": "Romain Dethier",
+      "type": "personne",
+      "alias": [],
+      "description": "participant au procès-verbal de présérie"
+    },
+    {
+      "nom": "Fabrice Collin",
+      "type": "personne",
+      "alias": [],
+      "description": "participant au procès-verbal de présérie"
+    },
+    {
+      "nom": "Linetech",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "fournisseur de visseuses à contrôle de couple"
+    },
+    {
+      "nom": "Aéris Pro 16",
+      "type": "produit",
+      "alias": [],
+      "description": "produit assemblé lors de la présérie"
+    },
+    {
+      "nom": "Ligne L4",
+      "type": "équipement",
+      "alias": [],
+      "description": "ligne de production de Seneffe"
+    },
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "site de production de la ligne L4"
+    }
+  ],
+  "seconds": 6.5
+}

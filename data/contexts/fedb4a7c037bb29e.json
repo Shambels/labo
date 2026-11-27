@@ -1,0 +1,7 @@
+{
+  "document": "01_Finance/Budget_2026/Budget 2026 v1.xlsx",
+  "body": "onglet « Hypothèses » · Budget 2026 · version 1 du 3 octobre 2025 (travail)\n| Hypothèse | Valeur retenue |\n|---|---|\n| Hausse des prix de vente au 1er janvier | 4 % sur toutes les gammes |\n| Indexation salariale | 3,2 % |\n| Volume pompes à chaleur | +3 % |\n| Volume ventilation | +2 % |\n| Prix de l'acier | stable |",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait se trouve dans l'onglet « Hypothèses » du budget 2026. Il détaille les paramètres macroéconomiques et commerciaux retenus, tels que la hausse des prix de vente, l'indexation salariale et les volumes attendus pour les pompes à chaleur et la ventilation.",
+  "seconds": 5.0
+}

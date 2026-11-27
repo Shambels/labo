@@ -1,0 +1,13 @@
+{
+  "document": "03_Production/Maintenance/Fiches_intervention/2026-03-05 INT-2026-458 Pont roulant.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Pont roulant",
+      "type": "équipement",
+      "alias": [],
+      "description": "Équipement soumis à inspection légale annuelle"
+    }
+  ],
+  "seconds": 1.0
+}

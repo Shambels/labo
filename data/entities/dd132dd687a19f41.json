@@ -1,0 +1,97 @@
+{
+  "document": "07_IT/Projet_Atlas_ERP/COPIL/COPIL_Atlas_09_20260416.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Kevin Mertens",
+      "type": "personne",
+      "alias": [],
+      "description": "sponsor du projet Atlas"
+    },
+    {
+      "nom": "Sophie Lejeune",
+      "type": "personne",
+      "alias": [],
+      "description": "cheffe de projet Atlas"
+    },
+    {
+      "nom": "Bastien Leroy",
+      "type": "personne",
+      "alias": [],
+      "description": "représentant d'Intégra Conseil"
+    },
+    {
+      "nom": "Claire Dumas",
+      "type": "personne",
+      "alias": [],
+      "description": "représentante de Praxio Software"
+    },
+    {
+      "nom": "Sarah Vandamme",
+      "type": "personne",
+      "alias": [],
+      "description": "participante au comité de pilotage"
+    },
+    {
+      "nom": "Céline Moreau",
+      "type": "personne",
+      "alias": [],
+      "description": "participante au comité de pilotage"
+    },
+    {
+      "nom": "Els Van den Broeck",
+      "type": "personne",
+      "alias": [],
+      "description": "participante au comité de pilotage"
+    },
+    {
+      "nom": "Marc Delhaye",
+      "type": "personne",
+      "alias": [],
+      "description": "participant au comité de pilotage"
+    },
+    {
+      "nom": "Namur",
+      "type": "site",
+      "alias": [],
+      "description": "lieu de la réunion du COPIL"
+    },
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "site de production"
+    },
+    {
+      "nom": "Gand",
+      "type": "site",
+      "alias": [],
+      "description": "site logistique et WMS"
+    },
+    {
+      "nom": "Intégra Conseil",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "partenaire du projet Atlas"
+    },
+    {
+      "nom": "Praxio Software",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "partenaire du projet Atlas"
+    },
+    {
+      "nom": "Projet Atlas",
+      "type": "projet",
+      "alias": [],
+      "description": "projet ERP de Calorvia"
+    },
+    {
+      "nom": "Comité de pilotage n° 9",
+      "type": "instance",
+      "alias": [],
+      "description": "réunion de pilotage du projet Atlas"
+    }
+  ],
+  "seconds": 10.2
+}

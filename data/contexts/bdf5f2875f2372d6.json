@@ -1,0 +1,7 @@
+{
+  "document": "00_Direction/CODIR/Annexes/2026-04-13 Annexe - Resultats enquete teletravail.pdf",
+  "body": "Pilote de télétravail : résultats de l'enquête\n118 participants, 84 réponses (taux de réponse : 71 %).\nFigure 1 : répartition des notes de satisfaction\n\n<!-- image -->\nSatisfaction moyenne : 8,1 sur 10. 86 % des répondants souhaitent continuer à deux jours par semaine.\nFigure 2 : jour de présence commun souhaité\n\n<!-- image -->",
+  "model": "qwen3.8-27b",
+  "context": "Cette section présente les résultats de l'enquête sur le pilote de télétravail, incluant la satisfaction moyenne et le jour de présence commun souhaité.",
+  "seconds": 2.2
+}

@@ -1,0 +1,7 @@
+{
+  "document": "00_Direction/CODIR/2026/2026-02-23 CODIR PV.docx",
+  "body": "Procès-verbal du Comité de direction\n4. MFA : terminaux partagés\n*Présenté par Kevin Mertens.*\n87 % des comptes sont protégés. Les terminaux partagés des ateliers de Seneffe et de Gand ne permettent pas d'utiliser l'application mobile : une authentification par badge sera déployée.",
+  "model": "qwen3.8-27b",
+  "context": "Point 4 du procès-verbal, présenté par Kevin Mertens, directeur des systèmes d'information. Il détaille le déploiement de l'authentification multifacteur sur les terminaux partagés des ateliers de Seneffe et de Gand.",
+  "seconds": 2.3
+}

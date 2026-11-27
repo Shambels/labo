@@ -1,0 +1,37 @@
+{
+  "document": "06_Achats/Fournisseurs/Evaluation fournisseurs 2025.xlsx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Kompra GmbH",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "Fournisseur maintenu, double source à étudier"
+    },
+    {
+      "nom": "Valtek Components Ltd",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "Fournisseur sous surveillance suite rappel Aéris 12"
+    },
+    {
+      "nom": "Tôlerie Mosane SRL",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "Fournisseur maintenu"
+    },
+    {
+      "nom": "Elcora Electronics BV",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "Fournisseur maintenu"
+    },
+    {
+      "nom": "TransArdenne SA",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "Fournisseur maintenu"
+    }
+  ],
+  "seconds": 5.0
+}

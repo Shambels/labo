@@ -1,0 +1,7 @@
+{
+  "document": "06_Achats/Fournisseurs/Evaluation fournisseurs 2025.xlsx",
+  "body": "onglet « Évaluation 2025 » · Évaluation annuelle des fournisseurs 2025 (notes sur 100) · Fournisseur : Kompra GmbH ; Qualité : 78 ; Délais : 84 ; Prix : 72 ; Score global : 79 ; Décision : Maintenu ; double source à étudier",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait se trouve dans l'onglet « Évaluation 2025 » du classeur d'évaluation annuelle des fournisseurs. Il détaille les notes et la décision de maintien pour le fournisseur Kompra GmbH.",
+  "seconds": 2.1
+}

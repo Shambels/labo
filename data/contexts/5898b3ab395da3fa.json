@@ -1,0 +1,7 @@
+{
+  "document": "03_Production/Gent/Maandrapporten/Productierapport Gent 2026-04.xlsx",
+  "body": "onglet « Productie » · Productierapport · site Gent · april 2026 · Lijn : V2 ; Producten : Ventis D450 / D450 Pro ; Geproduceerde eenheden : 1248 ; Stilstand (u) : 17.3 ; Uitval (%) : 1.4 ; OEE (%) : 75.2",
+  "model": "qwen3.8-27b",
+  "context": "Cette ligne du tableau de production détaille les performances de la ligne V2 sur le site de Gent. Elle concerne spécifiquement la fabrication des modèles Ventis D450 et D450 Pro.",
+  "seconds": 2.0
+}

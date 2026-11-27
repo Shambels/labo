@@ -1,0 +1,25 @@
+{
+  "document": "04_Qualite/Non_conformites/NC-2025-041.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Gand",
+      "type": "site",
+      "alias": [],
+      "description": "site de production concerné par la non-conformité"
+    },
+    {
+      "nom": "Ventis D450",
+      "type": "produit",
+      "alias": [],
+      "description": "produit présentant un balourd du ventilateur"
+    },
+    {
+      "nom": "Lien Maes",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable de l'action corrective"
+    }
+  ],
+  "seconds": 3.1
+}

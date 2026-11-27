@@ -1,0 +1,7 @@
+{
+  "document": "05_Commercial/Fiches_produits/Aéris_Pro_22_EN.pdf",
+  "body": "Aéris Pro 22 · Technical data sheet\nHigh-temperature propane (R290) air-to-water heat pump, ideal for renovation with existing radiators.\n| Feature | Value |\n| - | - |\n| Rated heating capacity | 22 kW |\n| SCOP (average climate, 35 °C) | 4,7 |\n| Sound power level | 53 dB(A) |\n| Refrigerant | R290 (1,8 kg) |\n| Weight | 165 kg |\n| Dimensions (H x W x D) | 1520 x 1180 x 520 mm |\n| Energy class | A+++ |\n| Maximum water temperature | 75 °C |\nWarranty: 5 years on the compressor, 2 years on other parts.",
+  "model": "qwen3.8-27b",
+  "context": "Cette section présente les caractéristiques techniques de la pompe à chaleur air-eau à haute température. Elle détaille les performances énergétiques, les dimensions physiques et les conditions de garantie du modèle destiné à la rénovation.",
+  "seconds": 2.3
+}

@@ -1,0 +1,7 @@
+{
+  "document": "00_Direction/CODIR/Annexes/2026-02-02 Annexe - Etude logistique entrepot.pptx",
+  "body": "Comparaison des options\n| Option | Capacité | Coût | Délai | Avis |\n| - | - | - | - | - |\n| A : extension de Gand | 2 800 m² | 2 100 000 € (investissement) | 12 à 18 mois (permis) | Trop lent |\n| B : location à Herstal | 4 200 m² | 98 700 €/an + 140 000 € de rayonnages | 1er mai 2026 | Recommandé |\n| C : prestataire 3PL | Variable | 310 000 €/an | 2 mois | Coût élevé |",
+  "model": "qwen3.8-27b",
+  "context": "Cette section présente le tableau comparatif des solutions logistiques envisagées pour résoudre la saturation de l'entrepôt de Gand. Elle détaille les capacités, coûts et délais associés aux options d'extension, de location à Herstal et de recours à un prestataire 3PL.",
+  "seconds": 2.6
+}

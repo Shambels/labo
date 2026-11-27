@@ -1,0 +1,67 @@
+{
+  "document": "07_IT/Projet_Atlas_ERP/Documentation/Plan de bascule Atlas.pdf",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Sophie Lejeune",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable du gel des saisies dans GesPro 7"
+    },
+    {
+      "nom": "Marc Delhaye",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable de l'inventaire physique complet"
+    },
+    {
+      "nom": "Intégra Conseil",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "prestataire pour la reprise des stocks et encours"
+    },
+    {
+      "nom": "Sarah Vandamme",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable des contrôles de cohérence"
+    },
+    {
+      "nom": "Kevin Mertens",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable du go/no-go final"
+    },
+    {
+      "nom": "Namur",
+      "type": "site",
+      "alias": [],
+      "description": "site concerné par le plan de bascule"
+    },
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "site concerné par le plan de bascule"
+    },
+    {
+      "nom": "Lille",
+      "type": "site",
+      "alias": [],
+      "description": "site concerné par le plan de bascule"
+    },
+    {
+      "nom": "Projet Atlas",
+      "type": "projet",
+      "alias": [],
+      "description": "projet de bascule ERP"
+    },
+    {
+      "nom": "GesPro 7",
+      "type": "produit",
+      "alias": [],
+      "description": "logiciel de gestion actuel"
+    }
+  ],
+  "seconds": 10.3
+}

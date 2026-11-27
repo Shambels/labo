@@ -1,0 +1,7 @@
+{
+  "document": "03_Production/Seneffe/Photos_equipements/IMG_20260314_Compresseur_dair.jpg",
+  "body": "Image\nAirvex  \nCompresseur à vis à vitesse variable  \nType  \nAVX-55 VSD  \nN° de série  \nAVX-55-2203-117  \nAnnée  \n2022  \nPuissance  \n55 kW  \nPression de service  \n7,5 bar  \nDébit  \n9,1 m3/min  \nCE  \n\n| Type | AVX-55 VSD |\n| N° de série | AVX-55-2203-117 |\n| Année | 2022 |\n| Puissance | 55 kW |\n| Pression de service | 7,5 bar |\n| Débit | 9,1 m3/min |\n\nDescription  \nIl s’agit d’une plaque signalétique métallique fixée sur un compresseur industriel. Elle affiche les caractéristiques techniques du modèle : type, numéro de série, année de fabrication, puissance, pression de service et débit. Le logo « Airvex » est en haut à gauche, et le marquage « CE » apparaît en bas à droite, indiquant la conformité européenne.",
+  "model": "qwen3.8-27b",
+  "context": "Cette section présente la plaque signalétique d'un compresseur à vis Airvex situé sur le site de Seneffe. Elle détaille les caractéristiques techniques de l'équipement, notamment son type, sa puissance et son débit.",
+  "seconds": 2.6
+}

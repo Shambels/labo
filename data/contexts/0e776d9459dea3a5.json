@@ -1,0 +1,7 @@
+{
+  "document": "08_Juridique/Contrats/Contrat integration ERP Integra Conseil.pdf",
+  "body": "Article 3 : échéancier\n20 % à la signature, 30 % à la validation de la conception, 30 % à la fin de la recette, 20 % à la fin de l'hypercare.",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait se situe dans l'article 3 du contrat d'intégration ERP. Il détaille le calendrier de paiement des factures selon les jalons du projet.",
+  "seconds": 1.7
+}

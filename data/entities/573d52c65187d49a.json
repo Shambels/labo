@@ -1,0 +1,25 @@
+{
+  "document": "04_Qualite/Non_conformites/NC-2026-013.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "site de production concerné par la non-conformité"
+    },
+    {
+      "nom": "Aéris 9",
+      "type": "produit",
+      "alias": [],
+      "description": "produit présentant un défaut de câblage"
+    },
+    {
+      "nom": "Romain Dethier",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable de la non-conformité"
+    }
+  ],
+  "seconds": 2.9
+}

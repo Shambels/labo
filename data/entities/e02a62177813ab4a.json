@@ -1,0 +1,43 @@
+{
+  "document": "09_Communication/Newsletter/Calorvia Info 2025-12.html",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Praxio",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "prestataire choisi pour le projet Atlas"
+    },
+    {
+      "nom": "Atlas",
+      "type": "projet",
+      "alias": [],
+      "description": "projet démarré le 8 décembre 2025"
+    },
+    {
+      "nom": "Aéris 12",
+      "type": "produit",
+      "alias": [],
+      "description": "produit faisant l'objet d'un rappel préventif"
+    },
+    {
+      "nom": "Elise Dufour",
+      "type": "personne",
+      "alias": [],
+      "description": "nouvelle collaboratrice en ventes France"
+    },
+    {
+      "nom": "Wout Maes",
+      "type": "personne",
+      "alias": [],
+      "description": "nouveau collaborateur au magasin de Gand"
+    },
+    {
+      "nom": "Gand",
+      "type": "site",
+      "alias": [],
+      "description": "site où travaille Wout Maes"
+    }
+  ],
+  "seconds": 5.3
+}

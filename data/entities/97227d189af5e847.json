@@ -1,0 +1,21 @@
+{
+  "document": "03_Production/Seneffe/Photos_equipements/IMG_20260312_Four_de_brasage.jpg",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Thermolux Industrie",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "fabricant du four de brasage continu"
+    },
+    {
+      "nom": "Four de brasage continu",
+      "type": "équipement",
+      "alias": [
+        "FBC-1200"
+      ],
+      "description": "four industriel de brasage continu"
+    }
+  ],
+  "seconds": 2.8
+}

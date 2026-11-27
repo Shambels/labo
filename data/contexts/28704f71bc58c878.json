@@ -1,0 +1,7 @@
+{
+  "document": "09_Communication/Communiques_presse/2026-05-18 PB Magazijn Herstal.docx",
+  "body": "Calorvia opent een magazijn van 4.200 m² in Herstal\nNamen, 18 mei 2026\nCalorvia heeft op 18 mei 2026 een magazijn van 4.200 m² in gebruik genomen in het industriepark Hauts-Sarts in Herstal. Er werken zes mensen.\nPerscontact: Lucie Bastin, presse@calorvia.example\n*Over Calorvia: Belgische fabrikant van warmtepompen en ventilatie-units, 620 medewerkers, vestigingen in Namen, Seneffe, Gent, Herstal en Rijsel.*",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait constitue l'intégralité du communiqué de presse annonçant l'ouverture d'un entrepôt dans le parc industriel Hauts-Sarts à Herstal. Il détaille la mise en service de ce site et présente la société Calorvia ainsi que son contact presse.",
+  "seconds": 2.8
+}

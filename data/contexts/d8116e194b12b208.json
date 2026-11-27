@@ -1,0 +1,7 @@
+{
+  "document": "08_Juridique/Contrats/Contrat integration ERP Integra Conseil.pdf",
+  "body": "Article 6 : maintenance\nAprès l'hypercare, Intégra Conseil assure le support de niveau 3 pour 38 000 € HT par an.\nPour Intégra Conseil SRL Pour Calorvia SA",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait se situe dans la rubrique maintenance du contrat d'intégration ERP. Il définit les conditions du support de niveau 3 assuré par Intégra Conseil après la phase d'hypercare.",
+  "seconds": 2.0
+}

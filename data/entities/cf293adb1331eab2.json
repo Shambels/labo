@@ -1,0 +1,43 @@
+{
+  "document": "07_IT/Projet_Atlas_ERP/Planning/Planning Atlas v3.png",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Projet Atlas",
+      "type": "projet",
+      "alias": [],
+      "description": "projet de déploiement ERP avec bascule multi-sites"
+    },
+    {
+      "nom": "Gand",
+      "type": "site",
+      "alias": [],
+      "description": "site de bascule et correction interface WMS"
+    },
+    {
+      "nom": "Namur",
+      "type": "site",
+      "alias": [],
+      "description": "site de bascule du système"
+    },
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "site de bascule du système"
+    },
+    {
+      "nom": "Lille",
+      "type": "site",
+      "alias": [],
+      "description": "site de bascule du système"
+    },
+    {
+      "nom": "WMS Gand",
+      "type": "équipement",
+      "alias": [],
+      "description": "interface logicielle nécessitant correction à Gand"
+    }
+  ],
+  "seconds": 6.2
+}

@@ -1,0 +1,7 @@
+{
+  "document": "02_RH/Enquetes/Enquete teletravail - reponses brutes.xlsx",
+  "body": "onglet « Réponses » · lignes 25 à 30\n| N° | Service | Site | Satisfaction (1-10) | Souhaite continuer | Commentaire |\n|---|---|---|---|---|---|\n| 25 | Direction | Namur | 9 | oui | Meilleure concentration pour les tâches de fond |\n| 26 | Commercial | Namur | 9 | oui |  |\n| 27 | Achats | Lille | 8 | oui | Meilleure concentration pour les tâches de fond |\n| 28 | Finance | Namur | 7 | non | Réunions hybrides à améliorer |\n| 29 | Communication | Namur | 9 | oui |  |\n| 30 | Informatique | Namur | 8 | oui |  |",
+  "model": "qwen3.8-27b",
+  "context": "Ces lignes correspondent aux réponses 25 à 30 de l'enquête sur le télétravail, recueillies auprès d'employés des sites de Namur et de Lille.",
+  "seconds": 2.0
+}

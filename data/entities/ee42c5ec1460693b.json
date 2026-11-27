@@ -1,0 +1,25 @@
+{
+  "document": "06_Achats/Fournisseurs/Supply agreement Valtek Components 2025.pdf",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Valtek Components Ltd",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "fournisseur de vannes pour pompes à chaleur"
+    },
+    {
+      "nom": "Four-way reversing valves",
+      "type": "produit",
+      "alias": [],
+      "description": "vannes à quatre voies pour pompes à chaleur"
+    },
+    {
+      "nom": "Service valves",
+      "type": "produit",
+      "alias": [],
+      "description": "vannes de service pour pompes à chaleur"
+    }
+  ],
+  "seconds": 3.7
+}

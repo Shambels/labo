@@ -1,0 +1,13 @@
+{
+  "document": "03_Production/Procedures/Consignes EPI usine Seneffe.pdf",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "usine de Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "site de production de Calorvia"
+    }
+  ],
+  "seconds": 1.1
+}

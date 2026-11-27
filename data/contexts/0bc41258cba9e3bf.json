@@ -1,0 +1,7 @@
+{
+  "document": "06_Achats/Appel_offres_ERP/Grille evaluation ERP v3.xlsx",
+  "body": "onglet « Grille » · Projet Atlas · grille d'évaluation des éditeurs ERP (notes sur 10) · lignes 8 à 8\n| Critère | Poids | Praxio | Kerneo | Sylvan Suite |\n|---|---|---|---|---|\n| Score pondéré (sur 100) | 100 | 82 | 76 | 69 |",
+  "model": "qwen3.8-27b",
+  "context": "Cette ligne, située dans l'onglet « Grille » du projet Atlas, présente le score pondéré final des éditeurs ERP évalués.",
+  "seconds": 1.5
+}

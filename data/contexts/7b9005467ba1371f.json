@@ -1,0 +1,7 @@
+{
+  "document": "04_Qualite/Reclamations/Registre reclamations clients 2025-2026.xlsx",
+  "body": "onglet « Registre » · lignes 9 à 9\n| Date | Client | Produit | Motif | Statut |\n|---|---|---|---|---|\n| 16/06/2026 | Habitat Confort SA | Aéris 9 | Facture reçue en double après le démarrage de l'ERP | En cours |",
+  "model": "qwen3.8-27b",
+  "context": "Cette entrée figure dans la dernière ligne du registre des réclamations. Elle concerne une facture en double reçue par Habitat Confort SA pour un produit Aéris 9, suite au démarrage de l'ERP.",
+  "seconds": 1.9
+}

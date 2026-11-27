@@ -1,0 +1,7 @@
+{
+  "document": "07_IT/Support/FAQ helpdesk.html",
+  "body": "Helpdesk informatique : questions fréquentes\nOù trouver les modes opératoires de Praxio ?\nDans l'espace Atlas de l'intranet, rubrique « Guides utilisateurs ». Les utilisateurs clés de chaque service sont vos premiers relais.",
+  "model": "qwen3.8-27b",
+  "context": "Cette rubrique de la FAQ informatique indique où consulter les modes opératoires de l'outil Praxio. Elle précise que ces guides sont disponibles dans l'espace Atlas de l'intranet.",
+  "seconds": 1.8
+}

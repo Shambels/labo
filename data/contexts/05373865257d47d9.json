@@ -1,0 +1,7 @@
+{
+  "document": "04_Qualite/Non_conformites/NC-2025-044.docx",
+  "body": "Fiche de non-conformité NC-2025-044\n| Date d'ouverture | 30/10/2025 |\n| - | - |\n| Site | Seneffe |\n| Produit | Aéris 6 |\n| Description | Étiquette énergétique erronée (classe A++ au lieu de A+++). |\n| Quantité concernée | 120 unités |\n| Mode de détection | Audit produit |\n| Cause | Modèle d'étiquette non mis à jour |\n| Action corrective | Mise à jour du modèle et ré-étiquetage |\n| Responsable | Romain Dethier |\n| Statut | Clôturée |\n| Coût de non-qualité | 480 € |",
+  "model": "qwen3.8-27b",
+  "context": "La fiche de non-conformité NC-2025-044 concerne le produit Aéris 6 au site de Seneffe. Elle détaille l'erreur d'étiquetage énergétique détectée lors d'un audit et les actions correctives associées.",
+  "seconds": 2.8
+}

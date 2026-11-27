@@ -1,0 +1,10 @@
+{
+  "path": "01_Finance/Comptabilite/Factures_fournisseurs/2026-02-27 TransArdenne TA-2026-00218.jpg",
+  "kind": "image",
+  "page": null,
+  "index": null,
+  "model": "qwen3.5-9b",
+  "prompt": "Tu transcris des documents d'entreprise pour un moteur de recherche.\n1. Recopie tout le texte visible, exactement comme il est écrit : nombres, codes, dates, unités et\n   annotations manuscrites compris. Rends les tableaux en Markdown.\n2. Puis, sous le titre « Description », décris en trois phrases au plus le type d'image (organigramme,\n   plan, graphique, photo, facture...) et ce qu'elle montre qui n'est pas écrit : les rattachements\n   d'un organigramme, la valeur la plus haute d'un graphique, la position des éléments d'un plan.\nN'invente rien : si un élément est illisible, écris [illisible].",
+  "seconds": 6.9,
+  "text": "**TransArdenne SA**  \nRoute de Marche 211, 6900 Marche-en-Famenne  \nTVA BE 0423.661.084  \n\nFacture n°  \nTA-2026-00218  \n\nDate  \n27/02/2026  \n\nÉchéance  \n29/03/2026  \n\nClient  \nCalorvia SA, 5100 Namur  \n\nPériode  \nfévrier 2026  \n\n| Code   | Prestation                              | Qté | Prix unit. | Total HT     |\n|--------|------------------------------------------|-----|------------|--------------|\n| SN-LI  | Navette Seneffe - Lille (camion complet) | 14  | 690,00     | 9 660,00     |\n| GE-SN  | Navette Gand - Seneffe (camion complet)  | 18  | 540,00     | 9 720,00     |\n| SUR    | Surcharge carburant                      | 1   | 1 162,80   | 1 162,80     |\n\nTotal HT  \n20 542,80 €  \n\nTVA 21 %  \n4 313,99 €  \n\nTotal TTC  \n24 856,79 €  \n\nIBAN BE62 0011 7745 2061.  \n\n---\n\n**Description**  \nIl s’agit d’une facture commerciale émise par TransArdenne SA pour des prestations de transport routier effectuées en février 2026. Le document détaille trois lignes de facturation : deux trajets réguliers (Seneffe-Lille et Gand-Seneffe) avec nombre de courses et prix unitaires, ainsi qu’une surcharge carburant unique. Les montants sont calculés avec TVA à 21 % et le total TTC est affiché en bas à droite."
+}

@@ -1,0 +1,43 @@
+{
+  "document": "05_Commercial/Reunions_commerciales/CR reunion commerciale 2025-11-12.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Pierre-Yves Collard",
+      "type": "personne",
+      "alias": [],
+      "description": "participant à la réunion commerciale"
+    },
+    {
+      "nom": "Joris Claes",
+      "type": "personne",
+      "alias": [],
+      "description": "participant à la réunion commerciale"
+    },
+    {
+      "nom": "Mathilde Roux",
+      "type": "personne",
+      "alias": [],
+      "description": "participant à la réunion commerciale"
+    },
+    {
+      "nom": "Benoît Gillet",
+      "type": "personne",
+      "alias": [],
+      "description": "participant à la réunion commerciale"
+    },
+    {
+      "nom": "Laura Mertz",
+      "type": "personne",
+      "alias": [],
+      "description": "participant à la réunion commerciale"
+    },
+    {
+      "nom": "Thermo Services Lille",
+      "type": "client",
+      "alias": [],
+      "description": "installateur agréé pour le nord de la France"
+    }
+  ],
+  "seconds": 4.0
+}

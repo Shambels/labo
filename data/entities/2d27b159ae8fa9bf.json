@@ -1,0 +1,29 @@
+{
+  "document": "01_Finance/Comptabilite/Factures_fournisseurs/2025-12-03 Elcora EL-25-11873.jpg",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Elcora Electronics BV",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "fournisseur de composants électroniques"
+    },
+    {
+      "nom": "Regelkaart Aéris (versie 4.0)",
+      "type": "produit",
+      "alias": [
+        "RC-40"
+      ],
+      "description": "carte de régulation électronique"
+    },
+    {
+      "nom": "Display module 2,8 inch",
+      "type": "produit",
+      "alias": [
+        "DS-2"
+      ],
+      "description": "module d'affichage électronique"
+    }
+  ],
+  "seconds": 4.2
+}

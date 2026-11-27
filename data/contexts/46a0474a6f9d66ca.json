@@ -1,0 +1,7 @@
+{
+  "document": "04_Qualite/Reclamations/Registre reclamations clients 2025-2026.xlsx",
+  "body": "onglet « Registre » · Date : 16/06/2026 ; Client : Habitat Confort SA ; Produit : Aéris 9 ; Motif : Facture reçue en double après le démarrage de l'ERP ; Statut : En cours",
+  "model": "qwen3.8-27b",
+  "context": "Cette entrée figure dans l'onglet « Registre » du registre des réclamations clients. Elle concerne une réclamation d'Habitat Confort SA sur un produit Aéris 9, liée à une facture reçue en double après le démarrage de l'ERP.",
+  "seconds": 2.4
+}

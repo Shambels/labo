@@ -1,0 +1,7 @@
+{
+  "document": "05_Commercial/Fiches_produits/Ventis_D300_FR.pdf",
+  "body": "Ventis D300 · Fiche technique\nGroupe de ventilation double flux avec récupération de chaleur pour logements neufs et rénovés.\n| Caractéristique | Valeur |\n| - | - |\n| Débit d'air maximal | 300 m3/h |\n| Rendement de récupération de chaleur | 90 % |\n| Puissance acoustique | 29 dB(A) |\n| Filtre d'air neuf | ISO ePM1 55 % (F7) |\n| Poids | 38 kg |\n| Dimensions (H x L x P) | 760 x 600 x 300 mm |\n| Classe énergétique | A |\nGarantie : 5 ans sur le compresseur, 2 ans sur les autres pièces.",
+  "model": "qwen3.8-27b",
+  "context": "Cette section présente les caractéristiques techniques et la garantie du groupe de ventilation double flux Ventis D300.",
+  "seconds": 1.6
+}

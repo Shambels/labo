@@ -1,0 +1,7 @@
+{
+  "document": "01_Finance/Reporting_mensuel/Reporting 2025-12.xlsx",
+  "body": "onglet « Effectifs » · Effectif par site en fin de mois (ETP) · Site : Namur ; ETP : 128",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait se trouve dans l'onglet « Effectifs » du reporting mensuel. Il détaille le nombre d'ETP présents sur le site de Namur.",
+  "seconds": 1.7
+}

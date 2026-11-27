@@ -1,0 +1,133 @@
+{
+  "document": "00_Direction/Conseil_administration/Projets_PV/Projet PV CA 2026-05-19.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Jean-François Delcourt",
+      "type": "personne",
+      "alias": [],
+      "description": "Président, administrateur indépendant"
+    },
+    {
+      "nom": "Hélène Marchal",
+      "type": "personne",
+      "alias": [],
+      "description": "Administratrice déléguée"
+    },
+    {
+      "nom": "Philippe Rasquin",
+      "type": "personne",
+      "alias": [],
+      "description": "Administrateur, représentant de Rasquin Participations SA"
+    },
+    {
+      "nom": "Valérie Rasquin",
+      "type": "personne",
+      "alias": [],
+      "description": "Administratrice, représentante de Rasquin Participations SA"
+    },
+    {
+      "nom": "Olivier Thiry",
+      "type": "personne",
+      "alias": [],
+      "description": "Administrateur, représentant de Mosane Capital"
+    },
+    {
+      "nom": "Martine Claessens",
+      "type": "personne",
+      "alias": [],
+      "description": "Administratrice indépendante"
+    },
+    {
+      "nom": "Dirk Peeters",
+      "type": "personne",
+      "alias": [],
+      "description": "Administrateur indépendant"
+    },
+    {
+      "nom": "Sarah Vandamme",
+      "type": "personne",
+      "alias": [],
+      "description": "Directrice financière a.i."
+    },
+    {
+      "nom": "Caroline Hendrickx",
+      "type": "personne",
+      "alias": [],
+      "description": "Secrétaire du conseil"
+    },
+    {
+      "nom": "Isabelle Gérard",
+      "type": "personne",
+      "alias": [],
+      "description": "Directrice financière nommée"
+    },
+    {
+      "nom": "Rasquin Participations SA",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "Actionnaire représenté au conseil"
+    },
+    {
+      "nom": "Mosane Capital",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "Actionnaire représenté au conseil"
+    },
+    {
+      "nom": "Namur",
+      "type": "site",
+      "alias": [],
+      "description": "Siège social"
+    },
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "Site de mise en production ERP"
+    },
+    {
+      "nom": "Lille",
+      "type": "site",
+      "alias": [],
+      "description": "Site de mise en production ERP"
+    },
+    {
+      "nom": "Gand",
+      "type": "site",
+      "alias": [],
+      "description": "Site de mise en production ERP"
+    },
+    {
+      "nom": "Herstal",
+      "type": "site",
+      "alias": [],
+      "description": "Entrepôt opérationnel"
+    },
+    {
+      "nom": "Projet ERP",
+      "type": "projet",
+      "alias": [],
+      "description": "Projet de mise en production ERP"
+    },
+    {
+      "nom": "Ligne L4",
+      "type": "équipement",
+      "alias": [],
+      "description": "Ligne de production en retard"
+    },
+    {
+      "nom": "Conseil d'administration",
+      "type": "instance",
+      "alias": [],
+      "description": "Organe de gouvernance"
+    },
+    {
+      "nom": "Comité de direction",
+      "type": "instance",
+      "alias": [],
+      "description": "Organe de direction"
+    }
+  ],
+  "seconds": 15.5
+}

@@ -1,0 +1,7 @@
+{
+  "document": "07_IT/Support/Export tickets hypercare 2026-06.csv",
+  "body": "| ticket | date_ouverture | site | module | priorite | statut |\n| - | - | - | - | - | - |\n| ATL-1013 | 2026-06-02 | Seneffe | Éditions | normale | clos |\n| ATL-1014 | 2026-06-02 | Lille | Éditions | normale | clos |\n| ATL-1015 | 2026-06-02 | Lille | Finance | normale | clos |\n| ATL-1016 | 2026-06-03 | Seneffe | Logistique | normale | clos |\n| ATL-1017 | 2026-06-03 | Namur | Achats | haute | clos |\n| ATL-1018 | 2026-06-03 | Seneffe | Finance | bloquant | clos |\n",
+  "model": "qwen3.8-27b",
+  "context": "Cette section du registre de support liste les tickets ouverts entre le 2 et le 3 juin 2026. Elle concerne les sites de Seneffe, Lille et Namur pour les modules Éditions, Finance, Logistique et Achats.",
+  "seconds": 2.5
+}

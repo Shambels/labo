@@ -1,0 +1,7 @@
+{
+  "document": "03_Production/Procedures/MO-SEN-12 Test d_etancheite Aeris.pdf",
+  "body": "En cas d'échec\n- Marquer l'unité d'une étiquette rouge et la placer en zone de retouche.\n- Prévenir le chef d'équipe et l'ingénieur qualité.",
+  "model": "qwen3.8-27b",
+  "context": "Cette section détaille les actions à mener lors d'un échec du test d'étanchéité des pompes à chaleur Aéris. Elle précise le marquage de l'unité défaillante et les responsables à alerter.",
+  "seconds": 2.1
+}

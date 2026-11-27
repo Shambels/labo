@@ -1,0 +1,7 @@
+{
+  "document": "07_IT/Securite/Charte informatique 2024.pdf",
+  "body": "Charte d'utilisation des outils informatiques\n- Les mots de passe comportent au moins 12 caractères et ne sont jamais communiqués, y compris au support.\n- L'installation de logiciels est réservée au service informatique.\n- L'usage privé raisonnable de la messagerie et d'internet est toléré pendant les pauses.\n- Les clés USB personnelles sont interdites sur les postes de production.\n- Tout courriel suspect est signalé avec le bouton « Signaler un hameçonnage ».",
+  "model": "qwen3.8-27b",
+  "context": "Cette section détaille les règles de sécurité et d'usage des outils numériques au sein de Calorvia. Elle couvre les exigences relatives aux mots de passe, l'installation de logiciels, l'usage privé d'internet et la gestion des menaces informatiques.",
+  "seconds": 2.6
+}

@@ -1,0 +1,25 @@
+{
+  "document": "04_Qualite/Non_conformites/NC-2026-019.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Herstal",
+      "type": "site",
+      "alias": [],
+      "description": "site de production de Calorvia"
+    },
+    {
+      "nom": "Aéris 9",
+      "type": "produit",
+      "alias": [],
+      "description": "produit concerné par la non-conformité"
+    },
+    {
+      "nom": "Damien Lecomte",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable de l'action corrective"
+    }
+  ],
+  "seconds": 2.7
+}

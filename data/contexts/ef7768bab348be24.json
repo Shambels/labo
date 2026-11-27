@@ -1,0 +1,7 @@
+{
+  "document": "07_IT/Projet_Atlas_ERP/COPIL/COPIL_Atlas_01_20251211.docx",
+  "body": "Projet Atlas : compte rendu du comité de pilotage n° 1\n1. Météo du projet par chantier\n| **Chantier** | **Statut** |\n| - | - |\n| Finance et comptabilité | Vert |\n| Achats | Vert |\n| Ventes et facturation | Vert |\n| Production (Seneffe) | Vert |\n| Logistique et WMS (Gand) | Vert |\n| Reprise des données | Vert |\n| Interfaces | Vert |\n| Formation et conduite du changement | Vert |",
+  "model": "qwen3.8-27b",
+  "context": "La rubrique « Météo du projet par chantier » du compte rendu du premier comité de pilotage du projet Atlas. Elle détaille le statut de chaque chantier, notamment la production à Seneffe et la logistique à Gand.",
+  "seconds": 2.3
+}

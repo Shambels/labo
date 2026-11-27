@@ -1,0 +1,7 @@
+{
+  "document": "07_IT/Securite/Rapport incident securite 2026-01-13.pdf",
+  "body": "Chronologie du mardi 13 janvier 2026\n| Heure | Événement |\n| - | - |\n| 08 h 47 | Réception d'un faux courriel de partage de document par une collaboratrice de la comptabilité. |\n| 09 h 03 | Saisie de l'identifiant et du mot de passe sur une fausse page de connexion. |\n| 09 h 20 | Première connexion de l'attaquant depuis une adresse IP située hors de l'Union européenne. |\n| 11 h 42 | Création d'une règle masquant les réponses des fournisseurs. |\n| 14 h 16 | Envoi au service des paiements d'une demande de modification de l'IBAN de Tôlerie Mosane pour la facture TM-2026-0042. |\n| 15 h 05 | Le service des paiements constate que le nouvel IBAN est lituanien et appelle le fournisseur : la fraude est confirmée. |\n",
+  "model": "qwen3.8-27b",
+  "context": "Cette section détaille la chronologie des événements de la journée du 13 janvier 2026, relatant la compromission d'une boîte aux lettres et la tentative de fraude visant le fournisseur Tôlerie Mosane.",
+  "seconds": 2.3
+}

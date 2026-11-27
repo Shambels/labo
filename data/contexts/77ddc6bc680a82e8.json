@@ -1,0 +1,7 @@
+{
+  "document": "07_IT/Support/Export tickets hypercare 2026-06.csv",
+  "body": "| ticket | date_ouverture | site | module | priorite | statut |\n| - | - | - | - | - | - |\n| ATL-1043 | 2026-06-11 | Lille | Logistique | normale | clos |\n| ATL-1044 | 2026-06-12 | Seneffe | Logistique | haute | clos |\n| ATL-1045 | 2026-06-13 | Namur | Ventes et facturation | basse | clos |\n| ATL-1046 | 2026-06-14 | Seneffe | Finance | normale | clos |\n| ATL-1047 | 2026-06-15 | Namur | Finance | basse | clos |\n| ATL-1048 | 2026-06-15 | Gand | Éditions | basse | clos |\n",
+  "model": "qwen3.8-27b",
+  "context": "Cette section du registre de support liste les tickets hypercare ouverts entre le 11 et le 15 juin 2026. Elle couvre les sites de Lille, Seneffe, Namur et Gand pour les modules Logistique, Ventes et facturation, Finance et Éditions.",
+  "seconds": 2.8
+}

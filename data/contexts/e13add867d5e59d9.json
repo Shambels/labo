@@ -1,0 +1,7 @@
+{
+  "document": "03_Production/Maintenance/Plan maintenance preventive 2026.xlsx",
+  "body": "onglet « Plan 2026 » · Plan de maintenance préventive 2026 · Seneffe · lignes 1 à 5\n| Équipement | Repère | Fréquence | Prochaine intervention | Prestataire |\n|---|---|---|---|---|\n| Presse plieuse | SEN-TOL-01 | Semestrielle | 14/09/2026 | Brevik Service |\n| Four de brasage | SEN-BRA-01 | Trimestrielle | 06/07/2026 | Interne |\n| Banc d'essai L2 | SEN-L2-TST | Mensuelle | 03/07/2026 | Interne |\n| Compresseur d'air | SEN-UTL-02 | 4 000 heures | 21/08/2026 | Airvex Service |\n| Robot de soudure | SEN-SOU-01 | Semestrielle | 17/08/2026 | Weldon Robotics |",
+  "model": "qwen3.8-27b",
+  "context": "Cette section du plan de maintenance préventive pour le site de Seneffe détaille les interventions prévues pour les équipements de production. Elle liste les fréquences et les prestataires associés à la presse plieuse, au four de brasage, au banc d'essai L2, au compresseur d'air et au robot de soudure.",
+  "seconds": 3.9
+}

@@ -1,0 +1,25 @@
+{
+  "document": "04_Qualite/Rappel_Aeris12/Terugroepbrief installateurs 2025-12-11.pdf",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Aéris 12",
+      "type": "produit",
+      "alias": [],
+      "description": "gamme de pompes à chaleur"
+    },
+    {
+      "nom": "Anne Vercammen",
+      "type": "personne",
+      "alias": [],
+      "description": "directrice de la qualité"
+    },
+    {
+      "nom": "quatre-voies",
+      "type": "équipement",
+      "alias": [],
+      "description": "pièce défectueuse des pompes à chaleur"
+    }
+  ],
+  "seconds": 2.9
+}

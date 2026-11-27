@@ -1,0 +1,162 @@
+{
+  "schema_name": "DoclingDocument",
+  "version": "1.11.0",
+  "name": "Commentaires de gestion T4 2025",
+  "origin": {
+    "mimetype": "application/pdf",
+    "binary_hash": 5330466335950409765,
+    "filename": "Commentaires de gestion T4 2025.pdf"
+  },
+  "furniture": {
+    "self_ref": "#/furniture",
+    "children": [],
+    "content_layer": "furniture",
+    "name": "_root_",
+    "label": "unspecified"
+  },
+  "body": {
+    "self_ref": "#/body",
+    "children": [
+      {
+        "$ref": "#/texts/0"
+      },
+      {
+        "$ref": "#/texts/1"
+      },
+      {
+        "$ref": "#/texts/2"
+      },
+      {
+        "$ref": "#/texts/3"
+      }
+    ],
+    "content_layer": "body",
+    "name": "_root_",
+    "label": "unspecified"
+  },
+  "groups": [],
+  "texts": [
+    {
+      "self_ref": "#/texts/0",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "furniture",
+      "label": "page_header",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 62.3622,
+            "t": 813.0068128,
+            "r": 168.13954400000006,
+            "b": 806.1630624000001,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            33
+          ]
+        }
+      ],
+      "orig": "Calorvia SA \u00b7 Contr\u00f4le de gestion",
+      "text": "Calorvia SA \u00b7 Contr\u00f4le de gestion"
+    },
+    {
+      "self_ref": "#/texts/1",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 773.5719,
+            "r": 301.7684528,
+            "b": 759.7385666666667,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            33
+          ]
+        }
+      ],
+      "orig": "Commentaires de gestion \u00b7 T4 2025",
+      "text": "Commentaires de gestion \u00b7 T4 2025",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/2",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 747.4337168000001,
+            "r": 512.76136185,
+            "b": 658.4512944,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            475
+          ]
+        }
+      ],
+      "orig": "Chiffre d'affaires du trimestre : 46 700 k\u20ac. EBITDA : 3 887 k\u20ac soit 8 3 % du chiffre d'affaires. Le trimestre est marqu\u00e9 par un pic d'activit\u00e9 en novembre et d\u00e9cembre, soutenu par quatre samedis de production \u00e0 Seneffe. La provision de 180 000 \u20ac li\u00e9e au rappel de l'A\u00e9ris 12 p\u00e8se sur le r\u00e9sultat de d\u00e9cembre. Les frais de personnel int\u00e9rimaire de Gand ont augment\u00e9 de 22 % par rapport au troisi\u00e8me trimestre, en raison du taux d'absent\u00e9isme et de la saturation de l'entrep\u00f4t.",
+      "text": "Chiffre d'affaires du trimestre : 46 700 k\u20ac. EBITDA : 3 887 k\u20ac soit 8 3 % du chiffre d'affaires. Le trimestre est marqu\u00e9 par un pic d'activit\u00e9 en novembre et d\u00e9cembre, soutenu par quatre samedis de production \u00e0 Seneffe. La provision de 180 000 \u20ac li\u00e9e au rappel de l'A\u00e9ris 12 p\u00e8se sur le r\u00e9sultat de d\u00e9cembre. Les frais de personnel int\u00e9rimaire de Gand ont augment\u00e9 de 22 % par rapport au troisi\u00e8me trimestre, en raison du taux d'absent\u00e9isme et de la saturation de l'entrep\u00f4t."
+    },
+    {
+      "self_ref": "#/texts/3",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "furniture",
+      "label": "page_footer",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 204.7511,
+            "t": 33.47927279999999,
+            "r": 390.52453760000003,
+            "b": 26.635522400000013,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            61
+          ]
+        }
+      ],
+      "orig": "Calorvia SA (entreprise fictive) \u00b7 Diffusion interne \u00b7 page 1",
+      "text": "Calorvia SA (entreprise fictive) \u00b7 Diffusion interne \u00b7 page 1"
+    }
+  ],
+  "pictures": [],
+  "tables": [],
+  "key_value_items": [],
+  "form_items": [],
+  "pages": {
+    "1": {
+      "size": {
+        "width": 595.2756,
+        "height": 841.8898
+      },
+      "page_no": 1
+    }
+  }
+}

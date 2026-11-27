@@ -1,0 +1,31 @@
+{
+  "document": "04_Qualite/Non_conformites/NC-2025-038.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "site de Calorvia"
+    },
+    {
+      "nom": "Aéris 9",
+      "type": "produit",
+      "alias": [],
+      "description": "produit concerné par la non-conformité"
+    },
+    {
+      "nom": "Tôlerie Mosane",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "fournisseur responsable de l'emballage insuffisant"
+    },
+    {
+      "nom": "Céline Moreau",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable de l'action corrective"
+    }
+  ],
+  "seconds": 3.3
+}

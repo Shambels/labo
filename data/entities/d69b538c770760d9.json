@@ -1,0 +1,39 @@
+{
+  "document": "02_RH/Formation/Plan de formation 2026.xlsx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Gand",
+      "type": "site",
+      "alias": [],
+      "description": "site de l'entrepôt"
+    },
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "site de maintenance et production"
+    },
+    {
+      "nom": "Namur",
+      "type": "site",
+      "alias": [],
+      "description": "site de management et langues"
+    },
+    {
+      "nom": "Praxio",
+      "type": "produit",
+      "alias": [
+        "ERP"
+      ],
+      "description": "logiciel de gestion d'entreprise"
+    },
+    {
+      "nom": "Atlas",
+      "type": "projet",
+      "alias": [],
+      "description": "projet d'implémentation de l'ERP"
+    }
+  ],
+  "seconds": 5.6
+}

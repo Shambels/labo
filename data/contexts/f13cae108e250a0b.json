@@ -1,0 +1,7 @@
+{
+  "document": "00_Direction/CODIR/2026/2026-01-14 CODIR extraordinaire PV.docx",
+  "body": "Procès-verbal du Comité de direction (séance extraordinaire)\nDécisions de la séance\n| **N°** | **Décision** |\n| - | - |\n| D-26-02 | L'authentification multifacteur (MFA) devient obligatoire pour tous les comptes au plus tard le 28 février 2026. |\n| D-26-03 | Toute modification de coordonnées bancaires d'un fournisseur doit être vérifiée par un rappel téléphonique à un contact connu et validée par deux personnes (comptabilité et direction financière), avec effet immédiat. |\n| D-26-04 | Une formation de sensibilisation à l'hameçonnage est obligatoire pour tout le personnel administratif avant le 31 mars 2026. |",
+  "model": "qwen3.8-27b",
+  "context": "Cette section détaille les décisions prises lors de la séance extraordinaire du comité de direction. Elle concerne les mesures de sécurité informatique adoptées en réponse à l'incident d'hameçonnage survenu le 13 janvier.",
+  "seconds": 2.2
+}

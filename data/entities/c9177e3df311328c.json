@@ -1,0 +1,19 @@
+{
+  "document": "04_Qualite/Rappel_Aeris12/FAQ rappel Aeris 12.html",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Aéris 12",
+      "type": "produit",
+      "alias": [],
+      "description": "pompe à chaleur concernée par un rappel préventif"
+    },
+    {
+      "nom": "R32",
+      "type": "produit",
+      "alias": [],
+      "description": "fluide frigorigène faiblement inflammable"
+    }
+  ],
+  "seconds": 2.0
+}

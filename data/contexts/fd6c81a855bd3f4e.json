@@ -1,0 +1,7 @@
+{
+  "document": "03_Production/Maintenance/Fiches_intervention/2026-02-17 INT-2026-782 Robot de soudure.docx",
+  "body": "Fiche d'intervention INT-2026-782\n| Date | 17/02/2026 |\n| - | - |\n| Équipement | Robot de soudure |\n| Description | Collisions répétées sur le poste 2. Recalibrage de l'outil. |\n| Durée d'arrêt | 1 h 45 |\n| Pièces et coûts | Néant |\n| Intervenant | Weldon Robotics |",
+  "model": "qwen3.8-27b",
+  "context": "La fiche d'intervention INT-2026-782 concerne le robot de soudure. Elle détaille le recalibrage de l'outil suite à des collisions sur le poste 2.",
+  "seconds": 2.2
+}

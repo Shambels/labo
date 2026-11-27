@@ -1,0 +1,7 @@
+{
+  "document": "01_Finance/Reporting_mensuel/Reporting 2026-02.xlsx",
+  "body": "onglet « Effectifs » · Effectif par site en fin de mois (ETP)\n| Site | ETP |\n|---|---|\n| Namur | 128 |\n| Seneffe | 287 |\n| Gand | 193 |\n| Lille | 14 |\n| Total | 622 |",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait se trouve dans l'onglet « Effectifs » du reporting mensuel. Il détaille la répartition de l'effectif en équivalents temps plein (ETP) par site (Namur, Seneffe, Gand, Lille) en fin de mois.",
+  "seconds": 2.6
+}

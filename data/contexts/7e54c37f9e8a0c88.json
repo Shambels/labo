@@ -1,0 +1,7 @@
+{
+  "document": "09_Communication/Newsletter/Calorvia Info 2026-02.html",
+  "body": "Calorvia Info · février 2026\nLe projet Atlas prend deux mois de plus\nPour fiabiliser les données articles et l'interface avec le WMS de Gand, la mise en production est reportée au 1er juin 2026.",
+  "model": "qwen3.8-27b",
+  "context": "Cette rubrique de la newsletter interne annonce le report de la mise en production du projet Atlas. Elle précise que ce délai supplémentaire vise à fiabiliser les données articles et l'interface avec le WMS de Gand.",
+  "seconds": 1.9
+}

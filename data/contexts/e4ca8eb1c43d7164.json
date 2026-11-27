@@ -1,0 +1,7 @@
+{
+  "document": "01_Finance/Budget_2026/Budget 2026 - version approuvee CA 16-12-2025.xlsx",
+  "body": "onglet « Hypothèses » · Budget 2026 · version approuvée par le conseil d'administration du 16/12/2025 · Hypothèse : Prix de l'acier ; Valeur retenue : +4 %",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait se trouve dans l'onglet « Hypothèses » du budget 2026. Il détaille l'hypothèse de hausse du prix de l'acier retenue pour l'élaboration du budget.",
+  "seconds": 2.3
+}

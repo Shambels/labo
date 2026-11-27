@@ -1,0 +1,57 @@
+{
+  "document": "01_Finance/Investissements/Demande capex CAPEX-2026-005 - Rayonnages de l_entrepôt de Herstal.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Rayonnages de l'entrepôt de Herstal",
+      "type": "projet",
+      "alias": [
+        "CAPEX-2026-005"
+      ],
+      "description": "Projet d'installation de rayonnages palettes"
+    },
+    {
+      "nom": "Thomas Lambert",
+      "type": "personne",
+      "alias": [],
+      "description": "Demandeur de l'investissement"
+    },
+    {
+      "nom": "Sarah Vandamme",
+      "type": "personne",
+      "alias": [],
+      "description": "Responsable du contrôle de gestion"
+    },
+    {
+      "nom": "Hélène Marchal",
+      "type": "personne",
+      "alias": [],
+      "description": "Responsable de la validation CODIR"
+    },
+    {
+      "nom": "Rackwell Systems SRL",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "Fournisseur des rayonnages"
+    },
+    {
+      "nom": "Entrepôt de Herstal",
+      "type": "site",
+      "alias": [],
+      "description": "Entrepôt loué de 4 200 m²"
+    },
+    {
+      "nom": "CODIR",
+      "type": "instance",
+      "alias": [],
+      "description": "Comité de direction"
+    },
+    {
+      "nom": "Conseil d'administration",
+      "type": "instance",
+      "alias": [],
+      "description": "Instance d'approbation des investissements"
+    }
+  ],
+  "seconds": 8.3
+}

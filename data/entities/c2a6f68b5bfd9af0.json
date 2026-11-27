@@ -1,0 +1,19 @@
+{
+  "document": "03_Production/Seneffe/Photos_equipements/IMG_20260313_Banc_dessai_L2.jpg",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Testra GmbH",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "fabricant du banc d'essai HPT-4"
+    },
+    {
+      "nom": "HPT-4",
+      "type": "équipement",
+      "alias": [],
+      "description": "banc d'essai industriel pour fluides R32 et R290"
+    }
+  ],
+  "seconds": 2.8
+}

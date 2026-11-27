@@ -1,0 +1,7 @@
+{
+  "document": "04_Qualite/Rappel_Aeris12/Liste numeros de serie concernes.xlsx",
+  "body": "onglet « Unités concernées » · lignes 13 à 16\n| Numéro de série | Date de production | Installateur | Région | Statut | Date d'intervention |\n|---|---|---|---|---|---|\n| AE12-25-4513 | 04/11/2025 | Installatiebedrijf Wouters | Flandre | Réparée | 13/12/2025 |\n| AE12-25-4514 | 04/11/2025 | Énergies du Condroz SRL | Namur | Réparée | 14/02/2026 |\n| AE12-25-4515 | 04/11/2025 | Thermo Services Lille SARL | Hauts-de-France | Réparée | 02/02/2026 |\n| AE12-25-4516 | 04/11/2025 | Installatiebedrijf Wouters | Flandre | Réparée | 14/12/2025 |",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait se situe dans l'onglet « Unités concernées » du classeur de rappel, aux lignes 13 à 16. Il détaille le suivi des interventions sur des unités produites le 4 novembre 2025, installées en Flandre, à Namur et dans les Hauts-de-France.",
+  "seconds": 3.3
+}

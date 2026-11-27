@@ -1,0 +1,7 @@
+{
+  "document": "03_Production/Procedures/WI-GNT-09 Dagelijkse controle heftruck.pdf",
+  "body": "Controlelijst\n- Banden en vorken zonder zichtbare schade.\n- Claxon en verlichting werken.\n- Blue spot werkt (blauwe lichtvlek op 3 meter achter de heftruck).\n- Snelheidsbegrenzer actief: maximum 6 km/u in de gangen.\n- Batterij minstens 30 % geladen.",
+  "model": "qwen3.8-27b",
+  "context": "Cette section détaille la liste de vérifications à effectuer sur la chariot élévateur avant le début de la prise de poste.",
+  "seconds": 1.4
+}

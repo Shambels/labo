@@ -1,0 +1,7 @@
+{
+  "document": "01_Finance/Investissements/Demande capex CAPEX-2025-014 - Ligne d_assemblage L4.docx",
+  "body": "Demande d'investissement CAPEX-2025-014\n| Projet | Ligne d'assemblage L4 (phase 1) |\n| - | - |\n| Demandeur | Thomas Lambert |\n| Date de la demande | 14/11/2025 |\n| Montant demandé | 1 250 000 € |\n| Description | Quatrième ligne d'assemblage à Seneffe, dédiée à la gamme Aéris Pro (assemblage et tests). |\n| Fournisseur pressenti | Linetech Automation BV (offre de 1 170 000 € pour la phase 1) |\n| Réserve pour imprévus | 80 000 € |\n| Aide régionale attendue | 30 % (demande déposée le 14/11/2025 auprès de la Région wallonne) |\n| Capacité supplémentaire | 45 unités par jour à régime nominal |\n",
+  "model": "qwen3.8-27b",
+  "context": "Cette section présente les caractéristiques générales du projet de la ligne d'assemblage L4 à Seneffe, destinée à la gamme Aéris Pro. Elle détaille le demandeur, le fournisseur pressenti, l'aide régionale attendue et la capacité de production supplémentaire.",
+  "seconds": 3.1
+}

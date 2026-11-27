@@ -1,0 +1,7 @@
+{
+  "document": "01_Finance/Investissements/Demande capex CAPEX-2026-003 - Installation photovoltaïque de Seneffe.docx",
+  "body": "Demande d'investissement CAPEX-2026-003\nCircuit d'approbation\n| **Étape** | **Responsable** | **Statut** |\n| - | - | - |\n| Avis du contrôle de gestion | Sarah Vandamme | Favorable |\n| Validation CODIR | Hélène Marchal | Validé |\n| Conseil d'administration (au-delà de 250 000 €) | Président du conseil | Requis |",
+  "model": "qwen3.8-27b",
+  "context": "Cette section détaille le circuit d'approbation de la demande d'investissement pour l'installation photovoltaïque de Seneffe. Elle liste les responsables et le statut des validations, notamment l'avis favorable du contrôle de gestion et la validation par le CODIR.",
+  "seconds": 2.5
+}

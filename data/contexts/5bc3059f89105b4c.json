@@ -1,0 +1,7 @@
+{
+  "document": "05_Commercial/Courriers/Courrier hausse tarifaire 2026.pdf",
+  "body": "Namur, le 24 octobre 2025 Objet : évolution de nos prix au 1er janvier 2026 Chère cliente, cher client, La hausse du prix de l'acier, l'indexation des salaires et le renchérissement des composants électroniques nous conduisent à adapter nos prix catalogue au 1er janvier 2026 : +3,5 % sur la gamme standard (Aéris 6, 9 et 12, Ventis D300 et D450) et +5 % sur la gamme premium (Aéris Pro et Ventis D450 Pro). Les commandes confirmées avant le 15 décembre 2025 et livrées avant le 31 janvier 2026 seront facturées aux prix 2025. Votre responsable commercial reste à votre disposition. Pierre-Yves Collard, directeur commercial",
+  "model": "qwen3.8-27b",
+  "context": "Le corps du courrier annonce l'augmentation des tarifs catalogue pour les gammes standard et premium de pompes à chaleur et de ventilation. Il précise les conditions de facturation aux anciens prix pour les commandes passées avant fin d'année.",
+  "seconds": 2.5
+}

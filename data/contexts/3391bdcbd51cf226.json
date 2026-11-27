@@ -1,0 +1,7 @@
+{
+  "document": "03_Production/Procedures/MO-SEN-12 Test d_etancheite Aeris.pdf",
+  "body": "Objet\nVérifier l'étanchéité du circuit frigorifique de chaque pompe à chaleur avant le remplissage en fluide.",
+  "model": "qwen3.8-27b",
+  "context": "Cette rubrique définit l'objectif de la procédure de contrôle qualité. Elle concerne la vérification de l'étanchéité du circuit frigorifique des pompes à chaleur Aéris avant leur remplissage.",
+  "seconds": 1.9
+}

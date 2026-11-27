@@ -1,0 +1,7 @@
+{
+  "document": "03_Production/Gent/Maandrapporten/Productierapport Gent 2025-10.xlsx",
+  "body": "onglet « Productie » · Productierapport · site Gent · oktober 2025 · Lijn : Totaal ; Geproduceerde eenheden : 2899 ; Stilstand (u) : 25.7",
+  "model": "qwen3.8-27b",
+  "context": "Cette ligne se trouve dans l'onglet « Productie » du rapport mensuel du site de Gent. Elle récapitule les totaux de production et d'arrêt pour l'ensemble des lignes.",
+  "seconds": 2.0
+}

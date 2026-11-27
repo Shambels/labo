@@ -1,0 +1,7 @@
+{
+  "document": "00_Direction/CODIR/2026/2026-01-26 CODIR PV.docx",
+  "body": "Procès-verbal du Comité de direction\n2. Indicateurs de la semaine 4\nSemaine 4, du 19 janvier 2026 au 25 janvier 2026.\n| **Indicateur** | **Valeur** | **Objectif** |\n| - | - | - |\n| Production Seneffe (pompes à chaleur) | 490 unités | 500 |\n| Production Gand (groupes de ventilation) | 637 unités | 650 |\n| Taux de service (OTIF) | 94,8 % | 95 % |\n| Taux de rebut Seneffe | 1,7 % | < 1,5 % |\n| Accidents avec arrêt de travail | 0 | 0 |\n| Prises de commandes | 4 272 k€ | – |\n| Taux d'absentéisme | 6,2 % | < 5 % |",
+  "model": "qwen3.8-27b",
+  "context": "Cette section présente les indicateurs de performance hebdomadaires pour la semaine 4. Elle détaille les résultats de production des sites de Seneffe et de Gand ainsi que les taux de service, de rebut et d'absentéisme.",
+  "seconds": 2.4
+}

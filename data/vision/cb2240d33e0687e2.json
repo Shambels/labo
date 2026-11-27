@@ -1,0 +1,10 @@
+{
+  "path": "04_Qualite/Indicateurs/Rebut par ligne decembre 2025.png",
+  "kind": "image",
+  "page": null,
+  "index": null,
+  "model": "qwen3.5-9b",
+  "prompt": "Tu transcris des documents d'entreprise pour un moteur de recherche.\n1. Recopie tout le texte visible, exactement comme il est écrit : nombres, codes, dates, unités et\n   annotations manuscrites compris. Rends les tableaux en Markdown.\n2. Puis, sous le titre « Description », décris en trois phrases au plus le type d'image (organigramme,\n   plan, graphique, photo, facture...) et ce qu'elle montre qui n'est pas écrit : les rattachements\n   d'un organigramme, la valeur la plus haute d'un graphique, la position des éléments d'un plan.\nN'invente rien : si un élément est illisible, écris [illisible].",
+  "seconds": 2.5,
+  "text": "Taux de rebut par ligne • décembre 2025 (%)\n\n| Ligne | Taux de rebut (%) |\n|-------|-------------------|\n| L1    | 1,7               |\n| L2    | 3,4               |\n| L3    | 1,6               |\n\nDescription  \nIl s’agit d’un graphique en barres montrant les taux de rebut par ligne de production en décembre 2025. La ligne L2 affiche le taux le plus élevé à 3,4 %, tandis que L1 et L3 sont inférieurs (1,7 % et 1,6 %). Le graphique est issu d’un rapport de production de l’usine de Seneffe."
+}

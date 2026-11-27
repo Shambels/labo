@@ -1,0 +1,7 @@
+{
+  "document": "08_Juridique/RGPD/Registre des traitements.xlsx",
+  "body": "onglet « Registre » · Registre des activités de traitement (article 30 du RGPD) · lignes 4 à 6\n| Traitement | Finalité | Catégories de données | Base légale | Durée de conservation | Responsable |\n|---|---|---|---|---|---|\n| Clients et installateurs | Gestion commerciale | Coordonnées professionnelles | Contrat | 10 ans | Pierre-Yves Collard |\n| Traçabilité des produits | Garanties et rappels | Adresse d'installation des clients finaux | Obligation légale (sécurité des produits) | 15 ans | Anne Vercammen |\n| Vidéosurveillance | Sécurité des biens | Images | Intérêt légitime | 30 jours | Olivier Hardy |",
+  "model": "qwen3.8-27b",
+  "context": "Ces lignes du registre RGPD détaillent les traitements liés à la gestion commerciale, à la traçabilité des produits et à la vidéosurveillance. Elles précisent les finalités, les bases légales et les responsables associés à ces activités.",
+  "seconds": 2.3
+}

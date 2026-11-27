@@ -1,0 +1,10 @@
+{
+  "path": "04_Qualite/Indicateurs/Rebut par ligne decembre 2025.png",
+  "kind": "image",
+  "page": null,
+  "index": null,
+  "model": "qwen3.8-27b",
+  "prompt": "Tu transcris des documents d'entreprise pour un moteur de recherche.\n1. Recopie tout le texte visible, exactement comme il est écrit : nombres, codes, dates, unités et\n   annotations manuscrites compris. Rends les tableaux en Markdown.\n2. Dans un schéma, un plan ou un organigramme, recopie aussi chaque texte posé sur un lien, une flèche ou un\n   trait (débit, distance, type de connexion, rattachement), sur une ligne qui commence par le nom des deux\n   éléments reliés, tels qu'ils sont écrits sur l'image, séparés par un tiret, puis deux-points et le texte.\n   Un tel texte n'a de sens qu'avec les deux éléments qu'il relie.\n3. Puis, sous le titre « Description », décris en trois phrases au plus le type d'image (organigramme,\n   plan, graphique, photo, facture...) et ce qu'elle montre qui n'est pas écrit : les rattachements\n   d'un organigramme, la valeur la plus haute d'un graphique, la position des éléments d'un plan.\nN'invente rien : si un élément est illisible, écris [illisible].",
+  "seconds": 10.3,
+  "text": "Taux de rebut par ligne • décembre 2025 (%)\n\n| Axe Y | L1 | L2 | L3 |\n| :--- | :--- | :--- | :--- |\n| 3.5 | | | |\n| 3.0 | | | |\n| 2.5 | | | |\n| 2.0 | | | |\n| 1.7 % | | 3,4 % | |\n| 1.5 | | | 1,6 % |\n| 1.0 | | | |\n| 0.5 | | | |\n| 0.0 | | | |\n\nUsine de Seneffe - rapport de production\n\nDescription\nIl s'agit d'un graphique à barres verticales représentant les taux de rebut pour trois lignes de production (L1, L2, L3) en décembre 2025. La ligne L2 affiche la valeur la plus élevée avec un taux de 3,4 %, tandis que les lignes L1 et L3 présentent des taux inférieurs à 2 %. Le graphique est issu d'un rapport de production de l'usine de Seneffe."
+}

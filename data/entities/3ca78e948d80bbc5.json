@@ -1,0 +1,19 @@
+{
+  "document": "03_Production/Gent/Veiligheid/Rapport audit circulation SafeWork Consult 2026-01.pdf",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Entrepôt de Gand",
+      "type": "site",
+      "alias": [],
+      "description": "site de production et stockage de Calorvia"
+    },
+    {
+      "nom": "SafeWork Consult",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "cabinet d'audit de la circulation"
+    }
+  ],
+  "seconds": 2.7
+}

@@ -1,0 +1,19 @@
+{
+  "document": "02_RH/Politiques/Politique teletravail v2 (2023).pdf",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Namur",
+      "type": "site",
+      "alias": [],
+      "description": "site de Calorvia avec personnel administratif"
+    },
+    {
+      "nom": "Lille",
+      "type": "site",
+      "alias": [],
+      "description": "site de Calorvia avec personnel administratif"
+    }
+  ],
+  "seconds": 2.7
+}

@@ -1,0 +1,93 @@
+{
+  "document": "03_Production/Maintenance/Plan maintenance preventive 2026.xlsx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Presse plieuse",
+      "type": "équipement",
+      "alias": [
+        "SEN-TOL-01"
+      ],
+      "description": "Équipement de production soumis à maintenance semestrielle"
+    },
+    {
+      "nom": "Four de brasage",
+      "type": "équipement",
+      "alias": [
+        "SEN-BRA-01"
+      ],
+      "description": "Équipement de production soumis à maintenance trimestrielle"
+    },
+    {
+      "nom": "Banc d'essai L2",
+      "type": "équipement",
+      "alias": [
+        "SEN-L2-TST"
+      ],
+      "description": "Équipement de test soumis à maintenance mensuelle"
+    },
+    {
+      "nom": "Compresseur d'air",
+      "type": "équipement",
+      "alias": [
+        "SEN-UTL-02"
+      ],
+      "description": "Équipement utilitaire soumis à maintenance horaire"
+    },
+    {
+      "nom": "Robot de soudure",
+      "type": "équipement",
+      "alias": [
+        "SEN-SOU-01"
+      ],
+      "description": "Équipement de production soumis à maintenance semestrielle"
+    },
+    {
+      "nom": "Pont roulant",
+      "type": "équipement",
+      "alias": [
+        "SEN-MAN-03"
+      ],
+      "description": "Équipement de manutention soumis à inspection légale annuelle"
+    },
+    {
+      "nom": "Ligne L4",
+      "type": "équipement",
+      "alias": [
+        "SEN-L4"
+      ],
+      "description": "Ligne de production en cours de mise en service"
+    },
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "Site de production de Calorvia"
+    },
+    {
+      "nom": "Brevik Service",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "Prestataire de maintenance pour la presse plieuse"
+    },
+    {
+      "nom": "Airvex Service",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "Prestataire de maintenance pour le compresseur d'air"
+    },
+    {
+      "nom": "Weldon Robotics",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "Prestataire de maintenance pour le robot de soudure"
+    },
+    {
+      "nom": "Linetech",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "Prestataire de maintenance pour la ligne L4"
+    }
+  ],
+  "seconds": 13.8
+}

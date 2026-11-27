@@ -1,0 +1,37 @@
+{
+  "document": "09_Communication/Newsletter/Calorvia Info 2025-10.html",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Atlas",
+      "type": "projet",
+      "alias": [],
+      "description": "projet de remplacement de l'ERP"
+    },
+    {
+      "nom": "GesPro 7",
+      "type": "produit",
+      "alias": [],
+      "description": "ERP actuel dont le support s'arrête"
+    },
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "site de maintenance et de fête du personnel"
+    },
+    {
+      "nom": "Mehdi Haddad",
+      "type": "personne",
+      "alias": [],
+      "description": "nouveau collègue en maintenance Seneffe"
+    },
+    {
+      "nom": "Chloé Bodart",
+      "type": "personne",
+      "alias": [],
+      "description": "nouvelle collègue en qualité"
+    }
+  ],
+  "seconds": 4.9
+}

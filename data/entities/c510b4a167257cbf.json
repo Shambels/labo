@@ -1,0 +1,19 @@
+{
+  "document": "02_RH/Recrutement/Offres/REC-2026-017 Comptable fournisseurs.html",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Namur",
+      "type": "site",
+      "alias": [],
+      "description": "site de travail du poste de comptable fournisseurs"
+    },
+    {
+      "nom": "Praxio",
+      "type": "équipement",
+      "alias": [],
+      "description": "ERP utilisé pour l'encodage des factures"
+    }
+  ],
+  "seconds": 2.3
+}

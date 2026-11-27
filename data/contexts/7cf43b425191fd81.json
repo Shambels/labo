@@ -1,0 +1,7 @@
+{
+  "document": "05_Commercial/Reunions_commerciales/CR reunion commerciale 2025-10-08.docx",
+  "body": "Réunion commerciale mensuelle du 8 octobre 2025\n1. Ventes de septembre 2025\nChiffre d'affaires du mois : 12 300 k€. Prises de commandes : 12 590 k€.\n| **Région** | **Chiffre d'affaires (k€)** |\n| - | - |\n| Wallonie | 4 085 |\n| Bruxelles | 1 110 |\n| Flandre | 3 937 |\n| France | 2 562 |\n| Autres pays | 606 |",
+  "model": "qwen3.8-27b",
+  "context": "Cette section détaille les résultats commerciaux de septembre 2025. Elle présente le chiffre d'affaires et les prises de commandes, répartis par région.",
+  "seconds": 1.7
+}

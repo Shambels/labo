@@ -1,0 +1,21 @@
+{
+  "document": "00_Direction/Conseil_administration/Convocations/Convocation CA 2026-03-17.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Conseil d'administration",
+      "type": "instance",
+      "alias": [
+        "CA"
+      ],
+      "description": "organe de direction de Calorvia SA"
+    },
+    {
+      "nom": "Caroline Hendrickx",
+      "type": "personne",
+      "alias": [],
+      "description": "secrétaire du conseil"
+    }
+  ],
+  "seconds": 1.8
+}

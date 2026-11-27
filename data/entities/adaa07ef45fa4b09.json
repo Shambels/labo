@@ -1,0 +1,13 @@
+{
+  "document": "02_RH/Notes_de_service/2025-12-09 NS-2025-03 Colis de fin d_année.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Nadia Benali",
+      "type": "personne",
+      "alias": [],
+      "description": "émettrice de la note de service"
+    }
+  ],
+  "seconds": 1.1
+}

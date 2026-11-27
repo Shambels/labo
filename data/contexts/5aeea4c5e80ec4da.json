@@ -1,0 +1,7 @@
+{
+  "document": "01_Finance/Reporting_mensuel/Reporting 2026-01.xlsx",
+  "body": "onglet « Ventes par région » · Chiffre d'affaires par région (k€) · Région : Total ; CA du mois : 14300",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait se trouve dans l'onglet « Ventes par région » du reporting mensuel. Il indique le chiffre d'affaires total du mois pour l'ensemble des zones géographiques.",
+  "seconds": 1.9
+}

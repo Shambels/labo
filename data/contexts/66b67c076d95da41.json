@@ -1,0 +1,7 @@
+{
+  "document": "06_Achats/Fournisseurs/Evaluation fournisseurs 2025.xlsx",
+  "body": "onglet « Évaluation 2025 »\nPondération : qualité 50 %, délais 30 %, prix 20 %.",
+  "model": "qwen3.8-27b",
+  "context": "Cette rubrique, située à la fin de l'onglet « Évaluation 2025 », précise la pondération appliquée aux critères de qualité, de délais et de prix.",
+  "seconds": 1.8
+}

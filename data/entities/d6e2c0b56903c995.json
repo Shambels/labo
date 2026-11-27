@@ -1,0 +1,25 @@
+{
+  "document": "04_Qualite/Non_conformites/NC-2026-021.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "site de production concerné par la non-conformité"
+    },
+    {
+      "nom": "Aéris Pro 16",
+      "type": "produit",
+      "alias": [],
+      "description": "produit concerné par le retard d'expédition"
+    },
+    {
+      "nom": "Sophie Lejeune",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable de l'action corrective"
+    }
+  ],
+  "seconds": 3.0
+}

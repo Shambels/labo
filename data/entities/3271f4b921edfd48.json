@@ -1,0 +1,19 @@
+{
+  "document": "09_Communication/Intranet/Contacts utiles.html",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Accueil Namur",
+      "type": "site",
+      "alias": [],
+      "description": "service d'accueil situé à Namur"
+    },
+    {
+      "nom": "Entrepôt de Herstal",
+      "type": "site",
+      "alias": [],
+      "description": "entrepôt situé à Herstal"
+    }
+  ],
+  "seconds": 2.0
+}

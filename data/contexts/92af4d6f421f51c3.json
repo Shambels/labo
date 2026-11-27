@@ -1,0 +1,7 @@
+{
+  "document": "06_Achats/Appel_offres_ERP/Grille evaluation ERP v3.xlsx",
+  "body": "onglet « Grille » · Projet Atlas · grille d'évaluation des éditeurs ERP (notes sur 10) · Critère : Ergonomie ; Poids : 10 ; Praxio : 8 ; Kerneo : 8.5 ; Sylvan Suite : 7.5",
+  "model": "qwen3.8-27b",
+  "context": "Dans l'onglet « Grille » du projet Atlas, cette ligne détaille la note d'ergonomie attribuée aux éditeurs Praxio, Kerneo et Sylvan Suite.",
+  "seconds": 1.8
+}

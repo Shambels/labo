@@ -1,0 +1,13 @@
+{
+  "document": "05_Commercial/Fiches_produits/Ventis_D450_FR.pdf",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Ventis D450",
+      "type": "produit",
+      "alias": [],
+      "description": "groupe de ventilation double flux avec récupération de chaleur"
+    }
+  ],
+  "seconds": 1.7
+}

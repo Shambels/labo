@@ -1,0 +1,51 @@
+{
+  "document": "00_Direction/Conseil_administration/AG/PV AGO 2026-06-09.pdf",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Jean-François Delcourt",
+      "type": "personne",
+      "alias": [],
+      "description": "président du bureau de l'assemblée"
+    },
+    {
+      "nom": "Caroline Hendrickx",
+      "type": "personne",
+      "alias": [],
+      "description": "secrétaire du bureau de l'assemblée"
+    },
+    {
+      "nom": "Philippe Rasquin",
+      "type": "personne",
+      "alias": [],
+      "description": "scrutateur de l'assemblée"
+    },
+    {
+      "nom": "Olivier Thiry",
+      "type": "personne",
+      "alias": [],
+      "description": "scrutateur de l'assemblée"
+    },
+    {
+      "nom": "Martine Claessens",
+      "type": "personne",
+      "alias": [],
+      "description": "administratrice indépendante de Calorvia"
+    },
+    {
+      "nom": "Rue des Artisans 42",
+      "type": "site",
+      "alias": [
+        "siège social"
+      ],
+      "description": "siège social de Calorvia à Namur"
+    },
+    {
+      "nom": "Namur",
+      "type": "site",
+      "alias": [],
+      "description": "ville du siège social de Calorvia"
+    }
+  ],
+  "seconds": 6.1
+}

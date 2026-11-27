@@ -1,0 +1,37 @@
+{
+  "document": "09_Communication/Newsletter/Calorvia Info 2026-05.html",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Herstal",
+      "type": "site",
+      "alias": [],
+      "description": "nouvel entrepôt de 4 200 m²"
+    },
+    {
+      "nom": "Isabelle Gérard",
+      "type": "personne",
+      "alias": [],
+      "description": "nouvelle directrice financière"
+    },
+    {
+      "nom": "Atlas",
+      "type": "projet",
+      "alias": [],
+      "description": "nouvel ERP de l'entreprise"
+    },
+    {
+      "nom": "Bart Goossens",
+      "type": "personne",
+      "alias": [],
+      "description": "collègue du magasin de Gand"
+    },
+    {
+      "nom": "Elise Dufour",
+      "type": "personne",
+      "alias": [],
+      "description": "collègue des ventes France"
+    }
+  ],
+  "seconds": 4.1
+}

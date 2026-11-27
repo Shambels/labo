@@ -1,0 +1,31 @@
+{
+  "document": "04_Qualite/Non_conformites/NC-2026-011.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "site de Calorvia"
+    },
+    {
+      "nom": "Aéris Pro 16",
+      "type": "produit",
+      "alias": [],
+      "description": "produit concerné par la non-conformité"
+    },
+    {
+      "nom": "Kompra",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "fournisseur des compresseurs"
+    },
+    {
+      "nom": "Céline Moreau",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable de la non-conformité"
+    }
+  ],
+  "seconds": 3.3
+}

@@ -1,0 +1,87 @@
+{
+  "document": "01_Finance/Budget_2026/Note de presentation budget 2026.pdf",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Laurent Dewit",
+      "type": "personne",
+      "alias": [],
+      "description": "directeur financier"
+    },
+    {
+      "nom": "Conseil d'administration",
+      "type": "instance",
+      "alias": [
+        "conseil"
+      ],
+      "description": "instance de validation du budget"
+    },
+    {
+      "nom": "Gamme standard",
+      "type": "produit",
+      "alias": [],
+      "description": "gamme de produits Calorvia"
+    },
+    {
+      "nom": "Gamme premium",
+      "type": "produit",
+      "alias": [],
+      "description": "gamme de produits Calorvia"
+    },
+    {
+      "nom": "Pompes à chaleur",
+      "type": "produit",
+      "alias": [],
+      "description": "produit principal de l'entreprise"
+    },
+    {
+      "nom": "Gamme Aéris Pro",
+      "type": "produit",
+      "alias": [
+        "Aéris Pro"
+      ],
+      "description": "gamme de produits limitée par capacité"
+    },
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "site de production"
+    },
+    {
+      "nom": "Ligne L4",
+      "type": "équipement",
+      "alias": [
+        "L4"
+      ],
+      "description": "ligne d'assemblage en construction"
+    },
+    {
+      "nom": "Projet Atlas",
+      "type": "projet",
+      "alias": [
+        "Atlas"
+      ],
+      "description": "projet de remplacement de l'ERP"
+    },
+    {
+      "nom": "ERP",
+      "type": "équipement",
+      "alias": [],
+      "description": "système de gestion d'entreprise"
+    },
+    {
+      "nom": "Entrepôt de Gand",
+      "type": "site",
+      "alias": [],
+      "description": "site logistique à sécuriser"
+    },
+    {
+      "nom": "Installation photovoltaïque",
+      "type": "équipement",
+      "alias": [],
+      "description": "équipement énergétique à installer"
+    }
+  ],
+  "seconds": 9.4
+}

@@ -1,0 +1,7 @@
+{
+  "document": "01_Finance/Reporting_mensuel/Reporting 2026-04.xlsx",
+  "body": "onglet « Effectifs » · Effectif par site en fin de mois (ETP) · Site : Total ; ETP : 621",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait se trouve dans l'onglet « Effectifs » du reporting mensuel. Il indique le nombre total d'ETP en fin de mois pour l'ensemble des sites de Calorvia.",
+  "seconds": 2.0
+}

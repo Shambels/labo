@@ -1,0 +1,7 @@
+{
+  "document": "01_Finance/Comptabilite/Factures_fournisseurs/2026-01-31 Resto Pro 2026-01.jpg",
+  "body": "Image\nResto'Pro SRL  \nRue de Bruxelles 55, 7180 Seneffe  \nTVA BE 0539.117.264  \n\nFacture n° RP-2026-0117  \nDate 31/01/2026  \nÉchéance 15/02/2026  \nClient Calovia SA - restaurant d'entreprise de Seneffe  \n\n| Code | Prestation                     | Qté  | Prix unit. | Total HT     |\n|------|--------------------------------|------|------------|--------------|\n| REP  | Repas servis en janvier 2026   | 3480 | 6,85       | 23 838,00    |\n| CAF  | Service café et réunions       | 1    | 612,00     | 612,00       |\n\nTotal HT 24 450,00 €  \nTVA 12 % 2 934,00 €  \nTotal TTC 27 384,00 €  \n\nIBAN BE10 1030 5266 7144.\n\n---\n\nDescription  \nIl s’agit d’une facture commerciale émise par Resto'Pro SRL pour le client Calovia SA. Elle détaille deux prestations : repas servis en janvier 2026 et service café et réunions, avec leurs quantités, prix unitaires et totaux HT. Le document inclut également le calcul de la TVA à 12 % et le total TTC, ainsi que les coordonnées bancaires de l’émetteur.",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait correspond à l'intégralité du document, situé dans le dossier des factures fournisseurs. Il détaille la facturation des prestations de restauration et de service café pour le restaurant d'entreprise de Seneffe.",
+  "seconds": 2.8
+}

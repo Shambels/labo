@@ -1,0 +1,7 @@
+{
+  "document": "00_Direction/Conseil_administration/PV_signes/PV CA 2026-01-20.pdf",
+  "body": "1. Approbation du procès-verbal de la séance précédente\nLe procès-verbal de la séance du 16 décembre 2025 est approuvé à l'unanimité.",
+  "model": "qwen3.8-27b",
+  "context": "Cette rubrique, située en ouverture du procès-verbal, consigne l'approbation unanime du compte rendu de la réunion précédente.",
+  "seconds": 1.4
+}

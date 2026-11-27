@@ -1,0 +1,159 @@
+{
+  "document": "00_Direction/CODIR/2026/2026-03-09 CODIR PV.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Hélène Marchal",
+      "type": "personne",
+      "alias": [
+        "CEO"
+      ],
+      "description": "administratrice déléguée et présidente du comité"
+    },
+    {
+      "nom": "Laurent Dewit",
+      "type": "personne",
+      "alias": [
+        "CFO"
+      ],
+      "description": "directeur financier"
+    },
+    {
+      "nom": "Thomas Lambert",
+      "type": "personne",
+      "alias": [
+        "COO"
+      ],
+      "description": "directeur des opérations"
+    },
+    {
+      "nom": "Nadia Benali",
+      "type": "personne",
+      "alias": [],
+      "description": "directrice des ressources humaines"
+    },
+    {
+      "nom": "Kevin Mertens",
+      "type": "personne",
+      "alias": [],
+      "description": "directeur des systèmes d'information"
+    },
+    {
+      "nom": "Anne Vercammen",
+      "type": "personne",
+      "alias": [],
+      "description": "directrice qualité"
+    },
+    {
+      "nom": "Pieter De Smet",
+      "type": "personne",
+      "alias": [],
+      "description": "directeur du site de Gand"
+    },
+    {
+      "nom": "Pierre-Yves Collard",
+      "type": "personne",
+      "alias": [],
+      "description": "directeur commercial"
+    },
+    {
+      "nom": "Sarah Vandamme",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable du contrôle de gestion"
+    },
+    {
+      "nom": "Julie Renard",
+      "type": "personne",
+      "alias": [],
+      "description": "secrétaire du comité de direction"
+    },
+    {
+      "nom": "Namur",
+      "type": "site",
+      "alias": [],
+      "description": "lieu de la séance du comité"
+    },
+    {
+      "nom": "Salle Meuse",
+      "type": "site",
+      "alias": [],
+      "description": "salle de réunion à Namur"
+    },
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "site de production de pompes à chaleur"
+    },
+    {
+      "nom": "Gand",
+      "type": "site",
+      "alias": [],
+      "description": "site de production de groupes de ventilation"
+    },
+    {
+      "nom": "Herstal",
+      "type": "site",
+      "alias": [],
+      "description": "site de l'entrepôt"
+    },
+    {
+      "nom": "Pompes à chaleur",
+      "type": "produit",
+      "alias": [],
+      "description": "produit fabriqué à Seneffe"
+    },
+    {
+      "nom": "Groupes de ventilation",
+      "type": "produit",
+      "alias": [],
+      "description": "produit fabriqué à Gand"
+    },
+    {
+      "nom": "Aéris 12",
+      "type": "produit",
+      "alias": [],
+      "description": "produit faisant l'objet d'un rappel"
+    },
+    {
+      "nom": "Héliosol SRL",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "installateur de panneaux photovoltaïques"
+    },
+    {
+      "nom": "Projet Atlas",
+      "type": "projet",
+      "alias": [],
+      "description": "projet de nettoyage des données articles"
+    },
+    {
+      "nom": "Salon Énergie+",
+      "type": "projet",
+      "alias": [],
+      "description": "salon professionnel"
+    },
+    {
+      "nom": "Comité de direction",
+      "type": "instance",
+      "alias": [
+        "CODIR"
+      ],
+      "description": "instance de direction de l'entreprise"
+    },
+    {
+      "nom": "Installation photovoltaïque de Seneffe",
+      "type": "projet",
+      "alias": [],
+      "description": "projet d'installation de panneaux solaires"
+    },
+    {
+      "nom": "Entrepôt de Herstal",
+      "type": "projet",
+      "alias": [],
+      "description": "projet d'installation d'un entrepôt"
+    }
+  ],
+  "seconds": 17.5
+}

@@ -1,0 +1,7 @@
+{
+  "document": "00_Direction/Conseil_administration/Projets_PV/Projet PV CA 2025-11-18.docx",
+  "body": "Procès-verbal de la réunion du conseil d'administration\n2. Rapport de l'administratrice déléguée\nLa CEO informe le conseil de l'accident survenu le 12 novembre dans l'entrepôt de Gand : un préparateur de commandes a été heurté par un chariot élévateur. Des mesures immédiates ont été prises (limitation de vitesse, signalisation lumineuse, marquage des passages piétons).",
+  "model": "qwen3.8-27b",
+  "context": "Point 2 du procès-verbal, intitulé « Rapport de l'administratrice déléguée ». Il relate l'accident survenu dans l'entrepôt de Gand et les mesures de sécurité prises en conséquence.",
+  "seconds": 2.2
+}

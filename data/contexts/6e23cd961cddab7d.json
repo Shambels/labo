@@ -1,0 +1,7 @@
+{
+  "document": "07_IT/Projet_Atlas_ERP/COPIL/COPIL_Atlas_13_20260611.docx",
+  "body": "Projet Atlas : compte rendu du comité de pilotage n° 13\n3. Points marquants\n- Première semaine : 37 tickets, dont 3 bloquants, tous résolus.\n- Le taux de service est tombé à 84,2 % la première semaine à cause du ralentissement de la préparation des commandes.\n- Les deux anomalies de l'interface WMS ont été corrigées le 10 juin : Gand est prêt pour le 15 juin.",
+  "model": "qwen3.8-27b",
+  "context": "Cette section « Points marquants » du compte rendu du COPIL n° 13 détaille les incidents de la première semaine de production, notamment les tickets bloquants et la baisse du taux de service. Elle précise également la résolution des anomalies de l'interface WMS et la disponibilité du site de Gand.",
+  "seconds": 2.8
+}

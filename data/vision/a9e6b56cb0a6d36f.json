@@ -1,0 +1,10 @@
+{
+  "path": "01_Finance/Comptabilite/Factures_fournisseurs/2026-02-06 Kompra KG-2026-1047.jpg",
+  "kind": "image",
+  "page": null,
+  "index": null,
+  "model": "qwen3.5-9b",
+  "prompt": "Tu transcris des documents d'entreprise pour un moteur de recherche.\n1. Recopie tout le texte visible, exactement comme il est écrit : nombres, codes, dates, unités et\n   annotations manuscrites compris. Rends les tableaux en Markdown.\n2. Puis, sous le titre « Description », décris en trois phrases au plus le type d'image (organigramme,\n   plan, graphique, photo, facture...) et ce qu'elle montre qui n'est pas écrit : les rattachements\n   d'un organigramme, la valeur la plus haute d'un graphique, la position des éléments d'un plan.\nN'invente rien : si un élément est illisible, écris [illisible].",
+  "seconds": 6.4,
+  "text": "Kompra GmbH  \nIndustriestraße 77, 52070 Aachen, Germany  \nVAT DE 318 774 201  \n\nInvoice no. KG-2026-1047  \nDate 06/02/2026  \nDue date 08/03/2026  \nCustomer Calorvia SA, 5100 Namur, Belgium  \nDelivery Seneffe plant  \n\n| Item   | Description                     | Qty | Unit price | Amount     |\n|--------|----------------------------------|-----|------------|------------|\n| KX-9R  | Rotary compressor R32, 9 kW      | 260 | 312,00     | 81 120,00  |\n| KX-16S | Scroll compressor R32, 16 kW     | 140 | 498,00     | 69 720,00  |\n\nNet amount 150 840,00 EUR  \nVAT 0,00 EUR  \nTotal 150 840,00 EUR  \n\nIntra-community supply: reverse charge (article 196 Directive 2006/112/EC).  \nIBAN DE44 3905 0000 1072 4419 06.\n\n---\n\n**Description**  \nIl s’agit d’une facture commerciale émise par Kompra GmbH en Allemagne pour un client belge, Calorvia SA. Elle détaille deux articles de vente : des compresseurs rotatifs et scroll, avec leurs quantités, prix unitaires et montants totaux. Le document inclut également les informations fiscales et bancaires liées à une livraison intracommunautaire sous régime de reverse charge."
+}

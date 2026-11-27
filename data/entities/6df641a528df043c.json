@@ -1,0 +1,13 @@
+{
+  "document": "02_RH/Notes_de_service/2026-01-16 NS-2026-02 Authentification multifacteur obligatoire.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Kevin Mertens",
+      "type": "personne",
+      "alias": [],
+      "description": "émetteur de la note de service"
+    }
+  ],
+  "seconds": 1.1
+}

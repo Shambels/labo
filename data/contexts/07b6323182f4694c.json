@@ -1,0 +1,7 @@
+{
+  "document": "06_Achats/Bons_de_livraison/2026-05-22 BL Linetech L4.jpg",
+  "body": "Image\nLinetech Automation BV  \nTechniekweg 12, 5652 Eindhoven  \nDelivery note  \n\nDelivery note  \nLT-DN-26-0142  \nDate  \n22/05/2026  \nShip to  \nCalorvia SA - Seneffe, line L4  \nOrder  \nAssembly line L4 - phase 1  \n\n| Item     | Description                     | Qty |\n|----------|----------------------------------|-----|\n| L4-MEC   | Mechanical modules (packages)    | 14  |\n| L4-ELC   | Control cabinet                  | 1   |\n\nRÉCEPTION  \nSENEFFE  \n\nReçu complet sauf armoire électrique  \n(livrée le 27/05) - M. Delhaye  \n\nMerci de vérifier la marchandise à la réception.\n\n---\n\n**Description**  \nIl s’agit d’une facture de livraison (delivery note) de Linetech Automation BV adressée à Calorvia SA à Seneffe. Elle détaille deux articles livrés : des modules mécaniques et un tableau électrique, avec une mention manuscrite indiquant que l’armoire électrique n’a pas été reçue à la date de signature. Le document inclut un espace de réception signé par M. Delhaye, daté du 27 mai 2026, et une note en bas rappelant de vérifier la marchandise à la réception.",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait correspond à l'intégralité du bon de livraison émis par Linetech Automation BV pour la ligne d'assemblage L4 de Seneffe. Il détaille la réception des modules mécaniques et de l'armoire électrique, avec la signature de M. Delhaye.",
+  "seconds": 3.3
+}

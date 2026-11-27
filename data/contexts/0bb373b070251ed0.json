@@ -1,0 +1,7 @@
+{
+  "document": "01_Finance/Reporting_mensuel/Reporting 2026-01.xlsx",
+  "body": "onglet « Effectifs » · Effectif par site en fin de mois (ETP) · Site : Gand ; ETP : 193",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait se trouve dans l'onglet « Effectifs » du reporting mensuel. Il détaille l'effectif en équivalents temps plein du site de Gand.",
+  "seconds": 1.8
+}

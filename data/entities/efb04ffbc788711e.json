@@ -1,0 +1,25 @@
+{
+  "document": "04_Qualite/Non_conformites/NC-2026-009.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Gand",
+      "type": "site",
+      "alias": [],
+      "description": "site de production concerné par la non-conformité"
+    },
+    {
+      "nom": "Ventis D300",
+      "type": "produit",
+      "alias": [],
+      "description": "produit présentant une fuite d'air au test"
+    },
+    {
+      "nom": "Lien Maes",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable de la non-conformité"
+    }
+  ],
+  "seconds": 2.9
+}

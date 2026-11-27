@@ -1,0 +1,7 @@
+{
+  "document": "05_Commercial/Fiches_produits/Aéris_6_NL.pdf",
+  "body": "Aéris 6 · Technische fiche\nLucht-water warmtepomp voor verwarming en sanitair warm water in eengezinswoningen.\n| Kenmerk | Waarde |\n| - | - |\n| Nominaal verwarmingsvermogen | 6 kW |\n| SCOP (gemiddeld klimaat, 35 °C) | 4,6 |\n| Geluidsvermogen | 49 dB(A) |\n| Koelmiddel | R32 (1,1 kg) |\n| Gewicht | 62 kg |\n| Afmetingen (H x B x D) | 1010 x 820 x 410 mm |\n| Energieklasse | A+++ |\n| Maximale watertemperatuur | 60 °C |\nGarantie: 5 jaar op de compressor, 2 jaar op de andere onderdelen.",
+  "model": "qwen3.8-27b",
+  "context": "Cette fiche technique présente les caractéristiques de la pompe à chaleur air-eau Aéris 6 destinée aux maisons individuelles. Elle détaille les performances énergétiques, les dimensions et les conditions de garantie du produit.",
+  "seconds": 2.3
+}

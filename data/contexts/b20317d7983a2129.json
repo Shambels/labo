@@ -1,0 +1,7 @@
+{
+  "document": "03_Production/Gent/Maandrapporten/Productierapport Gent 2026-02.xlsx",
+  "body": "onglet « Productie » · Productierapport · site Gent · februari 2026 · Lijn : Totaal ; Geproduceerde eenheden : 2882 ; Stilstand (u) : 18.8",
+  "model": "qwen3.8-27b",
+  "context": "Cette ligne se trouve dans l'onglet « Productie » du rapport de production du site de Gent. Elle récapitule les unités produites et les heures d'arrêt cumulées pour l'ensemble des lignes.",
+  "seconds": 2.1
+}

@@ -1,0 +1,7 @@
+{
+  "document": "03_Production/Seneffe/Ligne_L4/Planning installation L4 v2 2026-04-28.png",
+  "body": "Image\nLigne L4 · planning d'installation · version 2 (28/04/2026)  \nCommande 28/01  \nMise en service 06/07  \n\n| Tâche                          | Période         |\n|--------------------------------|-----------------|\n| Fabrication chez Linetech      | 28/01 – 08/05   |\n| Livraison (semaine 21)         | 18/05 – 22/05   |\n| Montage mécanique              | 26/05 – 10/06   |\n| Raccordements et essais à vide | 08/06 – 16/06   |\n| Présérie                       | 18/06 – 19/06   |\n| Montée en cadence (38 unités/jour) | 06/07 – 30/09   |\n\n02/2026 – 10/2026  \nDirection des opérations\n\nDescription  \nIl s’agit d’un diagramme de Gantt montrant le planning d’installation de la ligne L4, version 2, datée du 28/04/2026.  \nLes tâches sont disposées chronologiquement de gauche à droite, avec des barres colorées indiquant leurs durées et des lignes verticales rouges marquant les événements clés : commande le 28/01 et mise en service le 06/07.  \nLa montée en cadence, représentée par une barre grise plus large, commence après la mise en service et s’étend jusqu’à la fin du planning en octobre 2026.",
+  "model": "qwen3.8-27b",
+  "context": "Le document contient le planning d'installation de la ligne L4 au site de Seneffe. Il détaille les étapes de fabrication, de montage et de mise en service de cette ligne de production.",
+  "seconds": 2.7
+}

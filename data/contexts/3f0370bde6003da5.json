@@ -1,0 +1,7 @@
+{
+  "document": "02_RH/Enquetes/Enquete teletravail - reponses brutes.xlsx",
+  "body": "onglet « Réponses » · lignes 43 à 48\n| N° | Service | Site | Satisfaction (1-10) | Souhaite continuer | Commentaire |\n|---|---|---|---|---|---|\n| 43 | Communication | Namur | 10 | non | Gain de temps de trajet important |\n| 44 | Qualité | Namur | 8 | oui | Souhaite un jour commun de présence |\n| 45 | Achats | Namur | 8 | oui |  |\n| 46 | Finance | Lille | 8 | oui |  |\n| 47 | Qualité | Lille | 8 | oui |  |\n| 48 | RH | Namur | 8 | non | Meilleure concentration pour les tâches de fond |",
+  "model": "qwen3.8-27b",
+  "context": "Ces lignes 43 à 48 de l'onglet « Réponses » listent les avis de salariés des services Communication, Qualité, Achats, Finance et RH. Elles concernent les sites de Namur et de Lille, avec des commentaires sur le gain de temps de trajet, la concentration et le souhait d'un jour commun de présence.",
+  "seconds": 3.1
+}

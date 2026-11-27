@@ -1,0 +1,37 @@
+{
+  "document": "08_Juridique/Contrats/Bail commercial entrepot Herstal.pdf",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Hauts-Sarts Logistics SA",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "bailleresse de l'entrepôt"
+    },
+    {
+      "nom": "Hélène Marchal",
+      "type": "personne",
+      "alias": [],
+      "description": "administratrice déléguée de Calorvia"
+    },
+    {
+      "nom": "Entrepôt de 4200 m²",
+      "type": "équipement",
+      "alias": [],
+      "description": "local loué avec quatre quais"
+    },
+    {
+      "nom": "Parc industriel des Hauts-Sarts",
+      "type": "site",
+      "alias": [],
+      "description": "lieu de l'entrepôt à Herstal"
+    },
+    {
+      "nom": "Quais de chargement",
+      "type": "équipement",
+      "alias": [],
+      "description": "quatre quais de l'entrepôt"
+    }
+  ],
+  "seconds": 5.5
+}

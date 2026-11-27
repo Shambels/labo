@@ -1,0 +1,7 @@
+{
+  "document": "08_Juridique/RGPD/Registre des traitements.xlsx",
+  "body": "onglet « Registre » · Registre des activités de traitement (article 30 du RGPD) · lignes 1 à 3\n| Traitement | Finalité | Catégories de données | Base légale | Durée de conservation | Responsable |\n|---|---|---|---|---|---|\n| Gestion du personnel | Paie, contrats, absences | Identité, coordonnées, données salariales | Contrat de travail | 5 ans après le départ | Nadia Benali |\n| Recrutement | Sélection des candidats | CV, lettres, notes d'entretien | Mesures précontractuelles | 1 an après la candidature | Nadia Benali |\n| Contrôle d'accès | Sécurité des sites | Badge, horodatage des passages | Intérêt légitime | 6 mois | Olivier Hardy |",
+  "model": "qwen3.8-27b",
+  "context": "Cet extrait correspond aux trois premières lignes du registre des activités de traitement. Il détaille les traitements liés à la gestion du personnel, au recrutement et au contrôle d'accès.",
+  "seconds": 2.6
+}

@@ -1,0 +1,7 @@
+{
+  "document": "00_Direction/CODIR/2026/2026-02-09 CODIR PV.docx",
+  "body": "Procès-verbal du Comité de direction\n4. Projet Atlas : report de la mise en production\n*Présenté par Kevin Mertens.*\nLe COPIL du 5 février a constaté que 18 % des fiches articles sont incomplètes (poids, nomenclatures, codes douaniers) et que l'interface avec le WMS de Gand n'est pas encore testée.\nPour rappel, la mise en production avait été fixée au 1er avril 2026 (décision D-25-11). Maintenir cette date ferait courir un risque important sur la facturation et les expéditions.",
+  "model": "qwen3.8-27b",
+  "context": "Point 4 du procès-verbal, consacré au projet Atlas et au report de la mise en production de l'ERP Praxio.",
+  "seconds": 1.5
+}

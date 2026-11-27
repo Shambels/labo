@@ -1,0 +1,7 @@
+{
+  "document": "03_Production/Seneffe/Rapports_mensuels/Rapport production Seneffe 2025-12.xlsx",
+  "body": "onglet « Production » · Rapport de production · usine de Seneffe · décembre 2025 · Ligne : L2 ; Produits : Aéris 12 ; Unités produites : 778 ; Arrêts (h) : 41.5 ; Rebut (%) : 3.4 ; TRS (%) : 72",
+  "model": "qwen3.8-27b",
+  "context": "Cette ligne de données se trouve dans le tableau de synthèse de l'onglet « Production » du rapport mensuel de l'usine de Seneffe. Elle détaille les indicateurs de performance de la ligne L2, dédiée à la fabrication des pompes à chaleur Aéris 12.",
+  "seconds": 2.6
+}

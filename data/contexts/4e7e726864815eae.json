@@ -1,0 +1,7 @@
+{
+  "document": "01_Finance/Reporting_mensuel/Reporting 2025-12.xlsx",
+  "body": "onglet « Commentaires »\nCommentaires du contrôle de gestion\nProvision de 180 000 € pour le rappel de l'Aéris 12 comptabilisée en décembre.\nHors provision, le taux d'EBITDA de décembre aurait atteint 10,9 %.",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait se trouve dans l'onglet « Commentaires » du reporting mensuel. Il détaille l'impact financier du rappel de la gamme Aéris 12 sur le taux d'EBITDA de décembre.",
+  "seconds": 2.1
+}

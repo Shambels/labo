@@ -1,0 +1,7 @@
+{
+  "document": "02_RH/Enquetes/Enquete teletravail - reponses brutes.xlsx",
+  "body": "onglet « Synthèse »\n| Nombre de réponses | 84 |\n|---|---|\n| Participants au pilote | 118 |\n| Taux de réponse | 0.711864406779661 |\n| Satisfaction moyenne | 8.1 |\n| Part souhaitant continuer | 0.857142857142857 |",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait se trouve dans l'onglet « Synthèse » du classeur. Il présente les indicateurs globaux de l'enquête sur le télétravail, tels que le taux de réponse et la satisfaction moyenne des participants.",
+  "seconds": 2.2
+}

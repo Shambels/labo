@@ -1,0 +1,13 @@
+{
+  "document": "03_Production/Procedures/WI-GNT-09 Dagelijkse controle heftruck.pdf",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "heftruck",
+      "type": "équipement",
+      "alias": [],
+      "description": "véhicule de manutention contrôlé quotidiennement"
+    }
+  ],
+  "seconds": 1.6
+}

@@ -1,0 +1,7 @@
+{
+  "document": "06_Achats/Appel_offres_ERP/Cahier des charges ERP Atlas.docx",
+  "body": "Projet Atlas : cahier des charges pour le remplacement de l'ERP\n1. Contexte\nCalorvia utilise l'ERP GesPro 7 depuis 2011. Son éditeur arrête le support le 31 décembre 2026. GesPro 7 n'est pas relié au WMS LogiPath du site de Gand et la consolidation financière se fait dans Excel.",
+  "model": "qwen3.8-27b",
+  "context": "La rubrique Contexte du cahier des charges décrit la situation actuelle de l'ERP GesPro 7 et les limites de son intégration avec le WMS du site de Gand.",
+  "seconds": 2.4
+}

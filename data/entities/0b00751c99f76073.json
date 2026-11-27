@@ -1,0 +1,25 @@
+{
+  "document": "03_Production/Procedures/MO-SEN-12 Test d_etancheite Aeris.pdf",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Aéris",
+      "type": "produit",
+      "alias": [],
+      "description": "gamme de pompes à chaleur"
+    },
+    {
+      "nom": "Banc d'essai",
+      "type": "équipement",
+      "alias": [],
+      "description": "appareil de test d'étanchéité"
+    },
+    {
+      "nom": "ERP",
+      "type": "équipement",
+      "alias": [],
+      "description": "logiciel de gestion d'entreprise"
+    }
+  ],
+  "seconds": 2.5
+}

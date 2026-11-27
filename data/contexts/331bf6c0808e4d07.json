@@ -1,0 +1,7 @@
+{
+  "document": "01_Finance/Comptabilite/Factures_fournisseurs/2025-12-05 LiftService LS-2025-7781.jpg",
+  "body": "Image\n**LiftService Benelux NV**  \nKanaaldijk 31, 9000 Gent  \nBTW BE 0441.902.576  \n\nFactuurnummer: LS-2025-7781  \nFactuurdatum: 05/12/2025  \nVervaldatum: 04/01/2026  \nKlant: Calorvia SA - site Gent  \n\n| Art.     | Omschrijving                              | Aantal | Eenheidsprijs | Totaal      |\n|----------|-------------------------------------------|--------|---------------|-------------|\n| BS-LED   | Blue spot LED-veiligheidslamp, geplaatst  | 14     | 450,00        | 6 300,00    |\n\nTotaal excl. btw: 6 300,00 €  \nBtw 21 %: 1 323,00 €  \nTotaal incl. btw: 7 623,00 €  \n\nGeplaatst op heftrucks nr. 1 tot 14.\n\n---\n\n**Description**  \nIl s’agit d’une facture émise par LiftService Benelux NV pour un client, Calorvia SA – site Gent. Elle détaille la fourniture et installation de 14 lampes de sécurité LED bleues (Blue spot LED-veiligheidslamp), avec un prix unitaire de 450,00 €, soit un total hors taxes de 6 300,00 €. Le montant final incluant la TVA à 21 % s’élève à 7 623,00 €. La facture précise que les équipements ont été installés sur des chariots élévateurs numérotés de 1 à 14.",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait correspond à l'intégralité du document, classé dans la rubrique des factures fournisseurs. Il détaille la facturation par LiftService Benelux NV pour l'installation de lampes de sécurité LED sur les chariots élévateurs du site de Gent.",
+  "seconds": 3.3
+}

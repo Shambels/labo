@@ -1,0 +1,13 @@
+{
+  "document": "02_RH/Recrutement/Offres/REC-2025-034 Magazijnmedewerker.html",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Gent",
+      "type": "site",
+      "alias": [],
+      "description": "site du centre de distribution"
+    }
+  ],
+  "seconds": 1.3
+}

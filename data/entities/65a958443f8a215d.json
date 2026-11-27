@@ -1,0 +1,43 @@
+{
+  "document": "02_RH/Notes_de_service/2026-05-12 NS-2026-08 Ouverture de l_entrepôt de Herstal.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Thomas Lambert",
+      "type": "personne",
+      "alias": [],
+      "description": "émetteur de la note de service"
+    },
+    {
+      "nom": "Damien Lecomte",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable du site de Herstal"
+    },
+    {
+      "nom": "Entrepôt de Herstal",
+      "type": "site",
+      "alias": [],
+      "description": "entrepôt de stockage de 4200 m²"
+    },
+    {
+      "nom": "Pompes à chaleur",
+      "type": "produit",
+      "alias": [],
+      "description": "produits stockés à l'entrepôt"
+    },
+    {
+      "nom": "Province de Liège",
+      "type": "client",
+      "alias": [],
+      "description": "zone géographique des clients"
+    },
+    {
+      "nom": "Allemagne",
+      "type": "client",
+      "alias": [],
+      "description": "zone géographique des clients"
+    }
+  ],
+  "seconds": 5.0
+}

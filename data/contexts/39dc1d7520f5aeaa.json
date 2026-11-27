@@ -1,0 +1,7 @@
+{
+  "document": "10_RSE/Rapport RSE 2025.pdf",
+  "body": "Graphique de la page 1\n**Déchets industriels 2025 par filière (tonnes)**  \n| Filière       | Quantité (t) |  \n|---------------|--------------|  \n| Métaux        | 612 t        |  \n| Cartons       | 288 t        |  \n| Plastiques    | 74 t         |  \n| DEEE          | 31 t         |  \n| Tout-venant   | 156 t        |  \n\nRapport RSE 2025 · registre des déchets\n\n**Description**  \nIl s’agit d’un graphique en barres verticales montrant la répartition des déchets industriels en 2025 par filière, exprimée en tonnes. La barre la plus haute correspond aux métaux (612 t), suivie des cartons (288 t) et du tout-venant (156 t). Les filières plastiques et DEEE affichent les volumes les plus faibles, respectivement 74 t et 31 t.",
+  "model": "qwen3.8-27b",
+  "context": "Ce tableau et sa description se situent dans la rubrique « Déchets » du rapport. Ils détaillent la répartition des déchets industriels de l'entreprise par filière de valorisation.",
+  "seconds": 2.0
+}

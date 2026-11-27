@@ -1,0 +1,49 @@
+{
+  "document": "05_Commercial/Reunions_commerciales/CR reunion commerciale 2025-10-08.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Pierre-Yves Collard",
+      "type": "personne",
+      "alias": [],
+      "description": "participant à la réunion commerciale"
+    },
+    {
+      "nom": "Joris Claes",
+      "type": "personne",
+      "alias": [],
+      "description": "participant à la réunion commerciale"
+    },
+    {
+      "nom": "Mathilde Roux",
+      "type": "personne",
+      "alias": [],
+      "description": "participant à la réunion commerciale"
+    },
+    {
+      "nom": "Benoît Gillet",
+      "type": "personne",
+      "alias": [],
+      "description": "participant à la réunion commerciale"
+    },
+    {
+      "nom": "Laura Mertz",
+      "type": "personne",
+      "alias": [],
+      "description": "participant à la réunion commerciale"
+    },
+    {
+      "nom": "Klimaat Partners",
+      "type": "client",
+      "alias": [],
+      "description": "client augmentant sa commande annuelle"
+    },
+    {
+      "nom": "Ventis D450",
+      "type": "produit",
+      "alias": [],
+      "description": "produit dont la commande augmente"
+    }
+  ],
+  "seconds": 4.9
+}

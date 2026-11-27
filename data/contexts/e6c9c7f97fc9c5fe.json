@@ -1,0 +1,7 @@
+{
+  "document": "01_Finance/Budget_2026/Budget 2026 - version approuvee CA 16-12-2025.xlsx",
+  "body": "onglet « Compte de résultats » · Compte de résultats budgété 2026 (k€) · Mois : Total 2026 ; Chiffre d'affaires : 156000 ; EBITDA : 14820 ; Taux d'EBITDA : 9,5 %",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait se trouve dans l'onglet « Compte de résultats » et présente les totaux annuels budgétés pour l'exercice 2026. Il détaille le chiffre d'affaires, l'EBITDA et le taux d'EBITDA cumulés sur l'ensemble de l'année.",
+  "seconds": 2.9
+}

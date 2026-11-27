@@ -1,0 +1,41 @@
+{
+  "document": "06_Achats/Bons_de_livraison/2025-11-19 BL Valtek.jpg",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Valtek Components Ltd",
+      "type": "fournisseur",
+      "alias": [
+        "Valtek"
+      ],
+      "description": "fournisseur de vannes et composants"
+    },
+    {
+      "nom": "Seneffe plant",
+      "type": "site",
+      "alias": [
+        "Seneffe"
+      ],
+      "description": "site de réception des marchandises"
+    },
+    {
+      "nom": "V4W-12",
+      "type": "produit",
+      "alias": [],
+      "description": "vanne quatre voies 12 kW"
+    },
+    {
+      "nom": "SV-38",
+      "type": "produit",
+      "alias": [],
+      "description": "vanne de service 3/8"
+    },
+    {
+      "nom": "F. Collin",
+      "type": "personne",
+      "alias": [],
+      "description": "réceptionnaire des marchandises"
+    }
+  ],
+  "seconds": 4.7
+}

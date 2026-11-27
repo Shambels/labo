@@ -1,0 +1,7 @@
+{
+  "document": "01_Finance/Reporting_mensuel/Reporting 2026-02.xlsx",
+  "body": "onglet « Ventes par gamme » · Chiffre d'affaires par gamme (k€)\n| Gamme | CA du mois | Part |\n|---|---|---|\n| Aéris (standard) | 6599 | 48,9 % |\n| Aéris Pro (premium) | 2690 | 19,9 % |\n| Ventis (standard) | 2420 | 17,9 % |\n| Ventis Pro (premium) | 803 | 5,9 % |\n| Pièces et services | 988 | 7,3 % |\n| Total | 13500 |  |",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait se trouve dans l'onglet « Ventes par gamme » du reporting mensuel. Il détaille le chiffre d'affaires réalisé par gamme de produits, incluant les gammes Aéris, Ventis et les pièces et services.",
+  "seconds": 2.3
+}

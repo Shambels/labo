@@ -1,0 +1,7 @@
+{
+  "document": "10_RSE/Emissions par scope 2025.png",
+  "body": "Image\n**Émissions 2025 par scope (t CO2e)**\n\n| Scope | Émissions (t CO2e) |\n|-------|---------------------|\n| Scope 1 | 1 180 t |\n| Scope 2 | 2 240 t |\n| Scope 3 | 38 600 t |\n\n**Description**  \nIl s’agit d’un graphique en barres horizontales montrant les émissions de gaz à effet de serre en tonnes de CO2 équivalent (t CO2e) pour l’année 2025, classées par scope. La valeur la plus élevée est celle du Scope 3 (38 600 t), suivie du Scope 2 (2 240 t) et du Scope 1 (1 180 t). Le graphique illustre clairement la domination des émissions indirectes (Scope 3) par rapport aux émissions directes (Scopes 1 et 2).",
+  "model": "qwen3.8-27b",
+  "context": "Le document présente les émissions de gaz à effet de serre de Calorvia SA pour l'année 2025, classées par scope.",
+  "seconds": 2.0
+}

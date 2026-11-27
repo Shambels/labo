@@ -1,0 +1,121 @@
+{
+  "document": "00_Direction/Conseil_administration/PV_signes/PV CA 2026-02-17.pdf",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Jean-François Delcourt",
+      "type": "personne",
+      "alias": [],
+      "description": "Président, administrateur indépendant"
+    },
+    {
+      "nom": "Hélène Marchal",
+      "type": "personne",
+      "alias": [],
+      "description": "Administratrice déléguée"
+    },
+    {
+      "nom": "Philippe Rasquin",
+      "type": "personne",
+      "alias": [],
+      "description": "Administrateur, représentant de Rasquin Participations SA"
+    },
+    {
+      "nom": "Valérie Rasquin",
+      "type": "personne",
+      "alias": [],
+      "description": "Administratrice, représentante de Rasquin Participations SA"
+    },
+    {
+      "nom": "Olivier Thiry",
+      "type": "personne",
+      "alias": [],
+      "description": "Administrateur, représentant de Mosane Capital"
+    },
+    {
+      "nom": "Martine Claessens",
+      "type": "personne",
+      "alias": [],
+      "description": "Administratrice indépendante"
+    },
+    {
+      "nom": "Dirk Peeters",
+      "type": "personne",
+      "alias": [],
+      "description": "Administrateur indépendant"
+    },
+    {
+      "nom": "Laurent Dewit",
+      "type": "personne",
+      "alias": [],
+      "description": "Directeur financier"
+    },
+    {
+      "nom": "Thomas Lambert",
+      "type": "personne",
+      "alias": [],
+      "description": "COO"
+    },
+    {
+      "nom": "Caroline Hendrickx",
+      "type": "personne",
+      "alias": [],
+      "description": "Secrétaire du conseil"
+    },
+    {
+      "nom": "Sarah Vandamme",
+      "type": "personne",
+      "alias": [],
+      "description": "Responsable du contrôle de gestion, directrice financière ad interim"
+    },
+    {
+      "nom": "Rasquin Participations SA",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "Actionnaire représenté au conseil d'administration"
+    },
+    {
+      "nom": "Mosane Capital",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "Actionnaire représenté au conseil d'administration"
+    },
+    {
+      "nom": "Altair Executive Search",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "Cabinet de recrutement de la direction financière"
+    },
+    {
+      "nom": "Siège social à Namur",
+      "type": "site",
+      "alias": [],
+      "description": "Lieu de réunion du conseil d'administration"
+    },
+    {
+      "nom": "Entrepôt de Herstal",
+      "type": "site",
+      "alias": [],
+      "description": "Entrepôt de 4200 m² loué"
+    },
+    {
+      "nom": "WMS de Gand",
+      "type": "équipement",
+      "alias": [],
+      "description": "Système de gestion d'entrepôt à Gand"
+    },
+    {
+      "nom": "Projet ERP",
+      "type": "projet",
+      "alias": [],
+      "description": "Système de gestion d'entreprise en retard"
+    },
+    {
+      "nom": "Conseil d'administration",
+      "type": "instance",
+      "alias": [],
+      "description": "Organe de direction de Calorvia SA"
+    }
+  ],
+  "seconds": 14.8
+}

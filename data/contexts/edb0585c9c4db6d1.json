@@ -1,0 +1,7 @@
+{
+  "document": "07_IT/Securite/Rapport trimestriel cybersecurite 2026-04-10.docx",
+  "body": "Rapport trimestriel de cybersécurité · premier trimestre 2026\nRapport présenté au conseil d'administration, à sa demande du 20 janvier 2026.\n| Authentification multifacteur | 100 % des comptes protégés depuis le 13 mars 2026. |\n| - | - |\n| Simulation d'hameçonnage (février) | Taux de clic : 14 % (31 personnes sur 221). |\n| Formation de sensibilisation | 186 personnes formées entre le 9 et le 27 mars. |\n| Incidents | 1 incident majeur (compromission d'une boîte aux lettres le 13 janvier, sans perte financière). |\n| Correctifs de sécurité | 96 % des postes à jour à 30 jours. |",
+  "model": "qwen3.8-27b",
+  "context": "Il s'agit de l'intégralité du rapport trimestriel de cybersécurité du premier trimestre 2026, destiné au conseil d'administration. Le document détaille les indicateurs de sécurité tels que l'authentification multifacteur, les simulations d'hameçonnage, les formations et les incidents survenus.",
+  "seconds": 3.4
+}

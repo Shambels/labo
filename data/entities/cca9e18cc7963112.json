@@ -1,0 +1,13 @@
+{
+  "document": "02_RH/Recrutement/Offres/REC-2026-018 Contrôleur de gestion.html",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Namur",
+      "type": "site",
+      "alias": [],
+      "description": "site où le contrôleur de gestion accompagne le pilotage des coûts"
+    }
+  ],
+  "seconds": 1.7
+}

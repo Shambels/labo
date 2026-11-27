@@ -1,0 +1,7 @@
+{
+  "document": "07_IT/Projet_Atlas_ERP/Documentation/Resultats recette 2.xlsx",
+  "body": "onglet « Recette 2 » · Projet Atlas · résultats de la recette 2 (du 8 au 17 avril 2026)\n| Domaine | Cas de test | Conformes | Non conformes | Taux de conformité |\n|---|---|---|---|---|\n| Finance | 64 | 62 | 2 | 96,9 % |\n| Achats | 48 | 46 | 2 | 95,8 % |\n| Ventes et facturation | 72 | 65 | 7 | 90,3 % |\n| Production | 56 | 53 | 3 | 94,6 % |\n| Logistique et WMS | 44 | 41 | 3 | 93,2 % |\n| Éditions de documents | 36 | 31 | 5 | 86,1 % |\n| Total | 320 | 298 | 22 | 93,1 % |",
+  "model": "qwen3.8-27b",
+  "context": "Cette section présente le tableau récapitulatif des résultats de la recette 2 du projet Atlas. Elle détaille le taux de conformité des cas de test pour chaque domaine fonctionnel de l'ERP.",
+  "seconds": 2.8
+}

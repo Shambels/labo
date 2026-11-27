@@ -1,0 +1,123 @@
+{
+  "document": "00_Direction/Conseil_administration/PV_signes/PV CA 2025-12-16 signé.pdf",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Jean-François Delcourt",
+      "type": "personne",
+      "alias": [],
+      "description": "Président, administrateur indépendant"
+    },
+    {
+      "nom": "Hélène Marchal",
+      "type": "personne",
+      "alias": [
+        "CEO"
+      ],
+      "description": "Administratrice déléguée"
+    },
+    {
+      "nom": "Philippe Rasquin",
+      "type": "personne",
+      "alias": [],
+      "description": "Administrateur, représentant de Rasquin Participations SA"
+    },
+    {
+      "nom": "Valérie Rasquin",
+      "type": "personne",
+      "alias": [],
+      "description": "Administratrice, représentante de Rasquin Participations SA"
+    },
+    {
+      "nom": "Olivier Thiry",
+      "type": "personne",
+      "alias": [],
+      "description": "Administrateur, représentant de Mosane Capital"
+    },
+    {
+      "nom": "Martine Claessens",
+      "type": "personne",
+      "alias": [],
+      "description": "Administratrice indépendante"
+    },
+    {
+      "nom": "Dirk Peeters",
+      "type": "personne",
+      "alias": [],
+      "description": "Administrateur indépendant"
+    },
+    {
+      "nom": "Laurent Dewit",
+      "type": "personne",
+      "alias": [],
+      "description": "Directeur financier"
+    },
+    {
+      "nom": "Caroline Hendrickx",
+      "type": "personne",
+      "alias": [],
+      "description": "Secrétaire du conseil"
+    },
+    {
+      "nom": "Namur",
+      "type": "site",
+      "alias": [
+        "siège social"
+      ],
+      "description": "Siège social de Calorvia"
+    },
+    {
+      "nom": "Aéris 12",
+      "type": "produit",
+      "alias": [],
+      "description": "Pompe à chaleur rappelée"
+    },
+    {
+      "nom": "Valtek",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "Fournisseur de la vanne quatre voies"
+    },
+    {
+      "nom": "L4",
+      "type": "équipement",
+      "alias": [
+        "ligne L4"
+      ],
+      "description": "Ligne de production"
+    },
+    {
+      "nom": "ERP",
+      "type": "projet",
+      "alias": [],
+      "description": "Projet de déploiement ERP"
+    },
+    {
+      "nom": "Gand",
+      "type": "site",
+      "alias": [],
+      "description": "Site concerné par les mesures de sécurité"
+    },
+    {
+      "nom": "Rasquin Participations SA",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "Actionnaire représenté au conseil"
+    },
+    {
+      "nom": "Mosane Capital",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "Actionnaire représenté au conseil"
+    },
+    {
+      "nom": "Conseil d'administration",
+      "type": "instance",
+      "alias": [
+        "CA"
+      ],
+      "description": "Organe de direction de Calorvia"
+    }
+  ],
+  "seconds": 13.9
+}

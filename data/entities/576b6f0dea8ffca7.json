@@ -1,0 +1,57 @@
+{
+  "document": "03_Production/Gent/Veiligheid/Comite PBW/Verslag Comite PBW Gent 2025-12-18.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Pieter De Smet",
+      "type": "personne",
+      "alias": [],
+      "description": "président du comité de prévention et de protection au travail"
+    },
+    {
+      "nom": "Olivier Hardy",
+      "type": "personne",
+      "alias": [],
+      "description": "conseiller en prévention"
+    },
+    {
+      "nom": "Ann Wouters",
+      "type": "personne",
+      "alias": [],
+      "description": "membre du comité de prévention et de protection au travail"
+    },
+    {
+      "nom": "Els Van den Broeck",
+      "type": "personne",
+      "alias": [],
+      "description": "membre du comité de prévention et de protection au travail"
+    },
+    {
+      "nom": "Gent",
+      "type": "site",
+      "alias": [],
+      "description": "site de production de Calorvia"
+    },
+    {
+      "nom": "Comité voor Preventie en Bescherming op het Werk",
+      "type": "instance",
+      "alias": [
+        "Comité PBW"
+      ],
+      "description": "comité de prévention et de protection au travail"
+    },
+    {
+      "nom": "SafeWork Consult",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "auditeur externe de la circulation"
+    },
+    {
+      "nom": "heftrucks",
+      "type": "équipement",
+      "alias": [],
+      "description": "engins de levage équipés de blue spots"
+    }
+  ],
+  "seconds": 7.1
+}

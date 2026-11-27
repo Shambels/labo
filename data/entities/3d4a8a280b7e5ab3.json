@@ -1,0 +1,49 @@
+{
+  "document": "03_Production/Gent/Maandrapporten/Productierapport Gent 2026-04.xlsx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Ventis D300",
+      "type": "produit",
+      "alias": [],
+      "description": "produit fabriqué sur la ligne V1"
+    },
+    {
+      "nom": "Ventis D450",
+      "type": "produit",
+      "alias": [],
+      "description": "produit fabriqué sur la ligne V2"
+    },
+    {
+      "nom": "D450 Pro",
+      "type": "produit",
+      "alias": [],
+      "description": "produit fabriqué sur la ligne V2"
+    },
+    {
+      "nom": "Ligne V1",
+      "type": "équipement",
+      "alias": [
+        "V1"
+      ],
+      "description": "ligne de production du site de Gand"
+    },
+    {
+      "nom": "Ligne V2",
+      "type": "équipement",
+      "alias": [
+        "V2"
+      ],
+      "description": "ligne de production du site de Gand"
+    },
+    {
+      "nom": "Site de Gand",
+      "type": "site",
+      "alias": [
+        "Gent"
+      ],
+      "description": "site de production de Calorvia"
+    }
+  ],
+  "seconds": 6.6
+}

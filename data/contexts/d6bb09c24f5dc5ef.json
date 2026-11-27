@@ -1,0 +1,7 @@
+{
+  "document": "01_Finance/Reporting_mensuel/Reporting 2025-12.xlsx",
+  "body": "onglet « Ventes par région » · Chiffre d'affaires par région (k€)\n| Région | CA du mois | Part |\n|---|---|---|\n| Wallonie | 5810 | 34,6 % |\n| Bruxelles | 1496 | 8,9 % |\n| Flandre | 5181 | 30,8 % |\n| France | 3487 | 20,8 % |\n| Autres pays | 826 | 4,9 % |\n| Total | 16800 |  |",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait se trouve dans l'onglet « Ventes par région » du reporting mensuel. Il détaille la répartition du chiffre d'affaires par zone géographique.",
+  "seconds": 1.8
+}

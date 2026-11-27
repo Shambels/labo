@@ -1,0 +1,7 @@
+{
+  "document": "08_Juridique/RGPD/Registre des traitements.xlsx",
+  "body": "onglet « Registre » · Registre des activités de traitement (article 30 du RGPD) · Traitement : Gestion du personnel ; Finalité : Paie, contrats, absences ; Catégories de données : Identité, coordonnées, données salariales ; Base légale : Contrat de travail ; Durée de conservation : 5 ans après le départ ; Responsable : Nadia Benali",
+  "model": "qwen3.8-27b",
+  "context": "Cette entrée figure dans le registre des activités de traitement et détaille le traitement de données lié à la gestion du personnel. Elle précise les finalités, les catégories de données et la responsabilité de Nadia Benali pour ce traitement.",
+  "seconds": 2.1
+}

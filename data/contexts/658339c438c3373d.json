@@ -1,0 +1,7 @@
+{
+  "document": "00_Direction/Conseil_administration/Projets_PV/Projet PV CA 2026-05-19.docx",
+  "body": "Procès-verbal de la réunion du conseil d'administration\n3. Situation financière à fin avril 2026\nLe chiffre d'affaires d'avril 2026 s'élève à 12 100 k€. Le chiffre d'affaires cumulé à fin avril 2026 atteint 53 500 k€, soit 0,1 % au-dessus du budget (53 473 k€).\nL'EBITDA cumulé s'élève à 4 938 k€, soit 9,2 % du chiffre d'affaires, pour un objectif budgétaire de 9,5 %.",
+  "model": "qwen3.8-27b",
+  "context": "Point 3 du procès-verbal du conseil d'administration. Il détaille la situation financière de l'entreprise à fin avril 2026.",
+  "seconds": 1.7
+}

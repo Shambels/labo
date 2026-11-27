@@ -1,0 +1,7 @@
+{
+  "document": "05_Commercial/Tarifs/Tarif 2025.xlsx",
+  "body": "onglet « Tarif » · Tarif 2025 (prix catalogue HT, en euros)\n| Code | Produit | Gamme | Prix 2025 |\n|---|---|---|---|\n| AE06 | Aéris 6 | standard | 6890 |\n| AE09 | Aéris 9 | standard | 8450 |\n| AE12 | Aéris 12 | standard | 9980 |\n| AP16 | Aéris Pro 16 | premium | 13900 |\n| AP22 | Aéris Pro 22 | premium | 17250 |\n| VD30 | Ventis D300 | standard | 3290 |\n| VD45 | Ventis D450 | standard | 4180 |\n| VP45 | Ventis D450 Pro | premium | 5640 |",
+  "model": "qwen3.8-27b",
+  "context": "Cette section présente le tableau récapitulatif des prix catalogue HT pour l'ensemble de la gamme de produits Calorvia. Elle détaille les références, les gammes standard et premium ainsi que les tarifs associés aux modèles Aéris et Ventis.",
+  "seconds": 3.0
+}

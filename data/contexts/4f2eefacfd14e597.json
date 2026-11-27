@@ -1,0 +1,7 @@
+{
+  "document": "03_Production/Maintenance/Fiches_intervention/2026-06-02 INT-2026-490 Banc dessai L2.docx",
+  "body": "Fiche d'intervention INT-2026-490\n| Date | 02/06/2026 |\n| - | - |\n| Équipement | Banc d'essai L2 |\n| Description | Mise à jour du logiciel de test pour l'export des résultats vers l'ERP Praxio. |\n| Durée d'arrêt | 1 h 30 |\n| Pièces et coûts | Néant |\n| Intervenant | Nicolas Gilson |",
+  "model": "qwen3.8-27b",
+  "context": "Cette fiche d'intervention concerne le banc d'essai L2. Elle détaille la mise à jour du logiciel de test réalisée par Nicolas Gilson.",
+  "seconds": 1.8
+}

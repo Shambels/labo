@@ -1,0 +1,47 @@
+{
+  "document": "03_Production/Gent/Veiligheid/Comite PBW/Verslag Comite PBW Gent 2025-10-16.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Pieter De Smet",
+      "type": "personne",
+      "alias": [],
+      "description": "président du comité de prévention et de protection au travail"
+    },
+    {
+      "nom": "Olivier Hardy",
+      "type": "personne",
+      "alias": [],
+      "description": "conseiller en prévention"
+    },
+    {
+      "nom": "Ann Wouters",
+      "type": "personne",
+      "alias": [],
+      "description": "membre du comité de prévention et de protection au travail"
+    },
+    {
+      "nom": "Els Van den Broeck",
+      "type": "personne",
+      "alias": [],
+      "description": "membre du comité de prévention et de protection au travail"
+    },
+    {
+      "nom": "Comité pour la Prévention et la Protection au Travail",
+      "type": "instance",
+      "alias": [
+        "Comité PBW"
+      ],
+      "description": "instance de sécurité du site de Gand"
+    },
+    {
+      "nom": "Gent",
+      "type": "site",
+      "alias": [
+        "Gand"
+      ],
+      "description": "site de production de Calorvia"
+    }
+  ],
+  "seconds": 5.9
+}

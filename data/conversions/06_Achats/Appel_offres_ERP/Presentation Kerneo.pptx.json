@@ -1,0 +1,287 @@
+{
+  "schema_name": "DoclingDocument",
+  "version": "1.11.0",
+  "name": "Presentation Kerneo",
+  "origin": {
+    "mimetype": "application/vnd.openxmlformats-officedocument.presentationml.template",
+    "binary_hash": 2164976961096291374,
+    "filename": "Presentation Kerneo.pptx"
+  },
+  "furniture": {
+    "self_ref": "#/furniture",
+    "children": [],
+    "content_layer": "furniture",
+    "name": "_root_",
+    "label": "unspecified"
+  },
+  "body": {
+    "self_ref": "#/body",
+    "children": [
+      {
+        "$ref": "#/groups/0"
+      },
+      {
+        "$ref": "#/groups/1"
+      }
+    ],
+    "content_layer": "body",
+    "name": "_root_",
+    "label": "unspecified"
+  },
+  "groups": [
+    {
+      "self_ref": "#/groups/0",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/0"
+        },
+        {
+          "$ref": "#/texts/1"
+        }
+      ],
+      "content_layer": "body",
+      "name": "slide-0",
+      "label": "chapter"
+    },
+    {
+      "self_ref": "#/groups/1",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/2"
+        },
+        {
+          "$ref": "#/texts/3"
+        },
+        {
+          "$ref": "#/texts/4"
+        },
+        {
+          "$ref": "#/texts/5"
+        },
+        {
+          "$ref": "#/texts/6"
+        }
+      ],
+      "content_layer": "body",
+      "name": "slide-1",
+      "label": "chapter"
+    }
+  ],
+  "texts": [
+    {
+      "self_ref": "#/texts/0",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "title",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 685800.0,
+            "t": 2130425.0,
+            "r": 8458200.0,
+            "b": 3600450.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            20
+          ]
+        }
+      ],
+      "orig": "Kerneo pour Calorvia",
+      "text": "Kerneo pour Calorvia"
+    },
+    {
+      "self_ref": "#/texts/1",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "paragraph",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 1371600.0,
+            "t": 3886200.0,
+            "r": 7772400.0,
+            "b": 5638800.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            37
+          ]
+        }
+      ],
+      "orig": "D\u00e9monstration du 3 au 7 novembre 2025",
+      "text": "D\u00e9monstration du 3 au 7 novembre 2025"
+    },
+    {
+      "self_ref": "#/texts/2",
+      "parent": {
+        "$ref": "#/groups/1"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "title",
+      "prov": [
+        {
+          "page_no": 2,
+          "bbox": {
+            "l": 457200.0,
+            "t": 274638.0,
+            "r": 8686800.0,
+            "b": 1417638.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            17
+          ]
+        }
+      ],
+      "orig": "Notre proposition",
+      "text": "Notre proposition"
+    },
+    {
+      "self_ref": "#/texts/3",
+      "parent": {
+        "$ref": "#/groups/1"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "paragraph",
+      "prov": [
+        {
+          "page_no": 2,
+          "bbox": {
+            "l": 648000.0,
+            "t": 1512000.0,
+            "r": 11448000.0,
+            "b": 3383999.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            48
+          ]
+        }
+      ],
+      "orig": "\u2022 Solution modulaire pour les PME industrielles.",
+      "text": "\u2022 Solution modulaire pour les PME industrielles."
+    },
+    {
+      "self_ref": "#/texts/4",
+      "parent": {
+        "$ref": "#/groups/1"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "paragraph",
+      "prov": [
+        {
+          "page_no": 2,
+          "bbox": {
+            "l": 648000.0,
+            "t": 1512000.0,
+            "r": 11448000.0,
+            "b": 3383999.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            52
+          ]
+        }
+      ],
+      "orig": "\u2022 H\u00e9bergement dans un centre de donn\u00e9es \u00e0 Bruxelles.",
+      "text": "\u2022 H\u00e9bergement dans un centre de donn\u00e9es \u00e0 Bruxelles."
+    },
+    {
+      "self_ref": "#/texts/5",
+      "parent": {
+        "$ref": "#/groups/1"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "paragraph",
+      "prov": [
+        {
+          "page_no": 2,
+          "bbox": {
+            "l": 648000.0,
+            "t": 1512000.0,
+            "r": 11448000.0,
+            "b": 3383999.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            39
+          ]
+        }
+      ],
+      "orig": "\u2022 Tableaux de bord financiers int\u00e9gr\u00e9s.",
+      "text": "\u2022 Tableaux de bord financiers int\u00e9gr\u00e9s."
+    },
+    {
+      "self_ref": "#/texts/6",
+      "parent": {
+        "$ref": "#/groups/1"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "paragraph",
+      "prov": [
+        {
+          "page_no": 2,
+          "bbox": {
+            "l": 648000.0,
+            "t": 1512000.0,
+            "r": 11448000.0,
+            "b": 3383999.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            29
+          ]
+        }
+      ],
+      "orig": "\u2022 D\u00e9ploiement en 20 semaines.",
+      "text": "\u2022 D\u00e9ploiement en 20 semaines."
+    }
+  ],
+  "pictures": [],
+  "tables": [],
+  "key_value_items": [],
+  "form_items": [],
+  "pages": {
+    "1": {
+      "size": {
+        "width": 12192119.0,
+        "height": 6858000.0
+      },
+      "page_no": 1
+    },
+    "2": {
+      "size": {
+        "width": 12192119.0,
+        "height": 6858000.0
+      },
+      "page_no": 2
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "document": "03_Production/Seneffe/Ligne_L4/Offre Automa AS-2025-318.pdf",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Automa Systems SA",
+      "type": "fournisseur",
+      "alias": [
+        "Automa"
+      ],
+      "description": "fournisseur de la ligne d'assemblage L4"
+    },
+    {
+      "nom": "Thomas Lambert",
+      "type": "personne",
+      "alias": [],
+      "description": "destinataire de l'offre fournisseur"
+    },
+    {
+      "nom": "Ligne L4",
+      "type": "équipement",
+      "alias": [],
+      "description": "ligne d'assemblage, tests et emballage"
+    },
+    {
+      "nom": "Ligne L3",
+      "type": "équipement",
+      "alias": [],
+      "description": "ligne existante nécessitant adaptation du convoyage"
+    }
+  ],
+  "seconds": 4.3
+}

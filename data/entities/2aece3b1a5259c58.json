@@ -1,0 +1,13 @@
+{
+  "document": "05_Commercial/Fiches_produits/Aéris_Pro_16_FR.pdf",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Aéris Pro 16",
+      "type": "produit",
+      "alias": [],
+      "description": "Pompe à chaleur air-eau haute température au propane"
+    }
+  ],
+  "seconds": 1.7
+}

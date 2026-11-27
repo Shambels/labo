@@ -1,0 +1,7 @@
+{
+  "document": "01_Finance/Reporting_mensuel/Reporting 2026-03.xlsx",
+  "body": "onglet « Synthèse » · Reporting mensuel · mars 2026 · Montants en k€ · contrôle de gestion\n| Indicateur | Mois | Cumul annuel | Budget cumul | Écart au budget |\n|---|---|---|---|---|\n| Chiffre d&apos;affaires | 13600 | 41400 | 41684 |  |\n| Marge brute | 4127 | 12733 |  |  |\n| EBITDA | 1278 | 3764 |  |  |\n| Effectif fin de mois (ETP) | 623 |  |  |  |\nTaux d&apos;EBITDA",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait se trouve dans l'onglet « Synthèse » du reporting mensuel. Il présente les indicateurs financiers clés et l'effectif de l'entreprise pour le mois de mars 2026.",
+  "seconds": 3.4
+}

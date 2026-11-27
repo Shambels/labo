@@ -1,0 +1,7 @@
+{
+  "document": "02_RH/Confidentiel/Grille salariale 2026.xlsx",
+  "body": "onglet « Grille 2026 » · Grille salariale 2026 (salaire mensuel brut, après indexation de 3,4 %) · Classe : C3 - Cadre ; Minimum : 4150 ; Médiane : 4897 ; Maximum : 5644",
+  "model": "qwen3.8-27b",
+  "context": "Cette ligne détaille les salaires mensuels bruts de la classe C3 - Cadre. Elle se trouve dans l'onglet « Grille 2026 » du classeur RH.",
+  "seconds": 1.9
+}

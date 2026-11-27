@@ -1,0 +1,13 @@
+{
+  "document": "02_RH/Notes_de_service/2026-04-29 NS-2026-07 Télétravail  ce qui change au 1er mai.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Nadia Benali",
+      "type": "personne",
+      "alias": [],
+      "description": "émettrice de la note de service"
+    }
+  ],
+  "seconds": 1.5
+}

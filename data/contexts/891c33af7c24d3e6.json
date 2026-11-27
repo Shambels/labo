@@ -1,0 +1,7 @@
+{
+  "document": "07_IT/Projet_Atlas_ERP/Documentation/Strategie de reprise des donnees.docx",
+  "body": "Projet Atlas : stratégie de reprise des données\n3. Contrôles\nChaque fiche fournisseur reprise fait l'objet d'un contrôle de l'IBAN par rapport au dernier paiement effectué, conformément à la procédure FIN-07.",
+  "model": "qwen3.8-27b",
+  "context": "Cette section détaille les contrôles effectués sur les fiches fournisseurs lors de la reprise des données. Elle précise la vérification des IBAN par rapport aux derniers paiements, conformément à la procédure FIN-07.",
+  "seconds": 2.0
+}

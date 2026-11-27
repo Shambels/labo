@@ -1,0 +1,7 @@
+{
+  "document": "00_Direction/CODIR/2025/PV_CODIR_2025-10-06.docx",
+  "body": "Procès-verbal du Comité de direction\n4. Politique tarifaire 2026 : décision\n*Présenté par Pierre-Yves Collard.*\nLa simulation est présentée (voir annexe). Une hausse uniforme de 4 % rapporterait environ 5,9 M€ de chiffre d'affaires supplémentaire, mais au prix d'une perte de volume estimée à 3 % sur la gamme standard.\nUne hausse de 3,5 % sur la gamme standard et de 5 % sur la gamme premium rapporterait environ 5,5 M€, avec un risque de perte de volume plus faible.",
+  "model": "qwen3.8-27b",
+  "context": "Cette section du procès-verbal détaille la décision concernant la politique tarifaire 2026, présentée par le directeur commercial. Elle compare les impacts financiers d'une hausse uniforme à ceux d'une hausse différenciée entre les gammes standard et premium.",
+  "seconds": 2.3
+}

@@ -1,0 +1,7 @@
+{
+  "document": "09_Communication/Communiques_presse/2026-05-20 CP Nomination directrice financiere.docx",
+  "body": "Isabelle Gérard nommée directrice financière de Calorvia\nNamur, le 20 mai 2026\nLe conseil d'administration de Calorvia a nommé Isabelle Gérard au poste de directrice financière. Elle prendra ses fonctions le 15 juin 2026 et succède à Laurent Dewit, parti fin mars. Sarah Vandamme assurait l'intérim.\nContact presse : Lucie Bastin, presse@calorvia.example\n*À propos de Calorvia : fabricant belge de pompes à chaleur et de groupes de ventilation, 620 collaborateurs, sites à Namur, Seneffe, Gand, Herstal et Lille.*",
+  "model": "qwen3.8-27b",
+  "context": "Il s'agit du corps principal du communiqué de presse annonçant la nomination d'Isabelle Gérard au poste de directrice financière. Le texte détaille la prise de fonctions, la succession de Laurent Dewit et l'intérim assuré par Sarah Vandamme.",
+  "seconds": 2.5
+}

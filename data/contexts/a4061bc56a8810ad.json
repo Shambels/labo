@@ -1,0 +1,7 @@
+{
+  "document": "00_Direction/CODIR/2026/2026-02-02 CODIR PV.docx",
+  "body": "Procès-verbal du Comité de direction\n4. Étude logistique : recommandation\n*Présenté par Thomas Lambert.*\nTrois options ont été étudiées (voir annexe). L'extension du site de Gand (2800 m², 2 100 000 €) demande un permis dont l'obtention prendrait 12 à 18 mois. Le recours à un prestataire logistique (3PL) coûterait environ 310 000 € par an.\nLa location d'un entrepôt de 4200 m² à Herstal, disponible au 1er mai, coûterait 23,50 € par m² et par an, soit 98 700 € par an, plus 140 000 € de rayonnages.",
+  "model": "qwen3.8-27b",
+  "context": "Cette section du procès-verbal détaille les options logistiques étudiées pour le site de Gand. Elle compare l'extension des locaux, le recours à un prestataire 3PL et la location d'un entrepôt à Herstal.",
+  "seconds": 2.3
+}

@@ -1,0 +1,53 @@
+{
+  "document": "03_Production/Seneffe/Ligne_L4/Photo tableau risques L4 2025-11-05.jpg",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Linetech",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "fournisseur de la ligne L4"
+    },
+    {
+      "nom": "Ligne L4",
+      "type": "équipement",
+      "alias": [
+        "L4"
+      ],
+      "description": "ligne de production de Seneffe"
+    },
+    {
+      "nom": "Ligne L3",
+      "type": "équipement",
+      "alias": [
+        "L3"
+      ],
+      "description": "ligne de production de Seneffe"
+    },
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "site de production de Calorvia"
+    },
+    {
+      "nom": "T. Lambert",
+      "type": "personne",
+      "alias": [],
+      "description": "participant à l'atelier risques"
+    },
+    {
+      "nom": "M. Delhaye",
+      "type": "personne",
+      "alias": [],
+      "description": "participant à l'atelier risques"
+    },
+    {
+      "nom": "F. Collin",
+      "type": "personne",
+      "alias": [],
+      "description": "participant à l'atelier risques"
+    }
+  ],
+  "seconds": 5.2
+}

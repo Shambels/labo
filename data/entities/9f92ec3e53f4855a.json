@@ -1,0 +1,39 @@
+{
+  "document": "09_Communication/Intranet/Le projet Atlas en 10 questions.html",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Projet Atlas",
+      "type": "projet",
+      "alias": [],
+      "description": "remplacement de l'ERP GesPro 7 par Praxio"
+    },
+    {
+      "nom": "GesPro 7",
+      "type": "produit",
+      "alias": [
+        "ERP"
+      ],
+      "description": "système de gestion d'entreprise actuel"
+    },
+    {
+      "nom": "Praxio",
+      "type": "produit",
+      "alias": [],
+      "description": "nouveau système de gestion d'entreprise"
+    },
+    {
+      "nom": "WMS de Gand",
+      "type": "équipement",
+      "alias": [],
+      "description": "système de gestion d'entrepôt de Gand"
+    },
+    {
+      "nom": "Sophie Lejeune",
+      "type": "personne",
+      "alias": [],
+      "description": "cheffe de projet"
+    }
+  ],
+  "seconds": 4.3
+}

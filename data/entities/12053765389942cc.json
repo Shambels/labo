@@ -1,0 +1,15 @@
+{
+  "document": "07_IT/Securite/Rapport trimestriel cybersecurite 2026-07-03.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Praxio",
+      "type": "produit",
+      "alias": [
+        "ERP"
+      ],
+      "description": "Système de gestion d'entreprise"
+    }
+  ],
+  "seconds": 1.4
+}

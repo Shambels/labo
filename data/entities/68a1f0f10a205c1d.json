@@ -1,0 +1,13 @@
+{
+  "document": "00_Direction/CODIR/Annexes/2026-04-13 Annexe - Resultats enquete teletravail.pdf",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "CODIR",
+      "type": "instance",
+      "alias": [],
+      "description": "comité de direction de Calorvia"
+    }
+  ],
+  "seconds": 1.9
+}

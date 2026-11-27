@@ -1,0 +1,7 @@
+{
+  "document": "04_Qualite/Rappel_Aeris12/Liste numeros de serie concernes.xlsx",
+  "body": "onglet « Unités concernées » · lignes 25 à 28\n| Numéro de série | Date de production | Installateur | Région | Statut | Date d'intervention |\n|---|---|---|---|---|---|\n| AE12-25-4525 | 05/11/2025 | Habitat Confort SA | Brabant wallon | Réparée | 29/12/2025 |\n| AE12-25-4526 | 05/11/2025 | Distrinergie | Liège | Réparée | 15/02/2026 |\n| AE12-25-4527 | 05/11/2025 | Distrinergie | Liège | Réparée | 12/12/2025 |\n| AE12-25-4528 | 05/11/2025 | Thermo Services Lille SARL | Hauts-de-France | Réparée | 29/12/2025 |",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait se situe dans l'onglet « Unités concernées » du classeur de rappel. Il détaille les unités produites le 5 novembre 2025, installées par Habitat Confort SA, Distrinergie et Thermo Services Lille SARL.",
+  "seconds": 2.8
+}

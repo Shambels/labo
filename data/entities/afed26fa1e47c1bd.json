@@ -1,0 +1,19 @@
+{
+  "document": "03_Production/Maintenance/Fiches_intervention/2026-02-17 INT-2026-782 Robot de soudure.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Robot de soudure",
+      "type": "équipement",
+      "alias": [],
+      "description": "Équipement de production sujet à des collisions"
+    },
+    {
+      "nom": "Weldon Robotics",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "Intervenant pour le recalibrage de l'outil"
+    }
+  ],
+  "seconds": 2.6
+}

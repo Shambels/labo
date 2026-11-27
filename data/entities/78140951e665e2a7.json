@@ -1,0 +1,23 @@
+{
+  "document": "00_Direction/Conseil_administration/Convocations/Convocation CA 2025-10-21.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Conseil d'administration",
+      "type": "instance",
+      "alias": [
+        "CA"
+      ],
+      "description": "organe de direction de Calorvia SA"
+    },
+    {
+      "nom": "Ligne d'assemblage L4",
+      "type": "équipement",
+      "alias": [
+        "L4"
+      ],
+      "description": "ligne d'assemblage faisant l'objet d'une décision"
+    }
+  ],
+  "seconds": 3.3
+}

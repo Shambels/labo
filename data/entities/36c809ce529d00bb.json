@@ -1,0 +1,27 @@
+{
+  "document": "01_Finance/Comptabilite/Factures_fournisseurs/2026-03-10 Valtek note de credit CN-2026-018.jpg",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Valtek Components Ltd",
+      "type": "fournisseur",
+      "alias": [
+        "Valtek"
+      ],
+      "description": "fournisseur de valves Aeris 12"
+    },
+    {
+      "nom": "Aeris 12",
+      "type": "produit",
+      "alias": [],
+      "description": "valve faisant l'objet d'un rappel"
+    },
+    {
+      "nom": "RCL",
+      "type": "autre",
+      "alias": [],
+      "description": "part de coûts de rappel"
+    }
+  ],
+  "seconds": 3.6
+}

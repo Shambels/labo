@@ -1,0 +1,7 @@
+{
+  "document": "00_Direction/CODIR/Annexes/2025-10-06 Annexe - Simulation hausse tarifaire.xlsx",
+  "body": "onglet « Simulation » · Simulation de la hausse tarifaire 2026 (base : chiffre d'affaires 2025 estimé à 148 M€) · Scénario : A : hausse uniforme ; Hausse standard : 4 % ; Hausse premium : 4 % ; Perte de volume estimée : 3 % sur la gamme standard ; Gain de CA estimé (k€) : 5900",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait se situe dans l'onglet « Simulation » de l'annexe du CODIR. Il détaille les hypothèses et les résultats financiers du scénario A, qui prévoit une hausse uniforme des tarifs pour 2026.",
+  "seconds": 2.3
+}

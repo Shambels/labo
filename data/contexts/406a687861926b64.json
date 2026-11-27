@@ -1,0 +1,7 @@
+{
+  "document": "06_Achats/Appel_offres_ERP/Cahier des charges ERP Atlas.docx",
+  "body": "Projet Atlas : cahier des charges pour le remplacement de l'ERP\n2. Périmètre\n- Finance et comptabilité (trois entités : Calorvia SA, la succursale de Lille et la future plateforme de Herstal).\n- Achats, ventes, facturation, gestion des stocks multi-sites.\n- Production : nomenclatures, ordres de fabrication, traçabilité par numéro de série.\n- Interface temps réel avec le WMS LogiPath de Gand.\n- Environ 240 utilisateurs.",
+  "model": "qwen3.8-27b",
+  "context": "La rubrique « Périmètre » du cahier des charges détaille les modules fonctionnels et les entités concernés par le remplacement de l'ERP. Elle précise notamment l'inclusion de la production, de la gestion des stocks multi-sites et de l'interface avec le WMS de Gand.",
+  "seconds": 2.7
+}

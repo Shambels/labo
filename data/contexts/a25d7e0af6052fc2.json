@@ -1,0 +1,7 @@
+{
+  "document": "00_Direction/CODIR/2026/2026-02-23 CODIR PV.docx",
+  "body": "Procès-verbal du Comité de direction\n3. Suivi des actions\n| **N°** | **Action** | **Responsable** | **Échéance** | **Statut / commentaire** |\n| - | - | - | - | - |\n| A-26-003 | Déployer la MFA sur tous les comptes | KM | 28/02/2026 | En cours. 87 % des comptes protégés. |\n| A-26-005 | Organiser la campagne de sensibilisation à l'hameçonnage | KM | 31/03/2026 | En cours |\n| A-26-008 | Mettre en œuvre le plan de nettoyage des données articles | KM | 13/03/2026 | En cours |\n",
+  "model": "qwen3.8-27b",
+  "context": "Cette section du suivi des actions détaille les tâches informatiques en cours, notamment le déploiement de la MFA, la sensibilisation à l'hameçonnage et le nettoyage des données articles.",
+  "seconds": 2.0
+}

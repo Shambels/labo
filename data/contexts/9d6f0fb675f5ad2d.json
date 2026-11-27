@@ -1,0 +1,7 @@
+{
+  "document": "10_RSE/Bilan carbone 2025.xlsx",
+  "body": "onglet « Émissions 2025 » · Bilan carbone 2025 (tonnes équivalent CO2) · Poste : Fuites de fluides frigorigènes (ateliers) ; Scope : Scope 1 ; Émissions : 130",
+  "model": "qwen3.8-27b",
+  "context": "Cette ligne figure dans l'onglet « Émissions 2025 » du bilan carbone. Elle détaille les émissions de Scope 1 liées aux fuites de fluides frigorigènes dans les ateliers.",
+  "seconds": 2.0
+}

@@ -1,0 +1,19 @@
+{
+  "document": "05_Commercial/Offres/DV-2026-0311 Habitat.pdf",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Habitat Confort SA",
+      "type": "client",
+      "alias": [],
+      "description": "client de l'offre de prix"
+    },
+    {
+      "nom": "Aéris Pro 22",
+      "type": "produit",
+      "alias": [],
+      "description": "produit de la gamme Aéris Pro"
+    }
+  ],
+  "seconds": 2.6
+}

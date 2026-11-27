@@ -1,0 +1,25 @@
+{
+  "document": "02_RH/Notes_de_service/2026-05-27 NS-2026-10 Gel des saisies avant le démarrage de l_ERP.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Kevin Mertens",
+      "type": "personne",
+      "alias": [],
+      "description": "émetteur de la note de service"
+    },
+    {
+      "nom": "GesPro 7",
+      "type": "produit",
+      "alias": [],
+      "description": "logiciel de gestion des saisies"
+    },
+    {
+      "nom": "Praxio",
+      "type": "produit",
+      "alias": [],
+      "description": "nouveau système ERP"
+    }
+  ],
+  "seconds": 2.5
+}

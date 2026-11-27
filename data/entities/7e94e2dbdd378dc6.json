@@ -1,0 +1,63 @@
+{
+  "document": "04_Qualite/Rappel_Aeris12/Liste numeros de serie concernes.xlsx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Habitat Confort SA",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "installateur de pompes à chaleur"
+    },
+    {
+      "nom": "Klimaat Partners NV",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "installateur de pompes à chaleur"
+    },
+    {
+      "nom": "Installatiebedrijf Wouters",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "installateur de pompes à chaleur"
+    },
+    {
+      "nom": "Thermo Services Lille SARL",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "installateur de pompes à chaleur"
+    },
+    {
+      "nom": "Clim'Expert Hainaut",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "installateur de pompes à chaleur"
+    },
+    {
+      "nom": "Énergies du Condroz SRL",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "installateur de pompes à chaleur"
+    },
+    {
+      "nom": "Distrinergie",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "installateur de pompes à chaleur"
+    },
+    {
+      "nom": "Chauffage Lambert & Fils",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "installateur de pompes à chaleur"
+    },
+    {
+      "nom": "Aeris 12",
+      "type": "produit",
+      "alias": [
+        "AE12"
+      ],
+      "description": "pompe à chaleur concernée par un rappel"
+    }
+  ],
+  "seconds": 13.2
+}

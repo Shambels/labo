@@ -1,0 +1,123 @@
+{
+  "document": "00_Direction/CODIR/2026/2026-04-27 CODIR PV.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Hélène Marchal",
+      "type": "personne",
+      "alias": [
+        "CEO"
+      ],
+      "description": "administratrice déléguée et présidente du comité"
+    },
+    {
+      "nom": "Sarah Vandamme",
+      "type": "personne",
+      "alias": [],
+      "description": "directrice financière a.i."
+    },
+    {
+      "nom": "Thomas Lambert",
+      "type": "personne",
+      "alias": [
+        "COO"
+      ],
+      "description": "directeur des opérations"
+    },
+    {
+      "nom": "Nadia Benali",
+      "type": "personne",
+      "alias": [
+        "NB"
+      ],
+      "description": "directrice des ressources humaines"
+    },
+    {
+      "nom": "Pierre-Yves Collard",
+      "type": "personne",
+      "alias": [],
+      "description": "directeur commercial"
+    },
+    {
+      "nom": "Kevin Mertens",
+      "type": "personne",
+      "alias": [],
+      "description": "directeur des systèmes d'information"
+    },
+    {
+      "nom": "Anne Vercammen",
+      "type": "personne",
+      "alias": [],
+      "description": "directrice qualité"
+    },
+    {
+      "nom": "Pieter De Smet",
+      "type": "personne",
+      "alias": [],
+      "description": "directeur du site de Gand"
+    },
+    {
+      "nom": "Julie Renard",
+      "type": "personne",
+      "alias": [],
+      "description": "secrétaire du comité de direction"
+    },
+    {
+      "nom": "Namur",
+      "type": "site",
+      "alias": [],
+      "description": "lieu de la séance du comité"
+    },
+    {
+      "nom": "Salle Meuse",
+      "type": "site",
+      "alias": [],
+      "description": "salle de réunion à Namur"
+    },
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "site de production de pompes à chaleur"
+    },
+    {
+      "nom": "Gand",
+      "type": "site",
+      "alias": [],
+      "description": "site de production de groupes de ventilation"
+    },
+    {
+      "nom": "Herstal",
+      "type": "site",
+      "alias": [],
+      "description": "site de l'entrepôt"
+    },
+    {
+      "nom": "Ligne L4",
+      "type": "équipement",
+      "alias": [],
+      "description": "ligne de production en retard"
+    },
+    {
+      "nom": "Aéris Pro 22",
+      "type": "produit",
+      "alias": [],
+      "description": "produit lancé commercialement en France"
+    },
+    {
+      "nom": "Linetech",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "fournisseur de l'armoire de commande"
+    },
+    {
+      "nom": "Comité de direction",
+      "type": "instance",
+      "alias": [
+        "CODIR"
+      ],
+      "description": "instance de direction de l'entreprise"
+    }
+  ],
+  "seconds": 13.0
+}

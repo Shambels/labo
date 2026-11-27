@@ -1,0 +1,81 @@
+{
+  "document": "01_Finance/Investissements/Demande capex CAPEX-2025-017 - Sécurité de l_entrepôt de Gand.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Pieter De Smet",
+      "type": "personne",
+      "alias": [],
+      "description": "demandeur de l'investissement sécurité"
+    },
+    {
+      "nom": "Sarah Vandamme",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable du contrôle de gestion"
+    },
+    {
+      "nom": "Hélène Marchal",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable de la validation CODIR"
+    },
+    {
+      "nom": "Président du conseil",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable du conseil d'administration"
+    },
+    {
+      "nom": "Sécurité de l'entrepôt de Gand",
+      "type": "projet",
+      "alias": [
+        "CAPEX-2025-017"
+      ],
+      "description": "mesures de sécurité après accident"
+    },
+    {
+      "nom": "Entrepôt de Gand",
+      "type": "site",
+      "alias": [],
+      "description": "lieu de l'accident et des mesures"
+    },
+    {
+      "nom": "Blue spots",
+      "type": "équipement",
+      "alias": [],
+      "description": "dispositifs de sécurité pour chariots"
+    },
+    {
+      "nom": "Limateurs de vitesse",
+      "type": "équipement",
+      "alias": [],
+      "description": "dispositifs de limitation de vitesse"
+    },
+    {
+      "nom": "Marquage au sol des passages piétons",
+      "type": "équipement",
+      "alias": [],
+      "description": "signalisation des passages piétons"
+    },
+    {
+      "nom": "Barrières et miroirs d'angle",
+      "type": "équipement",
+      "alias": [],
+      "description": "dispositifs de sécurité physique"
+    },
+    {
+      "nom": "CODIR",
+      "type": "instance",
+      "alias": [],
+      "description": "comité de direction"
+    },
+    {
+      "nom": "Conseil d'administration",
+      "type": "instance",
+      "alias": [],
+      "description": "organe de validation des investissements"
+    }
+  ],
+  "seconds": 9.6
+}

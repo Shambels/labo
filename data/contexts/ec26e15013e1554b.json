@@ -1,0 +1,7 @@
+{
+  "document": "03_Production/Seneffe/Photos_equipements/IMG_20260313_Banc_dessai_L2.jpg",
+  "body": "Image\n**Testra GmbH**  \nPrüfstand / banc d'essai  \n\n| Type              | HPT-4                  |\n|-------------------|------------------------|\n| N° de série       | HPT4-21-0072           |\n| Année             | 2021                   |\n| Fluides           | R32 / R290             |\n| Pression max.     | 45 bar                 |\n| Puissance         | 11 kW                  |\n\nCE\n\n---\n\n**Description**  \nIl s’agit d’une plaque d’identification métallique fixée sur un banc d’essai industriel. Elle affiche les spécifications techniques du matériel : type, numéro de série, année de fabrication, fluides utilisés, pression maximale et puissance. Le marquage CE indique la conformité aux normes européennes de sécurité.",
+  "model": "qwen3.8-27b",
+  "context": "Cette section présente la plaque d'identification du banc d'essai Testra HPT-4. Elle détaille les spécifications techniques de l'équipement, notamment les fluides utilisés et la puissance.",
+  "seconds": 2.4
+}

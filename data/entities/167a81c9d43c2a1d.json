@@ -1,0 +1,19 @@
+{
+  "document": "02_RH/Notes_de_service/2026-04-28 NS-2026-06 Fin du gel des recrutements.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Nadia Benali",
+      "type": "personne",
+      "alias": [],
+      "description": "émettrice de la note de service"
+    },
+    {
+      "nom": "Conseil d'administration",
+      "type": "instance",
+      "alias": [],
+      "description": "a levé le gel des recrutements"
+    }
+  ],
+  "seconds": 2.2
+}

@@ -1,0 +1,7 @@
+{
+  "document": "05_Commercial/Tableaux_de_bord/Tableau de bord commercial 2026-03.png",
+  "body": "Image\nTableau de bord commercial • mars 2026\n\nChiffre d'affaires du mois  \n13 600 k€\n\nÉcart au budget  \n+2,5 %\n\nPrises de commandes  \n14 300 k€\n\nChiffre d'affaires par région  \n| Région       | Chiffre d'affaires |\n|--------------|---------------------|\n| Wallonie     | 4 410 k€           |\n| Bruxelles    | 1 207 k€           |\n| Flandre      | 4 358 k€           |\n| France       | 2 913 k€           |\n| Autres pays  | 712 k€             |\n\nDescription  \nIl s’agit d’un tableau de bord commercial pour mars 2026, présentant trois indicateurs clés en haut et un graphique à barres en bas. Le graphique montre le chiffre d’affaires par région, avec la Flandre et la Wallonie comme régions les plus performantes. La valeur la plus haute du graphique est de 4 410 k€ pour la Wallonie.",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait correspond à l'intégralité du tableau de bord commercial de mars 2026. Il détaille les indicateurs clés du mois ainsi que la répartition du chiffre d'affaires par région.",
+  "seconds": 2.5
+}

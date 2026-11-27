@@ -1,0 +1,119 @@
+{
+  "document": "00_Direction/CODIR/2026/2026-06-29 CODIR PV.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Hélène Marchal",
+      "type": "personne",
+      "alias": [
+        "CEO"
+      ],
+      "description": "administratrice déléguée et présidente du comité de direction"
+    },
+    {
+      "nom": "Isabelle Gérard",
+      "type": "personne",
+      "alias": [
+        "CFO"
+      ],
+      "description": "directrice financière de l'entreprise"
+    },
+    {
+      "nom": "Thomas Lambert",
+      "type": "personne",
+      "alias": [
+        "COO"
+      ],
+      "description": "directeur des opérations de l'entreprise"
+    },
+    {
+      "nom": "Nadia Benali",
+      "type": "personne",
+      "alias": [],
+      "description": "directrice des ressources humaines"
+    },
+    {
+      "nom": "Pierre-Yves Collard",
+      "type": "personne",
+      "alias": [],
+      "description": "directeur commercial de l'entreprise"
+    },
+    {
+      "nom": "Kevin Mertens",
+      "type": "personne",
+      "alias": [],
+      "description": "directeur des systèmes d'information"
+    },
+    {
+      "nom": "Anne Vercammen",
+      "type": "personne",
+      "alias": [],
+      "description": "directrice qualité de l'entreprise"
+    },
+    {
+      "nom": "Pieter De Smet",
+      "type": "personne",
+      "alias": [],
+      "description": "directeur du site de Gand"
+    },
+    {
+      "nom": "Julie Renard",
+      "type": "personne",
+      "alias": [],
+      "description": "secrétaire du comité de direction"
+    },
+    {
+      "nom": "Namur",
+      "type": "site",
+      "alias": [],
+      "description": "lieu de la séance du comité de direction"
+    },
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [
+        "usine de Seneffe"
+      ],
+      "description": "site de production de pompes à chaleur"
+    },
+    {
+      "nom": "Gand",
+      "type": "site",
+      "alias": [],
+      "description": "site de production de groupes de ventilation"
+    },
+    {
+      "nom": "Pompes à chaleur",
+      "type": "produit",
+      "alias": [],
+      "description": "produits fabriqués sur le site de Seneffe"
+    },
+    {
+      "nom": "Groupes de ventilation",
+      "type": "produit",
+      "alias": [],
+      "description": "produits fabriqués sur le site de Gand"
+    },
+    {
+      "nom": "Projet Atlas",
+      "type": "projet",
+      "alias": [],
+      "description": "projet informatique en phase de fin d'hypercare"
+    },
+    {
+      "nom": "GesPro 7",
+      "type": "produit",
+      "alias": [],
+      "description": "logiciel consultable en lecture seule jusqu'à fin 2026"
+    },
+    {
+      "nom": "Comité de direction",
+      "type": "instance",
+      "alias": [
+        "CODIR"
+      ],
+      "description": "instance dirigeante se réunissant bimensuellement en été"
+    }
+  ],
+  "seconds": 15.2
+}

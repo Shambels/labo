@@ -1,0 +1,7 @@
+{
+  "document": "05_Commercial/Comptes_cles/Plan de compte Thermo Services Lille 2026.docx",
+  "body": "Plan de compte 2026 : Thermo Services Lille SARL\n| Type de client | Installateur agréé, Hauts-de-France (depuis octobre 2025) |\n| - | - |\n| Objectif 2026 | 180 pompes à chaleur, dont 60 Aéris Pro |\n| Responsable | Mathilde Roux |\nLe client souhaite devenir centre de service agréé pour le nord de la France. Une formation de ses six techniciens est prévue à Seneffe en septembre 2026.",
+  "model": "qwen3.8-27b",
+  "context": "Cette fiche présente le profil du client Thermo Services Lille, installateur agréé dans les Hauts-de-France, ainsi que ses objectifs commerciaux pour 2026. Elle détaille également le projet de formation de ses techniciens à Seneffe et son ambition de devenir centre de service pour le nord de la France.",
+  "seconds": 3.1
+}

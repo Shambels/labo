@@ -1,0 +1,7 @@
+{
+  "document": "05_Commercial/Fiches_produits/Ventis_D450_FR.pdf",
+  "body": "Ventis D450 · Fiche technique\nGroupe de ventilation double flux avec récupération de chaleur pour logements neufs et rénovés.\n| Caractéristique | Valeur |\n| - | - |\n| Débit d'air maximal | 450 m3/h |\n| Rendement de récupération de chaleur | 91 % |\n| Puissance acoustique | 31 dB(A) |\n| Filtre d'air neuf | ISO ePM1 55 % (F7) |\n| Poids | 47 kg |\n| Dimensions (H x L x P) | 860 x 640 x 340 mm |\n| Classe énergétique | A |\nGarantie : 5 ans sur le compresseur, 2 ans sur les autres pièces.",
+  "model": "qwen3.8-27b",
+  "context": "Cette section présente les caractéristiques techniques et la garantie du groupe de ventilation double flux Ventis D450.",
+  "seconds": 1.6
+}

@@ -1,0 +1,7 @@
+{
+  "document": "03_Production/Gent/Veiligheid/Incidentrapport 2025-11-12 heftruck gang 7.pdf",
+  "body": "Beschrijving\nDe orderpicker stak gang 7 over tussen twee rekken om een etiket op te halen bij de printer. De heftruck reed achteruit met een snelheid van ongeveer 11 km/u. Door het rek was het zicht van de chauffeur beperkt. Er was geen gemarkeerde oversteekplaats.",
+  "model": "qwen3.8-27b",
+  "context": "Cette section détaille les circonstances de l'accident survenu dans le magasin de Gand. Elle décrit le moment où le préparateur de commandes a traversé l'allée 7 et a été heurté par une chariot élévateur.",
+  "seconds": 2.3
+}

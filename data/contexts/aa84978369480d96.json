@@ -1,0 +1,7 @@
+{
+  "document": "02_RH/Confidentiel/Grille salariale 2026.xlsx",
+  "body": "onglet « Grille 2026 » · Grille salariale 2026 (salaire mensuel brut, après indexation de 3,4 %) · Classe : E3 - Technicien ; Minimum : 2980 ; Médiane : 3516 ; Maximum : 4053",
+  "model": "qwen3.8-27b",
+  "context": "Cette ligne se trouve dans l'onglet « Grille 2026 » du classeur RH. Elle détaille les salaires mensuels bruts de la classe E3 - Technicien.",
+  "seconds": 1.9
+}

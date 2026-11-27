@@ -1,0 +1,13 @@
+{
+  "document": "02_RH/Recrutement/Offres/REC-2026-019 Assistant RH.html",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Namur",
+      "type": "site",
+      "alias": [],
+      "description": "site de l'entreprise Calorvia"
+    }
+  ],
+  "seconds": 1.1
+}

@@ -1,0 +1,13 @@
+{
+  "document": "01_Finance/Comptabilite/Factures_fournisseurs/2026-04-30 Bureau Plus BP-26-4410.jpg",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Bureau Plus SRL",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "fournisseur de fournitures de bureau"
+    }
+  ],
+  "seconds": 1.4
+}

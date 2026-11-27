@@ -1,0 +1,10 @@
+{
+  "path": "05_Commercial/Comptes_cles/Avenant tarifaire Distrinergie 2026 signe.pdf",
+  "kind": "scan_page",
+  "page": 0,
+  "index": null,
+  "model": "qwen3.5-9b",
+  "prompt": "Tu transcris des documents d'entreprise pour un moteur de recherche.\n1. Recopie tout le texte visible, exactement comme il est écrit : nombres, codes, dates, unités et\n   annotations manuscrites compris. Rends les tableaux en Markdown.\n2. Puis, sous le titre « Description », décris en trois phrases au plus le type d'image (organigramme,\n   plan, graphique, photo, facture...) et ce qu'elle montre qui n'est pas écrit : les rattachements\n   d'un organigramme, la valeur la plus haute d'un graphique, la position des éléments d'un plan.\nN'invente rien : si un élément est illisible, écris [illisible].",
+  "seconds": 6.2,
+  "text": "**Avenant n° 3 au contrat de distribution du 2 mars 2021**\n\nEntre Calorvia SA, représentée par Pierre-Yves Collard, directeur commercial, et Distrinergie SA, représentée par Vincent Hallet, directeur des achats.\n\n**Article 1 : prix 2026**\n\nPar dérogation au tarif 2026, les prix catalogue 2025 sont augmentés de 2 % pour toutes les gammes du 1er janvier au 31 décembre 2026.\n\n**Article 2 : engagement de volume**\n\nDistrinergie s'engage à acheter au moins 2400 unités en 2026. Si le volume acheté au 31 décembre 2026 est inférieur à 2 160 unités (90 % de l'engagement), Calorvia facturera rétroactivement la différence entre le tarif 2026 standard et le prix de l'avenant.\n\n**Article 3 : revue**\n\nLes parties se réunissent chaque trimestre pour revoir les volumes.\n\nFait à Namur, le 29 janvier 2026, en deux exemplaires.\n\nPour Calorvia SA  \n[signature manuscrite]\n\nPour Distrinergie SA  \n[signature manuscrite]\n\n---\n\n**Description**  \nIl s’agit d’un document contractuel sous forme de texte structuré en articles, sans graphique, plan ou photo. Il montre un avenant signé entre deux entreprises avec des signatures manuscrites illisibles et une mention de lieu et date de signature. Aucun élément visuel supplémentaire n’est présent."
+}

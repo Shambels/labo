@@ -1,0 +1,7 @@
+{
+  "document": "01_Finance/Reporting_mensuel/Reporting 2025-11.xlsx",
+  "body": "onglet « Synthèse » · Reporting mensuel · novembre 2025 · Montants en k€ · contrôle de gestion\n| Indicateur | Mois | Cumul annuel | Budget cumul | Écart au budget |\n|---|---|---|---|---|\n| Chiffre d'affaires | 15800 | 131400 | 134769 | -2,5 % |\n| Marge brute | 4740 | 39360 |  |  |\n| EBITDA | 1169 | 10412 |  |  |\n| Taux d'EBITDA | 7,4 % | 7,9 % |  |  |\n| Effectif fin de mois (ETP) | 620 |  |  |  |",
+  "model": "qwen3.8-27b",
+  "context": "La rubrique « Synthèse » présente les indicateurs financiers clés et l'effectif de l'entreprise pour le mois de novembre 2025.",
+  "seconds": 3.3
+}

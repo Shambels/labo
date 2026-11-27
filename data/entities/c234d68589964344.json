@@ -1,0 +1,21 @@
+{
+  "document": "02_RH/Recrutement/Offres/REC-2026-020 Technicien de ligne L4.html",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Ligne d'assemblage L4",
+      "type": "équipement",
+      "alias": [
+        "L4"
+      ],
+      "description": "ligne d'assemblage automatisée"
+    },
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "site de production de Calorvia"
+    }
+  ],
+  "seconds": 3.3
+}

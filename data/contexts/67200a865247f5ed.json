@@ -1,0 +1,7 @@
+{
+  "document": "08_Juridique/Contrats/Contrat integration ERP Integra Conseil.pdf",
+  "body": "Article 1 : objet\nIntégra Conseil SRL réalise le paramétrage, la reprise des données, les interfaces et la formation des utilisateurs clés pour la mise en œuvre de l'ERP Praxio chez Calorvia SA.",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait se trouve dans la rubrique « Article 1 : objet » du contrat. Il définit le périmètre des prestations d'Intégra Conseil pour la mise en œuvre de l'ERP Praxio chez Calorvia.",
+  "seconds": 2.6
+}

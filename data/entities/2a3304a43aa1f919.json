@@ -1,0 +1,13 @@
+{
+  "document": "02_RH/Politiques/Politique frais de deplacement.pdf",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Calorvia SA",
+      "type": "autre",
+      "alias": [],
+      "description": "Société émettrice de la politique de frais"
+    }
+  ],
+  "seconds": 1.2
+}

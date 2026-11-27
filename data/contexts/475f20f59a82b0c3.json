@@ -1,0 +1,7 @@
+{
+  "document": "03_Production/Maintenance/Fiches_intervention/2025-11-27 INT-2025-375 Four de brasage.docx",
+  "body": "Fiche d'intervention INT-2025-375\n| Date | 27/11/2025 |\n| - | - |\n| Équipement | Four de brasage |\n| Description | Dérive de température de la zone 3 (+18 °C). Remplacement d'un thermocouple. |\n| Durée d'arrêt | 2 h 30 |\n| Pièces et coûts | Thermocouple type K : 186 € |\n| Intervenant | Fabrice Collin |",
+  "model": "qwen3.8-27b",
+  "context": "Cette fiche d'intervention concerne le four de brasage. Elle détaille le remplacement d'un thermocouple effectué par Fabrice Collin.",
+  "seconds": 1.7
+}

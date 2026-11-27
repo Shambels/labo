@@ -1,0 +1,7 @@
+{
+  "document": "01_Finance/Tresorerie/Prevision tresorerie 2026.xlsx",
+  "body": "onglet « Prévision » · Prévision de trésorerie 2026 (k€) · mise à jour du 12/01/2026 · lignes 11 à 12\n| Mois | Trésorerie début | Encaissements | Décaissements | Investissements | Trésorerie fin |\n|---|---|---|---|---|---|\n| Novembre | 20219 | 16965 | 15052 | 160 | 21972 |\n| Décembre | 21972 | 18039 | 16005 | 120 | 23886 |",
+  "model": "qwen3.8-27b",
+  "context": "Cette section présente les prévisions de trésorerie pour les mois de novembre et décembre. Elle détaille les encaissements, décaissements et investissements prévus pour la fin de l'année.",
+  "seconds": 2.0
+}

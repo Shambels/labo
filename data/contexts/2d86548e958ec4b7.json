@@ -1,0 +1,7 @@
+{
+  "document": "01_Finance/Budget_2026/Budget 2026 - version approuvee CA 16-12-2025.xlsx",
+  "body": "onglet « Compte de résultats » · Compte de résultats budgété 2026 (k€) · Mois : Avril ; Chiffre d'affaires : 11789 ; EBITDA : 1120 ; Taux d'EBITDA : 9,5 %",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait se trouve dans l'onglet « Compte de résultats » du budget 2026. Il détaille les prévisions de chiffre d'affaires et d'EBITDA pour le mois d'avril.",
+  "seconds": 2.1
+}

@@ -1,0 +1,57 @@
+{
+  "document": "03_Production/Seneffe/CPPT/PV CPPT Seneffe 2025-10-14.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Marc Delhaye",
+      "type": "personne",
+      "alias": [],
+      "description": "président du comité de prévention"
+    },
+    {
+      "nom": "Olivier Hardy",
+      "type": "personne",
+      "alias": [],
+      "description": "conseiller en prévention"
+    },
+    {
+      "nom": "Fabrice Collin",
+      "type": "personne",
+      "alias": [],
+      "description": "membre du comité de prévention"
+    },
+    {
+      "nom": "Comité pour la prévention et la protection au travail",
+      "type": "instance",
+      "alias": [
+        "CPPT"
+      ],
+      "description": "comité de prévention et protection au travail"
+    },
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "site de production de Calorvia"
+    },
+    {
+      "nom": "Magasin",
+      "type": "équipement",
+      "alias": [],
+      "description": "lieu de l'accident par entorse"
+    },
+    {
+      "nom": "Poste de brasage",
+      "type": "équipement",
+      "alias": [],
+      "description": "lieu de l'accident par brûlure"
+    },
+    {
+      "nom": "Zone des presses",
+      "type": "équipement",
+      "alias": [],
+      "description": "zone faisant l'objet d'une étude de bruit"
+    }
+  ],
+  "seconds": 6.6
+}

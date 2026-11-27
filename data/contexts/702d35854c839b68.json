@@ -1,0 +1,7 @@
+{
+  "document": "09_Communication/Communiques_presse/2026-05-18 CP Entrepot Herstal.docx",
+  "body": "Calorvia ouvre un entrepôt de 4 200 m² à Herstal\nNamur, le 18 mai 2026\nCalorvia a mis en service le 18 mai 2026 un entrepôt de 4 200 m² dans le parc industriel des Hauts-Sarts à Herstal. Ce site, qui emploie six personnes, rapproche les stocks des clients de la province de Liège et de l'Allemagne.\nContact presse : Lucie Bastin, presse@calorvia.example\n*À propos de Calorvia : fabricant belge de pompes à chaleur et de groupes de ventilation, 620 collaborateurs, sites à Namur, Seneffe, Gand, Herstal et Lille.*",
+  "model": "qwen3.8-27b",
+  "context": "Il s'agit du corps principal du communiqué de presse annonçant l'ouverture d'un entrepôt à Herstal. Le texte détaille la mise en service du site dans le parc industriel des Hauts-Sarts et son rôle logistique pour les clients de la province de Liège et de l'Allemagne.",
+  "seconds": 3.0
+}

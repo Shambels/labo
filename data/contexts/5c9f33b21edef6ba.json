@@ -1,0 +1,7 @@
+{
+  "document": "07_IT/Securite/Procedure MFA v1.docx",
+  "body": "Procédure IT-12 : activer l'authentification multifacteur (version 1)\nSupport\nSupport informatique : poste 2200 ou helpdesk@calorvia.example.",
+  "model": "qwen3.8-27b",
+  "context": "Cette rubrique de support, située à la fin de la procédure, indique les coordonnées du service informatique pour l'activation de l'authentification multifacteur.",
+  "seconds": 1.6
+}

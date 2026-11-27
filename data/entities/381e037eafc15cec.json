@@ -1,0 +1,25 @@
+{
+  "document": "03_Production/Maintenance/Fiches_intervention/2025-12-10 INT-2025-773 Ligne L2.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Ligne L2",
+      "type": "équipement",
+      "alias": [],
+      "description": "ligne de production faisant l'objet d'une intervention"
+    },
+    {
+      "nom": "Romain Dethier",
+      "type": "personne",
+      "alias": [],
+      "description": "intervenant sur la fiche d'intervention"
+    },
+    {
+      "nom": "Lot V-2544",
+      "type": "autre",
+      "alias": [],
+      "description": "lot de vannes quatre voies mis en quarantaine"
+    }
+  ],
+  "seconds": 3.5
+}

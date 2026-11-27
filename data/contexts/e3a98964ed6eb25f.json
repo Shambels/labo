@@ -1,0 +1,7 @@
+{
+  "document": "07_IT/Support/FAQ helpdesk.html",
+  "body": "Helpdesk informatique : questions fréquentes\nComment signaler un courriel suspect ?\nUtilisez le bouton « Signaler un hameçonnage » de la messagerie. Ne cliquez sur aucun lien et ne répondez pas.",
+  "model": "qwen3.8-27b",
+  "context": "Cette rubrique de la FAQ du helpdesk informatique détaille la procédure à suivre pour signaler un courriel suspect. Elle précise l'utilisation du bouton dédié à l'hameçonnage dans la messagerie et les consignes de sécurité associées.",
+  "seconds": 2.1
+}

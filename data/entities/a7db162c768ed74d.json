@@ -1,0 +1,37 @@
+{
+  "document": "08_Juridique/Contrats/Contrat integration ERP Integra Conseil.pdf",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Intégra Conseil SRL",
+      "type": "fournisseur",
+      "alias": [
+        "Intégra Conseil"
+      ],
+      "description": "intégrateur réalisant le paramétrage et la formation"
+    },
+    {
+      "nom": "Praxio",
+      "type": "produit",
+      "alias": [
+        "ERP Praxio"
+      ],
+      "description": "système de gestion d'entreprise à mettre en œuvre"
+    },
+    {
+      "nom": "Calorvia SA",
+      "type": "client",
+      "alias": [
+        "Calorvia"
+      ],
+      "description": "entreprise cliente du contrat d'intégration"
+    },
+    {
+      "nom": "ERP Praxio",
+      "type": "projet",
+      "alias": [],
+      "description": "projet de mise en œuvre de l'ERP"
+    }
+  ],
+  "seconds": 4.4
+}

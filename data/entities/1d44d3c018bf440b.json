@@ -1,0 +1,37 @@
+{
+  "document": "05_Commercial/Tableaux_de_bord/Tableau de bord commercial 2026-04.png",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Wallonie",
+      "type": "site",
+      "alias": [],
+      "description": "région de chiffre d'affaires"
+    },
+    {
+      "nom": "Bruxelles",
+      "type": "site",
+      "alias": [],
+      "description": "région de chiffre d'affaires"
+    },
+    {
+      "nom": "Flandre",
+      "type": "site",
+      "alias": [],
+      "description": "région de chiffre d'affaires"
+    },
+    {
+      "nom": "France",
+      "type": "site",
+      "alias": [],
+      "description": "pays de chiffre d'affaires"
+    },
+    {
+      "nom": "Autres pays",
+      "type": "site",
+      "alias": [],
+      "description": "zone géographique de chiffre d'affaires"
+    }
+  ],
+  "seconds": 4.1
+}

@@ -17,7 +17,7 @@ wheels/
 enonces/
 
 # Data: corpus symlinks and everything generated (Docling conversions, VLM transcriptions, reports)
-data/
+data/quiz/
 qdrant_storage/
 
 # Tools

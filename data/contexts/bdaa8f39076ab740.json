@@ -1,0 +1,7 @@
+{
+  "document": "03_Production/Gent/Maandrapporten/Productierapport Gent 2025-12.xlsx",
+  "body": "onglet « Productie » · Productierapport · site Gent · december 2025\n| Lijn | Producten | Geproduceerde eenheden | Stilstand (u) | Uitval (%) | OEE (%) |\n|---|---|---|---|---|---|\n| V1 | Ventis D300 | 1494 | 14.7 | 1.4 | 75.2 |\n| V2 | Ventis D450 / D450 Pro | 1402 | 13.4 | 1.3 | 72.3 |\n| Totaal |  | 2896 | 28.1 |  |  |",
+  "model": "qwen3.8-27b",
+  "context": "Cette section présente le tableau de production mensuel du site de Gent. Elle détaille les volumes fabriqués, les arrêts et les indicateurs de performance pour les lignes V1 et V2.",
+  "seconds": 2.5
+}

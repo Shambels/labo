@@ -1,0 +1,25 @@
+{
+  "document": "02_RH/Recrutement/Offres/REC-2026-007 Technico-commercial Hainaut.html",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Mons",
+      "type": "site",
+      "alias": [],
+      "description": "ville de localisation du poste"
+    },
+    {
+      "nom": "Hainaut",
+      "type": "site",
+      "alias": [],
+      "description": "région de développement commercial"
+    },
+    {
+      "nom": "jobs@calorvia.example",
+      "type": "autre",
+      "alias": [],
+      "description": "adresse e-mail de candidature"
+    }
+  ],
+  "seconds": 3.3
+}

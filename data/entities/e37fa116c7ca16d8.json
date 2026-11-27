@@ -1,0 +1,21 @@
+{
+  "document": "02_RH/Recrutement/Offres/REC-2026-011 Accountmanager Limburg.html",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Hasselt",
+      "type": "site",
+      "alias": [],
+      "description": "lieu de travail du poste d'accountmanager"
+    },
+    {
+      "nom": "Limburg",
+      "type": "site",
+      "alias": [
+        "province de Limburg"
+      ],
+      "description": "zone géographique de prospection commerciale"
+    }
+  ],
+  "seconds": 2.5
+}

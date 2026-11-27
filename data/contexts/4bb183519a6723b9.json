@@ -1,0 +1,7 @@
+{
+  "document": "00_Direction/Conseil_administration/PV_signes/PV CA 2026-04-21.pdf",
+  "body": "4. Projet ERP\nLa deuxième recette a donné 94 % de cas de test conformes. La date de mise en production du 1er juin 2026 est confirmée, sous réserve du go/no-go du 18 mai.",
+  "model": "qwen3.8-27b",
+  "context": "Point 4 du procès-verbal du conseil d'administration. Il détaille l'avancement du projet ERP, notamment les résultats de la recette et la date de mise en production.",
+  "seconds": 1.8
+}

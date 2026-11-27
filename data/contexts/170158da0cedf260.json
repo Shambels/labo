@@ -1,0 +1,7 @@
+{
+  "document": "00_Direction/CODIR/2026/2026-05-04 CODIR PV.docx",
+  "body": "Procès-verbal du Comité de direction\n2. Indicateurs de la semaine 18\nSemaine 18, du 27 avril 2026 au 3 mai 2026.\n| **Indicateur** | **Valeur** | **Objectif** |\n| - | - | - |\n| Production Seneffe (pompes à chaleur) | 480 unités | 500 |\n| Production Gand (groupes de ventilation) | 694 unités | 650 |\n| Taux de service (OTIF) | 92,1 % | 95 % |\n| Taux de rebut Seneffe | 1,5 % | < 1,5 % |\n| Accidents avec arrêt de travail | 0 | 0 |\n| Prises de commandes | 2 846 k€ | – |\n| Taux d'absentéisme | 5,3 % | < 5 % |",
+  "model": "qwen3.8-27b",
+  "context": "Cette section présente les indicateurs de performance hebdomadaires, couvrant la production des sites de Seneffe et de Gand ainsi que les taux de service et d'absentéisme.",
+  "seconds": 2.0
+}

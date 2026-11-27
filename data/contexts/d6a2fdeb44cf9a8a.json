@@ -1,0 +1,7 @@
+{
+  "document": "07_IT/Support/README.md",
+  "body": "Support de l'ERP Praxio après l'hypercare\nNiveaux de support\n| Niveau | Qui | Délai de prise en charge |\n| - | - | - |\n| 1 | Utilisateurs clés du service | immédiat |\n| 2 | Support informatique interne (poste 2200) | 4 heures ouvrées |\n| 3 | Intégra Conseil (contrat de maintenance) | 1 jour ouvré, 4 heures pour un incident bloquant |",
+  "model": "qwen3.8-27b",
+  "context": "Cette section détaille les niveaux de support et les délais de prise en charge pour l'ERP Praxio. Elle précise les interlocuteurs à contacter, allant des utilisateurs clés à l'intégrateur Intégra Conseil.",
+  "seconds": 2.0
+}

@@ -1,0 +1,7 @@
+{
+  "document": "01_Finance/Comptabilite/Factures_fournisseurs/2026-02-06 Kompra KG-2026-1047.jpg",
+  "body": "Image\nKompra GmbH  \nIndustriestraße 77, 52070 Aachen, Germany  \nVAT DE 318 774 201  \n\nInvoice no. KG-2026-1047  \nDate 06/02/2026  \nDue date 08/03/2026  \nCustomer Calorvia SA, 5100 Namur, Belgium  \nDelivery Seneffe plant  \n\n| Item   | Description                     | Qty | Unit price | Amount     |\n|--------|----------------------------------|-----|------------|------------|\n| KX-9R  | Rotary compressor R32, 9 kW      | 260 | 312,00     | 81 120,00  |\n| KX-16S | Scroll compressor R32, 16 kW     | 140 | 498,00     | 69 720,00  |\n\nNet amount 150 840,00 EUR  \nVAT 0,00 EUR  \nTotal 150 840,00 EUR  \n\nIntra-community supply: reverse charge (article 196 Directive 2006/112/EC).  \nIBAN DE44 3905 0000 1072 4419 06.\n\nDescription  \nFacture d’achat émise par Kompra GmbH en Allemagne pour Calorvia SA en Belgique, destinée à l’installation de Seneffe. Elle détaille deux types de compresseurs (rotatif et scroll) avec leurs quantités, prix unitaires et montants totaux. Le document inclut les informations fiscales relatives à une livraison intracommunautaire sous régime de reverse charge.",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait correspond à l'intégralité du document, situé dans le dossier des factures fournisseurs. Il détaille l'achat de compresseurs rotatifs et scroll auprès de Kompra GmbH pour l'installation de Seneffe.",
+  "seconds": 3.0
+}

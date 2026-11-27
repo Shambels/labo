@@ -1,0 +1,7 @@
+{
+  "document": "06_Achats/Appel_offres_ERP/Grille evaluation ERP v3.xlsx",
+  "body": "onglet « Coûts » · Coût total sur cinq ans (€)\n| Poste | Praxio | Kerneo | Sylvan Suite |\n|---|---|---|---|\n| Abonnements (5 ans) | 270000 | 295000 | 240000 |\n| Intégration | 410000 | 320000 | 350000 |\n| Total | 680000 | 615000 | 590000 |",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait se trouve dans l'onglet « Coûts » du document. Il détaille le coût total sur cinq ans des éditeurs Praxio, Kerneo et Sylvan Suite, en distinguant les abonnements et l'intégration.",
+  "seconds": 2.4
+}

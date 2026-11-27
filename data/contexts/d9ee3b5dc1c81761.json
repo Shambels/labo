@@ -1,0 +1,7 @@
+{
+  "document": "03_Production/Gent/Veiligheid/Rapport audit circulation SafeWork Consult 2026-01.pdf",
+  "body": "Constats\n- Les blue spots et la limitation à 8 km/h sont en place et respectés (contrôle de 40 trajets).\n- Dans les allées de stockage, les distances de freinage à 8 km/h restent trop longues lorsqu'un piéton surgit entre deux rayonnages.\n- Le marquage des passages piétons est réalisé à 70 %.",
+  "model": "qwen3.8-27b",
+  "context": "La rubrique « Constats » de l'audit de circulation de l'entrepôt de Gand détaille l'état des dispositifs de sécurité et les risques liés aux distances de freinage.",
+  "seconds": 1.8
+}

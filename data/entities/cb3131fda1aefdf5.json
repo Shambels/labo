@@ -1,0 +1,15 @@
+{
+  "document": "10_RSE/Emissions par scope 2025.png",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Calorvia SA",
+      "type": "autre",
+      "alias": [
+        "Calorvia"
+      ],
+      "description": "entreprise émettrice de gaz à effet de serre"
+    }
+  ],
+  "seconds": 2.2
+}

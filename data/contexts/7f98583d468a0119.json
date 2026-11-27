@@ -1,0 +1,7 @@
+{
+  "document": "04_Qualite/Rappel_Aeris12/Liste numeros de serie concernes.xlsx",
+  "body": "onglet « Synthèse »\n| Unités concernées | 214 |\n|---|---|\n| Unités réparées | 211 |\n| Unités introuvables | 3 |\n| Situation au | 31/03/2026 |",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait se trouve dans l'onglet « Synthèse » du classeur de suivi du rappel. Il récapitule le nombre total d'unités concernées, réparées et introuvables à la date du 31 mars 2026.",
+  "seconds": 2.6
+}

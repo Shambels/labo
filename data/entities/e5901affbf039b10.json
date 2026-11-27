@@ -1,0 +1,63 @@
+{
+  "document": "07_IT/Architecture/Schema reseau inter-sites.png",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Gand (usine et entrepôt)",
+      "type": "site",
+      "alias": [],
+      "description": "site industriel et logistique de Calorvia"
+    },
+    {
+      "nom": "Lille (bureau commercial)",
+      "type": "site",
+      "alias": [],
+      "description": "bureau commercial de Calorvia"
+    },
+    {
+      "nom": "Namur (siège)",
+      "type": "site",
+      "alias": [],
+      "description": "siège social central de Calorvia"
+    },
+    {
+      "nom": "salle serveurs",
+      "type": "équipement",
+      "alias": [],
+      "description": "infrastructure informatique du réseau inter-sites"
+    },
+    {
+      "nom": "pare-feu principal",
+      "type": "équipement",
+      "alias": [],
+      "description": "dispositif de sécurité réseau principal"
+    },
+    {
+      "nom": "Herstal (entrepôt)",
+      "type": "site",
+      "alias": [],
+      "description": "site logistique de Calorvia"
+    },
+    {
+      "nom": "Seneffe (usine)",
+      "type": "site",
+      "alias": [],
+      "description": "site industriel de Calorvia"
+    },
+    {
+      "nom": "Internet et services cloud",
+      "type": "autre",
+      "alias": [],
+      "description": "services externes incluant ERP et messagerie"
+    },
+    {
+      "nom": "ERP Praxio",
+      "type": "produit",
+      "alias": [
+        "Praxio"
+      ],
+      "description": "logiciel de gestion d'entreprise cloud"
+    }
+  ],
+  "seconds": 8.5
+}

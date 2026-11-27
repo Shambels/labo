@@ -1,0 +1,43 @@
+{
+  "document": "02_RH/Notes_de_service/2026-06-15 NS-2026-11 Horaires d_été et fermeture collective.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Nadia Benali",
+      "type": "personne",
+      "alias": [],
+      "description": "émettrice de la note de service"
+    },
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [
+        "usine de Seneffe"
+      ],
+      "description": "usine fermée pour fermeture collective"
+    },
+    {
+      "nom": "Gand",
+      "type": "site",
+      "alias": [
+        "site de Gand"
+      ],
+      "description": "site restant ouvert avec équipes réduites"
+    },
+    {
+      "nom": "Herstal",
+      "type": "site",
+      "alias": [
+        "entrepôt de Herstal"
+      ],
+      "description": "entrepôt restant ouvert avec équipes réduites"
+    },
+    {
+      "nom": "Siège",
+      "type": "site",
+      "alias": [],
+      "description": "siège appliquant l'horaire d'été"
+    }
+  ],
+  "seconds": 5.3
+}

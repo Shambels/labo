@@ -1,0 +1,163 @@
+{
+  "document": "00_Direction/CODIR/2025/PV_CODIR_2025-12-01.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Hélène Marchal",
+      "type": "personne",
+      "alias": [
+        "CEO"
+      ],
+      "description": "administratrice déléguée et présidente du comité de direction"
+    },
+    {
+      "nom": "Laurent Dewit",
+      "type": "personne",
+      "alias": [
+        "CFO"
+      ],
+      "description": "directeur financier"
+    },
+    {
+      "nom": "Thomas Lambert",
+      "type": "personne",
+      "alias": [
+        "COO"
+      ],
+      "description": "directeur des opérations"
+    },
+    {
+      "nom": "Nadia Benali",
+      "type": "personne",
+      "alias": [],
+      "description": "directrice des ressources humaines"
+    },
+    {
+      "nom": "Kevin Mertens",
+      "type": "personne",
+      "alias": [],
+      "description": "directeur des systèmes d'information"
+    },
+    {
+      "nom": "Anne Vercammen",
+      "type": "personne",
+      "alias": [],
+      "description": "directrice qualité"
+    },
+    {
+      "nom": "Pieter De Smet",
+      "type": "personne",
+      "alias": [
+        "PDS"
+      ],
+      "description": "directeur du site de Gand"
+    },
+    {
+      "nom": "Pierre-Yves Collard",
+      "type": "personne",
+      "alias": [],
+      "description": "directeur commercial"
+    },
+    {
+      "nom": "Julie Renard",
+      "type": "personne",
+      "alias": [],
+      "description": "secrétaire du comité de direction"
+    },
+    {
+      "nom": "Namur",
+      "type": "site",
+      "alias": [],
+      "description": "lieu de la séance du comité de direction"
+    },
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "site de production de pompes à chaleur"
+    },
+    {
+      "nom": "Gand",
+      "type": "site",
+      "alias": [],
+      "description": "site de production de groupes de ventilation"
+    },
+    {
+      "nom": "Pompes à chaleur",
+      "type": "produit",
+      "alias": [],
+      "description": "produit fabriqué à Seneffe"
+    },
+    {
+      "nom": "Groupes de ventilation",
+      "type": "produit",
+      "alias": [],
+      "description": "produit fabriqué à Gand"
+    },
+    {
+      "nom": "Aéris 12",
+      "type": "produit",
+      "alias": [],
+      "description": "produit faisant l'objet de réclamations"
+    },
+    {
+      "nom": "Praxio Software SAS",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "fournisseur du nouvel ERP"
+    },
+    {
+      "nom": "Intégra Conseil",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "partenaire du projet Atlas"
+    },
+    {
+      "nom": "Valtek Components",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "fournisseur des vannes quatre voies"
+    },
+    {
+      "nom": "Projet Atlas",
+      "type": "projet",
+      "alias": [],
+      "description": "projet de mise en place du nouvel ERP"
+    },
+    {
+      "nom": "ERP Praxio",
+      "type": "produit",
+      "alias": [],
+      "description": "nouvel ERP à mettre en production"
+    },
+    {
+      "nom": "Comité de direction",
+      "type": "instance",
+      "alias": [
+        "CODIR"
+      ],
+      "description": "instance dirigeante de l'entreprise"
+    },
+    {
+      "nom": "Comité de pilotage",
+      "type": "instance",
+      "alias": [
+        "COPIL"
+      ],
+      "description": "instance de suivi du projet Atlas"
+    },
+    {
+      "nom": "Chariots élévateurs",
+      "type": "équipement",
+      "alias": [],
+      "description": "équipements du site de Gand"
+    },
+    {
+      "nom": "Vanne quatre voies",
+      "type": "équipement",
+      "alias": [],
+      "description": "composant défaillant des Aéris 12"
+    }
+  ],
+  "seconds": 18.0
+}

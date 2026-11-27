@@ -1,0 +1,7 @@
+{
+  "document": "06_Achats/Bons_de_livraison/2026-01-20 BL Tolerie Mosane.jpg",
+  "body": "Image\nTôlerie Mosane SRL  \nZoning de Sclaigneaux 14, 5300 Andenne  \nBon de livraison  \n\nBon de livraison  \nBL-TM-26-0061  \nDate  \n20/01/2026  \nLivré à  \nCalorvia SA - Seneffe  \n\n| Réf.   | Désignation                     | Qté |\n|--------|----------------------------------|-----|\n| TG15   | Tôle galvanisée 1,5 mm (tonne)   | 12  |\n| TG20   | Tôle galvanisée 2,0 mm (tonne)   | 2   |\n\nRÉCEPTION  \nSENEFFE  \n\nReçu conforme 20/01  \nR. Dethier  \n\nMerci de vérifier la marchandise à la réception.\n\n---\n\n**Description**  \nIl s’agit d’un bon de livraison imprimé par la Tôlerie Mosane SRL, destiné à Calorvia SA à Seneffe. Le document liste deux références de tôles galvanisées avec leurs quantités respectives en tonnes. En bas, une mention manuscrite confirme la réception conforme le 20/01, signée par R. Dethier, et un encadré indique « RÉCEPTION SENEFFE ».",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait correspond à l'intégralité du bon de livraison émis par la Tôlerie Mosane pour Calorvia SA à Seneffe. Il détaille la livraison de tôles galvanisées et la confirmation de réception signée par R. Dethier.",
+  "seconds": 3.0
+}

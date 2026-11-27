@@ -1,0 +1,7 @@
+{
+  "document": "02_RH/Formation/Plan de formation 2026.xlsx",
+  "body": "onglet « Plan 2026 » · Plan de formation 2026 · lignes 1 à 3\n| Domaine | Formation | Public | Site | Heures | Budget (€) | Trimestre |\n|---|---|---|---|---|---|---|\n| Sécurité | Conduite de chariots élévateurs (recyclage) | Caristes | Gand | 160 | 9600 | T1 |\n| Sécurité | Circulation piétons et chariots | Tout le personnel de l'entrepôt | Gand | 120 | 3200 | T1 |\n| Sécurité | Habilitation électrique BA4/BA5 | Maintenance | Seneffe | 96 | 7800 | T2 |",
+  "model": "qwen3.8-27b",
+  "context": "Cette section du plan de formation détaille les actions de sécurité prévues pour les caristes de Gand et l'équipe de maintenance de Seneffe.",
+  "seconds": 3.2
+}

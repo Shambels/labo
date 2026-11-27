@@ -1,0 +1,7 @@
+{
+  "document": "00_Direction/CODIR/2026/2026-01-12 CODIR PV.docx",
+  "body": "Procès-verbal du Comité de direction\n4. Gand : recommandations de l'audit sécurité\n*Présenté par Pieter De Smet.*\nLe bureau SafeWork Consult a audité la circulation dans l'entrepôt de Gand. Il recommande d'abaisser encore la vitesse dans les allées de stockage, où piétons et chariots se croisent.\nPour rappel, le CODIR du 17 novembre avait limité la vitesse à 8 km/h dans tout l'entrepôt.",
+  "model": "qwen3.8-27b",
+  "context": "Point 4 du procès-verbal, consacré aux recommandations de l'audit sécurité de l'entrepôt de Gand. Il détaille les préconisations du bureau SafeWork Consult concernant la circulation des chariots et des piétons dans les allées de stockage.",
+  "seconds": 2.5
+}

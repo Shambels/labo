@@ -1,0 +1,139 @@
+{
+  "document": "00_Direction/Conseil_administration/PV_signes/PV CA 2025-10-21 signé.pdf",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Jean-François Delcourt",
+      "type": "personne",
+      "alias": [],
+      "description": "Président et administrateur indépendant du conseil"
+    },
+    {
+      "nom": "Hélène Marchal",
+      "type": "personne",
+      "alias": [
+        "CEO"
+      ],
+      "description": "Administratrice déléguée et directrice générale"
+    },
+    {
+      "nom": "Philippe Rasquin",
+      "type": "personne",
+      "alias": [],
+      "description": "Administrateur représentant Rasquin Participations SA"
+    },
+    {
+      "nom": "Valérie Rasquin",
+      "type": "personne",
+      "alias": [],
+      "description": "Administratrice représentant Rasquin Participations SA"
+    },
+    {
+      "nom": "Olivier Thiry",
+      "type": "personne",
+      "alias": [],
+      "description": "Administrateur représentant Mosane Capital"
+    },
+    {
+      "nom": "Martine Claessens",
+      "type": "personne",
+      "alias": [],
+      "description": "Administratrice indépendante"
+    },
+    {
+      "nom": "Dirk Peeters",
+      "type": "personne",
+      "alias": [],
+      "description": "Administrateur excusé à la réunion"
+    },
+    {
+      "nom": "Laurent Dewit",
+      "type": "personne",
+      "alias": [],
+      "description": "Directeur financier de l'entreprise"
+    },
+    {
+      "nom": "Thomas Lambert",
+      "type": "personne",
+      "alias": [],
+      "description": "Directeur des opérations"
+    },
+    {
+      "nom": "Caroline Hendrickx",
+      "type": "personne",
+      "alias": [],
+      "description": "Secrétaire du conseil d'administration"
+    },
+    {
+      "nom": "Namur",
+      "type": "site",
+      "alias": [
+        "siège social"
+      ],
+      "description": "Lieu de la réunion du conseil"
+    },
+    {
+      "nom": "Rasquin Participations SA",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "Actionnaire représenté au conseil d'administration"
+    },
+    {
+      "nom": "Mosane Capital",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "Actionnaire représenté au conseil d'administration"
+    },
+    {
+      "nom": "Gamme standard",
+      "type": "produit",
+      "alias": [],
+      "description": "Gamme de produits avec hausse tarifaire"
+    },
+    {
+      "nom": "Gamme premium",
+      "type": "produit",
+      "alias": [],
+      "description": "Gamme de produits avec hausse tarifaire"
+    },
+    {
+      "nom": "Ligne d'assemblage L4",
+      "type": "équipement",
+      "alias": [],
+      "description": "Quatrième ligne d'assemblage projetée"
+    },
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "Site d'implantation de la ligne L4"
+    },
+    {
+      "nom": "Projet ligne d'assemblage L4",
+      "type": "projet",
+      "alias": [],
+      "description": "Investissement pour la quatrième ligne"
+    },
+    {
+      "nom": "Comité de direction",
+      "type": "instance",
+      "alias": [],
+      "description": "Instance ayant décidé la politique tarifaire"
+    },
+    {
+      "nom": "Conseil d'administration",
+      "type": "instance",
+      "alias": [
+        "CA"
+      ],
+      "description": "Organe de gouvernance de l'entreprise"
+    },
+    {
+      "nom": "Région wallonne",
+      "type": "autre",
+      "alias": [],
+      "description": "Entité offrant des aides à l'investissement"
+    }
+  ],
+  "seconds": 17.2
+}

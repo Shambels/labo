@@ -1,0 +1,19 @@
+{
+  "document": "07_IT/Support/FAQ helpdesk.html",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Praxio",
+      "type": "produit",
+      "alias": [],
+      "description": "logiciel de gestion des opérations"
+    },
+    {
+      "nom": "Atlas",
+      "type": "produit",
+      "alias": [],
+      "description": "espace de l'intranet pour guides utilisateurs"
+    }
+  ],
+  "seconds": 4.0
+}

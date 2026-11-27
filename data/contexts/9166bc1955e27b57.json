@@ -1,0 +1,7 @@
+{
+  "document": "07_IT/Support/Export tickets hypercare 2026-06.csv",
+  "body": "| ticket | date_ouverture | site | module | priorite | statut |\n| - | - | - | - | - | - |\n| ATL-1019 | 2026-06-03 | Namur | Ventes et facturation | basse | clos |\n| ATL-1020 | 2026-06-03 | Seneffe | Finance | haute | clos |\n| ATL-1021 | 2026-06-03 | Namur | Finance | haute | clos |\n| ATL-1022 | 2026-06-03 | Seneffe | Finance | haute | clos |\n| ATL-1023 | 2026-06-03 | Namur | Achats | haute | clos |\n| ATL-1024 | 2026-06-04 | Seneffe | Ventes et facturation | normale | clos |\n",
+  "model": "qwen3.8-27b",
+  "context": "Cet extrait se situe dans la rubrique des tickets hypercare de juin 2026. Il détaille les interventions support informatique des sites de Namur et Seneffe, principalement sur les modules Finance et Ventes et facturation.",
+  "seconds": 2.3
+}

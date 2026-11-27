@@ -1,0 +1,2428 @@
+{
+ "1": {
+  "answer": "**13 599 646,63 € HT** — chiffre d'affaires net facturé de mars 2026 (source : ERP, table VTE_FACT).\n\nDéfinition retenue : total des factures client moins les avoirs (notes de crédit), hors taxes, sur la date de facture (fac_dt) entre le 1er et le 31 mars 2026.\n\n---\n**Comment ce résultat a été obtenu** (journal `t2sql_query_log`, session `starter-run1-q1`)\n\n**q1** · erp (SQL Server) · 1 ligne(s)\n```sql\nSELECT SUM(CASE WHEN FAC_TYPE = 'A' THEN -FAC_MT_HT ELSE FAC_MT_HT END) AS chiffre_affaires_net_ht\nFROM dbo.VTE_FACT\nWHERE FAC_DT >= '2026-03-01' AND FAC_DT < '2026-04-01'\n```",
+  "steps": [
+   {
+    "tool": "get_table_card",
+    "args": {
+     "source": "erp",
+     "table": "VTE_FACT"
+    },
+    "ok": true
+   },
+   {
+    "tool": "execute_sql",
+    "args": {
+     "source": "erp",
+     "sql": "SELECT SUM(CASE WHEN FAC_TYPE = 'A' THEN -FAC_MT_HT ELSE FAC_MT_HT END) AS chiffre_affaires_net_ht\nFROM dbo.VTE_FACT\nWHERE FAC_DT >= '2026-03-01' AND FAC_DT < '2026-04-01'"
+    },
+    "ok": true,
+    "id": "q1",
+    "sql": "SELECT SUM(CASE WHEN FAC_TYPE = 'A' THEN -FAC_MT_HT ELSE FAC_MT_HT END) AS chiffre_affaires_net_ht\nFROM dbo.VTE_FACT\nWHERE FAC_DT >= '2026-03-01' AND FAC_DT < '2026-04-01'",
+    "source": "erp",
+    "row_count": 1,
+    "truncated": false
+   }
+  ],
+  "results": {
+   "q1": {
+    "source": "erp",
+    "sql": "SELECT SUM(CASE WHEN FAC_TYPE = 'A' THEN -FAC_MT_HT ELSE FAC_MT_HT END) AS chiffre_affaires_net_ht\nFROM dbo.VTE_FACT\nWHERE FAC_DT >= '2026-03-01' AND FAC_DT < '2026-04-01'",
+    "columns": [
+     "chiffre_affaires_net_ht"
+    ],
+    "rows": [
+     [
+      13599646.63
+     ]
+    ],
+    "row_count": 1,
+    "truncated": false
+   }
+  },
+  "seconds": 9.9,
+  "error": null,
+  "missing": [],
+  "missing_in_prose": [],
+  "ok": true,
+  "ok_prose": true
+ },
+ "2": {
+  "answer": "Je ne peux pas répondre à cette question avec les données disponibles, et voici pourquoi.\n\n**Ce que j'ai vérifié dans l'ERP :**\n- « Distrinergie SA » (TVA BE0236099757) existe bien, mais uniquement comme **client** (CLI_CLIENT, CL00001). Il n'existe **aucune fiche fournisseur** portant ce nom ni ce numéro de TVA dans FRN_FOURNISSEUR.\n- Les 8 **produits finis** (type PF : pompes à chaleur Aéris et groupes Ventis) n'ont **aucun fournisseur principal** (frn_id_princ = NULL) : ce sont des produits fabriqués en interne, pas achetés.\n- Sur l'ensemble de la période couverte (janv. 2025 – mai 2026), il n'y a **aucune réception fournisseur** (ni commande, ni mouvement de stock de type REC/RET) portant sur un article de type PF. Les produits finis n'entrent en stock que par production (PROD), transfert (TRF) ou reprise (INIT).\n\n**Conclusion :** il n'y a donc **0 unité de produit fini achetée de Distrinergie** de janvier à mai 2026 — mais ce résultat tient au fait que Distrinergie n'est pas un fournisseur dans l'ERP et que les produits finis ne s'achètent pas, ils se fabriquent.\n\nSi vous pensiez à autre chose, précisez :\n- **Distrinergie en tant que client** : voulez-vous les unités de produits finis **vendues** à Distrinergie SA (facturées) sur janv.–mai 2026 ?\n- Ou un **autre fournisseur** (par ex. un article de négoce type PAC acheté à un fournisseur précis) ?\n\nDites-moi la lecture souhaitée et je relance la requête.\n\n---\n**Comment ce résultat a été obtenu** (journal `t2sql_query_log`, session `starter-run1-q2` · 1 requête(s) refusée(s) ou en erreur, corrigée(s) en cours de route)\n\n**q1** · erp (SQL Server) · 1 ligne(s)\n```sql\nSELECT SUM(l.RL_QTE_RECUE) AS unites_recues, SUM(l.RL_QTE_REFUSEE) AS unites_refusees\nFROM dbo.ACH_RECEP_LIG l\nJOIN dbo.ACH_RECEP r ON r.REC_ID = l.REC_ID\nJOIN dbo.ACH_CDE c ON c.AC_ID = r.AC_ID\nJOIN dbo.ART_ARTICLE a ON a.ART_ID = l.ART_ID\nWHERE c.FRN_ID = (SELECT FRN_ID FROM dbo.FRN_FOURNISSEUR WHERE FRN_NOM = 'Distrinergie SA')\n  AND a.ART_TYPE = 'PF'\n  AND r.REC_DT >= '2026-01-01' AND r.REC_DT <= '2026-05-31'\n```\n\n**q2** · erp (SQL Server) · 0 ligne(s)\n```sql\nSELECT c.AC_NUM, c.AC_DT, r.REC_DT, a.ART_CODE, a.ART_LIB, a.ART_TYPE, l.RL_QTE_RECUE, l.RL_QTE_REFUSEE\nFROM dbo.ACH_RECEP_LIG l\nJOIN dbo.ACH_RECEP r ON r.REC_ID = l.REC_ID\nJOIN dbo.ACH_CDE c ON c.AC_ID = r.AC_ID\nJOIN dbo.ART_ARTICLE a ON a.ART_ID = l.ART_ID\nWHERE c.FRN_ID = (SELECT FRN_ID FROM dbo.FRN_FOURNISSEUR WHERE FRN_NOM = 'Distrinergie SA')\nORDER BY r.REC_DT\n```\n\n**q3** · erp (SQL Server) · 0 ligne(s)\n```sql\nSELECT f.FRN_ID, f.FRN_CODE, f.FRN_NOM, f.FRN_TVA, f.FRN_ACTIF\nFROM dbo.FRN_FOURNISSEUR f\nWHERE f.FRN_NOM LIKE '%Distrinergie%'\n```\n\n**q4** · erp (SQL Server) · 1 ligne(s)\n```sql\nSELECT c.CLI_ID, c.CLI_CODE, c.CLI_NOM, c.CLI_TVA\nFROM dbo.CLI_CLIENT c\nWHERE c.CLI_NOM LIKE '%Distrinergie%'\n```\n\n**q5** · erp (SQL Server) · 0 ligne(s)\n```sql\nSELECT f.FRN_ID, f.FRN_CODE, f.FRN_NOM, f.FRN_TVA\nFROM dbo.FRN_FOURNISSEUR f\nWHERE f.FRN_TVA = 'BE0236099757'\n```\n\n**q6** · erp (SQL Server) · 8 ligne(s)\n```sql\nSELECT a.ART_CODE, a.ART_LIB, a.ART_TYPE, a.FRN_ID_PRINC, f.FRN_NOM\nFROM dbo.ART_ARTICLE a\nLEFT JOIN dbo.FRN_FOURNISSEUR f ON f.FRN_ID = a.FRN_ID_PRINC\nWHERE a.ART_TYPE = 'PF'\n```\n\n**q7** · erp (SQL Server) · 1 ligne(s)\n```sql\nSELECT COUNT(*) AS nb_lignes, SUM(CASE WHEN m.MVT_QTE > 0 THEN m.MVT_QTE ELSE 0 END) AS entrees, SUM(CASE WHEN m.MVT_QTE < 0 THEN -m.MVT_QTE ELSE 0 END) AS sorties\nFROM dbo.STK_MVT m\nJOIN dbo.ART_ARTICLE a ON a.ART_ID = m.ART_ID\nWHERE a.ART_TYPE = 'PF'\n  AND m.MVT_TYPE IN ('REC','RET')\n  AND m.MVT_DT >= '2026-01-01' AND m.MVT_DT < '2026-06-01'\n```\n\n**q8** · erp (SQL Server) · 7 ligne(s)\n```sql\nSELECT m.MVT_TYPE, COUNT(*) AS nb, SUM(m.MVT_QTE) AS qte\nFROM dbo.STK_MVT m\nJOIN dbo.ART_ARTICLE a ON a.ART_ID = m.ART_ID\nWHERE a.ART_TYPE = 'PF'\nGROUP BY m.MVT_TYPE\n```\n\n**q9** · erp (SQL Server) · 0 ligne(s)\n```sql\nSELECT f.FRN_ID, f.FRN_NOM, COUNT(*) AS nb_lignes, SUM(l.RL_QTE_RECUE) AS qte_recue\nFROM dbo.ACH_RECEP_LIG l\nJOIN dbo.ACH_RECEP r ON r.REC_ID = l.REC_ID\nJOIN dbo.ACH_CDE c ON c.AC_ID = r.AC_ID\nJOIN dbo.FRN_FOURNISSEUR f ON f.FRN_ID = c.FRN_ID\nJOIN dbo.ART_ARTICLE a ON a.ART_ID = l.ART_ID\nWHERE a.ART_TYPE = 'PF'\nGROUP BY f.FRN_ID, f.FRN_NOM\n```\n\n**q10** · erp (SQL Server) · 8 ligne(s)\n```sql\nSELECT f.FRN_ID, f.FRN_NOM, COUNT(*) AS nb_lignes, SUM(l.RL_QTE_RECUE) AS qte_recue\nFROM dbo.ACH_RECEP_LIG l\nJOIN dbo.ACH_RECEP r ON r.REC_ID = l.REC_ID\nJOIN dbo.ACH_CDE c ON c.AC_ID = r.AC_ID\nJOIN dbo.FRN_FOURNISSEUR f ON f.FRN_ID = c.FRN_ID\nJOIN dbo.ART_ARTICLE a ON a.ART_ID = l.ART_ID\nWHERE a.ART_TYPE = 'NEG'\nGROUP BY f.FRN_ID, f.FRN_NOM\n```\n\n**q11** · erp (SQL Server) · 50 ligne(s)\n```sql\nSELECT a.ART_CODE, a.ART_LIB, a.ART_TYPE, a.FRN_ID_PRINC\nFROM dbo.ART_ARTICLE a\nWHERE a.FRN_ID_PRINC IS NOT NULL\n```\n\n**q12** · erp (SQL Server) · 15 ligne(s)\n```sql\nSELECT f.FRN_ID, f.FRN_NOM, COUNT(*) AS nb_lignes, SUM(l.RL_QTE_RECUE) AS qte_recue\nFROM dbo.ACH_RECEP_LIG l\nJOIN dbo.ACH_RECEP r ON r.REC_ID = l.REC_ID\nJOIN dbo.ACH_CDE c ON c.AC_ID = r.AC_ID\nJOIN dbo.FRN_FOURNISSEUR f ON f.FRN_ID = c.FRN_ID\nGROUP BY f.FRN_ID, f.FRN_NOM\n```\n\n**q13** · erp (SQL Server) · 15 ligne(s)\n```sql\nSELECT a.ART_CODE, a.ART_LIB, a.ART_TYPE, a.FRN_ID_PRINC, f.FRN_NOM\nFROM dbo.ART_ARTICLE a\nLEFT JOIN dbo.FRN_FOURNISSEUR f ON f.FRN_ID = a.FRN_ID_PRINC\nWHERE a.ART_TYPE = 'NEG'\n```\n\n**q14** · erp (SQL Server) · 8 ligne(s)\n```sql\nSELECT a.ART_CODE, a.ART_LIB, a.ART_TYPE, a.FRN_ID_PRINC, f.FRN_NOM\nFROM dbo.ART_ARTICLE a\nLEFT JOIN dbo.FRN_FOURNISSEUR f ON f.FRN_ID = a.FRN_ID_PRINC\nWHERE a.ART_TYPE = 'PF'\n```\n\n**q15** · erp (SQL Server) · 8 ligne(s)\n```sql\nSELECT a.ART_CODE, a.ART_LIB, a.ART_TYPE, a.FRN_ID_PRINC, f.FRN_NOM\nFROM dbo.ART_ARTICLE a\nLEFT JOIN dbo.FRN_FOURNISSEUR f ON f.FRN_ID = a.FRN_ID_PRINC\nWHERE a.ART_TYPE = 'PF'\n```\n\n**q16** · erp (SQL Server) · 8 ligne(s)\n```sql\nSELECT a.ART_CODE, a.ART_LIB, a.ART_TYPE, a.FRN_ID_PRINC, f.FRN_NOM\nFROM dbo.ART_ARTICLE a\nLEFT JOIN dbo.FRN_FOURNISSEUR f ON f.FRN_ID = a.FRN_ID_PRINC\nWHERE a.ART_TYPE = 'PF'\n```",
+  "steps": [
+   {
+    "tool": "find_values",
+    "args": {
+     "source": "erp",
+     "value": "Distrinergie"
+    },
+    "ok": true
+   },
+   {
+    "tool": "get_table_card",
+    "args": {
+     "source": "erp",
+     "table": "FRN_FOURNISSEUR"
+    },
+    "ok": true
+   },
+   {
+    "tool": "get_table_card",
+    "args": {
+     "source": "erp",
+     "table": "ACH_RECEP_LIG"
+    },
+    "ok": true
+   },
+   {
+    "tool": "get_table_card",
+    "args": {
+     "source": "erp",
+     "table": "ACH_RECEP"
+    },
+    "ok": true
+   },
+   {
+    "tool": "get_table_card",
+    "args": {
+     "source": "erp",
+     "table": "ACH_CDE"
+    },
+    "ok": true
+   },
+   {
+    "tool": "get_table_card",
+    "args": {
+     "source": "erp",
+     "table": "ART_ARTICLE"
+    },
+    "ok": true
+   },
+   {
+    "tool": "execute_sql",
+    "args": {
+     "source": "erp",
+     "sql": "SELECT SUM(l.RL_QTE_RECUE) AS unites_recues, SUM(l.RL_QTE_REFUSEE) AS unites_refusees\nFROM dbo.ACH_RECEP_LIG l\nJOIN dbo.ACH_RECEP r ON r.REC_ID = l.REC_ID\nJOIN dbo.ACH_CDE c ON c.AC_ID = r.AC_ID\nJOIN dbo.ART_ARTICLE a ON a.ART_ID = l.ART_ID\nWHERE c.FRN_ID = (SELECT FRN_ID FROM dbo.FRN_FOURNISSEUR WHERE FRN_NOM = 'Distrinergie SA')\n  AND a.ART_TYPE = 'PF'\n  AND r.REC_DT >= '2026-01-01' AND r.REC_DT <= '2026-05-31'"
+    },
+    "ok": true,
+    "id": "q1",
+    "sql": "SELECT SUM(l.RL_QTE_RECUE) AS unites_recues, SUM(l.RL_QTE_REFUSEE) AS unites_refusees\nFROM dbo.ACH_RECEP_LIG l\nJOIN dbo.ACH_RECEP r ON r.REC_ID = l.REC_ID\nJOIN dbo.ACH_CDE c ON c.AC_ID = r.AC_ID\nJOIN dbo.ART_ARTICLE a ON a.ART_ID = l.ART_ID\nWHERE c.FRN_ID = (SELECT FRN_ID FROM dbo.FRN_FOURNISSEUR WHERE FRN_NOM = 'Distrinergie SA')\n  AND a.ART_TYPE = 'PF'\n  AND r.REC_DT >= '2026-01-01' AND r.REC_DT <= '2026-05-31'",
+    "source": "erp",
+    "row_count": 1,
+    "truncated": false
+   },
+   {
+    "tool": "execute_sql",
+    "args": {
+     "source": "erp",
+     "sql": "SELECT c.AC_NUM, c.AC_DT, r.REC_DT, a.ART_CODE, a.ART_LIB, a.ART_TYPE, l.RL_QTE_RECUE, l.RL_QTE_REFUSEE\nFROM dbo.ACH_RECEP_LIG l\nJOIN dbo.ACH_RECEP r ON r.REC_ID = l.REC_ID\nJOIN dbo.ACH_CDE c ON c.AC_ID = r.AC_ID\nJOIN dbo.ART_ARTICLE a ON a.ART_ID = l.ART_ID\nWHERE c.FRN_ID = (SELECT FRN_ID FROM dbo.FRN_FOURNISSEUR WHERE FRN_NOM = 'Distrinergie SA')\nORDER BY r.REC_DT"
+    },
+    "ok": true,
+    "id": "q2",
+    "sql": "SELECT c.AC_NUM, c.AC_DT, r.REC_DT, a.ART_CODE, a.ART_LIB, a.ART_TYPE, l.RL_QTE_RECUE, l.RL_QTE_REFUSEE\nFROM dbo.ACH_RECEP_LIG l\nJOIN dbo.ACH_RECEP r ON r.REC_ID = l.REC_ID\nJOIN dbo.ACH_CDE c ON c.AC_ID = r.AC_ID\nJOIN dbo.ART_ARTICLE a ON a.ART_ID = l.ART_ID\nWHERE c.FRN_ID = (SELECT FRN_ID FROM dbo.FRN_FOURNISSEUR WHERE FRN_NOM = 'Distrinergie SA')\nORDER BY r.REC_DT",
+    "source": "erp",
+    "row_count": 0,
+    "truncated": false
+   },
+   {
+    "tool": "execute_sql",
+    "args": {
+     "source": "erp",
+     "sql": "SELECT f.FRN_ID, f.FRN_CODE, f.FRN_NOM, f.FRN_TVA, f.FRN_ACTIF\nFROM dbo.FRN_FOURNISSEUR f\nWHERE f.FRN_NOM LIKE '%Distrinergie%'"
+    },
+    "ok": true,
+    "id": "q3",
+    "sql": "SELECT f.FRN_ID, f.FRN_CODE, f.FRN_NOM, f.FRN_TVA, f.FRN_ACTIF\nFROM dbo.FRN_FOURNISSEUR f\nWHERE f.FRN_NOM LIKE '%Distrinergie%'",
+    "source": "erp",
+    "row_count": 0,
+    "truncated": false
+   },
+   {
+    "tool": "execute_sql",
+    "args": {
+     "source": "erp",
+     "sql": "SELECT c.CL_ID, c.CLI_CODE, c.CLI_NOM, c.CLI_TVA\nFROM dbo.CLI_CLIENT c\nWHERE c.CLI_NOM LIKE '%Distrinergie%'"
+    },
+    "ok": false,
+    "errors": [
+     "Colonne inconnue : CL_ID. Colonnes proches : CLI_CLIENT.CLI_ID, CLI_CLIENT.CLI_ADR, CLI_CLIENT.CLI_CODE. Lisez la fiche de la table (get_table_card)."
+    ]
+   },
+   {
+    "tool": "execute_sql",
+    "args": {
+     "source": "erp",
+     "sql": "SELECT c.CLI_ID, c.CLI_CODE, c.CLI_NOM, c.CLI_TVA\nFROM dbo.CLI_CLIENT c\nWHERE c.CLI_NOM LIKE '%Distrinergie%'"
+    },
+    "ok": true,
+    "id": "q4",
+    "sql": "SELECT c.CLI_ID, c.CLI_CODE, c.CLI_NOM, c.CLI_TVA\nFROM dbo.CLI_CLIENT c\nWHERE c.CLI_NOM LIKE '%Distrinergie%'",
+    "source": "erp",
+    "row_count": 1,
+    "truncated": false
+   },
+   {
+    "tool": "execute_sql",
+    "args": {
+     "source": "erp",
+     "sql": "SELECT f.FRN_ID, f.FRN_CODE, f.FRN_NOM, f.FRN_TVA\nFROM dbo.FRN_FOURNISSEUR f\nWHERE f.FRN_TVA = 'BE0236099757'"
+    },
+    "ok": true,
+    "id": "q5",
+    "sql": "SELECT f.FRN_ID, f.FRN_CODE, f.FRN_NOM, f.FRN_TVA\nFROM dbo.FRN_FOURNISSEUR f\nWHERE f.FRN_TVA = 'BE0236099757'",
+    "source": "erp",
+    "row_count": 0,
+    "truncated": false
+   },
+   {
+    "tool": "get_table_card",
+    "args": {
+     "source": "erp",
+     "table": "STK_MVT"
+    },
+    "ok": true
+   },
+   {
+    "tool": "execute_sql",
+    "args": {
+     "source": "erp",
+     "sql": "SELECT a.ART_CODE, a.ART_LIB, a.ART_TYPE, a.FRN_ID_PRINC, f.FRN_NOM\nFROM dbo.ART_ARTICLE a\nLEFT JOIN dbo.FRN_FOURNISSEUR f ON f.FRN_ID = a.FRN_ID_PRINC\nWHERE a.ART_TYPE = 'PF'"
+    },
+    "ok": true,
+    "id": "q6",
+    "sql": "SELECT a.ART_CODE, a.ART_LIB, a.ART_TYPE, a.FRN_ID_PRINC, f.FRN_NOM\nFROM dbo.ART_ARTICLE a\nLEFT JOIN dbo.FRN_FOURNISSEUR f ON f.FRN_ID = a.FRN_ID_PRINC\nWHERE a.ART_TYPE = 'PF'",
+    "source": "erp",
+    "row_count": 8,
+    "truncated": false
+   },
+   {
+    "tool": "execute_sql",
+    "args": {
+     "source": "erp",
+     "sql": "SELECT COUNT(*) AS nb_lignes, SUM(CASE WHEN m.MVT_QTE > 0 THEN m.MVT_QTE ELSE 0 END) AS entrees, SUM(CASE WHEN m.MVT_QTE < 0 THEN -m.MVT_QTE ELSE 0 END) AS sorties\nFROM dbo.STK_MVT m\nJOIN dbo.ART_ARTICLE a ON a.ART_ID = m.ART_ID\nWHERE a.ART_TYPE = 'PF'\n  AND m.MVT_TYPE IN ('REC','RET')\n  AND m.MVT_DT >= '2026-01-01' AND m.MVT_DT < '2026-06-01'"
+    },
+    "ok": true,
+    "id": "q7",
+    "sql": "SELECT COUNT(*) AS nb_lignes, SUM(CASE WHEN m.MVT_QTE > 0 THEN m.MVT_QTE ELSE 0 END) AS entrees, SUM(CASE WHEN m.MVT_QTE < 0 THEN -m.MVT_QTE ELSE 0 END) AS sorties\nFROM dbo.STK_MVT m\nJOIN dbo.ART_ARTICLE a ON a.ART_ID = m.ART_ID\nWHERE a.ART_TYPE = 'PF'\n  AND m.MVT_TYPE IN ('REC','RET')\n  AND m.MVT_DT >= '2026-01-01' AND m.MVT_DT < '2026-06-01'",
+    "source": "erp",
+    "row_count": 1,
+    "truncated": false
+   },
+   {
+    "tool": "execute_sql",
+    "args": {
+     "source": "erp",
+     "sql": "SELECT m.MVT_TYPE, COUNT(*) AS nb, SUM(m.MVT_QTE) AS qte\nFROM dbo.STK_MVT m\nJOIN dbo.ART_ARTICLE a ON a.ART_ID = m.ART_ID\nWHERE a.ART_TYPE = 'PF'\nGROUP BY m.MVT_TYPE"
+    },
+    "ok": true,
+    "id": "q8",
+    "sql": "SELECT m.MVT_TYPE, COUNT(*) AS nb, SUM(m.MVT_QTE) AS qte\nFROM dbo.STK_MVT m\nJOIN dbo.ART_ARTICLE a ON a.ART_ID = m.ART_ID\nWHERE a.ART_TYPE = 'PF'\nGROUP BY m.MVT_TYPE",
+    "source": "erp",
+    "row_count": 7,
+    "truncated": false
+   },
+   {
+    "tool": "execute_sql",
+    "args": {
+     "source": "erp",
+     "sql": "SELECT f.FRN_ID, f.FRN_NOM, COUNT(*) AS nb_lignes, SUM(l.RL_QTE_RECUE) AS qte_recue\nFROM dbo.ACH_RECEP_LIG l\nJOIN dbo.ACH_RECEP r ON r.REC_ID = l.REC_ID\nJOIN dbo.ACH_CDE c ON c.AC_ID = r.AC_ID\nJOIN dbo.FRN_FOURNISSEUR f ON f.FRN_ID = c.FRN_ID\nJOIN dbo.ART_ARTICLE a ON a.ART_ID = l.ART_ID\nWHERE a.ART_TYPE = 'PF'\nGROUP BY f.FRN_ID, f.FRN_NOM"
+    },
+    "ok": true,
+    "id": "q9",
+    "sql": "SELECT f.FRN_ID, f.FRN_NOM, COUNT(*) AS nb_lignes, SUM(l.RL_QTE_RECUE) AS qte_recue\nFROM dbo.ACH_RECEP_LIG l\nJOIN dbo.ACH_RECEP r ON r.REC_ID = l.REC_ID\nJOIN dbo.ACH_CDE c ON c.AC_ID = r.AC_ID\nJOIN dbo.FRN_FOURNISSEUR f ON f.FRN_ID = c.FRN_ID\nJOIN dbo.ART_ARTICLE a ON a.ART_ID = l.ART_ID\nWHERE a.ART_TYPE = 'PF'\nGROUP BY f.FRN_ID, f.FRN_NOM",
+    "source": "erp",
+    "row_count": 0,
+    "truncated": false
+   },
+   {
+    "tool": "execute_sql",
+    "args": {
+     "source": "erp",
+     "sql": "SELECT f.FRN_ID, f.FRN_NOM, COUNT(*) AS nb_lignes, SUM(l.RL_QTE_RECUE) AS qte_recue\nFROM dbo.ACH_RECEP_LIG l\nJOIN dbo.ACH_RECEP r ON r.REC_ID = l.REC_ID\nJOIN dbo.ACH_CDE c ON c.AC_ID = r.AC_ID\nJOIN dbo.FRN_FOURNISSEUR f ON f.FRN_ID = c.FRN_ID\nJOIN dbo.ART_ARTICLE a ON a.ART_ID = l.ART_ID\nWHERE a.ART_TYPE = 'NEG'\nGROUP BY f.FRN_ID, f.FRN_NOM"
+    },
+    "ok": true,
+    "id": "q10",
+    "sql": "SELECT f.FRN_ID, f.FRN_NOM, COUNT(*) AS nb_lignes, SUM(l.RL_QTE_RECUE) AS qte_recue\nFROM dbo.ACH_RECEP_LIG l\nJOIN dbo.ACH_RECEP r ON r.REC_ID = l.REC_ID\nJOIN dbo.ACH_CDE c ON c.AC_ID = r.AC_ID\nJOIN dbo.FRN_FOURNISSEUR f ON f.FRN_ID = c.FRN_ID\nJOIN dbo.ART_ARTICLE a ON a.ART_ID = l.ART_ID\nWHERE a.ART_TYPE = 'NEG'\nGROUP BY f.FRN_ID, f.FRN_NOM",
+    "source": "erp",
+    "row_count": 8,
+    "truncated": false
+   },
+   {
+    "tool": "execute_sql",
+    "args": {
+     "source": "erp",
+     "sql": "SELECT a.ART_CODE, a.ART_LIB, a.ART_TYPE, a.FRN_ID_PRINC\nFROM dbo.ART_ARTICLE a\nWHERE a.FRN_ID_PRINC IS NOT NULL"
+    },
+    "ok": true,
+    "id": "q11",
+    "sql": "SELECT a.ART_CODE, a.ART_LIB, a.ART_TYPE, a.FRN_ID_PRINC\nFROM dbo.ART_ARTICLE a\nWHERE a.FRN_ID_PRINC IS NOT NULL",
+    "source": "erp",
+    "row_count": 50,
+    "truncated": false
+   },
+   {
+    "tool": "execute_sql",
+    "args": {
+     "source": "erp",
+     "sql": "SELECT f.FRN_ID, f.FRN_NOM, COUNT(*) AS nb_lignes, SUM(l.RL_QTE_RECUE) AS qte_recue\nFROM dbo.ACH_RECEP_LIG l\nJOIN dbo.ACH_RECEP r ON r.REC_ID = l.REC_ID\nJOIN dbo.ACH_CDE c ON c.AC_ID = r.AC_ID\nJOIN dbo.FRN_FOURNISSEUR f ON f.FRN_ID = c.FRN_ID\nGROUP BY f.FRN_ID, f.FRN_NOM"
+    },
+    "ok": true,
+    "id": "q12",
+    "sql": "SELECT f.FRN_ID, f.FRN_NOM, COUNT(*) AS nb_lignes, SUM(l.RL_QTE_RECUE) AS qte_recue\nFROM dbo.ACH_RECEP_LIG l\nJOIN dbo.ACH_RECEP r ON r.REC_ID = l.REC_ID\nJOIN dbo.ACH_CDE c ON c.AC_ID = r.AC_ID\nJOIN dbo.FRN_FOURNISSEUR f ON f.FRN_ID = c.FRN_ID\nGROUP BY f.FRN_ID, f.FRN_NOM",
+    "source": "erp",
+    "row_count": 15,
+    "truncated": false
+   },
+   {
+    "tool": "execute_sql",
+    "args": {
+     "source": "erp",
+     "sql": "SELECT a.ART_CODE, a.ART_LIB, a.ART_TYPE, a.FRN_ID_PRINC, f.FRN_NOM\nFROM dbo.ART_ARTICLE a\nLEFT JOIN dbo.FRN_FOURNISSEUR f ON f.FRN_ID = a.FRN_ID_PRINC\nWHERE a.ART_TYPE = 'NEG'"
+    },
+    "ok": true,
+    "id": "q13",
+    "sql": "SELECT a.ART_CODE, a.ART_LIB, a.ART_TYPE, a.FRN_ID_PRINC, f.FRN_NOM\nFROM dbo.ART_ARTICLE a\nLEFT JOIN dbo.FRN_FOURNISSEUR f ON f.FRN_ID = a.FRN_ID_PRINC\nWHERE a.ART_TYPE = 'NEG'",
+    "source": "erp",
+    "row_count": 15,
+    "truncated": false
+   },
+   {
+    "tool": "execute_sql",
+    "args": {
+     "source": "erp",
+     "sql": "SELECT a.ART_CODE, a.ART_LIB, a.ART_TYPE, a.FRN_ID_PRINC, f.FRN_NOM\nFROM dbo.ART_ARTICLE a\nLEFT JOIN dbo.FRN_FOURNISSEUR f ON f.FRN_ID = a.FRN_ID_PRINC\nWHERE a.ART_TYPE = 'PF'"
+    },
+    "ok": true,
+    "id": "q14",
+    "sql": "SELECT a.ART_CODE, a.ART_LIB, a.ART_TYPE, a.FRN_ID_PRINC, f.FRN_NOM\nFROM dbo.ART_ARTICLE a\nLEFT JOIN dbo.FRN_FOURNISSEUR f ON f.FRN_ID = a.FRN_ID_PRINC\nWHERE a.ART_TYPE = 'PF'",
+    "source": "erp",
+    "row_count": 8,
+    "truncated": false
+   },
+   {
+    "tool": "execute_sql",
+    "args": {
+     "source": "erp",
+     "sql": "SELECT a.ART_CODE, a.ART_LIB, a.ART_TYPE, a.FRN_ID_PRINC, f.FRN_NOM\nFROM dbo.ART_ARTICLE a\nLEFT JOIN dbo.FRN_FOURNISSEUR f ON f.FRN_ID = a.FRN_ID_PRINC\nWHERE a.ART_TYPE = 'PF'"
+    },
+    "ok": true,
+    "id": "q15",
+    "sql": "SELECT a.ART_CODE, a.ART_LIB, a.ART_TYPE, a.FRN_ID_PRINC, f.FRN_NOM\nFROM dbo.ART_ARTICLE a\nLEFT JOIN dbo.FRN_FOURNISSEUR f ON f.FRN_ID = a.FRN_ID_PRINC\nWHERE a.ART_TYPE = 'PF'",
+    "source": "erp",
+    "row_count": 8,
+    "truncated": false
+   },
+   {
+    "tool": "execute_sql",
+    "args": {
+     "source": "erp",
+     "sql": "SELECT a.ART_CODE, a.ART_LIB, a.ART_TYPE, a.FRN_ID_PRINC, f.FRN_NOM\nFROM dbo.ART_ARTICLE a\nLEFT JOIN dbo.FRN_FOURNISSEUR f ON f.FRN_ID = a.FRN_ID_PRINC\nWHERE a.ART_TYPE = 'PF'"
+    },
+    "ok": true,
+    "id": "q16",
+    "sql": "SELECT a.ART_CODE, a.ART_LIB, a.ART_TYPE, a.FRN_ID_PRINC, f.FRN_NOM\nFROM dbo.ART_ARTICLE a\nLEFT JOIN dbo.FRN_FOURNISSEUR f ON f.FRN_ID = a.FRN_ID_PRINC\nWHERE a.ART_TYPE = 'PF'",
+    "source": "erp",
+    "row_count": 8,
+    "truncated": false
+   }
+  ],
+  "results": {
+   "q1": {
+    "source": "erp",
+    "sql": "SELECT SUM(l.RL_QTE_RECUE) AS unites_recues, SUM(l.RL_QTE_REFUSEE) AS unites_refusees\nFROM dbo.ACH_RECEP_LIG l\nJOIN dbo.ACH_RECEP r ON r.REC_ID = l.REC_ID\nJOIN dbo.ACH_CDE c ON c.AC_ID = r.AC_ID\nJOIN dbo.ART_ARTICLE a ON a.ART_ID = l.ART_ID\nWHERE c.FRN_ID = (SELECT FRN_ID FROM dbo.FRN_FOURNISSEUR WHERE FRN_NOM = 'Distrinergie SA')\n  AND a.ART_TYPE = 'PF'\n  AND r.REC_DT >= '2026-01-01' AND r.REC_DT <= '2026-05-31'",
+    "columns": [
+     "unites_recues",
+     "unites_refusees"
+    ],
+    "rows": [
+     [
+      null,
+      null
+     ]
+    ],
+    "row_count": 1,
+    "truncated": false
+   },
+   "q2": {
+    "source": "erp",
+    "sql": "SELECT c.AC_NUM, c.AC_DT, r.REC_DT, a.ART_CODE, a.ART_LIB, a.ART_TYPE, l.RL_QTE_RECUE, l.RL_QTE_REFUSEE\nFROM dbo.ACH_RECEP_LIG l\nJOIN dbo.ACH_RECEP r ON r.REC_ID = l.REC_ID\nJOIN dbo.ACH_CDE c ON c.AC_ID = r.AC_ID\nJOIN dbo.ART_ARTICLE a ON a.ART_ID = l.ART_ID\nWHERE c.FRN_ID = (SELECT FRN_ID FROM dbo.FRN_FOURNISSEUR WHERE FRN_NOM = 'Distrinergie SA')\nORDER BY r.REC_DT",
+    "columns": [
+     "AC_NUM",
+     "AC_DT",
+     "REC_DT",
+     "ART_CODE",
+     "ART_LIB",
+     "ART_TYPE",
+     "RL_QTE_RECUE",
+     "RL_QTE_REFUSEE"
+    ],
+    "rows": [],
+    "row_count": 0,
+    "truncated": false
+   },
+   "q3": {
+    "source": "erp",
+    "sql": "SELECT f.FRN_ID, f.FRN_CODE, f.FRN_NOM, f.FRN_TVA, f.FRN_ACTIF\nFROM dbo.FRN_FOURNISSEUR f\nWHERE f.FRN_NOM LIKE '%Distrinergie%'",
+    "columns": [
+     "FRN_ID",
+     "FRN_CODE",
+     "FRN_NOM",
+     "FRN_TVA",
+     "FRN_ACTIF"
+    ],
+    "rows": [],
+    "row_count": 0,
+    "truncated": false
+   },
+   "q4": {
+    "source": "erp",
+    "sql": "SELECT c.CLI_ID, c.CLI_CODE, c.CLI_NOM, c.CLI_TVA\nFROM dbo.CLI_CLIENT c\nWHERE c.CLI_NOM LIKE '%Distrinergie%'",
+    "columns": [
+     "CLI_ID",
+     "CLI_CODE",
+     "CLI_NOM",
+     "CLI_TVA"
+    ],
+    "rows": [
+     [
+      1,
+      "CL00001",
+      "Distrinergie SA",
+      "BE0236099757"
+     ]
+    ],
+    "row_count": 1,
+    "truncated": false
+   },
+   "q5": {
+    "source": "erp",
+    "sql": "SELECT f.FRN_ID, f.FRN_CODE, f.FRN_NOM, f.FRN_TVA\nFROM dbo.FRN_FOURNISSEUR f\nWHERE f.FRN_TVA = 'BE0236099757'",
+    "columns": [
+     "FRN_ID",
+     "FRN_CODE",
+     "FRN_NOM",
+     "FRN_TVA"
+    ],
+    "rows": [],
+    "row_count": 0,
+    "truncated": false
+   },
+   "q6": {
+    "source": "erp",
+    "sql": "SELECT a.ART_CODE, a.ART_LIB, a.ART_TYPE, a.FRN_ID_PRINC, f.FRN_NOM\nFROM dbo.ART_ARTICLE a\nLEFT JOIN dbo.FRN_FOURNISSEUR f ON f.FRN_ID = a.FRN_ID_PRINC\nWHERE a.ART_TYPE = 'PF'",
+    "columns": [
+     "ART_CODE",
+     "ART_LIB",
+     "ART_TYPE",
+     "FRN_ID_PRINC",
+     "FRN_NOM"
+    ],
+    "rows": [
+     [
+      "AE06",
+      "Pompe à chaleur Aéris 6",
+      "PF",
+      null,
+      null
+     ],
+     [
+      "AE09",
+      "Pompe à chaleur Aéris 9",
+      "PF",
+      null,
+      null
+     ],
+     [
+      "AE12",
+      "Pompe à chaleur Aéris 12",
+      "PF",
+      null,
+      null
+     ],
+     [
+      "AP16",
+      "Pompe à chaleur Aéris Pro 16",
+      "PF",
+      null,
+      null
+     ],
+     [
+      "AP22",
+      "Pompe à chaleur Aéris Pro 22",
+      "PF",
+      null,
+      null
+     ],
+     [
+      "VD30",
+      "Groupe de ventilation Ventis D300",
+      "PF",
+      null,
+      null
+     ],
+     [
+      "VD45",
+      "Groupe de ventilation Ventis D450",
+      "PF",
+      null,
+      null
+     ],
+     [
+      "VP45",
+      "Groupe de ventilation Ventis D450 Pro",
+      "PF",
+      null,
+      null
+     ]
+    ],
+    "row_count": 8,
+    "truncated": false
+   },
+   "q7": {
+    "source": "erp",
+    "sql": "SELECT COUNT(*) AS nb_lignes, SUM(CASE WHEN m.MVT_QTE > 0 THEN m.MVT_QTE ELSE 0 END) AS entrees, SUM(CASE WHEN m.MVT_QTE < 0 THEN -m.MVT_QTE ELSE 0 END) AS sorties\nFROM dbo.STK_MVT m\nJOIN dbo.ART_ARTICLE a ON a.ART_ID = m.ART_ID\nWHERE a.ART_TYPE = 'PF'\n  AND m.MVT_TYPE IN ('REC','RET')\n  AND m.MVT_DT >= '2026-01-01' AND m.MVT_DT < '2026-06-01'",
+    "columns": [
+     "nb_lignes",
+     "entrees",
+     "sorties"
+    ],
+    "rows": [
+     [
+      0,
+      null,
+      null
+     ]
+    ],
+    "row_count": 1,
+    "truncated": false
+   },
+   "q8": {
+    "source": "erp",
+    "sql": "SELECT m.MVT_TYPE, COUNT(*) AS nb, SUM(m.MVT_QTE) AS qte\nFROM dbo.STK_MVT m\nJOIN dbo.ART_ARTICLE a ON a.ART_ID = m.ART_ID\nWHERE a.ART_TYPE = 'PF'\nGROUP BY m.MVT_TYPE",
+    "columns": [
+     "MVT_TYPE",
+     "nb",
+     "qte"
+    ],
+    "rows": [
+     [
+      "TRF",
+      762,
+      0
+     ],
+     [
+      "EXP",
+      11612,
+      -42058
+     ],
+     [
+      "PROD",
+      544,
+      41810
+     ],
+     [
+      "REB",
+      1,
+      -1
+     ],
+     [
+      "INIT",
+      13,
+      943
+     ],
+     [
+      "INV",
+      5,
+      -1
+     ],
+     [
+      "RCL",
+      16,
+      21
+     ]
+    ],
+    "row_count": 7,
+    "truncated": false
+   },
+   "q9": {
+    "source": "erp",
+    "sql": "SELECT f.FRN_ID, f.FRN_NOM, COUNT(*) AS nb_lignes, SUM(l.RL_QTE_RECUE) AS qte_recue\nFROM dbo.ACH_RECEP_LIG l\nJOIN dbo.ACH_RECEP r ON r.REC_ID = l.REC_ID\nJOIN dbo.ACH_CDE c ON c.AC_ID = r.AC_ID\nJOIN dbo.FRN_FOURNISSEUR f ON f.FRN_ID = c.FRN_ID\nJOIN dbo.ART_ARTICLE a ON a.ART_ID = l.ART_ID\nWHERE a.ART_TYPE = 'PF'\nGROUP BY f.FRN_ID, f.FRN_NOM",
+    "columns": [
+     "FRN_ID",
+     "FRN_NOM",
+     "nb_lignes",
+     "qte_recue"
+    ],
+    "rows": [],
+    "row_count": 0,
+    "truncated": false
+   },
+   "q10": {
+    "source": "erp",
+    "sql": "SELECT f.FRN_ID, f.FRN_NOM, COUNT(*) AS nb_lignes, SUM(l.RL_QTE_RECUE) AS qte_recue\nFROM dbo.ACH_RECEP_LIG l\nJOIN dbo.ACH_RECEP r ON r.REC_ID = l.REC_ID\nJOIN dbo.ACH_CDE c ON c.AC_ID = r.AC_ID\nJOIN dbo.FRN_FOURNISSEUR f ON f.FRN_ID = c.FRN_ID\nJOIN dbo.ART_ARTICLE a ON a.ART_ID = l.ART_ID\nWHERE a.ART_TYPE = 'NEG'\nGROUP BY f.FRN_ID, f.FRN_NOM",
+    "columns": [
+     "FRN_ID",
+     "FRN_NOM",
+     "nb_lignes",
+     "qte_recue"
+    ],
+    "rows": [
+     [
+      15,
+      "Domotherm BV",
+      133,
+      12531
+     ],
+     [
+      3,
+      "Valtek Components Ltd",
+      67,
+      2483
+     ],
+     [
+      6,
+      "Elcora Electronics BV",
+      199,
+      10496
+     ],
+     [
+      7,
+      "Tôlerie Mosane SRL",
+      129,
+      6181
+     ],
+     [
+      10,
+      "Filtrex NV",
+      102,
+      12400
+     ],
+     [
+      5,
+      "Ventiflux GmbH",
+      118,
+      2515
+     ],
+     [
+      14,
+      "Hydrokit SpA",
+      71,
+      11843
+     ],
+     [
+      8,
+      "Polyform EPP NV",
+      315,
+      18123
+     ]
+    ],
+    "row_count": 8,
+    "truncated": false
+   },
+   "q11": {
+    "source": "erp",
+    "sql": "SELECT a.ART_CODE, a.ART_LIB, a.ART_TYPE, a.FRN_ID_PRINC\nFROM dbo.ART_ARTICLE a\nWHERE a.FRN_ID_PRINC IS NOT NULL",
+    "columns": [
+     "ART_CODE",
+     "ART_LIB",
+     "ART_TYPE",
+     "FRN_ID_PRINC"
+    ],
+    "rows": [
+     [
+      "ACC-KH25",
+      "Kit hydraulique 25 l",
+      "NEG",
+      14
+     ],
+     [
+      "ACC-BT50",
+      "Ballon tampon 50 l",
+      "NEG",
+      14
+     ],
+     [
+      "ACC-SEXT",
+      "Sonde extérieure",
+      "NEG",
+      15
+     ],
+     [
+      "ACC-THC",
+      "Thermostat d'ambiance connecté",
+      "NEG",
+      15
+     ],
+     [
+      "ACC-WIFI",
+      "Module Wi-Fi Calorvia Connect",
+      "NEG",
+      6
+     ],
+     [
+      "ACC-SMA",
+      "Support mural antivibratile",
+      "NEG",
+      7
+     ],
+     [
+      "ACC-FG4",
+      "Filtres G4 Ventis (lot de 2)",
+      "NEG",
+      10
+     ],
+     [
+      "ACC-FF7",
+      "Filtres F7 Ventis (lot de 2)",
+      "NEG",
+      10
+     ],
+     [
+      "ACC-BOU",
+      "Bouche d'extraction 125 mm",
+      "NEG",
+      8
+     ],
+     [
+      "ACC-GAI",
+      "Gaine isolée 160 mm (10 m)",
+      "NEG",
+      8
+     ],
+     [
+      "ACC-CPL",
+      "Collecteur plenum 6 piquages",
+      "NEG",
+      8
+     ],
+     [
+      "PDR-CRA",
+      "Carte de régulation Aéris (rechange)",
+      "NEG",
+      6
+     ],
+     [
+      "PDR-CRV",
+      "Carte de régulation Ventis (rechange)",
+      "NEG",
+      6
+     ],
+     [
+      "PDR-VEC",
+      "Ventilateur EC (rechange)",
+      "NEG",
+      5
+     ],
+     [
+      "PDR-V4W",
+      "Vanne quatre voies (rechange)",
+      "NEG",
+      3
+     ],
+     [
+      "CPR-KX06",
+      "Compresseur rotatif KX-06S",
+      "COMP",
+      1
+     ],
+     [
+      "CPR-KX09",
+      "Compresseur rotatif KX-09S",
+      "COMP",
+      1
+     ],
+     [
+      "CPR-KX12",
+      "Compresseur scroll KX-12S",
+      "COMP",
+      1
+     ],
+     [
+      "CPR-KX16",
+      "Compresseur scroll KX-16S",
+      "COMP",
+      1
+     ],
+     [
+      "CPR-NK22",
+      "Compresseur scroll NK-22",
+      "COMP",
+      2
+     ],
+     [
+      "VAN-V4W09",
+      "Vanne quatre voies 9 kW (V4W-09)",
+      "COMP",
+      3
+     ],
+     [
+      "VAN-V4W12",
+      "Vanne quatre voies 12 kW (V4W-12)",
+      "COMP",
+      3
+     ],
+     [
+      "VAN-V4W22",
+      "Vanne quatre voies 22 kW (V4W-22)",
+      "COMP",
+      3
+     ],
+     [
+      "VAN-SV38",
+      "Vanne de service 3/8 (SV-38)",
+      "COMP",
+      3
+     ],
+     [
+      "VAN-DET",
+      "Détendeur électronique",
+      "COMP",
+      3
+     ],
+     [
+      "ECH-PL20",
+      "Échangeur à plaques 20 plaques",
+      "COMP",
+      4
+     ],
+     [
+      "ECH-PL30",
+      "Échangeur à plaques 30 plaques",
+      "COMP",
+      4
+     ],
+     [
+      "ECH-PL50",
+      "Échangeur à plaques 50 plaques",
+      "COMP",
+      4
+     ],
+     [
+      "ECH-EVA",
+      "Évaporateur à ailettes standard",
+      "COMP",
+      4
+     ],
+     [
+      "ECH-EVAP",
+      "Évaporateur à ailettes grand modèle",
+      "COMP",
+      4
+     ],
+     [
+      "ECH-ENT",
+      "Échangeur enthalpique Ventis",
+      "COMP",
+      4
+     ],
+     [
+      "ECH-CF",
+      "Échangeur contre-flux Ventis",
+      "COMP",
+      4
+     ],
+     [
+      "VEN-AX45",
+      "Ventilateur axial EC 450 mm",
+      "COMP",
+      5
+     ],
+     [
+      "VEN-AX63",
+      "Ventilateur axial EC 630 mm",
+      "COMP",
+      5
+     ],
+     [
+      "VEN-RAD",
+      "Moteur radial EC 190 mm",
+      "COMP",
+      5
+     ],
+     [
+      "ELE-CRA",
+      "Carte de régulation Aéris",
+      "COMP",
+      6
+     ],
+     [
+      "ELE-CRV",
+      "Carte de régulation Ventis",
+      "COMP",
+      6
+     ],
+     [
+      "ELE-IHM",
+      "Afficheur tactile",
+      "COMP",
+      6
+     ],
+     [
+      "ELE-CAP",
+      "Kit de capteurs pression et température",
+      "COMP",
+      6
+     ],
+     [
+      "TOL-TG15",
+      "Tôle galvanisée 1,5 mm",
+      "MP",
+      7
+     ],
+     [
+      "TOL-TG20",
+      "Tôle galvanisée 2,0 mm",
+      "MP",
+      7
+     ],
+     [
+      "TOL-EPP3",
+      "Caisson EPP Ventis D300",
+      "COMP",
+      8
+     ],
+     [
+      "TOL-EPP4",
+      "Caisson EPP Ventis D450",
+      "COMP",
+      8
+     ],
+     [
+      "CUI-KT",
+      "Kit tuyauterie cuivre préformé",
+      "COMP",
+      11
+     ],
+     [
+      "FLU-R290",
+      "Fluide frigorigène R290",
+      "MP",
+      9
+     ],
+     [
+      "FIL-G4",
+      "Filtre G4 Ventis",
+      "COMP",
+      10
+     ],
+     [
+      "FIL-F7",
+      "Filtre F7 Ventis",
+      "COMP",
+      10
+     ],
+     [
+      "DIV-VIS",
+      "Kit visserie et colliers",
+      "COMP",
+      12
+     ],
+     [
+      "DIV-EMB",
+      "Emballage carton et palette",
+      "COMP",
+      13
+     ],
+     [
+      "VAN-V4W10",
+      "Vanne quatre voies 10 kW (ancien modèle)",
+      "COMP",
+      16
+     ]
+    ],
+    "row_count": 50,
+    "truncated": false
+   },
+   "q12": {
+    "source": "erp",
+    "sql": "SELECT f.FRN_ID, f.FRN_NOM, COUNT(*) AS nb_lignes, SUM(l.RL_QTE_RECUE) AS qte_recue\nFROM dbo.ACH_RECEP_LIG l\nJOIN dbo.ACH_RECEP r ON r.REC_ID = l.REC_ID\nJOIN dbo.ACH_CDE c ON c.AC_ID = r.AC_ID\nJOIN dbo.FRN_FOURNISSEUR f ON f.FRN_ID = c.FRN_ID\nGROUP BY f.FRN_ID, f.FRN_NOM",
+    "columns": [
+     "FRN_ID",
+     "FRN_NOM",
+     "nb_lignes",
+     "qte_recue"
+    ],
+    "rows": [
+     [
+      15,
+      "Domotherm BV",
+      133,
+      12531
+     ],
+     [
+      9,
+      "Gazinox SA",
+      35,
+      30100
+     ],
+     [
+      3,
+      "Valtek Components Ltd",
+      237,
+      86067
+     ],
+     [
+      12,
+      "Fixalux SA",
+      37,
+      40045
+     ],
+     [
+      6,
+      "Elcora Electronics BV",
+      365,
+      78496
+     ],
+     [
+      7,
+      "Tôlerie Mosane SRL",
+      236,
+      7421.5
+     ],
+     [
+      1,
+      "Kompra GmbH",
+      224,
+      19591
+     ],
+     [
+      10,
+      "Filtrex NV",
+      153,
+      51460
+     ],
+     [
+      4,
+      "Thermaplac SAS",
+      469,
+      63135
+     ],
+     [
+      13,
+      "Cartonnerie Wallonne SA",
+      70,
+      41415
+     ],
+     [
+      5,
+      "Ventiflux GmbH",
+      292,
+      65337
+     ],
+     [
+      2,
+      "Nordkompressor AB",
+      34,
+      1760
+     ],
+     [
+      11,
+      "Cuprotec SA",
+      59,
+      26483
+     ],
+     [
+      14,
+      "Hydrokit SpA",
+      71,
+      11843
+     ],
+     [
+      8,
+      "Polyform EPP NV",
+      450,
+      37966
+     ]
+    ],
+    "row_count": 15,
+    "truncated": false
+   },
+   "q13": {
+    "source": "erp",
+    "sql": "SELECT a.ART_CODE, a.ART_LIB, a.ART_TYPE, a.FRN_ID_PRINC, f.FRN_NOM\nFROM dbo.ART_ARTICLE a\nLEFT JOIN dbo.FRN_FOURNISSEUR f ON f.FRN_ID = a.FRN_ID_PRINC\nWHERE a.ART_TYPE = 'NEG'",
+    "columns": [
+     "ART_CODE",
+     "ART_LIB",
+     "ART_TYPE",
+     "FRN_ID_PRINC",
+     "FRN_NOM"
+    ],
+    "rows": [
+     [
+      "ACC-KH25",
+      "Kit hydraulique 25 l",
+      "NEG",
+      14,
+      "Hydrokit SpA"
+     ],
+     [
+      "ACC-BT50",
+      "Ballon tampon 50 l",
+      "NEG",
+      14,
+      "Hydrokit SpA"
+     ],
+     [
+      "ACC-SEXT",
+      "Sonde extérieure",
+      "NEG",
+      15,
+      "Domotherm BV"
+     ],
+     [
+      "ACC-THC",
+      "Thermostat d'ambiance connecté",
+      "NEG",
+      15,
+      "Domotherm BV"
+     ],
+     [
+      "ACC-WIFI",
+      "Module Wi-Fi Calorvia Connect",
+      "NEG",
+      6,
+      "Elcora Electronics BV"
+     ],
+     [
+      "ACC-SMA",
+      "Support mural antivibratile",
+      "NEG",
+      7,
+      "Tôlerie Mosane SRL"
+     ],
+     [
+      "ACC-FG4",
+      "Filtres G4 Ventis (lot de 2)",
+      "NEG",
+      10,
+      "Filtrex NV"
+     ],
+     [
+      "ACC-FF7",
+      "Filtres F7 Ventis (lot de 2)",
+      "NEG",
+      10,
+      "Filtrex NV"
+     ],
+     [
+      "ACC-BOU",
+      "Bouche d'extraction 125 mm",
+      "NEG",
+      8,
+      "Polyform EPP NV"
+     ],
+     [
+      "ACC-GAI",
+      "Gaine isolée 160 mm (10 m)",
+      "NEG",
+      8,
+      "Polyform EPP NV"
+     ],
+     [
+      "ACC-CPL",
+      "Collecteur plenum 6 piquages",
+      "NEG",
+      8,
+      "Polyform EPP NV"
+     ],
+     [
+      "PDR-CRA",
+      "Carte de régulation Aéris (rechange)",
+      "NEG",
+      6,
+      "Elcora Electronics BV"
+     ],
+     [
+      "PDR-CRV",
+      "Carte de régulation Ventis (rechange)",
+      "NEG",
+      6,
+      "Elcora Electronics BV"
+     ],
+     [
+      "PDR-VEC",
+      "Ventilateur EC (rechange)",
+      "NEG",
+      5,
+      "Ventiflux GmbH"
+     ],
+     [
+      "PDR-V4W",
+      "Vanne quatre voies (rechange)",
+      "NEG",
+      3,
+      "Valtek Components Ltd"
+     ]
+    ],
+    "row_count": 15,
+    "truncated": false
+   },
+   "q14": {
+    "source": "erp",
+    "sql": "SELECT a.ART_CODE, a.ART_LIB, a.ART_TYPE, a.FRN_ID_PRINC, f.FRN_NOM\nFROM dbo.ART_ARTICLE a\nLEFT JOIN dbo.FRN_FOURNISSEUR f ON f.FRN_ID = a.FRN_ID_PRINC\nWHERE a.ART_TYPE = 'PF'",
+    "columns": [
+     "ART_CODE",
+     "ART_LIB",
+     "ART_TYPE",
+     "FRN_ID_PRINC",
+     "FRN_NOM"
+    ],
+    "rows": [
+     [
+      "AE06",
+      "Pompe à chaleur Aéris 6",
+      "PF",
+      null,
+      null
+     ],
+     [
+      "AE09",
+      "Pompe à chaleur Aéris 9",
+      "PF",
+      null,
+      null
+     ],
+     [
+      "AE12",
+      "Pompe à chaleur Aéris 12",
+      "PF",
+      null,
+      null
+     ],
+     [
+      "AP16",
+      "Pompe à chaleur Aéris Pro 16",
+      "PF",
+      null,
+      null
+     ],
+     [
+      "AP22",
+      "Pompe à chaleur Aéris Pro 22",
+      "PF",
+      null,
+      null
+     ],
+     [
+      "VD30",
+      "Groupe de ventilation Ventis D300",
+      "PF",
+      null,
+      null
+     ],
+     [
+      "VD45",
+      "Groupe de ventilation Ventis D450",
+      "PF",
+      null,
+      null
+     ],
+     [
+      "VP45",
+      "Groupe de ventilation Ventis D450 Pro",
+      "PF",
+      null,
+      null
+     ]
+    ],
+    "row_count": 8,
+    "truncated": false
+   },
+   "q15": {
+    "source": "erp",
+    "sql": "SELECT a.ART_CODE, a.ART_LIB, a.ART_TYPE, a.FRN_ID_PRINC, f.FRN_NOM\nFROM dbo.ART_ARTICLE a\nLEFT JOIN dbo.FRN_FOURNISSEUR f ON f.FRN_ID = a.FRN_ID_PRINC\nWHERE a.ART_TYPE = 'PF'",
+    "columns": [
+     "ART_CODE",
+     "ART_LIB",
+     "ART_TYPE",
+     "FRN_ID_PRINC",
+     "FRN_NOM"
+    ],
+    "rows": [
+     [
+      "AE06",
+      "Pompe à chaleur Aéris 6",
+      "PF",
+      null,
+      null
+     ],
+     [
+      "AE09",
+      "Pompe à chaleur Aéris 9",
+      "PF",
+      null,
+      null
+     ],
+     [
+      "AE12",
+      "Pompe à chaleur Aéris 12",
+      "PF",
+      null,
+      null
+     ],
+     [
+      "AP16",
+      "Pompe à chaleur Aéris Pro 16",
+      "PF",
+      null,
+      null
+     ],
+     [
+      "AP22",
+      "Pompe à chaleur Aéris Pro 22",
+      "PF",
+      null,
+      null
+     ],
+     [
+      "VD30",
+      "Groupe de ventilation Ventis D300",
+      "PF",
+      null,
+      null
+     ],
+     [
+      "VD45",
+      "Groupe de ventilation Ventis D450",
+      "PF",
+      null,
+      null
+     ],
+     [
+      "VP45",
+      "Groupe de ventilation Ventis D450 Pro",
+      "PF",
+      null,
+      null
+     ]
+    ],
+    "row_count": 8,
+    "truncated": false
+   },
+   "q16": {
+    "source": "erp",
+    "sql": "SELECT a.ART_CODE, a.ART_LIB, a.ART_TYPE, a.FRN_ID_PRINC, f.FRN_NOM\nFROM dbo.ART_ARTICLE a\nLEFT JOIN dbo.FRN_FOURNISSEUR f ON f.FRN_ID = a.FRN_ID_PRINC\nWHERE a.ART_TYPE = 'PF'",
+    "columns": [
+     "ART_CODE",
+     "ART_LIB",
+     "ART_TYPE",
+     "FRN_ID_PRINC",
+     "FRN_NOM"
+    ],
+    "rows": [
+     [
+      "AE06",
+      "Pompe à chaleur Aéris 6",
+      "PF",
+      null,
+      null
+     ],
+     [
+      "AE09",
+      "Pompe à chaleur Aéris 9",
+      "PF",
+      null,
+      null
+     ],
+     [
+      "AE12",
+      "Pompe à chaleur Aéris 12",
+      "PF",
+      null,
+      null
+     ],
+     [
+      "AP16",
+      "Pompe à chaleur Aéris Pro 16",
+      "PF",
+      null,
+      null
+     ],
+     [
+      "AP22",
+      "Pompe à chaleur Aéris Pro 22",
+      "PF",
+      null,
+      null
+     ],
+     [
+      "VD30",
+      "Groupe de ventilation Ventis D300",
+      "PF",
+      null,
+      null
+     ],
+     [
+      "VD45",
+      "Groupe de ventilation Ventis D450",
+      "PF",
+      null,
+      null
+     ],
+     [
+      "VP45",
+      "Groupe de ventilation Ventis D450 Pro",
+      "PF",
+      null,
+      null
+     ]
+    ],
+    "row_count": 8,
+    "truncated": false
+   }
+  },
+  "seconds": 146.3,
+  "error": null,
+  "missing": [
+   "1230"
+  ],
+  "missing_in_prose": [
+   "1230"
+  ],
+  "ok": false,
+  "ok_prose": false
+ },
+ "3": {
+  "answer": "**Lot V-2544 — Vanne quatre voies 12 kW (V4W-12)** (source : ERP, mouvements de stock)\n\n- **Reçues : 600 pièces** — réception fournisseur RE25-00724 du 19/11/2025 (aucune quantité refusée à la réception).\n- **Retournées au fournisseur : 386 pièces** — mouvement de stock de type RET du 03/12/2025, saisi par QUALITE au titre de la non-conformité **NC-2025-047**.\n\nIl reste donc 214 vannes de ce lot dans le stock. À noter : une réception ultérieure mentionne un « Remplacement gratuit du lot V-2544 (NC-2025-047) » — le lot de remplacement, s'il existe, porte un numéro de lot différent et n'est pas compté ici.\n\n---\n**Comment ce résultat a été obtenu** (journal `t2sql_query_log`, session `starter-run1-q3`)\n\n**q1** · erp (SQL Server) · 1 ligne(s)\n```sql\nSELECT\n  (SELECT SUM(RL_QTE_RECUE) FROM dbo.ACH_RECEP_LIG WHERE RL_LOT = 'V-2544') AS qte_recue,\n  (SELECT SUM(RL_QTE_REFUSEE) FROM dbo.ACH_RECEP_LIG WHERE RL_LOT = 'V-2544') AS qte_refusee_reception,\n  (SELECT SUM(MVT_QTE) FROM dbo.STK_MVT WHERE MVT_LOT = 'V-2544' AND MVT_TYPE = 'RET') AS qte_retour_fournisseur\n```\n\n**q2** · erp (SQL Server) · 2 ligne(s)\n```sql\nSELECT m.MVT_DT, m.MVT_TYPE, m.MVT_QTE, m.MVT_REF, m.MVT_USER, a.ART_LIB\nFROM dbo.STK_MVT m JOIN dbo.ART_ARTICLE a ON a.ART_ID = m.ART_ID\nWHERE m.MVT_LOT = 'V-2544'\nORDER BY m.MVT_DT\n```",
+  "steps": [
+   {
+    "tool": "list_tables",
+    "args": {
+     "source": "erp"
+    },
+    "ok": true
+   },
+   {
+    "tool": "get_table_card",
+    "args": {
+     "source": "erp",
+     "table": "ACH_RECEP_LIG"
+    },
+    "ok": true
+   },
+   {
+    "tool": "get_table_card",
+    "args": {
+     "source": "erp",
+     "table": "ACH_RECEP"
+    },
+    "ok": true
+   },
+   {
+    "tool": "get_table_card",
+    "args": {
+     "source": "erp",
+     "table": "STK_MVT"
+    },
+    "ok": true
+   },
+   {
+    "tool": "get_table_card",
+    "args": {
+     "source": "erp",
+     "table": "ART_ARTICLE"
+    },
+    "ok": true
+   },
+   {
+    "tool": "execute_sql",
+    "args": {
+     "source": "erp",
+     "sql": "SELECT\n  (SELECT SUM(RL_QTE_RECUE) FROM dbo.ACH_RECEP_LIG WHERE RL_LOT = 'V-2544') AS qte_recue,\n  (SELECT SUM(RL_QTE_REFUSEE) FROM dbo.ACH_RECEP_LIG WHERE RL_LOT = 'V-2544') AS qte_refusee_reception,\n  (SELECT SUM(MVT_QTE) FROM dbo.STK_MVT WHERE MVT_LOT = 'V-2544' AND MVT_TYPE = 'RET') AS qte_retour_fournisseur"
+    },
+    "ok": true,
+    "id": "q1",
+    "sql": "SELECT\n  (SELECT SUM(RL_QTE_RECUE) FROM dbo.ACH_RECEP_LIG WHERE RL_LOT = 'V-2544') AS qte_recue,\n  (SELECT SUM(RL_QTE_REFUSEE) FROM dbo.ACH_RECEP_LIG WHERE RL_LOT = 'V-2544') AS qte_refusee_reception,\n  (SELECT SUM(MVT_QTE) FROM dbo.STK_MVT WHERE MVT_LOT = 'V-2544' AND MVT_TYPE = 'RET') AS qte_retour_fournisseur",
+    "source": "erp",
+    "row_count": 1,
+    "truncated": false
+   },
+   {
+    "tool": "execute_sql",
+    "args": {
+     "source": "erp",
+     "sql": "SELECT m.MVT_DT, m.MVT_TYPE, m.MVT_QTE, m.MVT_REF, m.MVT_USER, a.ART_LIB\nFROM dbo.STK_MVT m JOIN dbo.ART_ARTICLE a ON a.ART_ID = m.ART_ID\nWHERE m.MVT_LOT = 'V-2544'\nORDER BY m.MVT_DT"
+    },
+    "ok": true,
+    "id": "q2",
+    "sql": "SELECT m.MVT_DT, m.MVT_TYPE, m.MVT_QTE, m.MVT_REF, m.MVT_USER, a.ART_LIB\nFROM dbo.STK_MVT m JOIN dbo.ART_ARTICLE a ON a.ART_ID = m.ART_ID\nWHERE m.MVT_LOT = 'V-2544'\nORDER BY m.MVT_DT",
+    "source": "erp",
+    "row_count": 2,
+    "truncated": false
+   }
+  ],
+  "results": {
+   "q1": {
+    "source": "erp",
+    "sql": "SELECT\n  (SELECT SUM(RL_QTE_RECUE) FROM dbo.ACH_RECEP_LIG WHERE RL_LOT = 'V-2544') AS qte_recue,\n  (SELECT SUM(RL_QTE_REFUSEE) FROM dbo.ACH_RECEP_LIG WHERE RL_LOT = 'V-2544') AS qte_refusee_reception,\n  (SELECT SUM(MVT_QTE) FROM dbo.STK_MVT WHERE MVT_LOT = 'V-2544' AND MVT_TYPE = 'RET') AS qte_retour_fournisseur",
+    "columns": [
+     "qte_recue",
+     "qte_refusee_reception",
+     "qte_retour_fournisseur"
+    ],
+    "rows": [
+     [
+      600,
+      0,
+      -386
+     ]
+    ],
+    "row_count": 1,
+    "truncated": false
+   },
+   "q2": {
+    "source": "erp",
+    "sql": "SELECT m.MVT_DT, m.MVT_TYPE, m.MVT_QTE, m.MVT_REF, m.MVT_USER, a.ART_LIB\nFROM dbo.STK_MVT m JOIN dbo.ART_ARTICLE a ON a.ART_ID = m.ART_ID\nWHERE m.MVT_LOT = 'V-2544'\nORDER BY m.MVT_DT",
+    "columns": [
+     "MVT_DT",
+     "MVT_TYPE",
+     "MVT_QTE",
+     "MVT_REF",
+     "MVT_USER",
+     "ART_LIB"
+    ],
+    "rows": [
+     [
+      "2025-11-19T10:14:00",
+      "REC",
+      600,
+      "RE25-00724",
+      "RECEPT",
+      "Vanne quatre voies 12 kW (V4W-12)"
+     ],
+     [
+      "2025-12-03T14:00:00",
+      "RET",
+      -386,
+      "NC-2025-047",
+      "QUALITE",
+      "Vanne quatre voies 12 kW (V4W-12)"
+     ]
+    ],
+    "row_count": 2,
+    "truncated": false
+   }
+  },
+  "seconds": 34.0,
+  "error": null,
+  "missing": [],
+  "missing_in_prose": [],
+  "ok": true,
+  "ok_prose": true
+ },
+ "4": {
+  "answer": "**20 compresseurs** manquaient à la livraison Kompra du 3 mars 2026, et ils sont arrivés le **10 mars 2026**.\n\nDétails (source ERP, réceptions fournisseur) :\n- **3 mars 2026** — réception RE26-00147 (BL Kompra LS-0043451), commande PO-2026-11230 : 140 compresseurs reçus sur 160 commandés. Le commentaire signale « 7 palettes sur 8 : 1 palette manquante (20 compresseurs), NC-2026-011 ».\n- **10 mars 2026** — réception RE26-00165 (BL LS-0043479) : les 20 compresseurs manquants sont livrés (lot K2603186), avec le commentaire « Solde de la livraison du 03/03 (palette manquante ) ». La ligne de commande est alors soldée (160/160 reçus).\n\n---\n**Comment ce résultat a été obtenu** (journal `t2sql_query_log`, session `starter-run1-q4`)\n\n**q1** · erp (SQL Server) · 10 ligne(s)\n```sql\nSELECT r.REC_ID, r.REC_NUM, r.REC_DT, r.REC_BL_FRN, r.REC_COMMENT,\n       a.AC_NUM, a.AC_DT, a.AC_DT_LIV_PREV,\n       l.ACL_ID, l.ACL_QTE, l.ACL_QTE_RECUE,\n       rl.RL_QTE_RECUE, rl.RL_QTE_REFUSEE, rl.RL_LOT\nFROM dbo.ACH_RECEP r\nJOIN dbo.ACH_CDE a ON a.AC_ID = r.AC_ID\nLEFT JOIN dbo.ACH_CDE_LIG l ON l.AC_ID = a.AC_ID\nLEFT JOIN dbo.ACH_RECEP_LIG rl ON rl.REC_ID = r.REC_ID AND rl.ACL_ID = l.ACL_ID\nWHERE r.REC_DT = '2026-03-03'\nORDER BY r.REC_ID, l.ACL_NO\n```\n\n**q2** · erp (SQL Server) · 2 ligne(s)\n```sql\nSELECT r.REC_ID, r.REC_NUM, r.REC_DT, r.REC_BL_FRN, r.REC_COMMENT,\n       l.ACL_ID, l.ACL_QTE, l.ACL_QTE_RECUE,\n       rl.RL_QTE_RECUE, rl.RL_QTE_REFUSEE, rl.RL_LOT\nFROM dbo.ACH_RECEP r\nJOIN dbo.ACH_CDE a ON a.AC_ID = r.AC_ID\nLEFT JOIN dbo.ACH_CDE_LIG l ON l.AC_ID = a.AC_ID\nLEFT JOIN dbo.ACH_RECEP_LIG rl ON rl.REC_ID = r.REC_ID AND rl.ACL_ID = l.ACL_ID\nWHERE a.AC_NUM = 'PO-2026-11230'\nORDER BY r.REC_DT, l.ACL_NO\n```",
+  "steps": [
+   {
+    "tool": "find_values",
+    "args": {
+     "source": "erp",
+     "value": "Kompra"
+    },
+    "ok": true
+   },
+   {
+    "tool": "get_table_card",
+    "args": {
+     "source": "erp",
+     "table": "ACH_RECEP"
+    },
+    "ok": true
+   },
+   {
+    "tool": "get_table_card",
+    "args": {
+     "source": "erp",
+     "table": "ACH_RECEP_LIG"
+    },
+    "ok": true
+   },
+   {
+    "tool": "get_table_card",
+    "args": {
+     "source": "erp",
+     "table": "ACH_CDE"
+    },
+    "ok": true
+   },
+   {
+    "tool": "get_table_card",
+    "args": {
+     "source": "erp",
+     "table": "ACH_CDE_LIG"
+    },
+    "ok": true
+   },
+   {
+    "tool": "execute_sql",
+    "args": {
+     "source": "erp",
+     "sql": "SELECT r.REC_ID, r.REC_NUM, r.REC_DT, r.REC_BL_FRN, r.REC_COMMENT,\n       a.AC_NUM, a.AC_DT, a.AC_DT_LIV_PREV,\n       l.ACL_ID, l.ACL_QTE, l.ACL_QTE_RECUE,\n       rl.RL_QTE_RECUE, rl.RL_QTE_REFUSEE, rl.RL_LOT\nFROM dbo.ACH_RECEP r\nJOIN dbo.ACH_CDE a ON a.AC_ID = r.AC_ID\nLEFT JOIN dbo.ACH_CDE_LIG l ON l.AC_ID = a.AC_ID\nLEFT JOIN dbo.ACH_RECEP_LIG rl ON rl.REC_ID = r.REC_ID AND rl.ACL_ID = l.ACL_ID\nWHERE r.REC_DT = '2026-03-03'\nORDER BY r.REC_ID, l.ACL_NO"
+    },
+    "ok": true,
+    "id": "q1",
+    "sql": "SELECT r.REC_ID, r.REC_NUM, r.REC_DT, r.REC_BL_FRN, r.REC_COMMENT,\n       a.AC_NUM, a.AC_DT, a.AC_DT_LIV_PREV,\n       l.ACL_ID, l.ACL_QTE, l.ACL_QTE_RECUE,\n       rl.RL_QTE_RECUE, rl.RL_QTE_REFUSEE, rl.RL_LOT\nFROM dbo.ACH_RECEP r\nJOIN dbo.ACH_CDE a ON a.AC_ID = r.AC_ID\nLEFT JOIN dbo.ACH_CDE_LIG l ON l.AC_ID = a.AC_ID\nLEFT JOIN dbo.ACH_RECEP_LIG rl ON rl.REC_ID = r.REC_ID AND rl.ACL_ID = l.ACL_ID\nWHERE r.REC_DT = '2026-03-03'\nORDER BY r.REC_ID, l.ACL_NO",
+    "source": "erp",
+    "row_count": 10,
+    "truncated": false
+   },
+   {
+    "tool": "execute_sql",
+    "args": {
+     "source": "erp",
+     "sql": "SELECT r.REC_ID, r.REC_NUM, r.REC_DT, r.REC_BL_FRN, r.REC_COMMENT,\n       l.ACL_ID, l.ACL_QTE, l.ACL_QTE_RECUE,\n       rl.RL_QTE_RECUE, rl.RL_QTE_REFUSEE, rl.RL_LOT\nFROM dbo.ACH_RECEP r\nJOIN dbo.ACH_CDE a ON a.AC_ID = r.AC_ID\nLEFT JOIN dbo.ACH_CDE_LIG l ON l.AC_ID = a.AC_ID\nLEFT JOIN dbo.ACH_RECEP_LIG rl ON rl.REC_ID = r.REC_ID AND rl.ACL_ID = l.ACL_ID\nWHERE a.AC_NUM = 'PO-2026-11230'\nORDER BY r.REC_DT, l.ACL_NO"
+    },
+    "ok": true,
+    "id": "q2",
+    "sql": "SELECT r.REC_ID, r.REC_NUM, r.REC_DT, r.REC_BL_FRN, r.REC_COMMENT,\n       l.ACL_ID, l.ACL_QTE, l.ACL_QTE_RECUE,\n       rl.RL_QTE_RECUE, rl.RL_QTE_REFUSEE, rl.RL_LOT\nFROM dbo.ACH_RECEP r\nJOIN dbo.ACH_CDE a ON a.AC_ID = r.AC_ID\nLEFT JOIN dbo.ACH_CDE_LIG l ON l.AC_ID = a.AC_ID\nLEFT JOIN dbo.ACH_RECEP_LIG rl ON rl.REC_ID = r.REC_ID AND rl.ACL_ID = l.ACL_ID\nWHERE a.AC_NUM = 'PO-2026-11230'\nORDER BY r.REC_DT, l.ACL_NO",
+    "source": "erp",
+    "row_count": 2,
+    "truncated": false
+   }
+  ],
+  "results": {
+   "q1": {
+    "source": "erp",
+    "sql": "SELECT r.REC_ID, r.REC_NUM, r.REC_DT, r.REC_BL_FRN, r.REC_COMMENT,\n       a.AC_NUM, a.AC_DT, a.AC_DT_LIV_PREV,\n       l.ACL_ID, l.ACL_QTE, l.ACL_QTE_RECUE,\n       rl.RL_QTE_RECUE, rl.RL_QTE_REFUSEE, rl.RL_LOT\nFROM dbo.ACH_RECEP r\nJOIN dbo.ACH_CDE a ON a.AC_ID = r.AC_ID\nLEFT JOIN dbo.ACH_CDE_LIG l ON l.AC_ID = a.AC_ID\nLEFT JOIN dbo.ACH_RECEP_LIG rl ON rl.REC_ID = r.REC_ID AND rl.ACL_ID = l.ACL_ID\nWHERE r.REC_DT = '2026-03-03'\nORDER BY r.REC_ID, l.ACL_NO",
+    "columns": [
+     "REC_ID",
+     "REC_NUM",
+     "REC_DT",
+     "REC_BL_FRN",
+     "REC_COMMENT",
+     "AC_NUM",
+     "AC_DT",
+     "AC_DT_LIV_PREV",
+     "ACL_ID",
+     "ACL_QTE",
+     "ACL_QTE_RECUE",
+     "RL_QTE_RECUE",
+     "RL_QTE_REFUSEE",
+     "RL_LOT"
+    ],
+    "rows": [
+     [
+      966,
+      "RE26-00147",
+      "2026-03-03",
+      "LS-0043451",
+      "7 palettes sur 8 : 1 palette manquante (20 compresseurs), NC-2026-011",
+      "PO-2026-11230",
+      "2026-02-09",
+      "2026-03-03",
+      2261,
+      160,
+      160,
+      140,
+      0,
+      "K2603185"
+     ],
+     [
+      967,
+      "RE26-00148",
+      "2026-03-03",
+      "BL010339",
+      null,
+      "PO-2026-11244",
+      "2026-02-16",
+      "2026-03-03",
+      2290,
+      20,
+      20,
+      20,
+      0,
+      null
+     ],
+     [
+      967,
+      "RE26-00148",
+      "2026-03-03",
+      "BL010339",
+      null,
+      "PO-2026-11244",
+      "2026-02-16",
+      "2026-03-03",
+      2291,
+      20,
+      20,
+      20,
+      0,
+      null
+     ],
+     [
+      967,
+      "RE26-00148",
+      "2026-03-03",
+      "BL010339",
+      null,
+      "PO-2026-11244",
+      "2026-02-16",
+      "2026-03-03",
+      2292,
+      50,
+      50,
+      50,
+      0,
+      null
+     ],
+     [
+      967,
+      "RE26-00148",
+      "2026-03-03",
+      "BL010339",
+      null,
+      "PO-2026-11244",
+      "2026-02-16",
+      "2026-03-03",
+      2293,
+      300,
+      300,
+      300,
+      0,
+      "EL2603135"
+     ],
+     [
+      967,
+      "RE26-00148",
+      "2026-03-03",
+      "BL010339",
+      null,
+      "PO-2026-11244",
+      "2026-02-16",
+      "2026-03-03",
+      2294,
+      300,
+      300,
+      300,
+      0,
+      "EL2603136"
+     ],
+     [
+      967,
+      "RE26-00148",
+      "2026-03-03",
+      "BL010339",
+      null,
+      "PO-2026-11244",
+      "2026-02-16",
+      "2026-03-03",
+      2295,
+      50,
+      50,
+      50,
+      0,
+      "EL2603137"
+     ],
+     [
+      968,
+      "RE26-00149",
+      "2026-03-03",
+      "BL056042",
+      null,
+      "PO-2026-11272",
+      "2026-02-25",
+      "2026-03-03",
+      2363,
+      20,
+      20,
+      20,
+      0,
+      null
+     ],
+     [
+      968,
+      "RE26-00149",
+      "2026-03-03",
+      "BL056042",
+      null,
+      "PO-2026-11272",
+      "2026-02-25",
+      "2026-03-03",
+      2364,
+      100,
+      100,
+      100,
+      0,
+      null
+     ],
+     [
+      968,
+      "RE26-00149",
+      "2026-03-03",
+      "BL056042",
+      null,
+      "PO-2026-11272",
+      "2026-02-25",
+      "2026-03-03",
+      2365,
+      20,
+      20,
+      20,
+      0,
+      null
+     ]
+    ],
+    "row_count": 10,
+    "truncated": false
+   },
+   "q2": {
+    "source": "erp",
+    "sql": "SELECT r.REC_ID, r.REC_NUM, r.REC_DT, r.REC_BL_FRN, r.REC_COMMENT,\n       l.ACL_ID, l.ACL_QTE, l.ACL_QTE_RECUE,\n       rl.RL_QTE_RECUE, rl.RL_QTE_REFUSEE, rl.RL_LOT\nFROM dbo.ACH_RECEP r\nJOIN dbo.ACH_CDE a ON a.AC_ID = r.AC_ID\nLEFT JOIN dbo.ACH_CDE_LIG l ON l.AC_ID = a.AC_ID\nLEFT JOIN dbo.ACH_RECEP_LIG rl ON rl.REC_ID = r.REC_ID AND rl.ACL_ID = l.ACL_ID\nWHERE a.AC_NUM = 'PO-2026-11230'\nORDER BY r.REC_DT, l.ACL_NO",
+    "columns": [
+     "REC_ID",
+     "REC_NUM",
+     "REC_DT",
+     "REC_BL_FRN",
+     "REC_COMMENT",
+     "ACL_ID",
+     "ACL_QTE",
+     "ACL_QTE_RECUE",
+     "RL_QTE_RECUE",
+     "RL_QTE_REFUSEE",
+     "RL_LOT"
+    ],
+    "rows": [
+     [
+      966,
+      "RE26-00147",
+      "2026-03-03",
+      "LS-0043451",
+      "7 palettes sur 8 : 1 palette manquante (20 compresseurs), NC-2026-011",
+      2261,
+      160,
+      160,
+      140,
+      0,
+      "K2603185"
+     ],
+     [
+      984,
+      "RE26-00165",
+      "2026-03-10",
+      "LS-0043479",
+      "Solde de la livraison du 03/03 (palette manquante)",
+      2261,
+      160,
+      160,
+      20,
+      0,
+      "K2603186"
+     ]
+    ],
+    "row_count": 2,
+    "truncated": false
+   }
+  },
+  "seconds": 38.6,
+  "error": null,
+  "missing": [],
+  "missing_in_prose": [],
+  "ok": true,
+  "ok_prose": true
+ },
+ "5": {
+  "answer": "**Résultat net de l'exercice 2025 : 5 412 000,00 €** (source : compta, écritures VALIDÉES).\n\nDéfinition retenue : produits (comptes de classe 7) moins charges (comptes de classe 6), sur les 12 périodes de l'exercice 2025, en excluant le compte 693000 (affectation du résultat, qui ramènerait le total à zéro).\n\n---\n**Comment ce résultat a été obtenu** (journal `t2sql_query_log`, session `starter-run1-q5`)\n\n**q1** · compta (PostgreSQL) · 1 ligne(s)\n```sql\nSELECT SUM(l.credit - l.debit) AS resultat_net\nFROM public.ligne_ecriture l\nJOIN public.ecriture e ON e.id_ecriture = l.id_ecriture\nJOIN public.periode p ON p.code_periode = e.code_periode\nWHERE e.statut = 'VALIDEE'\n  AND p.code_exercice = '2025'\n  AND left(l.numero_compte, 1) IN ('6', '7')\n  AND l.numero_compte <> '693000'\nLIMIT 2001\n```",
+  "steps": [
+   {
+    "tool": "get_table_card",
+    "args": {
+     "source": "compta",
+     "table": "ligne_ecriture"
+    },
+    "ok": true
+   },
+   {
+    "tool": "get_table_card",
+    "args": {
+     "source": "compta",
+     "table": "ecriture"
+    },
+    "ok": true
+   },
+   {
+    "tool": "get_table_card",
+    "args": {
+     "source": "compta",
+     "table": "periode"
+    },
+    "ok": true
+   },
+   {
+    "tool": "execute_sql",
+    "args": {
+     "source": "compta",
+     "sql": "SELECT SUM(l.credit - l.debit) AS resultat_net\nFROM public.ligne_ecriture l\nJOIN public.ecriture e ON e.id_ecriture = l.id_ecriture\nJOIN public.periode p ON p.code_periode = e.code_periode\nWHERE e.statut = 'VALIDEE'\n  AND p.code_exercice = '2025'\n  AND left(l.numero_compte, 1) IN ('6', '7')\n  AND l.numero_compte <> '693000'"
+    },
+    "ok": true,
+    "id": "q1",
+    "sql": "SELECT SUM(l.credit - l.debit) AS resultat_net\nFROM public.ligne_ecriture l\nJOIN public.ecriture e ON e.id_ecriture = l.id_ecriture\nJOIN public.periode p ON p.code_periode = e.code_periode\nWHERE e.statut = 'VALIDEE'\n  AND p.code_exercice = '2025'\n  AND left(l.numero_compte, 1) IN ('6', '7')\n  AND l.numero_compte <> '693000'\nLIMIT 2001",
+    "source": "compta",
+    "row_count": 1,
+    "truncated": false
+   }
+  ],
+  "results": {
+   "q1": {
+    "source": "compta",
+    "sql": "SELECT SUM(l.credit - l.debit) AS resultat_net\nFROM public.ligne_ecriture l\nJOIN public.ecriture e ON e.id_ecriture = l.id_ecriture\nJOIN public.periode p ON p.code_periode = e.code_periode\nWHERE e.statut = 'VALIDEE'\n  AND p.code_exercice = '2025'\n  AND left(l.numero_compte, 1) IN ('6', '7')\n  AND l.numero_compte <> '693000'\nLIMIT 2001",
+    "columns": [
+     "resultat_net"
+    ],
+    "rows": [
+     [
+      5412000
+     ]
+    ],
+    "row_count": 1,
+    "truncated": false
+   }
+  },
+  "seconds": 19.0,
+  "error": null,
+  "missing": [],
+  "missing_in_prose": [],
+  "ok": true,
+  "ok_prose": true
+ },
+ "6": {
+  "answer": "**Mars 2026 (source : compta, écritures VALIDÉES, période 2026-03)**\n\n- **EBITDA : 1 278 366,78 €**\n- **Marge d'EBITDA : 9,40 %** (sur un chiffre d'affaires de 13 599 646,63 €)\n\nDéfinition retenue : EBITDA = résultat d'exploitation avant amortissements et provisions, soit la somme (crédit − débit) des comptes 60, 61, 62, 64 et 70 à 74 ; la marge est le rapport de cet EBITDA sur les comptes 70 (chiffre d'affaires). Sont exclus les comptes 63 (amortissements/provisions), 65 (intérêts, frais bancaires), 66, 67 (impôts) et 69.\n\n---\n**Comment ce résultat a été obtenu** (journal `t2sql_query_log`, session `starter-run1-q6`)\n\n**q1** · compta (PostgreSQL) · 1 ligne(s)\n```sql\nSELECT SUM(l.credit - l.debit) FILTER (WHERE left(l.numero_compte, 2) IN ('60','61','62','64','70','71','72','73','74')) AS ebitda,\n       SUM(l.credit - l.debit) FILTER (WHERE left(l.numero_compte, 2) = '70') AS chiffre_affaires\nFROM public.ligne_ecriture l JOIN public.ecriture e ON e.id_ecriture = l.id_ecriture\nWHERE e.statut = 'VALIDEE' AND e.code_periode = '2026-03'\nLIMIT 2001\n```\n\n**q2** · compta (PostgreSQL) · 1 ligne(s)\n```sql\nSELECT 1278366.78 / 13599646.63 * 100 AS marge_ebitda_pct\nLIMIT 2001\n```",
+  "steps": [
+   {
+    "tool": "get_table_card",
+    "args": {
+     "source": "compta",
+     "table": "ligne_ecriture"
+    },
+    "ok": true
+   },
+   {
+    "tool": "get_table_card",
+    "args": {
+     "source": "compta",
+     "table": "ecriture"
+    },
+    "ok": true
+   },
+   {
+    "tool": "execute_sql",
+    "args": {
+     "source": "compta",
+     "sql": "SELECT SUM(l.credit - l.debit) FILTER (WHERE left(l.numero_compte, 2) IN ('60','61','62','64','70','71','72','73','74')) AS ebitda,\n       SUM(l.credit - l.debit) FILTER (WHERE left(l.numero_compte, 2) = '70') AS chiffre_affaires\nFROM public.ligne_ecriture l JOIN public.ecriture e ON e.id_ecriture = l.id_ecriture\nWHERE e.statut = 'VALIDEE' AND e.code_periode = '2026-03'"
+    },
+    "ok": true,
+    "id": "q1",
+    "sql": "SELECT SUM(l.credit - l.debit) FILTER (WHERE left(l.numero_compte, 2) IN ('60','61','62','64','70','71','72','73','74')) AS ebitda,\n       SUM(l.credit - l.debit) FILTER (WHERE left(l.numero_compte, 2) = '70') AS chiffre_affaires\nFROM public.ligne_ecriture l JOIN public.ecriture e ON e.id_ecriture = l.id_ecriture\nWHERE e.statut = 'VALIDEE' AND e.code_periode = '2026-03'\nLIMIT 2001",
+    "source": "compta",
+    "row_count": 1,
+    "truncated": false
+   },
+   {
+    "tool": "execute_sql",
+    "args": {
+     "source": "compta",
+     "sql": "SELECT 1278366.78 / 13599646.63 * 100 AS marge_ebitda_pct"
+    },
+    "ok": true,
+    "id": "q2",
+    "sql": "SELECT 1278366.78 / 13599646.63 * 100 AS marge_ebitda_pct\nLIMIT 2001",
+    "source": "compta",
+    "row_count": 1,
+    "truncated": false
+   }
+  ],
+  "results": {
+   "q1": {
+    "source": "compta",
+    "sql": "SELECT SUM(l.credit - l.debit) FILTER (WHERE left(l.numero_compte, 2) IN ('60','61','62','64','70','71','72','73','74')) AS ebitda,\n       SUM(l.credit - l.debit) FILTER (WHERE left(l.numero_compte, 2) = '70') AS chiffre_affaires\nFROM public.ligne_ecriture l JOIN public.ecriture e ON e.id_ecriture = l.id_ecriture\nWHERE e.statut = 'VALIDEE' AND e.code_periode = '2026-03'\nLIMIT 2001",
+    "columns": [
+     "ebitda",
+     "chiffre_affaires"
+    ],
+    "rows": [
+     [
+      1278366.78,
+      13599646.63
+     ]
+    ],
+    "row_count": 1,
+    "truncated": false
+   },
+   "q2": {
+    "source": "compta",
+    "sql": "SELECT 1278366.78 / 13599646.63 * 100 AS marge_ebitda_pct\nLIMIT 2001",
+    "columns": [
+     "marge_ebitda_pct"
+    ],
+    "rows": [
+     [
+      9.399999976322913
+     ]
+    ],
+    "row_count": 1,
+    "truncated": false
+   }
+  },
+  "seconds": 22.9,
+  "error": null,
+  "missing": [],
+  "missing_in_prose": [],
+  "ok": true,
+  "ok_prose": true
+ },
+ "7": {
+  "answer": "**3 310 589,37 €** d'amortissements ont été comptabilisés en 2025 (source : compta).\n\nDéfinition retenue : dotations aux amortissements du compte 630000 (débit moins crédit), sur les écritures VALIDÉES des périodes 2025-01 à 2025-12.\n\n---\n**Comment ce résultat a été obtenu** (journal `t2sql_query_log`, session `starter-run1-q7`)\n\n**q1** · compta (PostgreSQL) · 1 ligne(s)\n```sql\nSELECT SUM(l.debit - l.credit) AS amortissements\nFROM public.ligne_ecriture l\nJOIN public.ecriture e ON e.id_ecriture = l.id_ecriture\nWHERE e.statut = 'VALIDEE'\n  AND l.numero_compte = '630000'\n  AND e.code_periode LIKE '2025-%'\nLIMIT 2001\n```",
+  "steps": [
+   {
+    "tool": "get_table_card",
+    "args": {
+     "source": "compta",
+     "table": "ligne_ecriture"
+    },
+    "ok": true
+   },
+   {
+    "tool": "get_table_card",
+    "args": {
+     "source": "compta",
+     "table": "ecriture"
+    },
+    "ok": true
+   },
+   {
+    "tool": "execute_sql",
+    "args": {
+     "source": "compta",
+     "sql": "SELECT SUM(l.debit - l.credit) AS amortissements\nFROM public.ligne_ecriture l\nJOIN public.ecriture e ON e.id_ecriture = l.id_ecriture\nWHERE e.statut = 'VALIDEE'\n  AND l.numero_compte = '630000'\n  AND e.code_periode LIKE '2025-%'"
+    },
+    "ok": true,
+    "id": "q1",
+    "sql": "SELECT SUM(l.debit - l.credit) AS amortissements\nFROM public.ligne_ecriture l\nJOIN public.ecriture e ON e.id_ecriture = l.id_ecriture\nWHERE e.statut = 'VALIDEE'\n  AND l.numero_compte = '630000'\n  AND e.code_periode LIKE '2025-%'\nLIMIT 2001",
+    "source": "compta",
+    "row_count": 1,
+    "truncated": false
+   }
+  ],
+  "results": {
+   "q1": {
+    "source": "compta",
+    "sql": "SELECT SUM(l.debit - l.credit) AS amortissements\nFROM public.ligne_ecriture l\nJOIN public.ecriture e ON e.id_ecriture = l.id_ecriture\nWHERE e.statut = 'VALIDEE'\n  AND l.numero_compte = '630000'\n  AND e.code_periode LIKE '2025-%'\nLIMIT 2001",
+    "columns": [
+     "amortissements"
+    ],
+    "rows": [
+     [
+      3310589.37
+     ]
+    ],
+    "row_count": 1,
+    "truncated": false
+   }
+  },
+  "seconds": 13.3,
+  "error": null,
+  "missing": [],
+  "missing_in_prose": [],
+  "ok": true,
+  "ok_prose": true
+ },
+ "8": {
+  "answer": "**Effectif sous contrat au 31/05/2026 : 609 personnes au total**, réparti par site (source : paie, table contracts) :\n\n| Site | Personnes |\n|---|---|\n| SENEFFE | 287 |\n| GENT | 190 |\n| NAMUR | 126 |\n| HERSTAL | 6 |\n\nDéfinition retenue : nombre de travailleurs distincts (employee_id) dont une ligne de contrat couvre la date du 31/05/2026 (start_date ≤ 31/05/2026 et end_date vide ou ≥ 31/05/2026), le site étant celui du département du contrat.\n\n---\n**Comment ce résultat a été obtenu** (journal `t2sql_query_log`, session `starter-run1-q8`)\n\n**q1** · paie (PostgreSQL) · 4 ligne(s)\n```sql\nSELECT d.site_code, COUNT(DISTINCT c.employee_id) AS personnes\nFROM public.contracts c\nJOIN public.departments d ON d.department_code = c.department_code\nWHERE c.start_date <= DATE '2026-05-31'\n  AND (c.end_date IS NULL OR c.end_date >= DATE '2026-05-31')\nGROUP BY d.site_code\nORDER BY d.site_code\nLIMIT 2001\n```",
+  "steps": [
+   {
+    "tool": "get_table_card",
+    "args": {
+     "source": "paie",
+     "table": "contracts"
+    },
+    "ok": true
+   },
+   {
+    "tool": "get_table_card",
+    "args": {
+     "source": "paie",
+     "table": "departments"
+    },
+    "ok": true
+   },
+   {
+    "tool": "execute_sql",
+    "args": {
+     "source": "paie",
+     "sql": "SELECT d.site_code, COUNT(DISTINCT c.employee_id) AS personnes\nFROM public.contracts c\nJOIN public.departments d ON d.department_code = c.department_code\nWHERE c.start_date <= DATE '2026-05-31'\n  AND (c.end_date IS NULL OR c.end_date >= DATE '2026-05-31')\nGROUP BY d.site_code\nORDER BY d.site_code"
+    },
+    "ok": true,
+    "id": "q1",
+    "sql": "SELECT d.site_code, COUNT(DISTINCT c.employee_id) AS personnes\nFROM public.contracts c\nJOIN public.departments d ON d.department_code = c.department_code\nWHERE c.start_date <= DATE '2026-05-31'\n  AND (c.end_date IS NULL OR c.end_date >= DATE '2026-05-31')\nGROUP BY d.site_code\nORDER BY d.site_code\nLIMIT 2001",
+    "source": "paie",
+    "row_count": 4,
+    "truncated": false
+   }
+  ],
+  "results": {
+   "q1": {
+    "source": "paie",
+    "sql": "SELECT d.site_code, COUNT(DISTINCT c.employee_id) AS personnes\nFROM public.contracts c\nJOIN public.departments d ON d.department_code = c.department_code\nWHERE c.start_date <= DATE '2026-05-31'\n  AND (c.end_date IS NULL OR c.end_date >= DATE '2026-05-31')\nGROUP BY d.site_code\nORDER BY d.site_code\nLIMIT 2001",
+    "columns": [
+     "site_code",
+     "personnes"
+    ],
+    "rows": [
+     [
+      "GENT",
+      190
+     ],
+     [
+      "HERSTAL",
+      6
+     ],
+     [
+      "NAMUR",
+      126
+     ],
+     [
+      "SENEFFE",
+      287
+     ]
+    ],
+    "row_count": 4,
+    "truncated": false
+   }
+  },
+  "seconds": 16.7,
+  "error": null,
+  "missing": [],
+  "missing_in_prose": [],
+  "ok": true,
+  "ok_prose": true
+ },
+ "9": {
+  "answer": "**12 jours** d'absence pour accident du travail (code ACC) sur le site de Gand (GENT) en novembre 2025, du 13/11 au 28/11 (source : paie, prestations journalières).\n\nDéfinition retenue : nombre de lignes de prestation journalière avec absence_code = 'ACC' pour des employés rattachés à un département du site GENT, sur la période du 01/11 au 30/11/2025.\n\n---\n**Comment ce résultat a été obtenu** (journal `t2sql_query_log`, session `starter-run1-q9`)\n\n**q1** · paie (PostgreSQL) · 1 ligne(s)\n```sql\nSELECT COUNT(*) AS jours, MIN(t.work_date) AS debut, MAX(t.work_date) AS fin\nFROM public.timesheets t\nJOIN public.contracts c ON c.employee_id = t.employee_id\nJOIN public.departments d ON d.department_code = c.department_code\nWHERE t.absence_code = 'ACC'\n  AND d.site_code = 'GENT'\n  AND t.work_date >= DATE '2025-11-01'\n  AND t.work_date <= DATE '2025-11-30'\nLIMIT 2001\n```",
+  "steps": [
+   {
+    "tool": "get_table_card",
+    "args": {
+     "source": "paie",
+     "table": "timesheets"
+    },
+    "ok": true
+   },
+   {
+    "tool": "get_table_card",
+    "args": {
+     "source": "paie",
+     "table": "employees"
+    },
+    "ok": true
+   },
+   {
+    "tool": "get_table_card",
+    "args": {
+     "source": "paie",
+     "table": "contracts"
+    },
+    "ok": true
+   },
+   {
+    "tool": "get_table_card",
+    "args": {
+     "source": "paie",
+     "table": "departments"
+    },
+    "ok": true
+   },
+   {
+    "tool": "execute_sql",
+    "args": {
+     "source": "paie",
+     "sql": "SELECT COUNT(*) AS jours, MIN(t.work_date) AS debut, MAX(t.work_date) AS fin\nFROM public.timesheets t\nJOIN public.contracts c ON c.employee_id = t.employee_id\nJOIN public.departments d ON d.department_code = c.department_code\nWHERE t.absence_code = 'ACC'\n  AND d.site_code = 'GENT'\n  AND t.work_date >= DATE '2025-11-01'\n  AND t.work_date <= DATE '2025-11-30'"
+    },
+    "ok": true,
+    "id": "q1",
+    "sql": "SELECT COUNT(*) AS jours, MIN(t.work_date) AS debut, MAX(t.work_date) AS fin\nFROM public.timesheets t\nJOIN public.contracts c ON c.employee_id = t.employee_id\nJOIN public.departments d ON d.department_code = c.department_code\nWHERE t.absence_code = 'ACC'\n  AND d.site_code = 'GENT'\n  AND t.work_date >= DATE '2025-11-01'\n  AND t.work_date <= DATE '2025-11-30'\nLIMIT 2001",
+    "source": "paie",
+    "row_count": 1,
+    "truncated": false
+   }
+  ],
+  "results": {
+   "q1": {
+    "source": "paie",
+    "sql": "SELECT COUNT(*) AS jours, MIN(t.work_date) AS debut, MAX(t.work_date) AS fin\nFROM public.timesheets t\nJOIN public.contracts c ON c.employee_id = t.employee_id\nJOIN public.departments d ON d.department_code = c.department_code\nWHERE t.absence_code = 'ACC'\n  AND d.site_code = 'GENT'\n  AND t.work_date >= DATE '2025-11-01'\n  AND t.work_date <= DATE '2025-11-30'\nLIMIT 2001",
+    "columns": [
+     "jours",
+     "debut",
+     "fin"
+    ],
+    "rows": [
+     [
+      12,
+      "2025-11-13",
+      "2025-11-28"
+     ]
+    ],
+    "row_count": 1,
+    "truncated": false
+   }
+  },
+  "seconds": 20.1,
+  "error": null,
+  "missing": [],
+  "missing_in_prose": [],
+  "ok": true,
+  "ok_prose": true
+ },
+ "10": {
+  "answer": "**823 jours de télétravail** au total sur la période, dont :\n- **292 jours** en avril 2026\n- **531 jours** en mai 2026\n\nSource : paie, table `timesheets`. Définition retenue : chaque ligne de prestation journalière avec `work_location = 'TELE'` compte pour un jour de télétravail (une ligne = une personne un jour ouvré).\n\n---\n**Comment ce résultat a été obtenu** (journal `t2sql_query_log`, session `starter-run1-q10`)\n\n**q1** · paie (PostgreSQL) · 2 ligne(s)\n```sql\nSELECT to_char(work_date, 'YYYY-MM') AS mois, COUNT(*) AS jours_teletravail\nFROM public.timesheets\nWHERE work_location = 'TELE'\n  AND work_date >= DATE '2026-04-01' AND work_date <= DATE '2026-05-31'\nGROUP BY to_char(work_date, 'YYYY-MM')\nORDER BY mois\nLIMIT 2001\n```",
+  "steps": [
+   {
+    "tool": "get_table_card",
+    "args": {
+     "source": "paie",
+     "table": "timesheets"
+    },
+    "ok": true
+   },
+   {
+    "tool": "execute_sql",
+    "args": {
+     "source": "paie",
+     "sql": "SELECT to_char(work_date, 'YYYY-MM') AS mois, COUNT(*) AS jours_teletravail\nFROM public.timesheets\nWHERE work_location = 'TELE'\n  AND work_date >= DATE '2026-04-01' AND work_date <= DATE '2026-05-31'\nGROUP BY to_char(work_date, 'YYYY-MM')\nORDER BY mois"
+    },
+    "ok": true,
+    "id": "q1",
+    "sql": "SELECT to_char(work_date, 'YYYY-MM') AS mois, COUNT(*) AS jours_teletravail\nFROM public.timesheets\nWHERE work_location = 'TELE'\n  AND work_date >= DATE '2026-04-01' AND work_date <= DATE '2026-05-31'\nGROUP BY to_char(work_date, 'YYYY-MM')\nORDER BY mois\nLIMIT 2001",
+    "source": "paie",
+    "row_count": 2,
+    "truncated": false
+   }
+  ],
+  "results": {
+   "q1": {
+    "source": "paie",
+    "sql": "SELECT to_char(work_date, 'YYYY-MM') AS mois, COUNT(*) AS jours_teletravail\nFROM public.timesheets\nWHERE work_location = 'TELE'\n  AND work_date >= DATE '2026-04-01' AND work_date <= DATE '2026-05-31'\nGROUP BY to_char(work_date, 'YYYY-MM')\nORDER BY mois\nLIMIT 2001",
+    "columns": [
+     "mois",
+     "jours_teletravail"
+    ],
+    "rows": [
+     [
+      "2026-04",
+      292
+     ],
+     [
+      "2026-05",
+      531
+     ]
+    ],
+    "row_count": 2,
+    "truncated": false
+   }
+  },
+  "seconds": 12.0,
+  "error": null,
+  "missing": [],
+  "missing_in_prose": [],
+  "ok": true,
+  "ok_prose": true
+ },
+ "11": {
+  "answer": "C'est confirmé : les factures au statut **COMPTA** (transférées en comptabilité) totalisent exactement **10 947 075,29 €**, soit le montant du journal VEN.\n\n**Réponse : non, les deux chiffres ne sont pas les mêmes pour mai 2026.**\n\n- **ERP** (factures − avoirs, sur date de facture) : **11 299 581,08 € HT**\n- **Comptabilité** (comptes 70, écritures validées, période 2026-05) : **10 947 075,29 € HT**\n- **Écart : 352 495,79 €**\n\nL'écart s'explique presque entièrement par les factures au statut **EMISE** dans l'ERP : émises en mai mais pas encore transférées en comptabilité, elles totalisent **352 505,79 €**. La différence résiduelle de **10,00 €** (352 505,79 − 352 495,79) est minime et peut provenir d'un avoir ou d'une écriture de régularisation.\n\nEn résumé : le CA comptable de mai correspond exactement aux factures ERP déjà transférées (statut COMPTA) ; les 352,5 k€ de factures encore en statut EMISE n'ont pas encore été comptabilisées.\n\n---\n**Comment ce résultat a été obtenu** (journal `t2sql_query_log`, session `starter-run1-q11`)\n\n**q1** · erp (SQL Server) · 1 ligne(s)\n```sql\nSELECT SUM(CASE WHEN fac_type = 'A' THEN -fac_mt_ht ELSE fac_mt_ht END) AS ca_erp\nFROM dbo.vte_fact\nWHERE fac_dt >= '2026-05-01' AND fac_dt < '2026-06-01'\n```\n\n**q2** · compta (PostgreSQL) · 1 ligne(s)\n```sql\nSELECT SUM(l.credit - l.debit) AS ca_compta\nFROM public.ligne_ecriture l JOIN public.ecriture e ON e.id_ecriture = l.id_ecriture\nWHERE e.statut = 'VALIDEE' AND l.numero_compte LIKE '70%' AND e.code_periode = '2026-05'\nLIMIT 2001\n```\n\n**q3** · erp (SQL Server) · 2 ligne(s)\n```sql\nSELECT fac_statut, SUM(CASE WHEN fac_type = 'A' THEN -fac_mt_ht ELSE fac_mt_ht END) AS ca\nFROM dbo.vte_fact\nWHERE fac_dt >= '2026-05-01' AND fac_dt < '2026-06-01'\nGROUP BY fac_statut\n```",
+  "steps": [
+   {
+    "tool": "get_table_card",
+    "args": {
+     "source": "erp",
+     "table": "VTE_FACT"
+    },
+    "ok": true
+   },
+   {
+    "tool": "get_table_card",
+    "args": {
+     "source": "compta",
+     "table": "ligne_ecriture"
+    },
+    "ok": true
+   },
+   {
+    "tool": "get_table_card",
+    "args": {
+     "source": "compta",
+     "table": "ecriture"
+    },
+    "ok": true
+   },
+   {
+    "tool": "execute_sql",
+    "args": {
+     "source": "erp",
+     "sql": "SELECT SUM(CASE WHEN fac_type = 'A' THEN -fac_mt_ht ELSE fac_mt_ht END) AS ca_erp\nFROM dbo.vte_fact\nWHERE fac_dt >= '2026-05-01' AND fac_dt < '2026-06-01'"
+    },
+    "ok": true,
+    "id": "q1",
+    "sql": "SELECT SUM(CASE WHEN fac_type = 'A' THEN -fac_mt_ht ELSE fac_mt_ht END) AS ca_erp\nFROM dbo.vte_fact\nWHERE fac_dt >= '2026-05-01' AND fac_dt < '2026-06-01'",
+    "source": "erp",
+    "row_count": 1,
+    "truncated": false
+   },
+   {
+    "tool": "execute_sql",
+    "args": {
+     "source": "compta",
+     "sql": "SELECT SUM(l.credit - l.debit) AS ca_compta\nFROM public.ligne_ecriture l JOIN public.ecriture e ON e.id_ecriture = l.id_ecriture\nWHERE e.statut = 'VALIDEE' AND l.numero_compte LIKE '70%' AND e.code_periode = '2026-05'"
+    },
+    "ok": true,
+    "id": "q2",
+    "sql": "SELECT SUM(l.credit - l.debit) AS ca_compta\nFROM public.ligne_ecriture l JOIN public.ecriture e ON e.id_ecriture = l.id_ecriture\nWHERE e.statut = 'VALIDEE' AND l.numero_compte LIKE '70%' AND e.code_periode = '2026-05'\nLIMIT 2001",
+    "source": "compta",
+    "row_count": 1,
+    "truncated": false
+   },
+   {
+    "tool": "execute_sql",
+    "args": {
+     "source": "erp",
+     "sql": "SELECT fac_statut, SUM(CASE WHEN fac_type = 'A' THEN -fac_mt_ht ELSE fac_mt_ht END) AS ca\nFROM dbo.vte_fact\nWHERE fac_dt >= '2026-05-01' AND fac_dt < '2026-06-01'\nGROUP BY fac_statut"
+    },
+    "ok": true,
+    "id": "q3",
+    "sql": "SELECT fac_statut, SUM(CASE WHEN fac_type = 'A' THEN -fac_mt_ht ELSE fac_mt_ht END) AS ca\nFROM dbo.vte_fact\nWHERE fac_dt >= '2026-05-01' AND fac_dt < '2026-06-01'\nGROUP BY fac_statut",
+    "source": "erp",
+    "row_count": 2,
+    "truncated": false
+   }
+  ],
+  "results": {
+   "q1": {
+    "source": "erp",
+    "sql": "SELECT SUM(CASE WHEN fac_type = 'A' THEN -fac_mt_ht ELSE fac_mt_ht END) AS ca_erp\nFROM dbo.vte_fact\nWHERE fac_dt >= '2026-05-01' AND fac_dt < '2026-06-01'",
+    "columns": [
+     "ca_erp"
+    ],
+    "rows": [
+     [
+      11299581.08
+     ]
+    ],
+    "row_count": 1,
+    "truncated": false
+   },
+   "q2": {
+    "source": "compta",
+    "sql": "SELECT SUM(l.credit - l.debit) AS ca_compta\nFROM public.ligne_ecriture l JOIN public.ecriture e ON e.id_ecriture = l.id_ecriture\nWHERE e.statut = 'VALIDEE' AND l.numero_compte LIKE '70%' AND e.code_periode = '2026-05'\nLIMIT 2001",
+    "columns": [
+     "ca_compta"
+    ],
+    "rows": [
+     [
+      10947075.29
+     ]
+    ],
+    "row_count": 1,
+    "truncated": false
+   },
+   "q3": {
+    "source": "erp",
+    "sql": "SELECT fac_statut, SUM(CASE WHEN fac_type = 'A' THEN -fac_mt_ht ELSE fac_mt_ht END) AS ca\nFROM dbo.vte_fact\nWHERE fac_dt >= '2026-05-01' AND fac_dt < '2026-06-01'\nGROUP BY fac_statut",
+    "columns": [
+     "fac_statut",
+     "ca"
+    ],
+    "rows": [
+     [
+      "COMPTA",
+      10947075.29
+     ],
+     [
+      "EMISE",
+      352505.79
+     ]
+    ],
+    "row_count": 2,
+    "truncated": false
+   }
+  },
+  "seconds": 38.8,
+  "error": null,
+  "missing": [],
+  "missing_in_prose": [],
+  "ok": true,
+  "ok_prose": true
+ },
+ "12": {
+  "answer": "**Commission de Joris Claes sur sa fiche de paie de mars 2026 : 731,38 €** (source : paie, élément COMMISSION, payée le 31/03/2026).\n\n- **Base** : 731 384,61 € de ventes facturées en **février 2026** dans l'ERP (la commission porte sur le chiffre d'affaires du mois précédent).\n- **Taux** : 0,1 % de cette base → 731,38 €.\n\n---\n**Comment ce résultat a été obtenu** (journal `t2sql_query_log`, session `starter-run1-q12`)\n\n**q1** · erp (SQL Server) · 1 ligne(s)\n```sql\nSELECT VDR_MATRICULE, VDR_PRENOM, VDR_NOM FROM dbo.VDR_VENDEUR WHERE VDR_EMAIL = 'joris.claes@calorvia.be'\n```\n\nCommission (paie, outil get_sales_commission) : matricule 10405, mois 2026-03",
+  "steps": [
+   {
+    "tool": "get_sales_commission",
+    "args": {
+     "staff_number": "Joris Claes",
+     "month": "2026-03"
+    },
+    "ok": false
+   },
+   {
+    "tool": "find_values",
+    "args": {
+     "source": "erp",
+     "value": "Joris Claes"
+    },
+    "ok": true
+   },
+   {
+    "tool": "get_table_card",
+    "args": {
+     "source": "erp",
+     "table": "VDR_VENDEUR"
+    },
+    "ok": true
+   },
+   {
+    "tool": "execute_sql",
+    "args": {
+     "source": "erp",
+     "sql": "SELECT VDR_MATRICULE, VDR_PRENOM, VDR_NOM FROM dbo.VDR_VENDEUR WHERE VDR_EMAIL = 'joris.claes@calorvia.be'"
+    },
+    "ok": true,
+    "id": "q1",
+    "sql": "SELECT VDR_MATRICULE, VDR_PRENOM, VDR_NOM FROM dbo.VDR_VENDEUR WHERE VDR_EMAIL = 'joris.claes@calorvia.be'",
+    "source": "erp",
+    "row_count": 1,
+    "truncated": false
+   },
+   {
+    "tool": "get_sales_commission",
+    "args": {
+     "staff_number": "10405",
+     "month": "2026-03"
+    },
+    "ok": true
+   }
+  ],
+  "results": {
+   "q1": {
+    "source": "erp",
+    "sql": "SELECT VDR_MATRICULE, VDR_PRENOM, VDR_NOM FROM dbo.VDR_VENDEUR WHERE VDR_EMAIL = 'joris.claes@calorvia.be'",
+    "columns": [
+     "VDR_MATRICULE",
+     "VDR_PRENOM",
+     "VDR_NOM"
+    ],
+    "rows": [
+     [
+      "10405",
+      "Joris",
+      "CLAES"
+     ]
+    ],
+    "row_count": 1,
+    "truncated": false
+   }
+  },
+  "seconds": 18.1,
+  "error": null,
+  "missing": [],
+  "missing_in_prose": [],
+  "ok": true,
+  "ok_prose": true
+ }
+}

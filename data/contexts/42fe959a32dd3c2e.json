@@ -1,0 +1,7 @@
+{
+  "document": "01_Finance/Reporting_mensuel/Reporting 2026-03.xlsx",
+  "body": "onglet « Ventes par gamme » · Chiffre d&apos;affaires par gamme (k€)\n| Gamme | CA du mois | Part |\n|---|---|---|\n| Aéris (standard) | 6236 |  |\n| Aéris Pro (premium) | 2993 |  |\n| Ventis (standard) | 2583 |  |\n| Ventis Pro (premium) | 814 |  |\n| Pièces et services | 974 |  |\nTotal",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait se trouve dans l'onglet « Ventes par gamme » du reporting mensuel. Il détaille le chiffre d'affaires réalisé par les différentes gammes de produits, notamment les pompes à chaleur Aéris et Ventis ainsi que les pièces et services.",
+  "seconds": 2.5
+}

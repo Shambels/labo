@@ -1,0 +1,7 @@
+{
+  "document": "04_Qualite/Non_conformites/NC-2025-049.docx",
+  "body": "Fiche de non-conformité NC-2025-049\n| Date d'ouverture | 16/12/2025 |\n| - | - |\n| Site | Seneffe |\n| Produit | Aéris 9 |\n| Description | Carte de régulation Elcora RC-40 : erreur E07 au premier démarrage. |\n| Quantité concernée | 22 unités |\n| Mode de détection | Banc d'essai |\n| Cause | Version de micrologiciel 4.0.2 défectueuse |\n| Action corrective | Mise à jour en 4.0.3 chez Elcora |\n| Responsable | Romain Dethier |\n| Statut | Clôturée |\n| Coût de non-qualité | 1 650 € |",
+  "model": "qwen3.8-27b",
+  "context": "Cette fiche détaille une non-conformité sur le produit Aéris 9 au site de Seneffe, causée par un défaut de la carte de régulation Elcora RC-40.",
+  "seconds": 2.4
+}

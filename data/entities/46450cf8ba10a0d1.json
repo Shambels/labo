@@ -1,0 +1,25 @@
+{
+  "document": "04_Qualite/Non_conformites/NC-2026-007.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Gand",
+      "type": "site",
+      "alias": [],
+      "description": "site de Calorvia SA"
+    },
+    {
+      "nom": "Système qualité",
+      "type": "produit",
+      "alias": [],
+      "description": "objet de la non-conformité"
+    },
+    {
+      "nom": "Ann Wouters",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable de l'action corrective"
+    }
+  ],
+  "seconds": 2.4
+}

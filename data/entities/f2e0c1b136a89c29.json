@@ -1,0 +1,205 @@
+{
+  "document": "02_RH/Organigrammes/Organigramme direction 2026-04.png",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Hélène Marchal",
+      "type": "personne",
+      "alias": [],
+      "description": "administratrice déléguée de Calorvia SA"
+    },
+    {
+      "nom": "Caroline Hendrickx",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable juridique du staff de direction"
+    },
+    {
+      "nom": "Lucie Bastin",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable communication du staff de direction"
+    },
+    {
+      "nom": "Camille Lemaire",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable RSE du staff de direction"
+    },
+    {
+      "nom": "Julie Renard",
+      "type": "personne",
+      "alias": [],
+      "description": "assistante du staff de direction"
+    },
+    {
+      "nom": "Sarah Vandamme",
+      "type": "personne",
+      "alias": [],
+      "description": "directrice financière a.i."
+    },
+    {
+      "nom": "Thomas Lambert",
+      "type": "personne",
+      "alias": [],
+      "description": "directeur des opérations"
+    },
+    {
+      "nom": "Nadia Benali",
+      "type": "personne",
+      "alias": [],
+      "description": "directrice des ressources humaines"
+    },
+    {
+      "nom": "Pierre-Yves Collard",
+      "type": "personne",
+      "alias": [],
+      "description": "directeur commercial"
+    },
+    {
+      "nom": "Kevin Mertens",
+      "type": "personne",
+      "alias": [],
+      "description": "directeur des systèmes d'information"
+    },
+    {
+      "nom": "Anne Vercammen",
+      "type": "personne",
+      "alias": [],
+      "description": "directrice qualité"
+    },
+    {
+      "nom": "Inès Rahmani",
+      "type": "personne",
+      "alias": [],
+      "description": "contrôle de gestion et trésorerie a.i."
+    },
+    {
+      "nom": "Bruno Hanssens",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable comptabilité"
+    },
+    {
+      "nom": "Marc Delhaye",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable du site de Seneffe"
+    },
+    {
+      "nom": "Pieter De Smet",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable du site de Gand"
+    },
+    {
+      "nom": "Olivier Hardy",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable prévention"
+    },
+    {
+      "nom": "Céline Moreau",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable achats"
+    },
+    {
+      "nom": "Christelle Masson",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable paie"
+    },
+    {
+      "nom": "Ann Wouters",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable RH Gand"
+    },
+    {
+      "nom": "Hugo Lambotte",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable formation"
+    },
+    {
+      "nom": "Benoît Gillet",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable Wallonie-Bruxelles"
+    },
+    {
+      "nom": "Joris Claes",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable Vlaanderen"
+    },
+    {
+      "nom": "Mathilde Roux",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable France"
+    },
+    {
+      "nom": "Laura Mertz",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable marketing"
+    },
+    {
+      "nom": "Sophie Lejeune",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable du projet Atlas"
+    },
+    {
+      "nom": "Nicolas Gilson",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable support"
+    },
+    {
+      "nom": "Yannick Dupuis",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable sécurité IT"
+    },
+    {
+      "nom": "Romain Dethier",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable qualité Seneffe"
+    },
+    {
+      "nom": "Lien Maes",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable qualité Gand"
+    },
+    {
+      "nom": "Grégory Pirard",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable service après-vente"
+    },
+    {
+      "nom": "Site de Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "site opérationnel de Calorvia SA"
+    },
+    {
+      "nom": "Site de Gand",
+      "type": "site",
+      "alias": [],
+      "description": "site opérationnel de Calorvia SA"
+    },
+    {
+      "nom": "Projet Atlas",
+      "type": "projet",
+      "alias": [],
+      "description": "projet dirigé par Sophie Lejeune"
+    }
+  ],
+  "seconds": 19.2
+}

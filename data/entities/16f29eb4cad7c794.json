@@ -1,0 +1,83 @@
+{
+  "document": "01_Finance/Budget_2026/Budget 2026 v1.xlsx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Nouvelle ligne d'assemblage L4",
+      "type": "projet",
+      "alias": [
+        "L4"
+      ],
+      "description": "ligne d'assemblage située à Seneffe"
+    },
+    {
+      "nom": "Remplacement de l'ERP",
+      "type": "projet",
+      "alias": [
+        "projet Atlas"
+      ],
+      "description": "projet de remplacement du système ERP"
+    },
+    {
+      "nom": "Infrastructure informatique",
+      "type": "projet",
+      "alias": [],
+      "description": "infrastructure de serveurs et réseau"
+    },
+    {
+      "nom": "Renouvellement de chariots élévateurs",
+      "type": "projet",
+      "alias": [],
+      "description": "renouvellement d'équipements à Gand"
+    },
+    {
+      "nom": "Maintenance lourde et renouvellement d'outillages",
+      "type": "projet",
+      "alias": [],
+      "description": "maintenance et renouvellement d'outillages"
+    },
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "site de production et d'assemblage"
+    },
+    {
+      "nom": "Gand",
+      "type": "site",
+      "alias": [],
+      "description": "site de production, logistique et chariots"
+    },
+    {
+      "nom": "Namur",
+      "type": "site",
+      "alias": [],
+      "description": "site des fonctions support"
+    },
+    {
+      "nom": "Lille",
+      "type": "site",
+      "alias": [],
+      "description": "bureau de Lille"
+    },
+    {
+      "nom": "Pompes à chaleur",
+      "type": "produit",
+      "alias": [],
+      "description": "gamme de produits de Calorvia"
+    },
+    {
+      "nom": "Ventilation",
+      "type": "produit",
+      "alias": [],
+      "description": "gamme de produits de Calorvia"
+    },
+    {
+      "nom": "Acier",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "matière première dont le prix est stable"
+    }
+  ],
+  "seconds": 13.5
+}

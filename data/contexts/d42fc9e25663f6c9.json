@@ -1,0 +1,7 @@
+{
+  "document": "08_Juridique/RGPD/Registre des traitements.xlsx",
+  "body": "onglet « Registre » · Registre des activités de traitement (article 30 du RGPD) · Traitement : Recrutement ; Finalité : Sélection des candidats ; Catégories de données : CV, lettres, notes d'entretien ; Base légale : Mesures précontractuelles ; Durée de conservation : 1 an après la candidature ; Responsable : Nadia Benali",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait se situe dans le registre des activités de traitement, à la rubrique consacrée au recrutement. Il détaille le traitement des candidatures, dont la gestion est assurée par Nadia Benali.",
+  "seconds": 2.0
+}

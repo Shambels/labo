@@ -1,0 +1,7 @@
+{
+  "document": "01_Finance/Budget_2026/Note de presentation budget 2026.pdf",
+  "body": "5. Évolution par rapport à la version 2\n- Hypothèse de volume des pompes à chaleur relevée de +2 % à +2,5 %.\n- Enveloppe de maintenance lourde réduite de 300 à 280 k€.\n- EBITDA porté de 9,3 % à 9,5 %, conformément à la demande du conseil du 18 novembre.",
+  "model": "qwen3.8-27b",
+  "context": "Cette section détaille les ajustements apportés au budget 2026 par rapport à la version précédente. Elle précise les modifications concernant les volumes de pompes à chaleur, l'enveloppe de maintenance et la marge EBITDA.",
+  "seconds": 2.2
+}

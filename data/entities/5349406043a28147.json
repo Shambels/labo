@@ -1,0 +1,25 @@
+{
+  "document": "05_Commercial/Offres/DV-2026-0236 ClimExpert.pdf",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Clim'Expert Hainaut",
+      "type": "client",
+      "alias": [],
+      "description": "client de l'offre de prix"
+    },
+    {
+      "nom": "Aéris Pro 16",
+      "type": "produit",
+      "alias": [],
+      "description": "produit de la gamme Aéris Pro"
+    },
+    {
+      "nom": "Aéris 12",
+      "type": "produit",
+      "alias": [],
+      "description": "produit de la gamme standard"
+    }
+  ],
+  "seconds": 3.5
+}

@@ -1,0 +1,10 @@
+{
+  "path": "00_Direction/Strategie/Feuille de route 2026-2028.png",
+  "kind": "image",
+  "page": null,
+  "index": null,
+  "model": "qwen3.8-27b",
+  "prompt": "Tu transcris des documents d'entreprise pour un moteur de recherche.\n1. Recopie tout le texte visible, exactement comme il est écrit : nombres, codes, dates, unités et\n   annotations manuscrites compris. Rends les tableaux en Markdown.\n2. Dans un schéma, un plan ou un organigramme, recopie aussi chaque texte posé sur un lien, une flèche ou un\n   trait (débit, distance, type de connexion, rattachement), sur une ligne qui commence par le nom des deux\n   éléments reliés, tels qu'ils sont écrits sur l'image, séparés par un tiret, puis deux-points et le texte.\n   Un tel texte n'a de sens qu'avec les deux éléments qu'il relie.\n3. Puis, sous le titre « Description », décris en trois phrases au plus le type d'image (organigramme,\n   plan, graphique, photo, facture...) et ce qu'elle montre qui n'est pas écrit : les rattachements\n   d'un organigramme, la valeur la plus haute d'un graphique, la position des éléments d'un plan.\nN'invente rien : si un élément est illisible, écris [illisible].",
+  "seconds": 16.2,
+  "text": "Calorvia • feuille de route stratégique 2026-2028\n\nObjectif 2028 : 185 Me\n\nERP Atlas 12/2025 - 06/2026\nLigne L4 (phase 1) 01/2026 - 07/2026\nPhotovoltaïque Seneffe 06/2026 - 07/2026\nLigne L4 phase 2 : emballage robotisé 01/2027 - 06/2027\nGamme Aérés R290 (6 à 12 kW) 09/2026 - 06/2027\nOuverture du marché néerlandais 03/2027 - 12/2027\nExtension du site de Gand (étude) 09/2027 - 06/2028\n\n01/2026 04/2026 07/2026 10/2026 01/2027 04/2027 07/2027 10/2027 01/2028 04/2028 07/2028 10/2028\n\nDirection des opérations\n\nDescription\nIl s'agit d'un diagramme de Gantt présentant la feuille de route stratégique de l'entreprise Calorvia pour la période 2026-2028. Le graphique illustre la chronologie et la durée de sept projets distincts, dont les barres colorées s'étendent sur un axe temporel trimestriel. Une ligne verticale en pointillés rouge marque l'objectif financier de 185 Me à atteindre en 2028."
+}

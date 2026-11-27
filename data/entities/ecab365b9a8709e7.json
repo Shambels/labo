@@ -1,0 +1,13 @@
+{
+  "document": "02_RH/Recrutement/Offres/REC-2025-038 Ingénieur qualité fournisseurs.html",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "site de l'entreprise Calorvia"
+    }
+  ],
+  "seconds": 1.2
+}

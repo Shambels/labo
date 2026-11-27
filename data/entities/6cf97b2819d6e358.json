@@ -1,0 +1,13 @@
+{
+  "document": "05_Commercial/Fiches_produits/Aéris_9_FR.pdf",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Aéris 9",
+      "type": "produit",
+      "alias": [],
+      "description": "Pompe à chaleur air-eau pour maisons individuelles"
+    }
+  ],
+  "seconds": 1.8
+}

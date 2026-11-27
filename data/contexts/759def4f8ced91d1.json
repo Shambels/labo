@@ -1,0 +1,7 @@
+{
+  "document": "01_Finance/Investissements/Demande capex CAPEX-2026-003 - Installation photovoltaïque de Seneffe.docx",
+  "body": "Demande d'investissement CAPEX-2026-003\n| Projet | Installation photovoltaïque de Seneffe |\n| - | - |\n| Demandeur | Thomas Lambert |\n| Date de la demande | 04/03/2026 |\n| Montant demandé | 410 000 € |\n| Description | Panneaux photovoltaïques en toiture de l'usine de Seneffe. |\n| Puissance | 520 kWc |\n| Production attendue | 495 MWh par an, soit environ 7 % de la consommation de Seneffe |\n| Fournisseur | Héliosol SRL |\n| Économie annuelle estimée | 74 000 € |\n| Temps de retour | 5,5 ans |",
+  "model": "qwen3.8-27b",
+  "context": "Cette fiche technique détaille les caractéristiques de l'installation photovoltaïque prévue sur le site de Seneffe. Elle présente les informations clés du projet, telles que le demandeur, le fournisseur et les performances énergétiques attendues.",
+  "seconds": 2.7
+}

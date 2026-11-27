@@ -1,0 +1,7 @@
+{
+  "document": "04_Qualite/Reclamations/Courrier Habitat 2025-09-12.pdf",
+  "body": "Page 1 (scan)\nHabitat Confort SA  \nRue de Namur 112, 1300 Wavre  \nCalorvia SA, service qualité, Rue des Artisans 42, 5100 Namur · le 12 septembre 2025  \nObjet : Aérïs 9 installée chez M. et Mme Dubois à Wavre  \nMadame, Monsieur,  \n\nNous vous signalons que l'unité extérieure de l'Aérïs 9 (numéro de série AE09-25-2207) installée le 28 août produit un bruit de 58 dB(A) mesuré à un mètre, alors que la fiche technique annonce 52 dB(A).  \nNos clients se plaignent du bruit la nuit. Nous vous demandons l'intervention d'un technicien dans les plus brefs délais.  \n\nVeuillez agréer nos salutations distinguées.  \nChristophe Lemaire, gérant  \n\nCalorvia SA (entreprise fictive) · Diffusion interne · page 1  \n\n---\n\n**Description**  \nIl s’agit d’une lettre formelle adressée par Habitat Confort SA à Calorvia SA, concernant un problème de bruit émis par une unité extérieure d’aération installée chez des clients. La lettre mentionne une mesure sonore supérieure à la spécification technique et demande une intervention technique urgente. Le document est structuré comme une correspondance commerciale officielle, avec en-tête, corps du message, formule de politesse et signature.",
+  "model": "qwen3.8-27b",
+  "context": "Cette rubrique de réclamations contient la correspondance d'Habitat Confort SA signalant un excès de bruit sur une Aérïs 9 installée chez les Dubois à Wavre.",
+  "seconds": 2.6
+}

@@ -1,0 +1,7 @@
+{
+  "document": "01_Finance/Comptabilite/Factures_fournisseurs/2026-03-02 Integra Conseil F-2026-031.jpg",
+  "body": "Image\n**Intégra Conseil SRL**  \nAvenue de l'Espérance 9, 6220 Fleurus  \nTVA BE 0661.552.140  \n\nFacture n° F-2026-031  \nDate 02/03/2026  \nÉchéance 01/04/2026  \nClient Calorvia SA, 5100 Namur  \nProjet Atlas - jours de février 2026  \n\n| Code | Prestation                          | Jours | Tarif   | Total HT     |\n|------|-------------------------------------|-------|---------|--------------|\n| CONS | Consultant fonctionnel senior       | 22    | 980,00  | 21 560,00    |\n| DEV  | Développeur interfaces              | 12    | 840,00  | 10 080,00    |\n| DATA | Reprise des données (jours supplémentaires) | 15    | 760,00  | 11 400,00    |\n\nTotal HT 43 040,00 €  \nTVA 21 % 9 038,40 €  \nTotal TTC 52 078,40 €  \n\nIBAN BE90 3631 8822 4507.\n\n---\n\n**Description**  \nIl s’agit d’une facture commerciale émise par Intégra Conseil SRL pour un projet nommé « Atlas » réalisé en février 2026. Le document détaille trois prestations facturées : un consultant fonctionnel senior, un développeur interfaces et une reprise de données supplémentaires, avec leurs jours travaillés, tarifs unitaires et montants HT. Les totaux incluent la TVA à 21 % et le montant TTC final.",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait correspond à l'intégralité du document, qui détaille les prestations de consultant, de développement et de reprise de données réalisées pour le projet Atlas en février 2026.",
+  "seconds": 2.7
+}

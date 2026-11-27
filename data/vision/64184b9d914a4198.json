@@ -1,0 +1,10 @@
+{
+  "path": "04_Qualite/Indicateurs/Taux de reclamations 2025-2026.png",
+  "kind": "image",
+  "page": null,
+  "index": null,
+  "model": "qwen3.5-9b",
+  "prompt": "Tu transcris des documents d'entreprise pour un moteur de recherche.\n1. Recopie tout le texte visible, exactement comme il est écrit : nombres, codes, dates, unités et\n   annotations manuscrites compris. Rends les tableaux en Markdown.\n2. Dans un schéma, un plan ou un organigramme, recopie aussi chaque texte posé sur un lien, une flèche ou un\n   trait (débit, distance, type de connexion, rattachement), sur une ligne qui commence par le nom des deux\n   éléments reliés, tels qu'ils sont écrits sur l'image, séparés par un tiret, puis deux-points et le texte.\n   Un tel texte n'a de sens qu'avec les deux éléments qu'il relie.\n3. Puis, sous le titre « Description », décris en trois phrases au plus le type d'image (organigramme,\n   plan, graphique, photo, facture...) et ce qu'elle montre qui n'est pas écrit : les rattachements\n   d'un organigramme, la valeur la plus haute d'un graphique, la position des éléments d'un plan.\nN'invente rien : si un élément est illisible, écris [illisible].",
+  "seconds": 3.8,
+  "text": "Taux de réclamations clients (% des unités livrées)  \n09/25: 0,8  \n10/25: 0,7  \n11/25: 1,4  \n12/25: 1,9  \n01/26: 0,9  \n02/26: 0,6  \n03/26: 0,6  \n04/26: 0,7  \n05/26: 0,5  \n\nObjectif 0,8 %\n\nDescription  \nGraphique linéaire montrant l’évolution du taux de réclamations clients en pourcentage des unités livrées, de septembre 2025 à mai 2026.  \nLa courbe atteint un pic à 1,9 % en décembre 2025, puis descend progressivement pour se stabiliser autour de 0,6–0,7 % avant de chuter à 0,5 % en mai 2026.  \nUne ligne pointillée horizontale indique l’objectif de 0,8 %, que la courbe dépasse brièvement en novembre et décembre 2025, puis reste en dessous sauf en avril 2026."
+}

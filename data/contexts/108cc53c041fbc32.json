@@ -1,0 +1,7 @@
+{
+  "document": "00_Direction/Conseil_administration/AG/PV AGO 2026-06-09.pdf",
+  "body": "Résolutions\n- 1 L'assemblée approuve les comptes annuels de l'exercice 2025, qui se clôturent par un bénéfice net de 5 412 k€.\n- 2 L'assemblée approuve la distribution d'un dividende brut de 0,80 € par action, payable à partir du 1er juillet 2026.\n- 3 L'assemblée donne décharge aux administrateurs et au commissaire pour l'exercice 2025.\n- 4 L'assemblée renouvelle le mandat d'administratrice indépendante de Martine Claessens pour une durée de quatre ans, jusqu'à l'assemblée générale de 2030.\nToutes les résolutions sont adoptées à l'unanimité des voix exprimées.\nLe président La secrétaire Les scrutateurs",
+  "model": "qwen3.8-27b",
+  "context": "La section des résolutions du procès-verbal détaille les décisions prises lors de l'assemblée générale ordinaire. Elle couvre l'approbation des comptes de l'exercice 2025, la distribution du dividende, la décharge des administrateurs et le renouvellement du mandat de Martine Claessens.",
+  "seconds": 3.0
+}

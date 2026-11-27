@@ -1,0 +1,7 @@
+{
+  "document": "07_IT/Securite/Rapport incident securite 2026-01-13.pdf",
+  "body": "Impact\nAucun paiement n'a été effectué. L'IBAN frauduleux communiqué était LT62 3250 0219 7745 1180. La facture TM-2026-0042 de 48 602,80 € a été payée le 5 février sur le compte habituel du fournisseur, après vérification téléphonique.",
+  "model": "qwen3.8-27b",
+  "context": "La rubrique « Impact » du rapport d'incident détaille les conséquences de la tentative de fraude sur la facture TM-2026-0042. Elle précise que le paiement a été effectué sur le compte habituel du fournisseur Tôlerie Mosane après vérification.",
+  "seconds": 2.5
+}

@@ -1,0 +1,7 @@
+{
+  "document": "06_Achats/Appel_offres_ERP/Grille evaluation ERP v3.xlsx",
+  "body": "onglet « Coûts » · Coût total sur cinq ans (€) · Poste : Abonnements (5 ans) ; Praxio : 270000 ; Kerneo : 295000 ; Sylvan Suite : 240000",
+  "model": "qwen3.8-27b",
+  "context": "Dans l'onglet « Coûts » du projet Atlas, cette ligne détaille le poste des abonnements sur cinq ans pour les éditeurs Praxio, Kerneo et Sylvan Suite.",
+  "seconds": 1.9
+}

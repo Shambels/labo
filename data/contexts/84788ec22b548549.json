@@ -1,0 +1,7 @@
+{
+  "document": "10_RSE/Bilan carbone 2025.xlsx",
+  "body": "onglet « Énergie 2025 » · Consommation d'énergie 2025 (MWh) · Site : Seneffe ; Consommation : 6820",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait se trouve dans l'onglet « Énergie 2025 » du bilan carbone. Il détaille la consommation d'énergie du site de Seneffe.",
+  "seconds": 1.8
+}

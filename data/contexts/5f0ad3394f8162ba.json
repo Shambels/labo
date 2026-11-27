@@ -1,0 +1,7 @@
+{
+  "document": "03_Production/Seneffe/Photos_equipements/IMG_20260316_Pont_roulant.jpg",
+  "body": "Image\nHissmann  \nPont roulant monopoutre  \nType  \nPR-5T  \nN° de série  \nHM-15-2290  \nAnnée  \n2015  \nCMU  \n5000 kg  \nPortée  \n18,5 m  \nDernière inspection  \n03/2026  \nCE  \n\nDescription  \nIl s’agit d’une plaque d’identification métallique fixée sur un pont roulant monopoutre de la marque Hissmann. Elle affiche les caractéristiques techniques du matériel : type, numéro de série, année de fabrication, capacité maximale (CMU), portée et date de dernière inspection. Le marquage CE indique sa conformité aux normes européennes de sécurité.",
+  "model": "qwen3.8-27b",
+  "context": "La rubrique « Photos équipements » du site de Seneffe présente la plaque d’identification d’un pont roulant monopoutre Hissmann. Elle détaille les caractéristiques techniques de ce matériel de production, notamment sa capacité maximale et sa portée.",
+  "seconds": 2.5
+}

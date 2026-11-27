@@ -1,0 +1,131 @@
+{
+  "schema_name": "DoclingDocument",
+  "version": "1.11.0",
+  "name": "Lettre rappel installateurs 2025-12-11",
+  "origin": {
+    "mimetype": "application/pdf",
+    "binary_hash": 14696868708842971303,
+    "filename": "Lettre rappel installateurs 2025-12-11.pdf"
+  },
+  "furniture": {
+    "self_ref": "#/furniture",
+    "children": [],
+    "content_layer": "furniture",
+    "name": "_root_",
+    "label": "unspecified"
+  },
+  "body": {
+    "self_ref": "#/body",
+    "children": [
+      {
+        "$ref": "#/texts/0"
+      },
+      {
+        "$ref": "#/texts/1"
+      },
+      {
+        "$ref": "#/texts/2"
+      }
+    ],
+    "content_layer": "body",
+    "name": "_root_",
+    "label": "unspecified"
+  },
+  "groups": [],
+  "texts": [
+    {
+      "self_ref": "#/texts/0",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "furniture",
+      "label": "page_header",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 62.3622,
+            "t": 813.0068128,
+            "r": 168.24110720000002,
+            "b": 806.1630624000001,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            33
+          ]
+        }
+      ],
+      "orig": "Calorvia SA \u00b7 Service apr\u00e8s-vente",
+      "text": "Calorvia SA \u00b7 Service apr\u00e8s-vente"
+    },
+    {
+      "self_ref": "#/texts/1",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 775.4337168000001,
+            "r": 525.9273769499998,
+            "b": 582.4512944,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            805
+          ]
+        }
+      ],
+      "orig": "Namur, le 11 d\u00e9cembre 2025 Objet : campagne de rappel pr\u00e9ventif des pompes \u00e0 chaleur A\u00e9ris 12 Madame, Monsieur, Un d\u00e9faut a \u00e9t\u00e9 identifi\u00e9 sur la vanne quatre voies de 214 pompes \u00e0 chaleur A\u00e9ris 12 produites entre le 3 et le 21 novembre 2025 (num\u00e9ros de s\u00e9rie AE12-25-4501 \u00e0 AE12-25-4714). Ce d\u00e9faut peut provoquer une fuite de fluide frigorig\u00e8ne. Nous vous demandons de contacter vos clients concern\u00e9s et de remplacer la vanne. Les vannes de remplacement vous seront livr\u00e9es gratuitement sous 48 heures. Chaque intervention vous sera r\u00e9mun\u00e9r\u00e9e 240 \u20ac HT, d\u00e9placement compris, sur pr\u00e9sentation du bon d'intervention. La liste des num\u00e9ros de s\u00e9rie install\u00e9s par votre entreprise est jointe \u00e0 ce courrier. Notre service apr\u00e8s-vente reste \u00e0 votre disposition au 081 22 40 40. Anne Vercammen, directrice qualit\u00e9",
+      "text": "Namur, le 11 d\u00e9cembre 2025 Objet : campagne de rappel pr\u00e9ventif des pompes \u00e0 chaleur A\u00e9ris 12 Madame, Monsieur, Un d\u00e9faut a \u00e9t\u00e9 identifi\u00e9 sur la vanne quatre voies de 214 pompes \u00e0 chaleur A\u00e9ris 12 produites entre le 3 et le 21 novembre 2025 (num\u00e9ros de s\u00e9rie AE12-25-4501 \u00e0 AE12-25-4714). Ce d\u00e9faut peut provoquer une fuite de fluide frigorig\u00e8ne. Nous vous demandons de contacter vos clients concern\u00e9s et de remplacer la vanne. Les vannes de remplacement vous seront livr\u00e9es gratuitement sous 48 heures. Chaque intervention vous sera r\u00e9mun\u00e9r\u00e9e 240 \u20ac HT, d\u00e9placement compris, sur pr\u00e9sentation du bon d'intervention. La liste des num\u00e9ros de s\u00e9rie install\u00e9s par votre entreprise est jointe \u00e0 ce courrier. Notre service apr\u00e8s-vente reste \u00e0 votre disposition au 081 22 40 40. Anne Vercammen, directrice qualit\u00e9"
+    },
+    {
+      "self_ref": "#/texts/2",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "furniture",
+      "label": "page_footer",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 204.7511,
+            "t": 33.47927279999999,
+            "r": 390.52453760000003,
+            "b": 26.635522400000013,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            61
+          ]
+        }
+      ],
+      "orig": "Calorvia SA (entreprise fictive) \u00b7 Diffusion interne \u00b7 page 1",
+      "text": "Calorvia SA (entreprise fictive) \u00b7 Diffusion interne \u00b7 page 1"
+    }
+  ],
+  "pictures": [],
+  "tables": [],
+  "key_value_items": [],
+  "form_items": [],
+  "pages": {
+    "1": {
+      "size": {
+        "width": 595.2756,
+        "height": 841.8898
+      },
+      "page_no": 1
+    }
+  }
+}

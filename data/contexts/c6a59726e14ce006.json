@@ -1,0 +1,7 @@
+{
+  "document": "01_Finance/Reporting_mensuel/Reporting 2025-09.xlsx",
+  "body": "onglet « Synthèse » · Reporting mensuel · septembre 2025 · Montants en k€ · contrôle de gestion\n| Indicateur | Mois | Cumul annuel | Budget cumul | Écart au budget |\n|---|---|---|---|---|\n| Chiffre d'affaires | 12300 | 101500 | 104103 | -2,5 % |\n| Marge brute | 3603 | 30353 |  |  |\n| EBITDA | 1009 | 8171 |  |  |\n| Taux d'EBITDA | 8,2 % | 8,1 % |  |  |\n| Effectif fin de mois (ETP) | 620 |  |  |  |",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait se trouve dans l'onglet « Synthèse » du reporting mensuel. Il présente les indicateurs financiers clés et l'effectif de l'entreprise pour le mois de septembre 2025.",
+  "seconds": 3.6
+}

@@ -1,0 +1,7 @@
+{
+  "document": "02_RH/Formation/Plan de formation 2026.xlsx",
+  "body": "onglet « Plan 2026 » · Plan de formation 2026 · lignes 4 à 6\n| Domaine | Formation | Public | Site | Heures | Budget (€) | Trimestre |\n|---|---|---|---|---|---|---|\n| Sécurité | Premiers secours (secouristes) | Secouristes désignés | Tous | 144 | 6900 | T2 |\n| Sécurité | Consignation des énergies (LOTO) | Maintenance et production | Seneffe | 100 | 4100 | T3 |\n| Technique | Brasage et contrôle d'étanchéité | Opérateurs L2 et L3 | Seneffe | 240 | 11800 | T1 |",
+  "model": "qwen3.8-27b",
+  "context": "Cette section du plan de formation détaille les actions prévues pour les secouristes, les équipes de maintenance et les opérateurs. Elle couvre les domaines de la sécurité et de la technique, notamment la formation aux premiers secours, la consignation des énergies et le brasage.",
+  "seconds": 2.6
+}

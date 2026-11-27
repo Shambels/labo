@@ -1,0 +1,7 @@
+{
+  "document": "00_Direction/CODIR/2026/2026-01-19 CODIR PV.docx",
+  "body": "Procès-verbal du Comité de direction\n3. Suivi des actions\n| **N°** | **Action** | **Responsable** | **Échéance** | **Statut / commentaire** |\n| - | - | - | - | - |\n| A-25-020 | Suivre l'avancement des interventions du rappel Aéris 12 | AV | 31/03/2026 | En cours |\n| A-26-001 | Étudier les options logistiques : extension de Gand, entrepôt externe ou prestataire 3PL | PDS | 30/01/2026 | En cours |\n| A-26-002 | Reconfigurer les limiteurs de vitesse (6 km/h en allée, 10 km/h sur les voies principales) | PDS | 23/01/2026 | En cours |\n",
+  "model": "qwen3.8-27b",
+  "context": "Cet extrait figure dans la rubrique « Suivi des actions » du procès-verbal. Il détaille les tâches en cours concernant le rappel Aéris 12, les options logistiques du site de Gand et la reconfiguration des limiteurs de vitesse.",
+  "seconds": 2.4
+}

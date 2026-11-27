@@ -1,0 +1,7 @@
+{
+  "document": "03_Production/Maintenance/Fiches_intervention/2026-04-14 INT-2026-246 Presse plieuse.docx",
+  "body": "Fiche d'intervention INT-2026-246\n| Date | 14/04/2026 |\n| - | - |\n| Équipement | Presse plieuse |\n| Description | Fuite d'huile sur le vérin gauche. Remplacement du joint. |\n| Durée d'arrêt | 5 h 15 |\n| Pièces et coûts | Joint et huile : 420 € |\n| Intervenant | Brevik Service |",
+  "model": "qwen3.8-27b",
+  "context": "La fiche d'intervention INT-2026-246 détaille la réparation d'une fuite d'huile sur la presse plieuse. Elle précise le remplacement du joint du vérin gauche effectué par Brevik Service.",
+  "seconds": 2.4
+}

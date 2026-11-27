@@ -1,0 +1,10 @@
+{
+  "path": "01_Finance/Comptabilite/Factures_fournisseurs/2026-04-30 Bureau Plus BP-26-4410.jpg",
+  "kind": "image",
+  "page": null,
+  "index": null,
+  "model": "qwen3.8-27b",
+  "prompt": "Tu transcris des documents d'entreprise pour un moteur de recherche.\n1. Recopie tout le texte visible, exactement comme il est écrit : nombres, codes, dates, unités et\n   annotations manuscrites compris. Rends les tableaux en Markdown.\n2. Dans un schéma, un plan ou un organigramme, recopie aussi chaque texte posé sur un lien, une flèche ou un\n   trait (débit, distance, type de connexion, rattachement), sur une ligne qui commence par le nom des deux\n   éléments reliés, tels qu'ils sont écrits sur l'image, séparés par un tiret, puis deux-points et le texte.\n   Un tel texte n'a de sens qu'avec les deux éléments qu'il relie.\n3. Puis, sous le titre « Description », décris en trois phrases au plus le type d'image (organigramme,\n   plan, graphique, photo, facture...) et ce qu'elle montre qui n'est pas écrit : les rattachements\n   d'un organigramme, la valeur la plus haute d'un graphique, la position des éléments d'un plan.\nN'invente rien : si un élément est illisible, écris [illisible].",
+  "seconds": 15.8,
+  "text": "Bureau Plus SRL\nChaussée de Louvain 180, 5000 Namur\nTVA BE 0455.880.312\n\nFacture n° BP-26-4410\nDate 30/04/2026\nÉchéance 30/05/2026\nClient Calorvia SA, 5100 Namur\n\n| Réf. | Désignation | Qté | Prix unit. | Total HT |\n| :--- | :--- | :--- | :--- | :--- |\n| PAP-A4 | Papier A4 80 g (carton de 5 ramettes) | 60 | 21,40 | 1 284,00 |\n| TON-MF | Toner imprimante multifonction | 12 | 86,00 | 1 032,00 |\n\nTotal HT 2 316,00 €\nTVA 21 % 486,36 €\nTotal TTC 2 802,36 €\n\nIBAN BE33 0682 1173 9946.\n\nDescription\nIl s'agit d'une facture commerciale émise par la société Bureau Plus SRL à destination du client Calorvia SA. Le document détaille l'achat de fournitures de bureau, spécifiquement du papier A4 et des toners, avec un total TTC de 2 802,36 €. Les informations d'identification de l'entreprise et le numéro de compte bancaire (IBAN) sont également visibles sur le document."
+}

@@ -1,0 +1,25 @@
+{
+  "document": "02_RH/Notes_de_service/2026-01-05 NS-2026-01 Gel des recrutements des fonctions support.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Nadia Benali",
+      "type": "personne",
+      "alias": [],
+      "description": "émettrice de la note de service"
+    },
+    {
+      "nom": "Conseil d'administration",
+      "type": "instance",
+      "alias": [],
+      "description": "décideur du gel des recrutements"
+    },
+    {
+      "nom": "CEO",
+      "type": "personne",
+      "alias": [],
+      "description": "autorise le remplacement des postes critiques"
+    }
+  ],
+  "seconds": 3.1
+}

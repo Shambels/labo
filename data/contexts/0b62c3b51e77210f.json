@@ -1,0 +1,7 @@
+{
+  "document": "06_Achats/Fournisseurs/Supply agreement Kompra GmbH 2024-2026.pdf",
+  "body": "3. Lead time\nSix (6) weeks from the purchase order.",
+  "model": "qwen3.8-27b",
+  "context": "La rubrique « Lead time » du contrat d'approvisionnement avec Kompra GmbH précise le délai de livraison des compresseurs.",
+  "seconds": 1.3
+}

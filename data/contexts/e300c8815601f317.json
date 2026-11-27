@@ -1,0 +1,7 @@
+{
+  "document": "02_RH/Enquetes/Enquete teletravail - reponses brutes.xlsx",
+  "body": "onglet « Réponses » · lignes 66 à 71\n| N° | Service | Site | Satisfaction (1-10) | Souhaite continuer | Commentaire |\n|---|---|---|---|---|---|\n| 66 | Communication | Namur | 9 | non | Souhaite un jour commun de présence |\n| 67 | Direction | Namur | 8 | oui | Souhaite un jour commun de présence |\n| 68 | Finance | Namur | 8 | oui |  |\n| 69 | Qualité | Namur | 7 | oui | Écran supplémentaire nécessaire à domicile |\n| 70 | Finance | Namur | 7 | non | Difficile de joindre certains collègues le vendredi |\n| 71 | RH | Namur | 10 | oui | Réunions hybrides à améliorer |",
+  "model": "qwen3.8-27b",
+  "context": "Ces lignes de l'onglet « Réponses » présentent les avis de salariés des services Communication, Direction, Finance, Qualité et RH basés à Namur.",
+  "seconds": 1.8
+}

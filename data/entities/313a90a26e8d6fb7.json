@@ -1,0 +1,39 @@
+{
+  "document": "00_Direction/Conseil_administration/Convocations/Convocation CA 2026-02-17.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Conseil d'administration",
+      "type": "instance",
+      "alias": [
+        "CA"
+      ],
+      "description": "organe de direction de Calorvia SA"
+    },
+    {
+      "nom": "Caroline Hendrickx",
+      "type": "personne",
+      "alias": [],
+      "description": "secrétaire du conseil"
+    },
+    {
+      "nom": "Siège social",
+      "type": "site",
+      "alias": [],
+      "description": "lieu de réunion du conseil"
+    },
+    {
+      "nom": "Entrepôt de Herstal",
+      "type": "site",
+      "alias": [],
+      "description": "local objet d'un bail"
+    },
+    {
+      "nom": "Projet ERP",
+      "type": "projet",
+      "alias": [],
+      "description": "système d'information en cours"
+    }
+  ],
+  "seconds": 4.2
+}

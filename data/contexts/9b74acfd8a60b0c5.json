@@ -1,0 +1,7 @@
+{
+  "document": "08_Juridique/Contrats/Contrat integration ERP Integra Conseil.pdf",
+  "body": "Article 4 : pénalités\nEn cas de retard imputable à l'intégrateur, une pénalité de 0,5 % du prix par semaine de retard est due, plafonnée à 10 % du prix.",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait se situe dans la rubrique des pénalités du contrat d'intégration ERP. Il précise les conditions financières applicables en cas de retard imputable à l'intégrateur.",
+  "seconds": 1.9
+}

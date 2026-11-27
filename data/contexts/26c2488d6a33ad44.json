@@ -1,0 +1,7 @@
+{
+  "document": "08_Juridique/RGPD/Registre des traitements.xlsx",
+  "body": "onglet « Registre » · Registre des activités de traitement (article 30 du RGPD) · Traitement : Traçabilité des produits ; Finalité : Garanties et rappels ; Catégories de données : Adresse d'installation des clients finaux ; Base légale : Obligation légale (sécurité des produits) ; Durée de conservation : 15 ans ; Responsable : Anne Vercammen",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait se situe dans le registre des activités de traitement, à la rubrique consacrée à la traçabilité des produits. Il détaille le traitement des adresses d'installation des clients finaux pour les garanties et rappels, sous la responsabilité d'Anne Vercammen.",
+  "seconds": 2.6
+}

@@ -1,0 +1,7 @@
+{
+  "document": "00_Direction/CODIR/Annexes/2026-05-18 Annexe - Go no-go Atlas.pptx",
+  "body": "Critères\n| Critère | Seuil | Résultat | Statut |\n| - | - | - | - |\n| Anomalies bloquantes ouvertes | 0 | 0 | OK |\n| Cas de test conformes | 95 % | 96,2 % | OK |\n| Utilisateurs formés | 100 % | 92 % (fin le 27 mai) | OK |\n| Répétition de la bascule | réussie | réussie (4 h 12) | OK |\n| Interface WMS Gand | 0 anomalie | 2 anomalies non bloquantes | Réserve |",
+  "model": "qwen3.8-27b",
+  "context": "Cette section détaille les critères de validation du projet Atlas. Elle présente le tableau de suivi des seuils et des résultats obtenus pour chaque indicateur.",
+  "seconds": 1.6
+}

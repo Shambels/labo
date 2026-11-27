@@ -1,0 +1,10 @@
+{
+  "path": "03_Production/Gent/Fotos_installaties/IMG_20251124_Batterijlader.jpg",
+  "kind": "image",
+  "page": null,
+  "index": null,
+  "model": "qwen3.5-9b",
+  "prompt": "Tu transcris des documents d'entreprise pour un moteur de recherche.\n1. Recopie tout le texte visible, exactement comme il est écrit : nombres, codes, dates, unités et\n   annotations manuscrites compris. Rends les tableaux en Markdown.\n2. Puis, sous le titre « Description », décris en trois phrases au plus le type d'image (organigramme,\n   plan, graphique, photo, facture...) et ce qu'elle montre qui n'est pas écrit : les rattachements\n   d'un organigramme, la valeur la plus haute d'un graphique, la position des éléments d'un plan.\nN'invente rien : si un élément est illisible, écris [illisible].",
+  "seconds": 4.1,
+  "text": "Voltis  \nBatterijlader heftrucks  \nType                          CB-48/150  \nSerienummer                   VC-2021-8840  \nBouwjaar                      2021  \nUitgangsspanning              48 V  \nLaadstroom                    150 A  \n\n| Type        | CB-48/150 |\n|-------------|-----------|\n| Serienummer | VC-2021-8840 |\n| Bouwjaar    | 2021      |\n| Uitgangsspanning | 48 V |\n| Laadstroom  | 150 A     |\n\nDescription  \nIl s’agit d’une plaque technique métallique fixée sur un appareil, probablement une batterie de chargeur pour chariot élévateur. Elle affiche les spécifications techniques du produit : type, numéro de série, année de fabrication, tension de sortie et courant de charge. Le logo « Voltis » est visible en haut à gauche, et le marquage CE figure en bas à droite, indiquant la conformité aux normes européennes."
+}

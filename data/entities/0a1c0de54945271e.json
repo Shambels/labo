@@ -1,0 +1,43 @@
+{
+  "document": "01_Finance/Comptabilite/Factures_fournisseurs/2026-01-08 Tolerie Mosane TM-2026-0042.jpg",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Tôlerie Mosane SRL",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "Fournisseur de tôles galvanisées et services de découpe"
+    },
+    {
+      "nom": "Calorvia SA",
+      "type": "client",
+      "alias": [],
+      "description": "Client de la facture fournisseur"
+    },
+    {
+      "nom": "Tôle galvanisée 1,5 mm",
+      "type": "produit",
+      "alias": [
+        "TG15"
+      ],
+      "description": "Matière première métallique livrée"
+    },
+    {
+      "nom": "Tôle galvanisée 2,0 mm",
+      "type": "produit",
+      "alias": [
+        "TG20"
+      ],
+      "description": "Matière première métallique livrée"
+    },
+    {
+      "nom": "Découpe laser et pliage",
+      "type": "produit",
+      "alias": [
+        "DEC"
+      ],
+      "description": "Service de transformation métallique"
+    }
+  ],
+  "seconds": 6.9
+}

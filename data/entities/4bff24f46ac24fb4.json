@@ -1,0 +1,21 @@
+{
+  "document": "03_Production/Gent/Fotos_installaties/IMG_20251121_Heftruck_nr_7.jpg",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Lyftec",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "fabricant de la fourche élévatrice électrique"
+    },
+    {
+      "nom": "Elektrische heftruck nr. 7",
+      "type": "équipement",
+      "alias": [
+        "LE-25"
+      ],
+      "description": "fourche élévatrice électrique de 2500 kg"
+    }
+  ],
+  "seconds": 2.9
+}

@@ -1,0 +1,7 @@
+{
+  "document": "03_Production/Procedures/Consignes EPI usine Seneffe.pdf",
+  "body": "Obligatoire dans toute l'usine\n- Chaussures de sécurité S3.\n- Gilet haute visibilité dans les zones de circulation des chariots.",
+  "model": "qwen3.8-27b",
+  "context": "Cette section détaille les équipements de protection individuelle obligatoires pour l'ensemble du personnel de l'usine de Seneffe. Elle précise le port des chaussures de sécurité et du gilet haute visibilité dans les zones de circulation des chariots.",
+  "seconds": 2.1
+}

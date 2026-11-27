@@ -1,0 +1,7 @@
+{
+  "document": "07_IT/Securite/Procedure MFA v1.docx",
+  "body": "Procédure IT-12 : activer l'authentification multifacteur (version 1)\n1. Échéance\nTous les comptes doivent être protégés par la MFA au plus tard le 28 février 2026.",
+  "model": "qwen3.8-27b",
+  "context": "Cette section définit l'échéance limite pour la mise en place de l'authentification multifacteur sur l'ensemble des comptes de l'entreprise.",
+  "seconds": 1.7
+}

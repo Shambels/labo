@@ -1,0 +1,55 @@
+{
+  "document": "03_Production/Seneffe/Rapports_mensuels/Rapport production Seneffe 2025-10.xlsx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Aéris 6 / 9",
+      "type": "produit",
+      "alias": [],
+      "description": "modèle de pompe à chaleur produit sur la ligne L1"
+    },
+    {
+      "nom": "Aéris 12",
+      "type": "produit",
+      "alias": [],
+      "description": "modèle de pompe à chaleur produit sur la ligne L2"
+    },
+    {
+      "nom": "Aéris Pro 16 / 22",
+      "type": "produit",
+      "alias": [],
+      "description": "modèle de pompe à chaleur produit sur la ligne L3"
+    },
+    {
+      "nom": "usine de Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "site de production de Calorvia"
+    },
+    {
+      "nom": "L1",
+      "type": "équipement",
+      "alias": [],
+      "description": "ligne de production des modèles Aéris 6 / 9"
+    },
+    {
+      "nom": "L2",
+      "type": "équipement",
+      "alias": [],
+      "description": "ligne de production du modèle Aéris 12"
+    },
+    {
+      "nom": "L3",
+      "type": "équipement",
+      "alias": [],
+      "description": "ligne de production des modèles Aéris Pro 16 / 22"
+    },
+    {
+      "nom": "banc d'essai",
+      "type": "équipement",
+      "alias": [],
+      "description": "équipement de test dont le capteur a causé un arrêt"
+    }
+  ],
+  "seconds": 8.6
+}

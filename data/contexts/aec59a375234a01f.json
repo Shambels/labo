@@ -1,0 +1,7 @@
+{
+  "document": "00_Direction/CODIR/2025/PV_CODIR_2025-11-17.docx",
+  "body": "Procès-verbal du Comité de direction\n4. Accident de chariot élévateur à Gand\n*Présenté par Pieter De Smet.*\nLe jeudi 13 novembre, vers 14 h 20, un préparateur de commandes a été heurté par un chariot élévateur dans l'allée 7 de l'entrepôt de Gand alors qu'il traversait l'allée. Il souffre d'une fracture du pied ; son incapacité de travail est estimée à deux semaines.\nL'analyse du conseiller en prévention montre que l'allée ne comporte pas de passage piéton marqué, que la visibilité est réduite à l'angle des racks et que le chariot circulait à environ 11 km/h. La vitesse maximale autorisée dans l'entrepôt était jusqu'ici de 12 km/h.",
+  "model": "qwen3.8-27b",
+  "context": "Point 4 du procès-verbal, présenté par Pieter De Smet. Il détaille l'accident de chariot élévateur survenu le 13 novembre dans l'entrepôt de Gand et l'analyse des causes par le conseiller en prévention.",
+  "seconds": 2.5
+}

@@ -1,0 +1,10 @@
+{
+  "path": "00_Direction/CODIR/Annexes/2026-04-13 Annexe - Resultats enquete teletravail.pdf",
+  "kind": "embedded",
+  "page": 0,
+  "index": 1,
+  "model": "qwen3.8-27b",
+  "prompt": "Tu transcris des documents d'entreprise pour un moteur de recherche.\n1. Recopie tout le texte visible, exactement comme il est écrit : nombres, codes, dates, unités et\n   annotations manuscrites compris. Rends les tableaux en Markdown.\n2. Dans un schéma, un plan ou un organigramme, recopie aussi chaque texte posé sur un lien, une flèche ou un\n   trait (débit, distance, type de connexion, rattachement), sur une ligne qui commence par le nom des deux\n   éléments reliés, tels qu'ils sont écrits sur l'image, séparés par un tiret, puis deux-points et le texte.\n   Un tel texte n'a de sens qu'avec les deux éléments qu'il relie.\n3. Puis, sous le titre « Description », décris en trois phrases au plus le type d'image (organigramme,\n   plan, graphique, photo, facture...) et ce qu'elle montre qui n'est pas écrit : les rattachements\n   d'un organigramme, la valeur la plus haute d'un graphique, la position des éléments d'un plan.\nN'invente rien : si un élément est illisible, écris [illisible].",
+  "seconds": 7.1,
+  "text": "Pilote télétravail : satisfaction (nombre de réponses par note)\n\n30\n25\n20\n15\n10\n5\n0\n2\n2\n4\n10\n32\n24\n10\n4 5 6 7 8 9 10\n\nEnquête du 16 au 27 mars 2026 · 84 réponses\n\nDescription\nL'image est un graphique en barres verticales représentant la distribution des réponses à une enquête de satisfaction. Il montre que la note la plus fréquemment attribuée est 8, avec 32 réponses, suivie de la note 9 avec 24 réponses. Les notes s'étendent de 4 à 10 sur l'axe horizontal."
+}

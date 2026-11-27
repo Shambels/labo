@@ -1,0 +1,31 @@
+{
+  "document": "05_Commercial/Offres/DV-2026-0189 Thermo.pdf",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Thermo Services Lille SARL",
+      "type": "client",
+      "alias": [],
+      "description": "client de l'offre de prix"
+    },
+    {
+      "nom": "Aéris 9",
+      "type": "produit",
+      "alias": [],
+      "description": "produit de la gamme standard"
+    },
+    {
+      "nom": "gamme standard",
+      "type": "produit",
+      "alias": [],
+      "description": "gamme de produits à délai court"
+    },
+    {
+      "nom": "Aéris Pro",
+      "type": "produit",
+      "alias": [],
+      "description": "gamme de produits à délai long"
+    }
+  ],
+  "seconds": 3.8
+}

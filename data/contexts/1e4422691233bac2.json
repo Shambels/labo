@@ -1,0 +1,7 @@
+{
+  "document": "03_Production/Seneffe/Ligne_L4/PV presérie L4 2026-06-18.docx",
+  "body": "Ligne L4 : procès-verbal de présérie du 18 juin 2026\n| Participants | Marc Delhaye, Romain Dethier, Fabrice Collin, deux techniciens Linetech |\n| - | - |\n| Produit | Aéris Pro 16 |\n| Quantité assemblée | 120 unités |\n| Temps de cycle mesuré | 11,8 minutes (objectif : 10,6 minutes) |\n| Unités non conformes | 3 (couple de serrage des raccords frigorifiques) |\n| Capacité retenue jusqu'en septembre | 38 unités par jour |\n| Capacité nominale visée | 45 unités par jour |",
+  "model": "qwen3.8-27b",
+  "context": "Cette section récapitulative du procès-verbal détaille les indicateurs de production de la présérie de l'Aéris Pro 16 sur la ligne L4 de Seneffe. Elle liste les participants, les résultats d'assemblage et les capacités de production retenues pour la période estivale.",
+  "seconds": 3.3
+}

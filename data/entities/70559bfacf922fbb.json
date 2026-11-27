@@ -1,0 +1,31 @@
+{
+  "document": "08_Juridique/RGPD/Registre des traitements.xlsx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Nadia Benali",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable des traitements de gestion du personnel et recrutement"
+    },
+    {
+      "nom": "Olivier Hardy",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable des traitements de contrôle d'accès et vidéosurveillance"
+    },
+    {
+      "nom": "Pierre-Yves Collard",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable du traitement de gestion commerciale clients et installateurs"
+    },
+    {
+      "nom": "Anne Vercammen",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable du traitement de traçabilité des produits"
+    }
+  ],
+  "seconds": 4.5
+}

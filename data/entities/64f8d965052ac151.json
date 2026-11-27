@@ -1,0 +1,31 @@
+{
+  "document": "00_Direction/Strategie/Photo tableau SWOT seminaire 2025-08-26.jpg",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Aérís Pro",
+      "type": "produit",
+      "alias": [],
+      "description": "gamme de produits reconnue"
+    },
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "usine saturée à 92 %"
+    },
+    {
+      "nom": "Kompra",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "fournisseur de compresseurs"
+    },
+    {
+      "nom": "CODIR",
+      "type": "instance",
+      "alias": [],
+      "description": "comité de direction"
+    }
+  ],
+  "seconds": 3.9
+}

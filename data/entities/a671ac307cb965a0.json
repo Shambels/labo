@@ -1,0 +1,27 @@
+{
+  "document": "01_Finance/Comptabilite/Factures_fournisseurs/2026-01-31 Resto Pro 2026-01.jpg",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Resto'Pro SRL",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "prestataire de restauration pour le restaurant d'entreprise"
+    },
+    {
+      "nom": "Calovia SA",
+      "type": "client",
+      "alias": [
+        "Calorvia"
+      ],
+      "description": "entreprise cliente du restaurant d'entreprise de Seneffe"
+    },
+    {
+      "nom": "restaurant d'entreprise de Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "lieu de service des repas et réunions"
+    }
+  ],
+  "seconds": 3.4
+}

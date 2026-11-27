@@ -1,0 +1,7 @@
+{
+  "document": "99_Archives/2024/Budget 2025 approuve.xlsx",
+  "body": "onglet « Synthèse » · Budget 2025 approuvé (k€)\n| Indicateur | Budget 2025 |\n|---|---|\n| Chiffre d'affaires | 152000 |\n| EBITDA | 13680 |\n| Taux d'EBITDA | 9,0 % |\n| Investissements | 1940 |\n| Effectif fin 2025 (ETP) | 628 |",
+  "model": "qwen3.8-27b",
+  "context": "La rubrique « Synthèse » présente les indicateurs clés du budget approuvé pour l'exercice 2025. Elle détaille les prévisions de chiffre d'affaires, de rentabilité, d'investissements et d'effectifs de l'entreprise.",
+  "seconds": 3.1
+}

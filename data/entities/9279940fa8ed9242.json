@@ -1,0 +1,61 @@
+{
+  "document": "09_Communication/Communiques_presse/2026-03-19 PR 2025 results.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Lucie Bastin",
+      "type": "personne",
+      "alias": [],
+      "description": "contact presse de Calorvia"
+    },
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "site d'implantation d'une nouvelle ligne d'assemblage"
+    },
+    {
+      "nom": "Herstal",
+      "type": "site",
+      "alias": [],
+      "description": "site d'implantation d'un nouveau entrepôt"
+    },
+    {
+      "nom": "Namur",
+      "type": "site",
+      "alias": [],
+      "description": "site de Calorvia"
+    },
+    {
+      "nom": "Ghent",
+      "type": "site",
+      "alias": [],
+      "description": "site de Calorvia"
+    },
+    {
+      "nom": "Lille",
+      "type": "site",
+      "alias": [],
+      "description": "site de Calorvia"
+    },
+    {
+      "nom": "new assembly line",
+      "type": "équipement",
+      "alias": [],
+      "description": "nouvelle ligne d'assemblage en cours d'investissement"
+    },
+    {
+      "nom": "new ERP system",
+      "type": "équipement",
+      "alias": [],
+      "description": "nouveau système ERP en cours d'investissement"
+    },
+    {
+      "nom": "warehouse",
+      "type": "équipement",
+      "alias": [],
+      "description": "nouveau entrepôt en cours d'investissement"
+    }
+  ],
+  "seconds": 6.8
+}

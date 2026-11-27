@@ -1,0 +1,10 @@
+{
+  "path": "04_Qualite/Indicateurs/Pareto causes non-conformites 2025.png",
+  "kind": "image",
+  "page": null,
+  "index": null,
+  "model": "qwen3.8-27b",
+  "prompt": "Tu transcris des documents d'entreprise pour un moteur de recherche.\n1. Recopie tout le texte visible, exactement comme il est écrit : nombres, codes, dates, unités et\n   annotations manuscrites compris. Rends les tableaux en Markdown.\n2. Dans un organigramme ou une arborescence, regroupe chaque case sous la case dont elle dépend : écris la case\n   supérieure (son texte complet, par exemple le nom et la fonction), puis, juste en dessous, chaque case qui lui\n   est rattachée sur une ligne qui commence par « - ». Ne recopie jamais les cases rangée par rangée : une case n'a\n   de sens qu'avec celle dont elle dépend.\n3. Dans un schéma ou un plan, recopie chaque texte posé sur un lien, une flèche ou un trait (débit, distance,\n   type de connexion), sur une ligne qui commence par le nom des deux éléments reliés, tels qu'ils sont écrits sur\n   l'image, séparés par un tiret, puis deux-points et le texte. N'écris rien pour un lien sans texte.\n4. Puis, sous le titre « Description », décris en trois phrases au plus le type d'image (organigramme,\n   plan, graphique, photo, facture...) et ce qu'elle montre qui n'est pas écrit : la valeur la plus haute d'un\n   graphique, la position des éléments d'un plan.\nN'invente rien : si un élément est illisible, écris [illisible].",
+  "seconds": 8.1,
+  "text": "Non-conformités 2025 par cause (nombre de fiches)\n\n17.5\n15.0\n12.5\n10.0\n7.5\n5.0\n2.5\n0.0\n\n19\n11\n8\n5\n4\n2\n\nFournisseur\nBrasage\nEmballage\nÉtiquetage\nMontage\nLogiciel\n\nDirection qualité - 49 fiches en 2025\n\nDescription\nIl s'agit d'un graphique à barres verticales représentant le nombre de fiches de non-conformité par cause pour l'année 2025. Les barres sont classées par ordre décroissant de fréquence, avec la cause « Fournisseur » affichant la valeur la plus élevée (19). La cause « Logiciel » présente la valeur la plus basse (2)."
+}

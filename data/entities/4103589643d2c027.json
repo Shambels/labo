@@ -1,0 +1,65 @@
+{
+  "document": "01_Finance/Investissements/Demande capex CAPEX-2026-003 - Installation photovoltaïque de Seneffe.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Thomas Lambert",
+      "type": "personne",
+      "alias": [],
+      "description": "demandeur de l'investissement photovoltaïque"
+    },
+    {
+      "nom": "Sarah Vandamme",
+      "type": "personne",
+      "alias": [],
+      "description": "contrôleuse de gestion"
+    },
+    {
+      "nom": "Hélène Marchal",
+      "type": "personne",
+      "alias": [],
+      "description": "validatrice du CODIR"
+    },
+    {
+      "nom": "Président du conseil",
+      "type": "personne",
+      "alias": [],
+      "description": "membre du conseil d'administration"
+    },
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [
+        "usine de Seneffe"
+      ],
+      "description": "site de l'installation photovoltaïque"
+    },
+    {
+      "nom": "Installation photovoltaïque de Seneffe",
+      "type": "projet",
+      "alias": [
+        "CAPEX-2026-003"
+      ],
+      "description": "projet d'installation de panneaux solaires"
+    },
+    {
+      "nom": "Héliosol SRL",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "fournisseur des panneaux photovoltaïques"
+    },
+    {
+      "nom": "CODIR",
+      "type": "instance",
+      "alias": [],
+      "description": "comité de direction"
+    },
+    {
+      "nom": "Conseil d'administration",
+      "type": "instance",
+      "alias": [],
+      "description": "instance de validation des investissements"
+    }
+  ],
+  "seconds": 7.6
+}

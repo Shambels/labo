@@ -1,0 +1,23 @@
+{
+  "document": "01_Finance/Comptabilite/Factures_fournisseurs/2026-02-02 Linetech LT-26-0057.jpg",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Linetechn Automation BV",
+      "type": "fournisseur",
+      "alias": [
+        "Linetech"
+      ],
+      "description": "fournisseur de la ligne d'assemblage L4"
+    },
+    {
+      "nom": "Ligne d'assemblage L4",
+      "type": "équipement",
+      "alias": [
+        "L4"
+      ],
+      "description": "ligne d'assemblage en phase 1"
+    }
+  ],
+  "seconds": 3.7
+}

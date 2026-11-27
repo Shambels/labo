@@ -1,0 +1,31 @@
+{
+  "document": "04_Qualite/Indicateurs/Rebut par ligne decembre 2025.png",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "L1",
+      "type": "équipement",
+      "alias": [],
+      "description": "ligne de production de l'usine de Seneffe"
+    },
+    {
+      "nom": "L2",
+      "type": "équipement",
+      "alias": [],
+      "description": "ligne de production de l'usine de Seneffe"
+    },
+    {
+      "nom": "L3",
+      "type": "équipement",
+      "alias": [],
+      "description": "ligne de production de l'usine de Seneffe"
+    },
+    {
+      "nom": "Usine de Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "site de production de Calorvia"
+    }
+  ],
+  "seconds": 4.4
+}

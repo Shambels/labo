@@ -1,0 +1,73 @@
+{
+  "document": "01_Finance/Comptabilite/Export grand livre fournisseurs 2026-05.csv",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Tôlerie Mosane SRL",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "fournisseur de tôlerie"
+    },
+    {
+      "nom": "Elcora Electronics BV",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "fournisseur d'électronique"
+    },
+    {
+      "nom": "TransArdenne SA",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "fournisseur de transport"
+    },
+    {
+      "nom": "Kompra GmbH",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "fournisseur de composants"
+    },
+    {
+      "nom": "Valtek Components Ltd",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "fournisseur de composants"
+    },
+    {
+      "nom": "LiftService Benelux NV",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "prestataire de maintenance d'ascenseurs"
+    },
+    {
+      "nom": "Intégra Conseil SRL",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "prestataire de conseil"
+    },
+    {
+      "nom": "Héliosol SRL",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "fournisseur de solutions solaires"
+    },
+    {
+      "nom": "Linetech Automation BV",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "fournisseur d'automatisation"
+    },
+    {
+      "nom": "Resto'Pro SRL",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "prestataire de restauration"
+    },
+    {
+      "nom": "Bureau Plus SRL",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "prestataire de services de bureau"
+    }
+  ],
+  "seconds": 8.6
+}

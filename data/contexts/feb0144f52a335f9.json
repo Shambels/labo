@@ -1,0 +1,7 @@
+{
+  "document": "00_Direction/Conseil_administration/Projets_PV/Projet PV CA 2025-11-18.docx",
+  "body": "Procès-verbal de la réunion du conseil d'administration\n4. Remplacement de l'ERP : choix de la solution\nKevin Mertens présente les résultats de la consultation. Praxio obtient le meilleur score (82/100), devant Kerneo (76) et Sylvan Suite (69).\nLe conseil approuve, à l'unanimité, le choix de la solution Praxio et un budget de 680 000 € sur cinq ans, à la condition que le contrat d'intégration avec Intégra Conseil soit conclu au forfait.",
+  "model": "qwen3.8-27b",
+  "context": "Point 4 du procès-verbal du conseil d'administration, consacré au remplacement de l'ERP. Il détaille le choix de la solution Praxio et l'approbation du budget associé.",
+  "seconds": 2.0
+}

@@ -1,0 +1,39 @@
+{
+  "document": "00_Direction/Conseil_administration/Convocations/Convocation CA 2025-11-18.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Conseil d'administration",
+      "type": "instance",
+      "alias": [
+        "CA"
+      ],
+      "description": "organe de direction de Calorvia SA"
+    },
+    {
+      "nom": "Caroline Hendrickx",
+      "type": "personne",
+      "alias": [],
+      "description": "secrétaire du conseil"
+    },
+    {
+      "nom": "Siège social",
+      "type": "site",
+      "alias": [],
+      "description": "lieu de réunion du conseil d'administration"
+    },
+    {
+      "nom": "ERP",
+      "type": "produit",
+      "alias": [],
+      "description": "système de gestion d'entreprise à choisir"
+    },
+    {
+      "nom": "Ligne L4",
+      "type": "équipement",
+      "alias": [],
+      "description": "ligne de production faisant l'objet d'une décision"
+    }
+  ],
+  "seconds": 4.4
+}

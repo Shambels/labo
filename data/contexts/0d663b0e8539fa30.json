@@ -1,0 +1,7 @@
+{
+  "document": "01_Finance/Tresorerie/Prevision tresorerie 2026.xlsx",
+  "body": "onglet « Prévision » · Prévision de trésorerie 2026 (k€) · mise à jour du 12/01/2026 · lignes 1 à 5\n| Mois | Trésorerie début | Encaissements | Décaissements | Investissements | Trésorerie fin |\n|---|---|---|---|---|---|\n| Janvier | 8420 | 14925 | 13242 | 120 | 9983 |\n| Février | 9983 | 14065 | 12479 | 351 | 11218 |\n| Mars | 11218 | 13528 | 12003 | 95 | 12648 |\n| Avril | 12648 | 12025 | 10669 | 140 | 13864 |\n| Mai | 13864 | 11166 | 9907 | 160 | 14963 |",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait se situe dans l'onglet « Prévision » du classeur de trésorerie. Il détaille les flux financiers mensuels de janvier à mai 2026.",
+  "seconds": 3.9
+}

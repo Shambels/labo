@@ -1,0 +1,27 @@
+{
+  "document": "07_IT/Support/README.md",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Praxio",
+      "type": "produit",
+      "alias": [
+        "ERP Praxio"
+      ],
+      "description": "ERP de l'entreprise"
+    },
+    {
+      "nom": "Intégra Conseil",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "prestataire de maintenance de l'ERP"
+    },
+    {
+      "nom": "GesPro 7",
+      "type": "produit",
+      "alias": [],
+      "description": "logiciel archivé en lecture seule"
+    }
+  ],
+  "seconds": 3.3
+}

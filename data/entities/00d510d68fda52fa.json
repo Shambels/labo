@@ -1,0 +1,19 @@
+{
+  "document": "03_Production/Seneffe/Photos_equipements/IMG_20260314_Compresseur_dair.jpg",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Airvex",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "marque du compresseur à vis"
+    },
+    {
+      "nom": "AVX-55 VSD",
+      "type": "produit",
+      "alias": [],
+      "description": "compresseur à vis à vitesse variable"
+    }
+  ],
+  "seconds": 2.5
+}

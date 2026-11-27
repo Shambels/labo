@@ -1,0 +1,37 @@
+{
+  "document": "03_Production/Gent/Veiligheid/Incidentrapport 2025-11-12 heftruck gang 7.pdf",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Olivier Hardy",
+      "type": "personne",
+      "alias": [],
+      "description": "preventieadviseur rédacteur du rapport d'incident"
+    },
+    {
+      "nom": "Els Van den Broeck",
+      "type": "personne",
+      "alias": [],
+      "description": "collaboratrice à la rédaction du rapport"
+    },
+    {
+      "nom": "Magazijn Gent",
+      "type": "site",
+      "alias": [],
+      "description": "entrepôt de Gand où l'incident s'est produit"
+    },
+    {
+      "nom": "Lyftec LE-20",
+      "type": "équipement",
+      "alias": [],
+      "description": "chariot élévateur impliqué dans l'accident"
+    },
+    {
+      "nom": "Printer",
+      "type": "équipement",
+      "alias": [],
+      "description": "imprimante d'étiquettes déplacée après l'incident"
+    }
+  ],
+  "seconds": 5.4
+}

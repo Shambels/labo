@@ -1,0 +1,7 @@
+{
+  "document": "09_Communication/Intranet/Restaurant Seneffe menu semaine 12.html",
+  "body": "Restaurant de Seneffe : menu de la semaine 12\n| Jour | Plat du jour | Végétarien |\n| - | - | - |\n| Lundi | Boulettes sauce tomate | Lasagne aux légumes |\n| Mardi | Vol-au-vent | Curry de pois chiches |\n| Mercredi | Carbonnades flamandes | Quiche aux poireaux |\n| Jeudi | Filet de cabillaud | Risotto aux champignons |\n| Vendredi | Américain frites | Falafels |",
+  "model": "qwen3.8-27b",
+  "context": "Cette rubrique présente le menu hebdomadaire du restaurant de Seneffe. Elle détaille les plats du jour et les options végétariens servis du lundi au vendredi.",
+  "seconds": 1.9
+}

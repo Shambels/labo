@@ -1,0 +1,7 @@
+{
+  "document": "00_Direction/CODIR/Annexes/2025-10-06 Annexe - Simulation hausse tarifaire.xlsx",
+  "body": "onglet « Simulation » · Simulation de la hausse tarifaire 2026 (base : chiffre d'affaires 2025 estimé à 148 M€)\n| Scénario | Hausse standard | Hausse premium | Perte de volume estimée | Gain de CA estimé (k€) |\n|---|---|---|---|---|\n| A : hausse uniforme | 4 % | 4 % | 3 % sur la gamme standard | 5900 |\n| B : hausse différenciée | 3,5 % | 5 % | 1 % sur la gamme standard | 5500 |\n| C : gel des prix | 0 % | 0 % | 0 % | 0 |",
+  "model": "qwen3.8-27b",
+  "context": "Cette section présente le tableau comparatif des trois scénarios de hausse tarifaire pour 2026, détaillant les impacts sur les volumes et le chiffre d'affaires.",
+  "seconds": 2.4
+}

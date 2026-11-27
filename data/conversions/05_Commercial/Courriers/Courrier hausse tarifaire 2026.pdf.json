@@ -1,0 +1,131 @@
+{
+  "schema_name": "DoclingDocument",
+  "version": "1.11.0",
+  "name": "Courrier hausse tarifaire 2026",
+  "origin": {
+    "mimetype": "application/pdf",
+    "binary_hash": 15350252139727787866,
+    "filename": "Courrier hausse tarifaire 2026.pdf"
+  },
+  "furniture": {
+    "self_ref": "#/furniture",
+    "children": [],
+    "content_layer": "furniture",
+    "name": "_root_",
+    "label": "unspecified"
+  },
+  "body": {
+    "self_ref": "#/body",
+    "children": [
+      {
+        "$ref": "#/texts/0"
+      },
+      {
+        "$ref": "#/texts/1"
+      },
+      {
+        "$ref": "#/texts/2"
+      }
+    ],
+    "content_layer": "body",
+    "name": "_root_",
+    "label": "unspecified"
+  },
+  "groups": [],
+  "texts": [
+    {
+      "self_ref": "#/texts/0",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "furniture",
+      "label": "page_header",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 62.3622,
+            "t": 813.0068128,
+            "r": 178.01063920000004,
+            "b": 806.1630624000001,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            35
+          ]
+        }
+      ],
+      "orig": "Calorvia SA \u00b7 Direction commerciale",
+      "text": "Calorvia SA \u00b7 Direction commerciale"
+    },
+    {
+      "self_ref": "#/texts/1",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 775.4337168000001,
+            "r": 526.9133705499997,
+            "b": 629.4512944,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            624
+          ]
+        }
+      ],
+      "orig": "Namur, le 24 octobre 2025 Objet : \u00e9volution de nos prix au 1er janvier 2026 Ch\u00e8re cliente, cher client, La hausse du prix de l'acier, l'indexation des salaires et le rench\u00e9rissement des composants \u00e9lectroniques nous conduisent \u00e0 adapter nos prix catalogue au 1er janvier 2026 : +3,5 % sur la gamme standard (A\u00e9ris 6, 9 et 12, Ventis D300 et D450) et +5 % sur la gamme premium (A\u00e9ris Pro et Ventis D450 Pro). Les commandes confirm\u00e9es avant le 15 d\u00e9cembre 2025 et livr\u00e9es avant le 31 janvier 2026 seront factur\u00e9es aux prix 2025. Votre responsable commercial reste \u00e0 votre disposition. Pierre-Yves Collard, directeur commercial",
+      "text": "Namur, le 24 octobre 2025 Objet : \u00e9volution de nos prix au 1er janvier 2026 Ch\u00e8re cliente, cher client, La hausse du prix de l'acier, l'indexation des salaires et le rench\u00e9rissement des composants \u00e9lectroniques nous conduisent \u00e0 adapter nos prix catalogue au 1er janvier 2026 : +3,5 % sur la gamme standard (A\u00e9ris 6, 9 et 12, Ventis D300 et D450) et +5 % sur la gamme premium (A\u00e9ris Pro et Ventis D450 Pro). Les commandes confirm\u00e9es avant le 15 d\u00e9cembre 2025 et livr\u00e9es avant le 31 janvier 2026 seront factur\u00e9es aux prix 2025. Votre responsable commercial reste \u00e0 votre disposition. Pierre-Yves Collard, directeur commercial"
+    },
+    {
+      "self_ref": "#/texts/2",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "furniture",
+      "label": "page_footer",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 204.7511,
+            "t": 33.47927279999999,
+            "r": 390.52453760000003,
+            "b": 26.635522400000013,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            61
+          ]
+        }
+      ],
+      "orig": "Calorvia SA (entreprise fictive) \u00b7 Diffusion interne \u00b7 page 1",
+      "text": "Calorvia SA (entreprise fictive) \u00b7 Diffusion interne \u00b7 page 1"
+    }
+  ],
+  "pictures": [],
+  "tables": [],
+  "key_value_items": [],
+  "form_items": [],
+  "pages": {
+    "1": {
+      "size": {
+        "width": 595.2756,
+        "height": 841.8898
+      },
+      "page_no": 1
+    }
+  }
+}

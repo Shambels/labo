@@ -1,0 +1,7 @@
+{
+  "document": "03_Production/Procedures/MO-SEN-07 Brasage des vannes 4 voies rev C.pdf",
+  "body": "Paramètres\n- Métal d'apport : baguette à 15 % d'argent.\n- Balayage d'azote pendant le brasage.\n- Temps de chauffe : 25 à 35 secondes.",
+  "model": "qwen3.8-27b",
+  "context": "La rubrique « Paramètres » du mode opératoire détaille les conditions techniques de brasage des vannes quatre voies pour les modèles Aéris 6, 9 et 12.",
+  "seconds": 1.8
+}

@@ -1,0 +1,7 @@
+{
+  "document": "01_Finance/Budget_2026/Budget 2026 v2.xlsx",
+  "body": "onglet « Compte de résultats » · Compte de résultats budgété 2026 (k€) · lignes 8 à 13\n| Mois | Chiffre d'affaires | EBITDA | Taux d'EBITDA |\n|---|---|---|---|\n| Août | 9739 | 906 | 9,3 % |\n| Septembre | 12881 | 1198 | 9,3 % |\n| Octobre | 14766 | 1373 | 9,3 % |\n| Novembre | 16546 | 1539 | 9,3 % |\n| Décembre | 17594 | 1635 | 9,3 % |\n| Total 2026 | 155200 | 14434 | 9,3 % |",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait se situe dans l'onglet « Compte de résultats » et présente les prévisions mensuelles de chiffre d'affaires et d'EBITDA pour la seconde moitié de l'année 2026. Il détaille les données budgétées d'août à décembre ainsi que le total annuel.",
+  "seconds": 3.0
+}

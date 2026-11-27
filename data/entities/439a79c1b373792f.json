@@ -1,0 +1,35 @@
+{
+  "document": "01_Finance/Comptabilite/Factures_fournisseurs/2026-02-06 Kompra KG-2026-1047.jpg",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Kompra GmbH",
+      "type": "fournisseur",
+      "alias": [
+        "Kompra KG"
+      ],
+      "description": "fournisseur de compresseurs basé à Aachen"
+    },
+    {
+      "nom": "KX-9R",
+      "type": "produit",
+      "alias": [],
+      "description": "compresseur rotatif R32 de 9 kW"
+    },
+    {
+      "nom": "KX-16S",
+      "type": "produit",
+      "alias": [],
+      "description": "compresseur scroll R32 de 16 kW"
+    },
+    {
+      "nom": "Seneffe plant",
+      "type": "site",
+      "alias": [
+        "installation de Seneffe"
+      ],
+      "description": "site de livraison des compresseurs"
+    }
+  ],
+  "seconds": 5.2
+}

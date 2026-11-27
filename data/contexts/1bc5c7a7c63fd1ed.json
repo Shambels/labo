@@ -1,0 +1,7 @@
+{
+  "document": "06_Achats/Fournisseurs/Supply agreement Kompra GmbH 2024-2026.pdf",
+  "body": "4. Quality\nTarget defect rate: 500 PPM. Above 1,000 PPM on a rolling quarter, the Supplier shall submit an 8D report within ten working days.",
+  "model": "qwen3.8-27b",
+  "context": "Cette rubrique détaille les exigences de qualité applicables aux compresseurs fournis par Kompra GmbH. Elle précise le taux de défaut cible ainsi que la procédure de reporting en cas de dépassement.",
+  "seconds": 1.8
+}

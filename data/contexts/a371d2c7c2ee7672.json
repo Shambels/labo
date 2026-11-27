@@ -1,0 +1,7 @@
+{
+  "document": "04_Qualite/Rappel_Aeris12/Liste numeros de serie concernes.xlsx",
+  "body": "onglet « Unités concernées » · lignes 141 à 144\n| Numéro de série | Date de production | Installateur | Région | Statut | Date d'intervention |\n|---|---|---|---|---|---|\n| AE12-25-4641 | 14/11/2025 | Installatiebedrijf Wouters | Flandre | Réparée | 28/01/2026 |\n| AE12-25-4642 | 14/11/2025 | Énergies du Condroz SRL | Namur | Réparée | 18/01/2026 |\n| AE12-25-4643 | 14/11/2025 | Chauffage Lambert & Fils | Luxembourg | Réparée | 04/01/2026 |\n| AE12-25-4644 | 15/11/2025 | Clim'Expert Hainaut | Hainaut | Réparée | 08/01/2026 |",
+  "model": "qwen3.8-27b",
+  "context": "Ces lignes figurent dans l'onglet « Unités concernées » du classeur de rappel. Elles détaillent le statut des unités produites les 14 et 15 novembre 2025, installées en Flandre, Namur, Luxembourg et Hainaut.",
+  "seconds": 2.9
+}

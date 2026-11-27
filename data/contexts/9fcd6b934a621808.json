@@ -1,0 +1,7 @@
+{
+  "document": "01_Finance/Comptabilite/Export grand livre fournisseurs 2026-05.csv",
+  "body": "| numero | fournisseur | date | echeance | montant_ttc | statut |\n| - | - | - | - | - | - |\n| TM-2026-0042 | Tôlerie Mosane SRL | 08/01/2026 | 07/02/2026 | 48 602,80 | payée |\n| TM-2025-0391 | Tôlerie Mosane SRL | 14/11/2025 | 14/12/2025 | 33 057,20 | payée |\n| EL-25-11873 | Elcora Electronics BV | 03/12/2025 | 02/01/2026 | 67 421,20 | payée |\n| TA-2026-00218 | TransArdenne SA | 27/02/2026 | 29/03/2026 | 24 856,79 | payée |\n",
+  "model": "qwen3.8-27b",
+  "context": "Cette section du grand livre fournisseurs présente les factures réglées de Tôlerie Mosane, Elcora Electronics et TransArdenne.",
+  "seconds": 2.8
+}

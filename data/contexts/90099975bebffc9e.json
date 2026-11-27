@@ -1,0 +1,7 @@
+{
+  "document": "05_Commercial/Fiches_produits/Aéris_12_FR.pdf",
+  "body": "Aéris 12 · Fiche technique\nPompe à chaleur air-eau pour le chauffage et l'eau chaude sanitaire des maisons individuelles.\n| Caractéristique | Valeur |\n| - | - |\n| Puissance calorifique nominale | 12 kW |\n| SCOP (climat moyen, 35 °C) | 4,4 |\n| Puissance acoustique | 54 dB(A) |\n| Fluide frigorigène | R32 (1,9 kg) |\n| Poids | 96 kg |\n| Dimensions (H x L x P) | 1250 x 940 x 450 mm |\n| Classe énergétique | A++ |\n| Température d'eau maximale | 60 °C |\nGarantie : 5 ans sur le compresseur, 2 ans sur les autres pièces.",
+  "model": "qwen3.8-27b",
+  "context": "Cette section présente les caractéristiques techniques et la garantie de la pompe à chaleur air-eau Aéris 12, destinée au chauffage et à l'eau chaude sanitaire des maisons individuelles.",
+  "seconds": 2.2
+}

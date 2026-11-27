@@ -1,0 +1,7 @@
+{
+  "document": "02_RH/Enquetes/Enquete teletravail - reponses brutes.xlsx",
+  "body": "onglet « Réponses » : tableau de 84 lignes. Colonnes : N°, Service, Site, Satisfaction (1-10), Souhaite continuer, Commentaire. Service : RH (13), Direction (13), Communication (13), Informatique (11), Achats (10), Commercial (9), Finance (8), Qualité (7). Site : Namur (78), Lille (6). Satisfaction (1-10) : 8 (32), 9 (24), 7 (10), 10 (10), 6 (4), 5 (2), 4 (2). Souhaite continuer : oui (72), non (12). Commentaire : Gain de temps de trajet important (12), Souhaite un jour commun de présence (11), Écran supplémentaire nécessaire à domicile (11), Meilleure concentration pour les tâches de fond (9), Réunions hybrides à améliorer (7), Difficile de joindre certains collègues le vendredi (5).",
+  "model": "qwen3.8-27b",
+  "context": "Cette section présente la synthèse des réponses brutes de l'enquête sur le télétravail. Elle détaille la répartition des participants par service et site, ainsi que les statistiques de satisfaction et les commentaires recueillis.",
+  "seconds": 5.1
+}

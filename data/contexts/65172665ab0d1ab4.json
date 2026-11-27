@@ -1,0 +1,7 @@
+{
+  "document": "01_Finance/Reporting_mensuel/Commentaires de gestion T4 2025.pdf",
+  "body": "Commentaires de gestion · T4 2025\nChiffre d'affaires du trimestre : 46 700 k€. EBITDA : 3 887 k€ soit 8 3 % du chiffre d'affaires. Le trimestre est marqué par un pic d'activité en novembre et décembre, soutenu par quatre samedis de production à Seneffe. La provision de 180 000 € liée au rappel de l'Aéris 12 pèse sur le résultat de décembre. Les frais de personnel intérimaire de Gand ont augmenté de 22 % par rapport au troisième trimestre, en raison du taux d'absentéisme et de la saturation de l'entrepôt.",
+  "model": "qwen3.8-27b",
+  "context": "La rubrique « Commentaires de gestion » du rapport financier trimestriel détaille les performances commerciales et opérationnelles de l'entreprise. Elle met en lumière les facteurs d'activité spécifiques aux sites de Seneffe et de Gand, ainsi que l'impact financier du rappel du produit Aéris 12.",
+  "seconds": 2.9
+}

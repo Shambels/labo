@@ -1,0 +1,19 @@
+{
+  "document": "01_Finance/Reporting_mensuel/Commentaires de gestion T1 2026.pdf",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Distrinergie",
+      "type": "client",
+      "alias": [],
+      "description": "client majeur de Calorvia"
+    },
+    {
+      "nom": "Valtek",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "fournisseur lié au rappel de produit"
+    }
+  ],
+  "seconds": 1.8
+}

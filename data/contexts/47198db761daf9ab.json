@@ -1,0 +1,7 @@
+{
+  "document": "01_Finance/Comptabilite/Factures_fournisseurs/2026-03-12 Heliosol acompte FAC-HS-2026-012.jpg",
+  "body": "Image\nHéliosol SRL  \nRue du Soleil Levant 3, 1400 Nivelles  \nTVA BE 0712.448.035  \n\nFacture n° FAC-HS-2026-012  \nDate 12/03/2026  \nÉchéance 11/04/2026  \nClient Calorvia SA - usine de Seneffe  \n\n| Réf. | Désignation | Qté | Prix unit. | Total HT |\n|------|-------------|-----|------------|----------|\n| ACO | Acompte 30 % - photovoltaïque 520 kWc | 1 | 123 000,00 | 123 000,00 |\n\nTotal HT 123 000,00 €  \nTVA 21 % 25 830,00 €  \nTotal TTC 148 830,00 €  \n\nSolde à la réception de l'installation (prévue en juillet 2026).\n\nDescription  \nIl s’agit d’une facture commerciale émise par Héliosol SRL pour un acompte relatif à une installation photovoltaïque de 520 kWc destinée à l’usine de Seneffe de Calorvia SA. Le document inclut les montants HT, TVA et TTC, ainsi qu’une mention de solde payable à la réception de l’installation, prévue en juillet 2026. La facture est datée du 12 mars 2026 avec une échéance au 11 avril 2026.",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait correspond à l'intégralité du document, situé dans la rubrique des factures fournisseurs. Il détaille l'acompte de 30 % pour l'installation photovoltaïque de l'usine de Seneffe.",
+  "seconds": 2.9
+}

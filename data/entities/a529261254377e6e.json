@@ -1,0 +1,31 @@
+{
+  "document": "02_RH/Politiques/Reglement de travail - extrait horaires.pdf",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Namur",
+      "type": "site",
+      "alias": [],
+      "description": "site avec personnel administratif"
+    },
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "site avec équipes de production matin et après-midi"
+    },
+    {
+      "nom": "Gand",
+      "type": "site",
+      "alias": [],
+      "description": "site avec équipes de production matin et nuit"
+    },
+    {
+      "nom": "Lille",
+      "type": "site",
+      "alias": [],
+      "description": "site avec bureau commercial"
+    }
+  ],
+  "seconds": 2.9
+}

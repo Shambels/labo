@@ -1,0 +1,13 @@
+{
+  "document": "03_Production/Gent/Veiligheid/Affiche snelheid magazijn.jpg",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Magazijn Gent",
+      "type": "site",
+      "alias": [],
+      "description": "entrepôt de Gand avec règles de circulation"
+    }
+  ],
+  "seconds": 1.4
+}

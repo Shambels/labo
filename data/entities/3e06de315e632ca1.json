@@ -1,0 +1,49 @@
+{
+  "document": "01_Finance/Comptabilite/Factures_fournisseurs/2026-02-27 TransArdenne TA-2026-00218.jpg",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "TransArdenne SA",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "transporteur routier de marchandises"
+    },
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "point de départ et d'arrivée des navettes"
+    },
+    {
+      "nom": "Lille",
+      "type": "site",
+      "alias": [],
+      "description": "destination des navettes routières"
+    },
+    {
+      "nom": "Gand",
+      "type": "site",
+      "alias": [],
+      "description": "point de départ des navettes"
+    },
+    {
+      "nom": "Navette Seneffe - Lille",
+      "type": "produit",
+      "alias": [],
+      "description": "prestation de transport camion complet"
+    },
+    {
+      "nom": "Navette Gand - Seneffe",
+      "type": "produit",
+      "alias": [],
+      "description": "prestation de transport camion complet"
+    },
+    {
+      "nom": "Surcharge carburant",
+      "type": "produit",
+      "alias": [],
+      "description": "supplément facturé sur le carburant"
+    }
+  ],
+  "seconds": 6.9
+}

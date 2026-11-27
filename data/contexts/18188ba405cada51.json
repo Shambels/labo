@@ -1,0 +1,7 @@
+{
+  "document": "00_Direction/CODIR/2025/PV_CODIR_2025-09-08.docx",
+  "body": "Procès-verbal du Comité de direction\n4. Remplacement de l'ERP GesPro 7\n*Présenté par Kevin Mertens.*\nKevin Mertens informe le CODIR que l'éditeur de GesPro 7 a annoncé la fin du support de cette version au 31 décembre 2026. Au-delà de cette date, plus aucun correctif de sécurité ne sera publié.\nPar ailleurs, GesPro 7 n'est pas relié au logiciel de gestion d'entrepôt (WMS) de Gand et la consolidation financière mensuelle se fait encore dans des fichiers Excel, ce qui prend quatre jours au contrôle de gestion.\nLe CODIR estime l'enveloppe du projet entre 600 et 750 k€ sur cinq ans (licences et intégration).",
+  "model": "qwen3.8-27b",
+  "context": "Cette section du procès-verbal détaille la présentation par Kevin Mertens du projet de remplacement de l'ERP GesPro 7. Elle expose les limites techniques de l'outil actuel et le budget prévisionnel du projet « Atlas ».",
+  "seconds": 2.2
+}

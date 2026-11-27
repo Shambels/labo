@@ -1,0 +1,7 @@
+{
+  "document": "07_IT/Projet_Atlas_ERP/Documentation/Plan de bascule Atlas.pdf",
+  "body": "Projet Atlas : plan de bascule (Namur, Seneffe, Lille)\n| Étape | Début | Fin | Responsable |\n| - | - | - | - |\n| Gel des saisies dans GesPro 7 | vendredi 29/05 12 h 00 |  | Sophie Lejeune |\n| Inventaire physique complet | vendredi 29/05 13 h 00 | samedi 30/05 16 h 00 | Marc Delhaye |\n| Reprise des stocks et des encours | samedi 30/05 18 h 00 | dimanche 31/05 14 h 00 | Intégra Conseil |\n| Contrôles de cohérence | dimanche 31/05 14 h 00 | dimanche 31/05 16 h 00 | Sarah Vandamme |\n| Go/no-go final | dimanche 31/05 16 h 00 |  | Kevin Mertens |\n| Démarrage | lundi 01/06 6 h 00 |  | Tous |",
+  "model": "qwen3.8-27b",
+  "context": "Cette section détaille le calendrier des étapes de bascule pour les sites de Namur, Seneffe et Lille. Elle précise les horaires et les responsables de chaque phase, allant du gel des saisies jusqu'au démarrage.",
+  "seconds": 2.7
+}

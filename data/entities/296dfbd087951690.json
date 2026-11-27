@@ -1,0 +1,13 @@
+{
+  "document": "05_Commercial/Fiches_produits/Ventis_D450_Pro_NL.pdf",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Ventis D450 Pro",
+      "type": "produit",
+      "alias": [],
+      "description": "unité de ventilation avec récupération de chaleur"
+    }
+  ],
+  "seconds": 1.7
+}

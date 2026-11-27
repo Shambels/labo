@@ -1,0 +1,37 @@
+{
+  "document": "04_Qualite/Non_conformites/NC-2025-049.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "site de production de Calorvia"
+    },
+    {
+      "nom": "Aéris 9",
+      "type": "produit",
+      "alias": [],
+      "description": "produit concerné par la non-conformité"
+    },
+    {
+      "nom": "Elcora RC-40",
+      "type": "équipement",
+      "alias": [],
+      "description": "carte de régulation défectueuse"
+    },
+    {
+      "nom": "Elcora",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "fournisseur de la carte de régulation"
+    },
+    {
+      "nom": "Romain Dethier",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable de la non-conformité"
+    }
+  ],
+  "seconds": 4.4
+}

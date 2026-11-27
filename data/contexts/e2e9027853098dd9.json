@@ -1,0 +1,7 @@
+{
+  "document": "02_RH/Notes_de_service/2026-05-27 NS-2026-10 Gel des saisies avant le démarrage de l_ERP.docx",
+  "body": "Note de service NS-2026-10\n| Objet | Gel des saisies avant le démarrage de l'ERP |\n| - | - |\n| Date | 27/05/2026 |\n| Émetteur | Kevin Mertens |\n| Destinataires | Tout le personnel |\nLes saisies dans GesPro 7 seront gelées le vendredi 29 mai à 12 h 00. Aucune commande, réception ou facture ne pourra être enregistrée avant le démarrage de Praxio le lundi 1er juin à 6 h 00.\nLes urgences du week-end sont notées sur papier et saisies le lundi dans Praxio.",
+  "model": "qwen3.8-27b",
+  "context": "Cette note de service émise par Kevin Mertens s'adresse à l'ensemble du personnel. Elle détaille les consignes relatives à la suspension des saisies dans GesPro 7 en vue du passage à l'ERP Praxio.",
+  "seconds": 2.5
+}

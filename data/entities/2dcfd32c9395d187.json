@@ -1,0 +1,31 @@
+{
+  "document": "10_RSE/Rapport RSE 2025.pdf",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "site de l'installation photovoltaïque"
+    },
+    {
+      "nom": "Installation photovoltaïque de Seneffe",
+      "type": "équipement",
+      "alias": [],
+      "description": "installation photovoltaïque de 520 kWc"
+    },
+    {
+      "nom": "Pompes à chaleur",
+      "type": "produit",
+      "alias": [],
+      "description": "produits vendus par Calorvia"
+    },
+    {
+      "nom": "Propane (R290)",
+      "type": "produit",
+      "alias": [],
+      "description": "fluide frigorigène naturel"
+    }
+  ],
+  "seconds": 5.5
+}

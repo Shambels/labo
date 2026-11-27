@@ -1,0 +1,13 @@
+{
+  "document": "02_RH/Politiques/Politique voitures de societe 2025.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Comité de direction",
+      "type": "instance",
+      "alias": [],
+      "description": "Membres bénéficiant d'une voiture de société"
+    }
+  ],
+  "seconds": 1.4
+}

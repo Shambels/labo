@@ -1,0 +1,7 @@
+{
+  "document": "00_Direction/CODIR/2025/PV_CODIR_2025-10-06.docx",
+  "body": "Procès-verbal du Comité de direction\nNouvelles actions\n| **N°** | **Action** | **Responsable** | **Échéance** |\n| - | - | - | - |\n| A-25-007 | Envoyer aux clients le courrier d'annonce de la hausse tarifaire | Pierre-Yves Collard | 31/10/2025 |\n| A-25-008 | Publier la grille tarifaire 2026 | Pierre-Yves Collard | 14/11/2025 |\n| A-25-009 | Préparer la version 2 du budget 2026 | Laurent Dewit | 14/11/2025 |\nProchaine réunion : lundi 13 octobre 2025 à 8 h 30.\n*Procès-verbal rédigé par Julie Renard.*",
+  "model": "qwen3.8-27b",
+  "context": "Cette section, située en fin de document, liste les nouvelles actions décidées lors de la séance, notamment l'annonce de la hausse tarifaire et la préparation du budget 2026. Elle conclut le procès-verbal en indiquant la date de la prochaine réunion.",
+  "seconds": 2.6
+}

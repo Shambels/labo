@@ -1,0 +1,51 @@
+compta	amortissement	Depreciation		Records the financial details of asset depreciation entries, including the unique identifier and the monetary amount.
+compta	budget	Budget		A record representing a financial budget allocation for a specific month and document version.
+compta	centre_analytique	Analytical Centre		A specific department or organizational unit within the company, including its identifier, label, and operational status.
+compta	compte_bancaire	Bank Account		Represents a specific financial account held by the organization, identified by a unique bank code and associated with a specific currency.
+compta	ecriture	Accounting Entry		Represents a single line item or record in the general ledger, including its source document references, dates, status, and audit information.
+compta	exercice	Fiscal Year		Represents a specific accounting or fiscal period defined by a year code, start and end dates, and its operational status (open or closed).
+compta	immobilisation	Real Estate Asset		Records the details of real estate assets including their identification, valuation, acquisition cost, useful life, depreciation method, and current status.
+compta	journal	Accounting Journal		A single entity representing an accounting journal with its unique identifier, descriptive label, and functional type.
+compta	ligne_ecriture	Accounting Entry Line		Represents a single line within an accounting journal entry, detailing the specific financial impact (debit or credit) and its reconciliation status.
+compta	mouvement_bancaire	Bank Movement		Records individual financial transactions within a bank account, including details on amounts, counterparties, and reconciliation status.
+compta	periode	Fiscal Period		A defined time interval for financial reporting or operational accounting, including its start date, end date, and current open/closed status.
+compta	plan_comptable	Chart Of Accounts Entry		A record representing a specific account within the company's general ledger or chart of accounts.
+compta	taux_tva	VAT Rate		Defines the applicable Value Added Tax (VAT) categories, their descriptive labels, and the specific tax rates applied.
+compta	tiers	Tier		A business tier representing a client or supplier entity, including its financial, legal, and status details.
+gespro	ach_cde	Purchase Order		Represents a purchase order record including its identification, dates, status, and financial value.
+gespro	ach_cde_lig	Access Control List		A record detailing an access control list entry, including its quantity, price, and recovered quantity.
+gespro	ach_fact	Invoice		Records the details, financial amounts, status, and identification of customer invoices, including tax breakdowns and payment due dates.
+gespro	ach_recep	Receipt		Records details of goods receipt or delivery events, including reference numbers, dates, and specific comments.
+gespro	ach_recep_lig	Recovery Link		Records the results of a recovery process for a specific batch, including quantities recovered or refused and the reason for refusal.
+gespro	art_article	Product Article		Records defining individual products, including identification, classification, pricing, inventory attributes, and lifecycle status.
+gespro	art_famille	Product Family		Represents a classification group for products, including its identity, type, range, and associated financial accounts.
+gespro	art_nomenc	Nomenclature		Represents a nomenclature record containing its unique identifier, associated quantity, and reference date.
+gespro	art_tarif	Tariff		A record defining a specific pricing rate or fee along with its validity period and descriptive notes.
+gespro	cli_client	Client		A business entity or organization registered in the system with its legal, financial, and contact details.
+gespro	frn_fournisseur	Supplier		Represents a business entity that provides goods or services, including identification, contact details, and transactional terms.
+gespro	log_exped	Shipment Log		Records the details, tracking information, and status of shipped parcels.
+gespro	log_transp	Transport Provider		Record representing a registered transport provider, including their identity, tax details, location, service type, and current status.
+gespro	par_code	Reference Code		A standardized reference code entry that links a specific code type to its unique alphanumeric identifier, human-readable label, and display order, serving as a lookup table for various system attributes and classifications.
+gespro	prd_of	Order		A record representing a production or work order, including its reference details, time frame, quantity metrics (planned, actual, rejected), and current status.
+gespro	soc_site	Site		A physical business location such as a factory, headquarters, office, or warehouse.
+gespro	stk_etat	Stock Status		Captures the current quantity, minimum threshold, and last movement timestamp for a stock item.
+gespro	stk_mvt	Stock Movement		Record of inventory changes including date, type, quantity, and associated references.
+gespro	vdr_vendeur	Vendor		Represents a vendor or seller entity, including their identification, contact information, location, and status.
+gespro	vte_cde	Order (gespro.dbo.vte_cde)		Represents a customer order or delivery document, tracking its identification, client, status, dates, and financial value.
+gespro	vte_cde_lig	Order Line Item		Represents a single line or item detail within a sales order or invoice, including quantities, pricing, and delivery status.
+gespro	vte_fact	Invoice (gespro.dbo.vte_fact)		This table represents invoice records, capturing details such as the invoice identifier, type, issue and due dates, financial totals (net, tax, gross), VAT rate, business motivation, and current processing status.
+gespro	vte_fact_lig	Order Line Item (gespro.dbo.vte_fact_lig)		Represents individual lines within a sales order or purchase order, detailing specific products, quantities, pricing, and discounts.
+paie	absence_types	Absence Type		Definitions for different categories of employee absences, including whether they are paid by the employer and if meal vouchers apply.
+paie	contracts	Employment Contract		Represents the core employment agreement between the organization and an employee, defining terms such as duration, work hours, and remote work eligibility.
+paie	cost_centers	Cost Center		Organizational unit used for cost allocation and financial reporting.
+paie	departments	Department		An organizational unit within the company.
+paie	employees	Employee		Represents an individual who is or was employed by the organization, including personal details, contact information, and employment history.
+paie	job_positions	Job Position		A record defining a specific role within the organization, including its identifier, title, classification, and compensation grade.
+paie	pay_elements	Payroll Element		A specific component of an employee's compensation, detailing its classification, tax implications, and financial posting.
+paie	payroll_runs	Payroll Run		Represents a single execution of the payroll processing cycle, including the period, dates, type, and current status of the run.
+paie	payslip_lines	Payslip Line		Individual line item within a payslip detailing specific pay components, quantities, rates, and calculated amounts.
+paie	payslips	Payslip		A record detailing the compensation breakdown for an employee for a specific pay period, including gross earnings, social security contributions, taxes, and net pay.
+paie	salary_history	Salary Record		A historical record of an employee's compensation details, including the effective date, gross amounts, and the reason for the change.
+paie	salary_scales	Salary Scale		Defines the minimum and maximum monthly salary limits for a specific pay grade, effective from a certain date.
+paie	timesheets	Timesheet		Represents a record of an employee's work activities, hours, and status for a specific calendar day.
+paie	work_sites	Work Site		A physical business location where work is performed, including its address, identifier, and operational start date.

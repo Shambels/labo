@@ -1,0 +1,19 @@
+{
+  "document": "03_Production/Seneffe/Photos_equipements/IMG_20260315_Robot_de_soudure.jpg",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Weldon Robotics",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "fabricant du robot de soudage à l'arc"
+    },
+    {
+      "nom": "WR-6 Arc",
+      "type": "équipement",
+      "alias": [],
+      "description": "robot de soudage à l'arc"
+    }
+  ],
+  "seconds": 2.4
+}

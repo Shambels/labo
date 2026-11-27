@@ -1,0 +1,25 @@
+{
+  "document": "04_Qualite/Rappel_Aeris12/Lettre rappel installateurs 2025-12-11.pdf",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Aéris 12",
+      "type": "produit",
+      "alias": [],
+      "description": "pompe à chaleur concernée par le rappel"
+    },
+    {
+      "nom": "vanne quatre voies",
+      "type": "équipement",
+      "alias": [],
+      "description": "composant défectueux des pompes à chaleur"
+    },
+    {
+      "nom": "Anne Vercammen",
+      "type": "personne",
+      "alias": [],
+      "description": "directrice qualité"
+    }
+  ],
+  "seconds": 8.3
+}

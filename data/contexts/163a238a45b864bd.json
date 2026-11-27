@@ -1,0 +1,7 @@
+{
+  "document": "04_Qualite/Rappel_Aeris12/Liste numeros de serie concernes.xlsx",
+  "body": "onglet « Unités concernées » · lignes 29 à 32\n| Numéro de série | Date de production | Installateur | Région | Statut | Date d'intervention |\n|---|---|---|---|---|---|\n| AE12-25-4529 | 05/11/2025 | Énergies du Condroz SRL | Namur | Réparée | 10/02/2026 |\n| AE12-25-4530 | 05/11/2025 | Distrinergie | Liège | Réparée | 26/01/2026 |\n| AE12-25-4531 | 05/11/2025 | Distrinergie | Liège | Réparée | 09/02/2026 |\n| AE12-25-4532 | 05/11/2025 | Clim'Expert Hainaut | Hainaut | Réparée | 17/12/2025 |",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait se situe dans l'onglet « Unités concernées » du classeur de rappel. Il détaille le statut des unités produites le 5 novembre 2025, installées par Énergies du Condroz, Distrinergie et Clim'Expert Hainaut.",
+  "seconds": 3.0
+}

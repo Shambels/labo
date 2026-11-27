@@ -1,0 +1,69 @@
+{
+  "document": "01_Finance/Reporting_mensuel/Reporting 2025-09.xlsx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Aéris",
+      "type": "produit",
+      "alias": [
+        "Aéris (standard)"
+      ],
+      "description": "gamme standard de produits"
+    },
+    {
+      "nom": "Aéris Pro",
+      "type": "produit",
+      "alias": [
+        "Aéris Pro (premium)"
+      ],
+      "description": "gamme premium de produits"
+    },
+    {
+      "nom": "Ventis",
+      "type": "produit",
+      "alias": [
+        "Ventis (standard)"
+      ],
+      "description": "gamme standard de produits"
+    },
+    {
+      "nom": "Ventis Pro",
+      "type": "produit",
+      "alias": [
+        "Ventis Pro (premium)"
+      ],
+      "description": "gamme premium de produits"
+    },
+    {
+      "nom": "Pièces et services",
+      "type": "produit",
+      "alias": [],
+      "description": "gamme de pièces et services"
+    },
+    {
+      "nom": "Namur",
+      "type": "site",
+      "alias": [],
+      "description": "site de production ou d'activité"
+    },
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "site de production ou d'activité"
+    },
+    {
+      "nom": "Gand",
+      "type": "site",
+      "alias": [],
+      "description": "site de production ou d'activité"
+    },
+    {
+      "nom": "Lille",
+      "type": "site",
+      "alias": [],
+      "description": "site de production ou d'activité"
+    }
+  ],
+  "seconds": 9.2
+}

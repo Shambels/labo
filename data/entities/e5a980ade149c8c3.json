@@ -1,0 +1,15 @@
+{
+  "document": "07_IT/Projet_Atlas_ERP/Planning/Planning Atlas v1.png",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Projet Atlas",
+      "type": "projet",
+      "alias": [
+        "Atlas"
+      ],
+      "description": "projet de déploiement ERP"
+    }
+  ],
+  "seconds": 1.5
+}

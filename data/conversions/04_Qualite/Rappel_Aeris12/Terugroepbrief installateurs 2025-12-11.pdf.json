@@ -1,0 +1,131 @@
+{
+  "schema_name": "DoclingDocument",
+  "version": "1.11.0",
+  "name": "Terugroepbrief installateurs 2025-12-11",
+  "origin": {
+    "mimetype": "application/pdf",
+    "binary_hash": 4612251766471596982,
+    "filename": "Terugroepbrief installateurs 2025-12-11.pdf"
+  },
+  "furniture": {
+    "self_ref": "#/furniture",
+    "children": [],
+    "content_layer": "furniture",
+    "name": "_root_",
+    "label": "unspecified"
+  },
+  "body": {
+    "self_ref": "#/body",
+    "children": [
+      {
+        "$ref": "#/texts/0"
+      },
+      {
+        "$ref": "#/texts/1"
+      },
+      {
+        "$ref": "#/texts/2"
+      }
+    ],
+    "content_layer": "body",
+    "name": "_root_",
+    "label": "unspecified"
+  },
+  "groups": [],
+  "texts": [
+    {
+      "self_ref": "#/texts/0",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "furniture",
+      "label": "page_header",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 62.3622,
+            "t": 813.0068128,
+            "r": 168.24110720000002,
+            "b": 806.1630624000001,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            33
+          ]
+        }
+      ],
+      "orig": "Calorvia SA \u00b7 Service apr\u00e8s-vente",
+      "text": "Calorvia SA \u00b7 Service apr\u00e8s-vente"
+    },
+    {
+      "self_ref": "#/texts/1",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 775.4337168000001,
+            "r": 526.4246863500001,
+            "b": 615.4512944,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            598
+          ]
+        }
+      ],
+      "orig": "Namen, 11 december 2025 Betreft: preventieve terugroepactie van de warmtepompen A\u00e9ris 12 Geachte mevrouw, geachte heer, Er werd een defect vastgesteld aan de vierwegklep van 214 warmtepompen A\u00e9ris 12 die tussen 3 en 21 november 2025 werden geproduceerd (serienummers AE12-25-4501 tot AE12-25-4714). Dit defect kan een lek van koelmiddel veroorzaken. Wij vragen u om uw betrokken klanten te contacteren en de klep te vervangen. De vervangkleppen worden binnen 48 uur gratis geleverd. Elke interventie wordt vergoed aan 240 euro excl. btw, verplaatsing inbegrepen. Anne Vercammen, kwaliteitsdirecteur",
+      "text": "Namen, 11 december 2025 Betreft: preventieve terugroepactie van de warmtepompen A\u00e9ris 12 Geachte mevrouw, geachte heer, Er werd een defect vastgesteld aan de vierwegklep van 214 warmtepompen A\u00e9ris 12 die tussen 3 en 21 november 2025 werden geproduceerd (serienummers AE12-25-4501 tot AE12-25-4714). Dit defect kan een lek van koelmiddel veroorzaken. Wij vragen u om uw betrokken klanten te contacteren en de klep te vervangen. De vervangkleppen worden binnen 48 uur gratis geleverd. Elke interventie wordt vergoed aan 240 euro excl. btw, verplaatsing inbegrepen. Anne Vercammen, kwaliteitsdirecteur"
+    },
+    {
+      "self_ref": "#/texts/2",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "furniture",
+      "label": "page_footer",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 204.7511,
+            "t": 33.47927279999999,
+            "r": 390.52453760000003,
+            "b": 26.635522400000013,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            61
+          ]
+        }
+      ],
+      "orig": "Calorvia SA (entreprise fictive) \u00b7 Diffusion interne \u00b7 page 1",
+      "text": "Calorvia SA (entreprise fictive) \u00b7 Diffusion interne \u00b7 page 1"
+    }
+  ],
+  "pictures": [],
+  "tables": [],
+  "key_value_items": [],
+  "form_items": [],
+  "pages": {
+    "1": {
+      "size": {
+        "width": 595.2756,
+        "height": 841.8898
+      },
+      "page_no": 1
+    }
+  }
+}

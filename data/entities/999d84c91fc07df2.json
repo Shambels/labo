@@ -1,0 +1,45 @@
+{
+  "document": "03_Production/Seneffe/CPPT/PV CPPT Seneffe 2026-01-13.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Marc Delhaye",
+      "type": "personne",
+      "alias": [],
+      "description": "président du comité de prévention"
+    },
+    {
+      "nom": "Olivier Hardy",
+      "type": "personne",
+      "alias": [],
+      "description": "conseiller en prévention"
+    },
+    {
+      "nom": "Fabrice Collin",
+      "type": "personne",
+      "alias": [],
+      "description": "membre du comité de prévention"
+    },
+    {
+      "nom": "Comité pour la prévention et la protection au travail",
+      "type": "instance",
+      "alias": [
+        "CPPT"
+      ],
+      "description": "comité de prévention et protection au travail"
+    },
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "site de production de Calorvia"
+    },
+    {
+      "nom": "Presses",
+      "type": "équipement",
+      "alias": [],
+      "description": "machines générant un niveau sonore de 88 dB(A)"
+    }
+  ],
+  "seconds": 4.2
+}

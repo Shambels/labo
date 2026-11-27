@@ -1,0 +1,7 @@
+{
+  "document": "00_Direction/CODIR/2026/2026-05-18 CODIR PV.docx",
+  "body": "Procès-verbal du Comité de direction\n2. Indicateurs de la semaine 20\nSemaine 20, du 11 mai 2026 au 17 mai 2026.\n| **Indicateur** | **Valeur** | **Objectif** |\n| - | - | - |\n| Production Seneffe (pompes à chaleur) | 455 unités | 500 |\n| Production Gand (groupes de ventilation) | 677 unités | 650 |\n| Taux de service (OTIF) | 95,5 % | 95 % |\n| Taux de rebut Seneffe | 1,4 % | < 1,5 % |\n| Accidents avec arrêt de travail | 0 | 0 |\n| Prises de commandes | 3 469 k€ | – |\n| Taux d'absentéisme | 4,9 % | < 5 % |",
+  "model": "qwen3.8-27b",
+  "context": "La rubrique « Indicateurs de la semaine 20 » présente les performances opérationnelles et commerciales de l'entreprise. Elle détaille les résultats de production des sites de Seneffe et de Gand ainsi que les taux de service et d'absentéisme.",
+  "seconds": 2.5
+}

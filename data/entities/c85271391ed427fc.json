@@ -1,0 +1,25 @@
+{
+  "document": "09_Communication/Newsletter/Calorvia Info 2026-04.html",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Lotte Janssens",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable des ventes en Flandre"
+    },
+    {
+      "nom": "Yasmine Collignon",
+      "type": "personne",
+      "alias": [],
+      "description": "collaboratrice des ressources humaines"
+    },
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "usine de Calorvia"
+    }
+  ],
+  "seconds": 3.1
+}

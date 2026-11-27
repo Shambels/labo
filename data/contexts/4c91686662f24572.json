@@ -1,0 +1,7 @@
+{
+  "document": "01_Finance/Budget_2026/Note de presentation budget 2026.pdf",
+  "body": "3. Charges\nL'indexation salariale est estimée à 3,4 %. Le prix de l'acier est budgété en hausse de 4 %. Les frais de structure progressent de 2,1 %, hors projet ERP.",
+  "model": "qwen3.8-27b",
+  "context": "La rubrique « Charges » détaille les hypothèses d'évolution des coûts salariaux, du prix de l'acier et des frais de structure pour le budget 2026.",
+  "seconds": 1.9
+}

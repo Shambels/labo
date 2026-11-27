@@ -1,0 +1,67 @@
+{
+  "document": "07_IT/Architecture/Schema applicatif 2026.png",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Salesbox",
+      "type": "produit",
+      "alias": [
+        "CRM"
+      ],
+      "description": "CRM de gestion des ventes"
+    },
+    {
+      "nom": "Intégra Conseil",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "prestataire du bus d'intégration"
+    },
+    {
+      "nom": "PayLine",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "prestataire externe de la paie"
+    },
+    {
+      "nom": "Praxio",
+      "type": "produit",
+      "alias": [
+        "ERP"
+      ],
+      "description": "ERP SaaS centralisant finance et production"
+    },
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "site des bancs d'essai"
+    },
+    {
+      "nom": "LogiPath",
+      "type": "produit",
+      "alias": [
+        "WMS"
+      ],
+      "description": "logiciel de gestion d'entrepôt"
+    },
+    {
+      "nom": "Gand",
+      "type": "site",
+      "alias": [],
+      "description": "site de l'entrepôt LogiPath"
+    },
+    {
+      "nom": "Portail installateurs",
+      "type": "produit",
+      "alias": [],
+      "description": "portail pour garanties et rappels"
+    },
+    {
+      "nom": "Entrepôt de données",
+      "type": "produit",
+      "alias": [],
+      "description": "système de tableaux de bord"
+    }
+  ],
+  "seconds": 7.2
+}

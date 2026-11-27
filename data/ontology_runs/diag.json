@@ -1,0 +1,27 @@
+{
+ "8": {
+  "answer": {
+   "response": "Here is the result of the query.",
+   "sql_code": "SELECT ws.site_code,\n       ws.name,\n       COUNT(c.contract_id) AS nb_personnes_sous_contrat\nFROM public.contracts c\nJOIN public.departments d ON c.department_code = d.department_code\nJOIN public.work_sites ws ON d.site_code = ws.site_code\nWHERE c.start_date <= DATE '2026-05-31'\n  AND (c.end_date IS NULL OR c.end_date >= DATE '2026-05-31')\nGROUP BY ws.site_code, ws.name\nORDER BY ws.site_code",
+   "sql_columns": [],
+   "custom_analyses_used": [],
+   "sql_response_from_db": [
+    "[{\"site_code\":\"GENT\",\"name\":\"Usine et entrep\\u00f4t de Gand\",\"nb_personnes_sous_contrat\":190},{\"site_code\":\"HERSTAL\",\"name\":\"Entrep\\u00f4t de Herstal\",\"nb_personnes_sous_contrat\":6},{\"site_code\":\"NAMUR\",\"name\":\"Si\\u00e8ge de Namur\",\"nb_personnes_sous_contrat\":126},{\"site_code\":\"SENEFFE\",\"name\":\"Usine de Seneffe\",\"nb_personnes_sous_contrat\":287}]"
+   ],
+   "thoughts": "- Searching the data and writing SQL: Searching for: personnes sous contrat par site contrat date site\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Submitting the final query."
+  },
+  "error": null,
+  "steps": [
+   "react_sql_agent",
+   "format_and_respond"
+  ],
+  "seconds": 23.2,
+  "missing": [
+   "190",
+   "6",
+   "126",
+   "287"
+  ],
+  "ok": false
+ }
+}

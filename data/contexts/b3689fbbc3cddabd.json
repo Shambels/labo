@@ -1,0 +1,7 @@
+{
+  "document": "00_Direction/Conseil_administration/Projets_PV/Projet PV CA 2026-02-17 v1.docx",
+  "body": "Procès-verbal de la réunion du conseil d'administration\n2. Rapport de l'administratrice déléguée\nLe projet ERP est retardé : la mise en production est reportée du 1er avril au 1er juin 2026, en raison de la qualité des données articles et de l'interface avec le WMS de Gand.",
+  "model": "qwen3.8-27b",
+  "context": "Point 2 du procès-verbal, intitulé « Rapport de l'administratrice déléguée ». Il concerne le retard du projet ERP et le report de sa mise en production.",
+  "seconds": 1.9
+}

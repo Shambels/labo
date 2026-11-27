@@ -1,0 +1,7 @@
+{
+  "document": "03_Production/Procedures/MO-SEN-12 Test d_etancheite Aeris.pdf",
+  "body": "Étapes\n- Raccorder le banc d'essai au circuit par les vannes de service.\n- Mettre le circuit sous pression d'azote à 42 bar.\n- Attendre 15 minutes : la chute de pression ne doit pas dépasser 0,2 bar.\n- Contrôler les brasures au détecteur d'hélium : le seuil de rejet est de 3 grammes par an.\n- Enregistrer le résultat dans le logiciel du banc (export automatique vers l'ERP).",
+  "model": "qwen3.8-27b",
+  "context": "La rubrique « Étapes » détaille la séquence d'opérations pour le test d'étanchéité du circuit frigorifique des pompes à chaleur Aéris.",
+  "seconds": 1.7
+}

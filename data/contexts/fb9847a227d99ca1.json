@@ -1,0 +1,7 @@
+{
+  "document": "04_Qualite/Reclamations/Courrier Énergies 2025-11-18.pdf",
+  "body": "Page 1 (scan)\nÉnergies du Condroz SRL  \nRoute de Dinant 7, 5590 Ciney  \nCalorvia SA, service qualité, Rue des Artisans 42, 5100 Namur · le 18 novembre 2025  \nObjet : Retard de livraison  \nMadame, Monsieur,  \n\nNotre commande CMD-25-4471 de 12 Aérïs 6, confirmée pour le 24 octobre, n'a été livrée que le 14 novembre, soit avec trois semaines de retard.  \n\nCe retard nous a obligés à reporter quatre chantiers. Nous vous demandons un geste commercial sur cette commande.  \n\nVeuillez agréer nos salutations distinguées.  \nSandrine Collard, administratrice  \n\nCalorvia SA (entreprise fictive) · Diffusion interne · page 1  \n\n---\n\n**Description**  \nIl s’agit d’une lettre formelle de réclamation adressée par Énergies du Condroz SRL à Calorvia SA concernant un retard de livraison. Le document mentionne une commande spécifique, ses dates de confirmation et de livraison, ainsi que les conséquences opérationnelles du retard. Il ne contient aucun graphique, plan ou organigramme — uniquement du texte structuré en paragraphes.",
+  "model": "qwen3.8-27b",
+  "context": "Cette rubrique de réclamations contient une lettre de Sandrine Collard d'Énergies du Condroz SRL. Elle y signale un retard de livraison sur une commande d'Aérïs 6 et demande un geste commercial.",
+  "seconds": 2.7
+}

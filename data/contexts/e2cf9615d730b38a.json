@@ -1,0 +1,7 @@
+{
+  "document": "01_Finance/Reporting_mensuel/Commentaires de gestion T1 2026.pdf",
+  "body": "Commentaires de gestion · T1 2026\nChiffre d'affaires du trimestre : 41 400 k€. EBITDA : 3 764 k€ soit 9 1 % du chiffre d'affaires. Le chiffre d'affaires est inférieur au budget, principalement en Wallonie (report de chantiers de rénovation) et chez Distrinergie, dont la hausse tarifaire est limitée à 2 %. La marge progresse grâce à la hausse tarifaire et à la reprise partielle de la provision du rappel (Valtek). Le gel des recrutements des fonctions support a permis d'économiser environ 190 k€ de frais de personnel\nsur le trimestre.",
+  "model": "qwen3.8-27b",
+  "context": "La rubrique « Commentaires de gestion » du rapport financier trimestriel. Elle détaille les résultats d'exploitation, les écarts de chiffre d'affaires par zone et les mesures de maîtrise des coûts de personnel.",
+  "seconds": 2.4
+}

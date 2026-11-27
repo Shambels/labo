@@ -1,0 +1,7 @@
+{
+  "document": "03_Production/Maintenance/Fiches_intervention/2025-12-10 INT-2025-773 Ligne L2.docx",
+  "body": "Fiche d'intervention INT-2025-773\n| Date | 10/12/2025 |\n| - | - |\n| Équipement | Ligne L2 |\n| Description | Contrôle à 100 % des vannes quatre voies et mise en quarantaine du lot V-2544. |\n| Durée d'arrêt | 41 h 30 cumulées |\n| Pièces et coûts | Main-d'œuvre interne |\n| Intervenant | Romain Dethier |",
+  "model": "qwen3.8-27b",
+  "context": "Cette fiche d'intervention concerne la maintenance de la Ligne L2. Elle détaille le contrôle des vannes quatre voies et la mise en quarantaine du lot V-2544.",
+  "seconds": 2.2
+}

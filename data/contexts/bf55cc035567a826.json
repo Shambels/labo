@@ -1,0 +1,7 @@
+{
+  "document": "02_RH/Enquetes/Enquete teletravail - reponses brutes.xlsx",
+  "body": "onglet « Réponses » · lignes 49 à 54\n| N° | Service | Site | Satisfaction (1-10) | Souhaite continuer | Commentaire |\n|---|---|---|---|---|---|\n| 49 | Finance | Namur | 8 | oui | Gain de temps de trajet important |\n| 50 | Direction | Namur | 8 | oui |  |\n| 51 | Commercial | Namur | 8 | oui |  |\n| 52 | Direction | Namur | 8 | oui | Réunions hybrides à améliorer |\n| 53 | Informatique | Namur | 9 | oui |  |\n| 54 | Finance | Namur | 8 | non |  |",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait se situe dans l'onglet « Réponses » du classeur, aux lignes 49 à 54. Il détaille les avis de salariés des services Finance, Direction, Commercial et Informatique basés à Namur.",
+  "seconds": 2.4
+}

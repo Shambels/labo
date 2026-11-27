@@ -1,0 +1,79 @@
+{
+  "document": "09_Communication/Communiques_presse/2026-05-20 CP Nomination directrice financiere.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Isabelle Gérard",
+      "type": "personne",
+      "alias": [],
+      "description": "directrice financière de Calorvia"
+    },
+    {
+      "nom": "Laurent Dewit",
+      "type": "personne",
+      "alias": [],
+      "description": "ancien directeur financier de Calorvia"
+    },
+    {
+      "nom": "Sarah Vandamme",
+      "type": "personne",
+      "alias": [],
+      "description": "directrice financière intérimaire de Calorvia"
+    },
+    {
+      "nom": "Lucie Bastin",
+      "type": "personne",
+      "alias": [],
+      "description": "contact presse de Calorvia"
+    },
+    {
+      "nom": "Namur",
+      "type": "site",
+      "alias": [],
+      "description": "site de Calorvia"
+    },
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "site de Calorvia"
+    },
+    {
+      "nom": "Gand",
+      "type": "site",
+      "alias": [],
+      "description": "site de Calorvia"
+    },
+    {
+      "nom": "Herstal",
+      "type": "site",
+      "alias": [],
+      "description": "site de Calorvia"
+    },
+    {
+      "nom": "Lille",
+      "type": "site",
+      "alias": [],
+      "description": "site de Calorvia"
+    },
+    {
+      "nom": "Pompes à chaleur",
+      "type": "produit",
+      "alias": [],
+      "description": "produit fabriqué par Calorvia"
+    },
+    {
+      "nom": "Groupes de ventilation",
+      "type": "produit",
+      "alias": [],
+      "description": "produit fabriqué par Calorvia"
+    },
+    {
+      "nom": "Conseil d'administration",
+      "type": "instance",
+      "alias": [],
+      "description": "organe ayant nommé la directrice financière"
+    }
+  ],
+  "seconds": 7.9
+}

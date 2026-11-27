@@ -1,0 +1,7 @@
+{
+  "document": "00_Direction/CODIR/2025/PV_CODIR_2025-10-20.docx",
+  "body": "Procès-verbal du Comité de direction\n3. Suivi des actions\n| **N°** | **Action** | **Responsable** | **Échéance** | **Statut / commentaire** |\n| - | - | - | - | - |\n| A-25-004 | Obtenir au moins deux offres fermes pour la ligne L4 | TL | 17/10/2025 | Clôturée. Deux offres reçues : Automa Systems et Linetech Automation. |\n| A-25-005 | Établir un plan d'action contre l'absentéisme à Gand | PDS | 14/11/2025 | En cours |\n| A-25-007 | Envoyer aux clients le courrier d'annonce de la hausse tarifaire | PYC | 31/10/2025 | En cours |\n",
+  "model": "qwen3.8-27b",
+  "context": "La rubrique « Suivi des actions » du procès-verbal détaille l'avancement des tâches assignées aux directeurs. Elle couvre notamment la réception des offres pour la ligne L4, le plan contre l'absentéisme à Gand et l'annonce de la hausse tarifaire.",
+  "seconds": 2.6
+}

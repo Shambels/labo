@@ -1,0 +1,13 @@
+{
+  "document": "07_IT/Securite/Rapport trimestriel cybersecurite 2026-04-10.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Conseil d'administration",
+      "type": "instance",
+      "alias": [],
+      "description": "instance recevant le rapport trimestriel"
+    }
+  ],
+  "seconds": 2.1
+}

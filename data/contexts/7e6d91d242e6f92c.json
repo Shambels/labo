@@ -1,0 +1,7 @@
+{
+  "document": "02_RH/Enquetes/Enquete teletravail - reponses brutes.xlsx",
+  "body": "onglet « Réponses » · lignes 72 à 77\n| N° | Service | Site | Satisfaction (1-10) | Souhaite continuer | Commentaire |\n|---|---|---|---|---|---|\n| 72 | Commercial | Namur | 10 | oui | Souhaite un jour commun de présence |\n| 73 | Informatique | Namur | 6 | non |  |\n| 74 | Communication | Namur | 6 | oui |  |\n| 75 | Informatique | Namur | 9 | oui |  |\n| 76 | Commercial | Namur | 7 | oui | Souhaite un jour commun de présence |\n| 77 | Communication | Namur | 5 | oui | Souhaite un jour commun de présence |",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait se situe dans l'onglet « Réponses » du classeur, aux lignes 72 à 77. Il détaille les avis de salariés des services Commercial, Informatique et Communication basés à Namur.",
+  "seconds": 2.3
+}

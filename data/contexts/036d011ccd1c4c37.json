@@ -1,0 +1,7 @@
+{
+  "document": "03_Production/Maintenance/Fiches_intervention/2026-03-05 INT-2026-458 Pont roulant.docx",
+  "body": "Fiche d'intervention INT-2026-458\n| Date | 05/03/2026 |\n| - | - |\n| Équipement | Pont roulant |\n| Description | Inspection légale annuelle : conforme. Prochaine inspection en mars 2027. |\n| Durée d'arrêt | 4 h 00 (planifiée un samedi) |\n| Pièces et coûts | Inspection : 650 € |\n| Intervenant | Organisme agréé |",
+  "model": "qwen3.8-27b",
+  "context": "Cette fiche d'intervention concerne le pont roulant. Elle détaille l'inspection légale annuelle réalisée par un organisme agréé.",
+  "seconds": 1.6
+}

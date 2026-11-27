@@ -1,0 +1,61 @@
+{
+  "document": "09_Communication/Communiques_presse/2026-01-29 PB Lijn L4 Seneffe.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Aéris Pro",
+      "type": "produit",
+      "alias": [],
+      "description": "gamme de produits pour la nouvelle ligne"
+    },
+    {
+      "nom": "Lucie Bastin",
+      "type": "personne",
+      "alias": [],
+      "description": "contact presse de Calorvia"
+    },
+    {
+      "nom": "Waals Gewest",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "financeur de l'investissement"
+    },
+    {
+      "nom": "Lijn L4",
+      "type": "équipement",
+      "alias": [],
+      "description": "quatrième ligne d'assemblage"
+    },
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "site de la nouvelle ligne"
+    },
+    {
+      "nom": "Namen",
+      "type": "site",
+      "alias": [],
+      "description": "ville de publication du communiqué"
+    },
+    {
+      "nom": "Gent",
+      "type": "site",
+      "alias": [],
+      "description": "site de Calorvia"
+    },
+    {
+      "nom": "Herstal",
+      "type": "site",
+      "alias": [],
+      "description": "site de Calorvia"
+    },
+    {
+      "nom": "Rijsel",
+      "type": "site",
+      "alias": [],
+      "description": "site de Calorvia"
+    }
+  ],
+  "seconds": 6.2
+}

@@ -1,0 +1,13 @@
+{
+  "document": "09_Communication/Intranet/Restaurant Seneffe menu semaine 12.html",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Restaurant de Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "restaurant d'entreprise"
+    }
+  ],
+  "seconds": 1.0
+}

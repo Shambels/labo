@@ -1,0 +1,25 @@
+{
+  "document": "03_Production/Maintenance/Fiches_intervention/2026-06-02 INT-2026-490 Banc dessai L2.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Banc d'essai L2",
+      "type": "équipement",
+      "alias": [],
+      "description": "banc d'essai de production"
+    },
+    {
+      "nom": "Nicolas Gilson",
+      "type": "personne",
+      "alias": [],
+      "description": "intervenant sur le banc d'essai"
+    },
+    {
+      "nom": "Praxio",
+      "type": "autre",
+      "alias": [],
+      "description": "ERP destinataire des résultats de test"
+    }
+  ],
+  "seconds": 3.4
+}

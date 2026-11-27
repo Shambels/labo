@@ -1,0 +1,7 @@
+{
+  "document": "03_Production/Maintenance/Fiches_intervention/2026-01-20 INT-2026-641 Compresseur dair.docx",
+  "body": "Fiche d'intervention INT-2026-641\n| Date | 20/01/2026 |\n| - | - |\n| Équipement | Compresseur d'air |\n| Description | Entretien des 4 000 heures : filtres, huile, courroie. |\n| Durée d'arrêt | 3 h 00 (compresseur de secours en service) |\n| Pièces et coûts | Kit d'entretien : 890 € |\n| Intervenant | Airvex Service |",
+  "model": "qwen3.8-27b",
+  "context": "Cette fiche d'intervention, classée dans le dossier de maintenance de la production, concerne l'entretien du compresseur d'air. Elle détaille les travaux réalisés par Airvex Service, notamment le remplacement des filtres, de l'huile et de la courroie.",
+  "seconds": 2.8
+}

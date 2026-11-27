@@ -1,0 +1,7 @@
+{
+  "document": "04_Qualite/Non_conformites/NC-2026-009.docx",
+  "body": "Fiche de non-conformité NC-2026-009\n| Date d'ouverture | 19/02/2026 |\n| - | - |\n| Site | Gand |\n| Produit | Ventis D300 |\n| Description | Joint de porte mal positionné : fuite d'air au test. |\n| Quantité concernée | 18 unités |\n| Mode de détection | Contrôle final |\n| Cause | Nouveau fournisseur de joints, tolérance non respectée |\n| Action corrective | Retour au fournisseur précédent |\n| Responsable | Lien Maes |\n| Statut | Clôturée |\n| Coût de non-qualité | 860 € |",
+  "model": "qwen3.8-27b",
+  "context": "Cette fiche détaille une non-conformité sur le produit Ventis D300 au site de Gand, causée par un joint de porte mal positionné. Elle est gérée par Lien Maes et a été clôturée après un retour au fournisseur précédent.",
+  "seconds": 2.7
+}

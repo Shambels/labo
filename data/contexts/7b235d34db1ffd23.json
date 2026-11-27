@@ -1,0 +1,7 @@
+{
+  "document": "04_Qualite/Reclamations/Registre reclamations clients 2025-2026.xlsx",
+  "body": "onglet « Registre » · lignes 1 à 4\n| Date | Client | Produit | Motif | Statut |\n|---|---|---|---|---|\n| 12/09/2025 | Habitat Confort SA | Aéris 9 | Bruit de l'unité extérieure | Clôturée |\n| 03/10/2025 | Klimaat Partners NV | Ventis D450 | Vibrations | Clôturée |\n| 06/11/2025 | Bouwgroep Verhaegen | Ventis D300 | Cartons écrasés | Clôturée |\n| 18/11/2025 | Énergies du Condroz SRL | Aéris 6 | Retard de livraison de 3 semaines | Clôturée |",
+  "model": "qwen3.8-27b",
+  "context": "Cette section du registre des réclamations liste les quatre premiers dossiers enregistrés, couvrant la période de septembre à novembre 2025. Elle détaille les incidents signalés par des clients tels qu'Habitat Confort SA ou Klimaat Partners NV, concernant des produits comme l'Aéris 9 ou le Ventis D450.",
+  "seconds": 4.0
+}

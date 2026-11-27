@@ -1,0 +1,159 @@
+{
+  "document": "00_Direction/CODIR/2025/PV_CODIR_2025-12-08.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Hélène Marchal",
+      "type": "personne",
+      "alias": [
+        "CEO"
+      ],
+      "description": "administratrice déléguée et présidente du comité de direction"
+    },
+    {
+      "nom": "Laurent Dewit",
+      "type": "personne",
+      "alias": [
+        "CFO"
+      ],
+      "description": "directeur financier de l'entreprise"
+    },
+    {
+      "nom": "Thomas Lambert",
+      "type": "personne",
+      "alias": [
+        "COO"
+      ],
+      "description": "directeur des opérations de l'entreprise"
+    },
+    {
+      "nom": "Nadia Benali",
+      "type": "personne",
+      "alias": [
+        "NB"
+      ],
+      "description": "directrice des ressources humaines"
+    },
+    {
+      "nom": "Pierre-Yves Collard",
+      "type": "personne",
+      "alias": [],
+      "description": "directeur commercial de l'entreprise"
+    },
+    {
+      "nom": "Kevin Mertens",
+      "type": "personne",
+      "alias": [],
+      "description": "directeur des systèmes d'information"
+    },
+    {
+      "nom": "Anne Vercammen",
+      "type": "personne",
+      "alias": [
+        "AV"
+      ],
+      "description": "directrice qualité de l'entreprise"
+    },
+    {
+      "nom": "Pieter De Smet",
+      "type": "personne",
+      "alias": [
+        "PDS"
+      ],
+      "description": "directeur du site de Gand"
+    },
+    {
+      "nom": "Romain Dethier",
+      "type": "personne",
+      "alias": [],
+      "description": "ingénieur qualité du site de Seneffe"
+    },
+    {
+      "nom": "Julie Renard",
+      "type": "personne",
+      "alias": [],
+      "description": "secrétaire du comité de direction"
+    },
+    {
+      "nom": "Namur",
+      "type": "site",
+      "alias": [],
+      "description": "lieu de la séance du comité de direction"
+    },
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "site de production des pompes à chaleur"
+    },
+    {
+      "nom": "Gand",
+      "type": "site",
+      "alias": [],
+      "description": "site de production des groupes de ventilation"
+    },
+    {
+      "nom": "Pompes à chaleur",
+      "type": "produit",
+      "alias": [],
+      "description": "produit fabriqué sur le site de Seneffe"
+    },
+    {
+      "nom": "Groupes de ventilation",
+      "type": "produit",
+      "alias": [],
+      "description": "produit fabriqué sur le site de Gand"
+    },
+    {
+      "nom": "Aéris 12",
+      "type": "produit",
+      "alias": [],
+      "description": "modèle de pompe à chaleur concerné par un rappel"
+    },
+    {
+      "nom": "Valtek",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "fournisseur des vannes V-2544 défectueuses"
+    },
+    {
+      "nom": "Praxio",
+      "type": "partenaire",
+      "alias": [],
+      "description": "partenaire du projet Atlas"
+    },
+    {
+      "nom": "Intégra Conseil",
+      "type": "partenaire",
+      "alias": [],
+      "description": "partenaire du projet Atlas"
+    },
+    {
+      "nom": "Projet Atlas",
+      "type": "projet",
+      "alias": [],
+      "description": "projet de systèmes d'information lancé en décembre"
+    },
+    {
+      "nom": "Comité de direction",
+      "type": "instance",
+      "alias": [
+        "CODIR"
+      ],
+      "description": "instance de direction de l'entreprise"
+    },
+    {
+      "nom": "Chariots élévateurs",
+      "type": "équipement",
+      "alias": [],
+      "description": "équipements du site de Gand équipés de blue spots"
+    },
+    {
+      "nom": "Vannes V-2544",
+      "type": "équipement",
+      "alias": [],
+      "description": "composants défectueux fournis par Valtek"
+    }
+  ],
+  "seconds": 20.6
+}

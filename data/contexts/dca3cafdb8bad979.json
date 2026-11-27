@@ -1,0 +1,7 @@
+{
+  "document": "01_Finance/Procedures/Procedure modification coordonnees bancaires fournisseurs.pdf",
+  "body": "1. Principe\nAucune modification de coordonnées bancaires ne peut être enregistrée sur la seule base d'un courriel, d'un courrier ou d'un appel entrant, même si la demande semble provenir d'un interlocuteur connu.",
+  "model": "qwen3.8-27b",
+  "context": "Cette section expose le principe fondamental de la procédure de modification des coordonnées bancaires fournisseurs. Elle précise que toute demande doit être vérifiée par un canal indépendant et ne peut pas être traitée sur la seule base d'une communication entrante.",
+  "seconds": 2.2
+}

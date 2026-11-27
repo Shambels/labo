@@ -1,0 +1,7 @@
+{
+  "document": "01_Finance/Comptabilite/Factures_fournisseurs/2025-11-14 Tolerie Mosane TM-2025-0391.jpg",
+  "body": "Image\n**Tôlerie Mosane SRL**  \nZoning de Sclaigneaux 14, 5300 Andenne  \nTVA BE 0478.215.903  \n\nFacture n°  \nTM-2025-0391  \n\nDate  \n14/11/2025  \n\nÉchéance  \n14/12/2025  \n\nClient  \nCalorvia SA, Rue des Artisans 42, 5100 Namur  \n\n| Réf.   | Désignation                          | Qté | Prix unit. | Total HT     |\n|--------|--------------------------------------|-----|------------|--------------|\n| TG15   | Tôle galvanisée 1,5 mm (tonne)       | 9   | 2 760,00   | 24 840,00    |\n| PLI    | Pliage de capots Aérïs (pièce)       | 400 | 6,20       | 2 480,00     |\n\nTotal HT  \n27 320,00 €  \n\nTVA 21 %  \n5 737,20 €  \n\nTotal TTC  \n33 057,20 €  \n\nPaiement par virement sur le compte IBAN BE47 0689 4412 7380 (BIC GKCCBEBB).\n\n---\n\n**Description**  \nIl s’agit d’une facture commerciale émise par la Tôlerie Mosane SRL à l’adresse de Calorvia SA. Le document liste deux articles vendus : de la tôle galvanisée en tonne et un service de pliage de capots Aérïs en pièces, avec leurs quantités, prix unitaires et totaux HT. Les montants sont calculés avec TVA à 21 %, aboutissant à un total TTC de 33 057,20 €, payable par virement bancaire.",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait correspond à l'intégralité du document, classé dans le dossier des factures fournisseurs. Il détaille l'achat de tôle galvanisée et le pliage de capots Aérïs auprès de la Tôlerie Mosane.",
+  "seconds": 3.2
+}

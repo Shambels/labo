@@ -1,0 +1,7 @@
+{
+  "document": "05_Commercial/Fiches_produits/Aéris_9_FR.pdf",
+  "body": "Aéris 9 · Fiche technique\nPompe à chaleur air-eau pour le chauffage et l'eau chaude sanitaire des maisons individuelles.\n| Caractéristique | Valeur |\n| - | - |\n| Puissance calorifique nominale | 9 kW |\n| SCOP (climat moyen, 35 °C) | 4,5 |\n| Puissance acoustique | 52 dB(A) |\n| Fluide frigorigène | R32 (1,5 kg) |\n| Poids | 78 kg |\n| Dimensions (H x L x P) | 1080 x 880 x 430 mm |\n| Classe énergétique | A+++ |\n| Température d'eau maximale | 60 °C |\nGarantie : 5 ans sur le compresseur, 2 ans sur les autres pièces.",
+  "model": "qwen3.8-27b",
+  "context": "Cette section présente les caractéristiques techniques et la garantie de la pompe à chaleur air-eau Aéris 9, destinée au chauffage et à l'eau chaude sanitaire des maisons individuelles.",
+  "seconds": 2.1
+}

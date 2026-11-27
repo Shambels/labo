@@ -1,0 +1,61 @@
+{
+  "document": "09_Communication/Communiques_presse/2026-05-18 CP Entrepot Herstal.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Entrepôt de Herstal",
+      "type": "site",
+      "alias": [],
+      "description": "entrepôt de 4 200 m² dans le parc des Hauts-Sarts"
+    },
+    {
+      "nom": "Parc industriel des Hauts-Sarts",
+      "type": "site",
+      "alias": [],
+      "description": "parc industriel accueillant l'entrepôt de Herstal"
+    },
+    {
+      "nom": "Lucie Bastin",
+      "type": "personne",
+      "alias": [],
+      "description": "contact presse de Calorvia"
+    },
+    {
+      "nom": "Province de Liège",
+      "type": "site",
+      "alias": [],
+      "description": "zone géographique desservie par l'entrepôt"
+    },
+    {
+      "nom": "Allemagne",
+      "type": "site",
+      "alias": [],
+      "description": "pays desservi par l'entrepôt"
+    },
+    {
+      "nom": "Namur",
+      "type": "site",
+      "alias": [],
+      "description": "site de Calorvia"
+    },
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "site de Calorvia"
+    },
+    {
+      "nom": "Gand",
+      "type": "site",
+      "alias": [],
+      "description": "site de Calorvia"
+    },
+    {
+      "nom": "Lille",
+      "type": "site",
+      "alias": [],
+      "description": "site de Calorvia"
+    }
+  ],
+  "seconds": 7.2
+}

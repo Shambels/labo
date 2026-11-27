@@ -1,0 +1,7 @@
+{
+  "document": "01_Finance/Budget_2026/Budget 2026 - version approuvee CA 16-12-2025.xlsx",
+  "body": "onglet « Effectifs » · Effectif budgété à fin 2026 (ETP)\n| Département | ETP |\n|---|---|\n| Production Seneffe | 298 |\n| Production et logistique Gand | 194 |\n| Commercial | 52 |\n| Fonctions support Namur | 85 |\n| Bureau de Lille | 14 |\n| Total | 643 |",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait se trouve dans l'onglet « Effectifs » du budget. Il détaille la répartition des équivalents temps plein par département, couvrant les sites de Seneffe, Gand, Namur et Lille.",
+  "seconds": 2.2
+}

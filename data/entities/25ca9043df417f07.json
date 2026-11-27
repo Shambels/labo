@@ -1,0 +1,31 @@
+{
+  "document": "04_Qualite/Non_conformites/NC-2025-047.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "site de Calorvia concerné par la non-conformité"
+    },
+    {
+      "nom": "Aéris 12",
+      "type": "produit",
+      "alias": [],
+      "description": "produit présentant une fuite de fluide R32"
+    },
+    {
+      "nom": "Valtek",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "fournisseur du lot de vannes V-2544"
+    },
+    {
+      "nom": "Anne Vercammen",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable de la non-conformité NC-2025-047"
+    }
+  ],
+  "seconds": 4.5
+}

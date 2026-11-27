@@ -1,0 +1,7 @@
+{
+  "document": "02_RH/Confidentiel/Grille salariale 2026.xlsx",
+  "body": "onglet « Grille 2026 » · Grille salariale 2026 (salaire mensuel brut, après indexation de 3,4 %) · Classe : C2 - Employé confirmé ; Minimum : 3240 ; Médiane : 3823 ; Maximum : 4406",
+  "model": "qwen3.8-27b",
+  "context": "Cette ligne se trouve dans l'onglet « Grille 2026 » du classeur RH. Elle détaille les salaires mensuels bruts de la classe C2 - Employé confirmé.",
+  "seconds": 1.9
+}

@@ -1,0 +1,7 @@
+{
+  "document": "07_IT/Securite/Procedure MFA v2.docx",
+  "body": "Procédure IT-12 : activer l'authentification multifacteur (version 2)\n1. Échéance\nTous les comptes doivent être protégés par la MFA au plus tard le 28 février 2026. Pour les terminaux partagés des ateliers de Seneffe et de Gand, l'échéance est reportée au 15 mars 2026 (décision du CODIR du 23 février 2026).",
+  "model": "qwen3.8-27b",
+  "context": "Cette section définit les délais d'activation de l'authentification multifacteur pour l'ensemble des comptes et les terminaux partagés des ateliers de Seneffe et de Gand.",
+  "seconds": 2.0
+}

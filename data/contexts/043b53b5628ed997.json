@@ -1,0 +1,7 @@
+{
+  "document": "07_IT/Support/Export tickets hypercare 2026-06.csv",
+  "body": "| ticket | date_ouverture | site | module | priorite | statut |\n| - | - | - | - | - | - |\n| ATL-1049 | 2026-06-16 | Lille | Ventes et facturation | haute | clos |\n| ATL-1050 | 2026-06-17 | Gand | Achats | normale | clos |\n| ATL-1051 | 2026-06-18 | Lille | Finance | normale | clos |\n| ATL-1052 | 2026-06-19 | Gand | Achats | normale | clos |\n| ATL-1053 | 2026-06-19 | Namur | Ventes et facturation | haute | ouvert |\n| ATL-1054 | 2026-06-20 | Gand | Production | basse | ouvert |\n",
+  "model": "qwen3.8-27b",
+  "context": "Cette section de la liste des tickets hypercare couvre la période du 16 au 20 juin 2026. Elle détaille les interventions sur les sites de Lille, Gand et Namur, concernant les modules Ventes et facturation, Achats, Finance et Production.",
+  "seconds": 2.6
+}

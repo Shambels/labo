@@ -1,0 +1,7 @@
+{
+  "document": "07_IT/Support/Export tickets hypercare 2026-06.csv",
+  "body": "| ticket | date_ouverture | site | module | priorite | statut |\n| - | - | - | - | - | - |\n| ATL-1055 | 2026-06-21 | Seneffe | Éditions | normale | ouvert |\n| ATL-1056 | 2026-06-22 | Gand | Finance | normale | ouvert |\n| ATL-1057 | 2026-06-23 | Lille | Logistique | normale | ouvert |\n| ATL-1058 | 2026-06-23 | Gand | Éditions | normale | ouvert |\n| ATL-1059 | 2026-06-24 | Lille | Éditions | normale | ouvert |\n| ATL-1060 | 2026-06-25 | Gand | Production | normale | ouvert |\n",
+  "model": "qwen3.8-27b",
+  "context": "Cette section du registre de support liste les tickets ouverts pour les sites de Seneffe, Gand et Lille. Elle couvre les modules Éditions, Finance, Logistique et Production.",
+  "seconds": 1.9
+}

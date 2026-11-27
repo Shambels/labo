@@ -1,0 +1,25 @@
+{
+  "document": "05_Commercial/Salons/Bilan salon Energie+ 2026.pptx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Namur Expo",
+      "type": "site",
+      "alias": [],
+      "description": "lieu du salon Énergie+ 2026"
+    },
+    {
+      "nom": "Énergie+ 2026",
+      "type": "projet",
+      "alias": [],
+      "description": "salon professionnel de l'énergie"
+    },
+    {
+      "nom": "Aéris Pro 22",
+      "type": "produit",
+      "alias": [],
+      "description": "produit le plus demandé lors du salon"
+    }
+  ],
+  "seconds": 4.7
+}

@@ -1,0 +1,25 @@
+{
+  "document": "09_Communication/Intranet/Organisation direction financiere a partir du 1er avril.html",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Laurent Dewit",
+      "type": "personne",
+      "alias": [],
+      "description": "directeur financier partant le 31 mars"
+    },
+    {
+      "nom": "Sarah Vandamme",
+      "type": "personne",
+      "alias": [],
+      "description": "assure l'intérim de la direction financière"
+    },
+    {
+      "nom": "Inès Rahmani",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable du contrôle de gestion"
+    }
+  ],
+  "seconds": 2.9
+}

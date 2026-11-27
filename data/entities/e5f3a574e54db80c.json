@@ -1,0 +1,31 @@
+{
+  "document": "06_Achats/Appel_offres_ERP/Grille evaluation ERP v3.xlsx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Projet Atlas",
+      "type": "projet",
+      "alias": [],
+      "description": "projet de sélection d'un éditeur ERP"
+    },
+    {
+      "nom": "Praxio",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "éditeur ERP évalué pour le projet Atlas"
+    },
+    {
+      "nom": "Kerneo",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "éditeur ERP évalué pour le projet Atlas"
+    },
+    {
+      "nom": "Sylvan Suite",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "éditeur ERP évalué pour le projet Atlas"
+    }
+  ],
+  "seconds": 5.1
+}

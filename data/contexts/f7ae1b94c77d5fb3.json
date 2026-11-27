@@ -1,0 +1,7 @@
+{
+  "document": "04_Qualite/Non_conformites/NC-2025-045.docx",
+  "body": "Fiche de non-conformité NC-2025-045\n| Date d'ouverture | 06/11/2025 |\n| - | - |\n| Site | Gand |\n| Produit | Ventis D300 |\n| Description | Cartons écrasés à l'expédition. |\n| Quantité concernée | 9 unités |\n| Mode de détection | Réclamation client |\n| Cause | Gerbage de cinq unités au lieu de quatre |\n| Action corrective | Rappel de l'instruction WI-GNT-03 |\n| Responsable | Lien Maes |\n| Statut | Clôturée |\n| Coût de non-qualité | 1 980 € |",
+  "model": "qwen3.8-27b",
+  "context": "Cette fiche de non-conformité concerne le produit Ventis D300 au site de Gand. Elle détaille une réclamation client liée à des cartons écrasés lors de l'expédition.",
+  "seconds": 2.3
+}

@@ -1,0 +1,7 @@
+{
+  "document": "05_Commercial/Fiches_produits/Aéris_9_NL.pdf",
+  "body": "Aéris 9 · Technische fiche\nLucht-water warmtepomp voor verwarming en sanitair warm water in eengezinswoningen.\n| Kenmerk | Waarde |\n| - | - |\n| Nominaal verwarmingsvermogen | 9 kW |\n| SCOP (gemiddeld klimaat, 35 °C) | 4,5 |\n| Geluidsvermogen | 52 dB(A) |\n| Koelmiddel | R32 (1,5 kg) |\n| Gewicht | 78 kg |\n| Afmetingen (H x B x D) | 1080 x 880 x 430 mm |\n| Energieklasse | A+++ |\n| Maximale watertemperatuur | 60 °C |\nGarantie: 5 jaar op de compressor, 2 jaar op de andere onderdelen.",
+  "model": "qwen3.8-27b",
+  "context": "Cette fiche technique présente les caractéristiques de la pompe à chaleur air-eau Aéris 9 destinée aux maisons individuelles. Elle détaille les performances énergétiques, les dimensions et les conditions de garantie du produit.",
+  "seconds": 2.4
+}

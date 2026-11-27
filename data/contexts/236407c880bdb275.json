@@ -1,0 +1,7 @@
+{
+  "document": "07_IT/Support/Export tickets hypercare 2026-06.csv",
+  "body": "| ticket | date_ouverture | site | module | priorite | statut |\n| - | - | - | - | - | - |\n| ATL-1031 | 2026-06-05 | Seneffe | Achats | normale | clos |\n| ATL-1032 | 2026-06-05 | Seneffe | Ventes et facturation | basse | clos |\n| ATL-1033 | 2026-06-05 | Namur | Logistique | normale | clos |\n| ATL-1034 | 2026-06-05 | Namur | Éditions | haute | clos |\n| ATL-1035 | 2026-06-05 | Seneffe | Éditions | normale | clos |\n| ATL-1036 | 2026-06-05 | Namur | Achats | normale | clos |\n",
+  "model": "qwen3.8-27b",
+  "context": "Cette section de la liste des tickets hypercare concerne les incidents ouverts le 5 juin 2026. Elle détaille les demandes de support pour les sites de Seneffe et Namur, couvrant les modules Achats, Ventes et facturation, Logistique et Éditions.",
+  "seconds": 2.8
+}

@@ -1,0 +1,7 @@
+{
+  "document": "02_RH/Notes_de_service/2026-01-16 NS-2026-02 Authentification multifacteur obligatoire.docx",
+  "body": "Note de service NS-2026-02\n| Objet | Authentification multifacteur obligatoire |\n| - | - |\n| Date | 16/01/2026 |\n| Émetteur | Kevin Mertens |\n| Destinataires | Tout le personnel |\nSuite à l'incident de sécurité du 13 janvier, l'authentification multifacteur (MFA) devient obligatoire pour tous les comptes informatiques au plus tard le 28 février 2026.\nChaque collaborateur installe l'application d'authentification sur son smartphone professionnel en suivant la procédure MFA publiée sur l'intranet. Le support informatique (poste 2200) organise des permanences sur chaque site.",
+  "model": "qwen3.8-27b",
+  "context": "Cette rubrique présente l'en-tête et le corps de la note de service émise par Kevin Mertens. Elle détaille la mise en place obligatoire de l'authentification multifacteur pour l'ensemble du personnel suite à un incident de sécurité.",
+  "seconds": 2.7
+}

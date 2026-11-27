@@ -1,0 +1,10 @@
+{
+  "path": "03_Production/Seneffe/Photos_equipements/IMG_20260313_Banc_dessai_L2.jpg",
+  "kind": "image",
+  "page": null,
+  "index": null,
+  "model": "qwen3.5-9b",
+  "prompt": "Tu transcris des documents d'entreprise pour un moteur de recherche.\n1. Recopie tout le texte visible, exactement comme il est écrit : nombres, codes, dates, unités et\n   annotations manuscrites compris. Rends les tableaux en Markdown.\n2. Puis, sous le titre « Description », décris en trois phrases au plus le type d'image (organigramme,\n   plan, graphique, photo, facture...) et ce qu'elle montre qui n'est pas écrit : les rattachements\n   d'un organigramme, la valeur la plus haute d'un graphique, la position des éléments d'un plan.\nN'invente rien : si un élément est illisible, écris [illisible].",
+  "seconds": 3.5,
+  "text": "**Testra GmbH  \nPrüfstand / banc d'essai**\n\n| Type              | HPT-4             |\n|-------------------|-------------------|\n| N° de série       | HPT4-21-0072      |\n| Année             | 2021              |\n| Fluides           | R32 / R290        |\n| Pression max.     | 45 bar            |\n| Puissance         | 11 kW             |\n\nCE\n\n---\n\n**Description**  \nIl s’agit d’une plaque technique métallique fixée sur un équipement industriel, probablement un banc d’essai. Elle affiche des spécifications techniques claires : type, numéro de série, année de fabrication, fluides utilisés, pression maximale et puissance. Le marquage « CE » en bas à droite indique la conformité aux normes européennes de sécurité."
+}

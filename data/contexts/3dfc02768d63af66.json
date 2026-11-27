@@ -1,0 +1,7 @@
+{
+  "document": "04_Qualite/Non_conformites/NC-2026-006.docx",
+  "body": "Fiche de non-conformité NC-2026-006\n| Date d'ouverture | 04/02/2026 |\n| - | - |\n| Site | Seneffe |\n| Produit | Système qualité |\n| Description | Audit ISO 9001 : enregistrements d'étalonnage manquants pour deux clés dynamométriques. |\n| Quantité concernée | 2 outils |\n| Mode de détection | Audit de certification |\n| Cause | Suivi de l'étalonnage tenu sur papier |\n| Action corrective | Intégration des outils dans le plan d'étalonnage |\n| Responsable | Romain Dethier |\n| Statut | Clôturée le 17/04/2026 |\n| Coût de non-qualité | 0 € |",
+  "model": "qwen3.8-27b",
+  "context": "Cette fiche de non-conformité concerne le site de Seneffe et le système qualité. Elle détaille les enregistrements d'étalonnage manquants pour deux clés dynamométriques détectés lors d'un audit ISO 9001.",
+  "seconds": 2.7
+}

@@ -1,0 +1,37 @@
+{
+  "document": "02_RH/Notes_de_service/2025-09-10 NS-2025-01 Fête du personnel 2025.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Nadia Benali",
+      "type": "personne",
+      "alias": [],
+      "description": "émettrice de la note de service"
+    },
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "lieu de la fête du personnel"
+    },
+    {
+      "nom": "Namur",
+      "type": "site",
+      "alias": [],
+      "description": "point de départ des navettes"
+    },
+    {
+      "nom": "Gand",
+      "type": "site",
+      "alias": [],
+      "description": "point de départ des navettes"
+    },
+    {
+      "nom": "Fête du personnel 2025",
+      "type": "projet",
+      "alias": [],
+      "description": "événement annuel du personnel"
+    }
+  ],
+  "seconds": 4.5
+}

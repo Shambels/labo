@@ -1,0 +1,43 @@
+{
+  "document": "00_Direction/CODIR/Annexes/2025-10-06 Annexe - Simulation hausse tarifaire.xlsx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "A : hausse uniforme",
+      "type": "projet",
+      "alias": [
+        "Scénario A"
+      ],
+      "description": "scénario de hausse tarifaire uniforme de 4 %"
+    },
+    {
+      "nom": "B : hausse différenciée",
+      "type": "projet",
+      "alias": [
+        "Scénario B"
+      ],
+      "description": "scénario de hausse tarifaire différenciée recommandé"
+    },
+    {
+      "nom": "C : gel des prix",
+      "type": "projet",
+      "alias": [
+        "Scénario C"
+      ],
+      "description": "scénario de gel des prix sans hausse"
+    },
+    {
+      "nom": "gamme standard",
+      "type": "produit",
+      "alias": [],
+      "description": "gamme de produits concernée par la hausse tarifaire"
+    },
+    {
+      "nom": "gamme premium",
+      "type": "produit",
+      "alias": [],
+      "description": "gamme de produits concernée par la hausse tarifaire"
+    }
+  ],
+  "seconds": 5.2
+}

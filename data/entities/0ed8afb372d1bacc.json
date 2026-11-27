@@ -1,0 +1,37 @@
+{
+  "document": "06_Achats/Bons_de_livraison/2026-02-12 BL Elcora.jpg",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Elcora Electronics BV",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "fournisseur de composants électroniques"
+    },
+    {
+      "nom": "RC-40",
+      "type": "produit",
+      "alias": [],
+      "description": "carte de régulation Aéris"
+    },
+    {
+      "nom": "DS-2",
+      "type": "produit",
+      "alias": [],
+      "description": "module d'affichage 2,8 pouces"
+    },
+    {
+      "nom": "R. Dethier",
+      "type": "personne",
+      "alias": [],
+      "description": "réceptionnaire du site de Seneffe"
+    },
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "site de réception des marchandises"
+    }
+  ],
+  "seconds": 4.5
+}

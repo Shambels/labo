@@ -1,0 +1,25 @@
+{
+  "document": "04_Qualite/Non_conformites/NC-2026-022.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "site de Calorvia concerné par la non-conformité"
+    },
+    {
+      "nom": "Sophie Lejeune",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable de la non-conformité NC-2026-022"
+    },
+    {
+      "nom": "Praxio",
+      "type": "équipement",
+      "alias": [],
+      "description": "système ERP paramétré pour l'édition des bons"
+    }
+  ],
+  "seconds": 4.2
+}

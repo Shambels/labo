@@ -1,0 +1,7 @@
+{
+  "document": "03_Production/Seneffe/Rapports_mensuels/Rapport production Seneffe 2026-02.xlsx",
+  "body": "onglet « Production » · Rapport de production · usine de Seneffe · février 2026\n| Ligne | Produits | Unités produites | Arrêts (h) | Rebut (%) | TRS (%) |\n|---|---|---|---|---|---|\n| L1 | Aéris 6 / 9 | 973 | 9.6 | 1.4 | 79.6 |\n| L2 | Aéris 12 | 730 | 9.8 | 1.7 | 72.3 |\n| L3 | Aéris Pro 16 / 22 | 552 | 15.5 | 1.4 | 81.4 |\n| Total |  | 2255 | 34.9 |  |  |",
+  "model": "qwen3.8-27b",
+  "context": "Cette section présente le tableau récapitulatif de la production mensuelle de l'usine de Seneffe. Elle détaille les volumes fabriqués, les arrêts et les taux de rebut pour les lignes L1, L2 et L3.",
+  "seconds": 3.0
+}

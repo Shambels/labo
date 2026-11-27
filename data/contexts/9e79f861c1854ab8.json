@@ -1,0 +1,7 @@
+{
+  "document": "07_IT/Projet_Atlas_ERP/COPIL/COPIL_Atlas_08_20260402.docx",
+  "body": "Projet Atlas : compte rendu du comité de pilotage n° 8\n3. Points marquants\n- Résultats de la recette 1 : 81 % des cas de test sont conformes ; 23 anomalies ont été ouvertes, dont 4 bloquantes.\n- Les anomalies bloquantes concernent le calcul des remises par client et l'export des bons de préparation vers le WMS.",
+  "model": "qwen3.8-27b",
+  "context": "La rubrique « Points marquants » du compte rendu détaille les résultats de la recette 1 du projet Atlas. Elle précise que les anomalies bloquantes identifiées concernent le calcul des remises et l'export des bons de préparation vers le WMS.",
+  "seconds": 2.4
+}

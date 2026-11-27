@@ -1,0 +1,7 @@
+{
+  "document": "05_Commercial/Offres/DV-2026-0213 Thermo.pdf",
+  "body": "Offre de prix DV-2026-0213\nClient : Thermo Services Lille SARL · Date : 19/03/2026 · Validité : 30 jours\n| Produit | Quantité | Prix catalogue 2026 | Remise | Total HT |\n| - | - | - | - | - |\n| Aéris Pro 16 | 12 | 14 600 € | 9 % | 159 432,00 € |\n| Aéris Pro 22 | 4 | 18 110 € | 9 % | 65 920,40 € |\n| Total HT |  |  |  | 225 352,40 € |\nDélai de livraison indicatif : 3 semaines pour la gamme standard, 6 semaines pour la gamme Aéris Pro. Offre établie selon nos conditions générales de vente 2026.",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait correspond à l'intégralité du document, situé dans la rubrique commerciale des offres. Il détaille la proposition tarifaire pour l'achat de pompes à chaleur de la gamme Aéris Pro destinées au client Thermo Services Lille.",
+  "seconds": 2.7
+}

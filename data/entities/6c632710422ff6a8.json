@@ -1,0 +1,13 @@
+{
+  "document": "04_Qualite/Indicateurs/Pareto causes non-conformites 2025.png",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Calorvia SA",
+      "type": "autre",
+      "alias": [],
+      "description": "Société de pompes à chaleur et ventilation"
+    }
+  ],
+  "seconds": 1.6
+}

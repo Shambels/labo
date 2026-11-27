@@ -1,0 +1,7 @@
+{
+  "document": "02_RH/Politiques/Politique frais de deplacement.pdf",
+  "body": "2. Plafonds\n| Frais | Plafond |\n| - | - |\n| Hôtel en Belgique (par nuit, petit-déjeuner compris) | 120 € |\n| Hôtel en France, aux Pays-Bas ou en Allemagne (par nuit) | 150 € |\n| Repas (par repas, boissons comprises) | 25 € |\n| Train | 2e classe, 1re classe au-delà de 3 heures |\n| Avion | Classe économique, sur accord préalable du directeur |",
+  "model": "qwen3.8-27b",
+  "context": "Cette section détaille les plafonds de remboursement pour les frais d'hébergement, de restauration et de transport. Elle précise les limites applicables aux déplacements professionnels en Belgique, en France, aux Pays-Bas et en Allemagne.",
+  "seconds": 2.0
+}

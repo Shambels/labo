@@ -1,0 +1,25 @@
+{
+  "document": "04_Qualite/Non_conformites/NC-2025-044.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "site de production concerné par la non-conformité"
+    },
+    {
+      "nom": "Aéris 6",
+      "type": "produit",
+      "alias": [],
+      "description": "produit ayant une étiquette énergétique erronée"
+    },
+    {
+      "nom": "Romain Dethier",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable de la non-conformité"
+    }
+  ],
+  "seconds": 2.6
+}

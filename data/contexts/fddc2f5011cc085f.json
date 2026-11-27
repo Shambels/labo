@@ -1,0 +1,7 @@
+{
+  "document": "05_Commercial/Fiches_produits/Aéris_Pro_16_FR.pdf",
+  "body": "Aéris Pro 16 · Fiche technique\nPompe à chaleur air-eau haute température au propane (R290), idéale en rénovation avec radiateurs existants.\n| Caractéristique | Valeur |\n| - | - |\n| Puissance calorifique nominale | 16 kW |\n| SCOP (climat moyen, 35 °C) | 4,8 |\n| Puissance acoustique | 51 dB(A) |\n| Fluide frigorigène | R290 (1,3 kg) |\n| Poids | 128 kg |\n| Dimensions (H x L x P) | 1380 x 1020 x 480 mm |\n| Classe énergétique | A+++ |\n| Température d'eau maximale | 75 °C |\nGarantie : 5 ans sur le compresseur, 2 ans sur les autres pièces.",
+  "model": "qwen3.8-27b",
+  "context": "Cette section présente les caractéristiques techniques et la garantie de la pompe à chaleur Aéris Pro 16.",
+  "seconds": 1.6
+}

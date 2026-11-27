@@ -1,0 +1,7 @@
+{
+  "document": "99_Archives/2024/Tarif 2024.xlsx",
+  "body": "onglet « Tarif » · Tarif 2024 (prix catalogue HT, en euros)\n| Code | Produit | Gamme | Prix 2024 |\n|---|---|---|---|\n| AE06 | Aéris 6 | standard | 6690 |\n| AE09 | Aéris 9 | standard | 8200 |\n| AE12 | Aéris 12 | standard | 9690 |\n| AP16 | Aéris Pro 16 | premium | 13500 |\n| AP22 | Aéris Pro 22 | premium | 16750 |\n| VD30 | Ventis D300 | standard | 3190 |\n| VD45 | Ventis D450 | standard | 4060 |\n| VP45 | Ventis D450 Pro | premium | 5480 |",
+  "model": "qwen3.8-27b",
+  "context": "Cette section présente le tableau récapitulatif des prix catalogue HT pour l'ensemble de la gamme de produits Calorvia. Elle détaille les références, les gammes standard et premium, ainsi que les tarifs associés aux modèles Aéris et Ventis.",
+  "seconds": 3.0
+}

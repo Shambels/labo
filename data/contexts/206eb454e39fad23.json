@@ -1,0 +1,7 @@
+{
+  "document": "02_RH/Effectifs/Effectifs mensuels 2025-2026.xlsx",
+  "body": "onglet « ETP par site » · Effectifs en fin de mois (ETP) · lignes 4 à 6\n| Site | 09/2025 | 10/2025 | 11/2025 | 12/2025 | 01/2026 | 02/2026 | 03/2026 | 04/2026 | 05/2026 | 06/2026 |\n|---|---|---|---|---|---|---|---|---|---|---|\n| Lille | 14 | 14 | 14 | 14 | 14 | 14 | 14 | 14 | 14 | 14 |\n| Herstal | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 6 | 6 |\n| Total | 620 | 620 | 620 | 620 | 622 | 622 | 623 | 621 | 626 | 628 |",
+  "model": "qwen3.8-27b",
+  "context": "Dans l'onglet « ETP par site », cette section détaille les effectifs mensuels des sites de Lille et de Herstal, ainsi que le total global.",
+  "seconds": 1.8
+}

@@ -1,0 +1,7 @@
+{
+  "document": "07_IT/Support/README.md",
+  "body": "Support de l'ERP Praxio après l'hypercare\nArchivage de GesPro 7\nGesPro 7 reste accessible en lecture seule jusqu'au 31 décembre 2026, puis ses données seront archivées.",
+  "model": "qwen3.8-27b",
+  "context": "Cette section détaille la procédure d'archivage du logiciel GesPro 7. Elle précise que l'accès en lecture seule est maintenu jusqu'à la fin de l'année 2026 avant le transfert des données.",
+  "seconds": 2.1
+}

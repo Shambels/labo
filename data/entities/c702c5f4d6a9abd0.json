@@ -1,0 +1,21 @@
+{
+  "document": "03_Production/Seneffe/Photos_equipements/IMG_20260316_Pont_roulant.jpg",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Hissmann",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "marque du pont roulant monopoutre"
+    },
+    {
+      "nom": "Pont roulant monopoutre",
+      "type": "équipement",
+      "alias": [
+        "PR-5T"
+      ],
+      "description": "pont roulant monopoutre de marque Hissmann"
+    }
+  ],
+  "seconds": 2.6
+}

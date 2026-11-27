@@ -1,0 +1,7 @@
+{
+  "document": "02_RH/Confidentiel/Grille salariale 2026.xlsx",
+  "body": "onglet « Grille 2026 » · Grille salariale 2026 (salaire mensuel brut, après indexation de 3,4 %)\n| Classe | Minimum | Médiane | Maximum |\n|---|---|---|---|\n| E1 - Ouvrier | 2380 | 2808 | 3237 |\n| E2 - Ouvrier qualifié | 2650 | 3127 | 3604 |\n| E3 - Technicien | 2980 | 3516 | 4053 |\n| C1 - Employé | 2720 | 3210 | 3699 |\n| C2 - Employé confirmé | 3240 | 3823 | 4406 |\n| C3 - Cadre | 4150 | 4897 | 5644 |\n| C4 - Cadre supérieur | 5480 | 6466 | 7453 |",
+  "model": "qwen3.8-27b",
+  "context": "Cette section présente le tableau récapitulatif des salaires mensuels bruts par classe de personnel. Elle détaille les montants minimum, médian et maximum pour chaque catégorie, des ouvriers aux cadres supérieurs.",
+  "seconds": 3.0
+}

@@ -1,0 +1,21 @@
+{
+  "document": "01_Finance/Comptabilite/Factures_fournisseurs/2025-11-14 Tolerie Mosane TM-2025-0391.jpg",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Tôlerie Mosane SRL",
+      "type": "fournisseur",
+      "alias": [
+        "Tolerie Mosane"
+      ],
+      "description": "fournisseur de tôles et services de pliage"
+    },
+    {
+      "nom": "Aérïs",
+      "type": "produit",
+      "alias": [],
+      "description": "capots fabriqués par Calorvia"
+    }
+  ],
+  "seconds": 3.7
+}

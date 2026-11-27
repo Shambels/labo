@@ -1,0 +1,7 @@
+{
+  "document": "01_Finance/Procedures/Procedure modification coordonnees bancaires fournisseurs.pdf",
+  "body": "3. Signalement\nToute demande suspecte est transférée sans délai à la sécurité informatique (securite.it@calorvia.example) et n'est pas traitée.",
+  "model": "qwen3.8-27b",
+  "context": "Cette section détaille la procédure de signalement des demandes suspectes de modification de coordonnées bancaires. Elle précise le transfert immédiat de ces cas à la sécurité informatique de l'entreprise.",
+  "seconds": 1.8
+}

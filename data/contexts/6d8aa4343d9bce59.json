@@ -1,0 +1,7 @@
+{
+  "document": "01_Finance/Comptabilite/Factures_fournisseurs/2026-03-10 Valtek note de credit CN-2026-018.jpg",
+  "body": "Image\n**Valtek Components Ltd**  \nUnit 4, Riverside Park, Coventry CV1 4FS, United Kingdom  \nVAT GB 402 1187 63  \n\nCredit note no. CN-2026-018  \nDate 10/03/2026  \nReference Recall Aeris 12 - valve batch V-2544  \nCustomer Calorvia SA, 5100 Namur, Belgium  \n\n| Item | Description | Qty | Unit price | Amount |\n|------|-------------|-----|------------|--------|\n| RCL | Share of recall costs (65 %) as agreed on 27/02/20261 | | 117 000,00 | 117 000,00 |\n\nTotal credit 117 000,00 EUR  \n\nThis credit note will be offset against open invoices.\n\n---\n\n**Description**  \nIl s’agit d’une facture de crédit émise par Valtek Components Ltd pour un client belge, Calorvia SA. Elle concerne une part de coûts de rappel (65 %) liés à un lot de valves Aeris 12, dont le montant total est de 117 000,00 EUR. Le document indique qu’il sera compensé contre des factures ouvertes.",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait correspond à l'intégralité de la note de crédit émise par Valtek Components Ltd. Il détaille la prise en charge d'une part des coûts de rappel pour le lot de valves Aeris 12.",
+  "seconds": 2.7
+}

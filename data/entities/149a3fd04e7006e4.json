@@ -1,0 +1,43 @@
+{
+  "document": "00_Direction/CODIR/Annexes/2026-05-18 Annexe - Go no-go Atlas.pptx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Projet Atlas",
+      "type": "projet",
+      "alias": [],
+      "description": "projet de déploiement avec décision go/no-go"
+    },
+    {
+      "nom": "Namur",
+      "type": "site",
+      "alias": [],
+      "description": "site de déploiement prévu le 1er juin"
+    },
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "site de déploiement prévu le 1er juin"
+    },
+    {
+      "nom": "Lille",
+      "type": "site",
+      "alias": [],
+      "description": "site de déploiement prévu le 1er juin"
+    },
+    {
+      "nom": "Gand",
+      "type": "site",
+      "alias": [],
+      "description": "site de déploiement prévu le 15 juin"
+    },
+    {
+      "nom": "WMS Gand",
+      "type": "équipement",
+      "alias": [],
+      "description": "interface logicielle avec anomalies non bloquantes"
+    }
+  ],
+  "seconds": 5.7
+}

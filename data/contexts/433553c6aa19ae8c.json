@@ -1,0 +1,7 @@
+{
+  "document": "03_Production/Gent/Maandrapporten/Productierapport Gent 2026-01.xlsx",
+  "body": "onglet « Productie »\nOpmerkingen\nSnelheid in de gangen verlaagd tot 6 km/u (22/01). Markering van de oversteekplaatsen klaar op 15/01.",
+  "model": "qwen3.8-27b",
+  "context": "Cette section des remarques du rapport de production du site de Gent concerne la réduction de la vitesse dans les couloirs et la finalisation du marquage des passages piétons.",
+  "seconds": 1.8
+}

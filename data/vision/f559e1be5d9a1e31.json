@@ -1,0 +1,10 @@
+{
+  "path": "01_Finance/Comptabilite/Factures_fournisseurs/2026-03-10 Valtek note de credit CN-2026-018.jpg",
+  "kind": "image",
+  "page": null,
+  "index": null,
+  "model": "qwen3.5-9b",
+  "prompt": "Tu transcris des documents d'entreprise pour un moteur de recherche.\n1. Recopie tout le texte visible, exactement comme il est écrit : nombres, codes, dates, unités et\n   annotations manuscrites compris. Rends les tableaux en Markdown.\n2. Puis, sous le titre « Description », décris en trois phrases au plus le type d'image (organigramme,\n   plan, graphique, photo, facture...) et ce qu'elle montre qui n'est pas écrit : les rattachements\n   d'un organigramme, la valeur la plus haute d'un graphique, la position des éléments d'un plan.\nN'invente rien : si un élément est illisible, écris [illisible].",
+  "seconds": 5.5,
+  "text": "**Texte transcrit :**\n\nValtek Components Ltd  \nUnit 4, Riverside Park, Coventry CV1 4FS, United Kingdom  \nVAT GB 402 1187 63  \n\nCredit note no. | CN-2026-018  \nDate | 10/03/2026  \nReference | Recall Aeris 12 - valve batch V-2544  \nCustomer | Calorvia SA, 5100 Namur, Belgium  \n\n| Item | Description | Qty | Unit price | Amount |\n|------|-------------|-----|------------|--------|\n| RCL | Share of recall costs (65 %) as agreed on 27/02/20261 | | 117 000,00 | 117 000,00 |\n\nTotal credit | **117 000,00 EUR**\n\nThis credit note will be offset against open invoices.\n\n---\n\n**Description**\n\nIl s’agit d’une facture de crédit émise par Valtek Components Ltd pour un rappel de produit (Aeris 12, lot V-2544) adressé à Calorvia SA en Belgique. Le document détaille une seule ligne de charge : la part des coûts de rappel (65 %) convenue le 27 février 2026, soit 117 000,00 EUR. La valeur totale du crédit est affichée en bas du tableau, sans autre information visuelle ou graphique."
+}

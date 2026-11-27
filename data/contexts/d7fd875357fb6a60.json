@@ -1,0 +1,7 @@
+{
+  "document": "03_Production/Procedures/MO-SEN-07 Brasage des vannes 4 voies rev C.pdf",
+  "body": "Modifications de la révision C\n- Ajout d'un contrôle visuel à 100 % des brasures de la vanne, suite au rappel de l'Aéris 12 (non-conformité NC-2025-047).\n- Ajout d'un essai destructif (coupe) sur une vanne tous les 50 brasages.",
+  "model": "qwen3.8-27b",
+  "context": "Cette section détaille les changements apportés à la procédure de brasage des vannes quatre voies pour les modèles Aéris 6, 9 et 12. Elle précise l'ajout d'un contrôle visuel systématique et d'un essai destructif périodique.",
+  "seconds": 2.4
+}

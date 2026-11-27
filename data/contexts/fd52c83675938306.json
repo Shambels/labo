@@ -1,0 +1,7 @@
+{
+  "document": "03_Production/Seneffe/Photos_equipements/IMG_20260311_Presse_plieuse.jpg",
+  "body": "Image\n| Type | PB-135/3100 |\n| N° de série | BRV-19-04417 |\n| Année | 2019 |\n| Force | 135 t |\n| Longueur de pliage | 3100 mm |\n| Puissance | 15 kW |\n| Tension | 400 V 3~ 50 Hz |\n| Masse | 9800 kg |\n\nCE\n\nDescription  \nIl s’agit d’une plaque signalétique métallique fixée sur une machine industrielle. Elle affiche les caractéristiques techniques d’une presse plieuse hydraulique Brevik Machines, avec des données précises comme la force, la tension et la masse. La plaque est encadrée par quatre vis aux coins et porte le marquage CE en bas à droite, indiquant sa conformité aux normes européennes.",
+  "model": "qwen3.8-27b",
+  "context": "Cette fiche technique se trouve dans la rubrique des photos des équipements de production de Seneffe. Elle détaille les caractéristiques de la presse plieuse hydraulique Brevik Machines.",
+  "seconds": 2.3
+}

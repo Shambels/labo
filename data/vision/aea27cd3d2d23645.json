@@ -1,0 +1,10 @@
+{
+  "path": "03_Production/Seneffe/Photos_equipements/IMG_20260311_Presse_plieuse.jpg",
+  "kind": "image",
+  "page": null,
+  "index": null,
+  "model": "qwen3.8-27b",
+  "prompt": "Tu transcris des documents d'entreprise pour un moteur de recherche.\n1. Recopie tout le texte visible, exactement comme il est écrit : nombres, codes, dates, unités et\n   annotations manuscrites compris. Rends les tableaux en Markdown.\n2. Dans un schéma, un plan ou un organigramme, recopie aussi chaque texte posé sur un lien, une flèche ou un\n   trait (débit, distance, type de connexion, rattachement), sur une ligne qui commence par le nom des deux\n   éléments reliés, tels qu'ils sont écrits sur l'image, séparés par un tiret, puis deux-points et le texte.\n   Un tel texte n'a de sens qu'avec les deux éléments qu'il relie.\n3. Puis, sous le titre « Description », décris en trois phrases au plus le type d'image (organigramme,\n   plan, graphique, photo, facture...) et ce qu'elle montre qui n'est pas écrit : les rattachements\n   d'un organigramme, la valeur la plus haute d'un graphique, la position des éléments d'un plan.\nN'invente rien : si un élément est illisible, écris [illisible].",
+  "seconds": 9.8,
+  "text": "Brevik Machines\nPresse plieuse hydraulique\n\n| | |\n| :--- | :--- |\n| Type | PB-135/3100 |\n| N° de série | BRV-19-04417 |\n| Année | 2019 |\n| Force | 135 t |\n| Longueur de pliage | 3100 mm |\n| Puissance | 15 kW |\n| Tension | 400 V 3~ 50 Hz |\n| Masse | 9800 kg |\n\nCE\n\nDescription\nIl s'agit d'une photo d'une plaque signalétique métallique fixée sur une machine industrielle. La plaque détaille les caractéristiques techniques d'une presse plieuse hydraulique, incluant le type, le numéro de série, la force et la tension. Le marquage CE est visible dans le coin inférieur droit, indiquant la conformité européenne de l'équipement."
+}

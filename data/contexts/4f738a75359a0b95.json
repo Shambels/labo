@@ -1,0 +1,7 @@
+{
+  "document": "01_Finance/Budget_2026/Budget 2026 v2.xlsx",
+  "body": "onglet « Compte de résultats » · Compte de résultats budgété 2026 (k€) · lignes 1 à 7\n| Mois | Chiffre d'affaires | EBITDA | Taux d'EBITDA |\n|---|---|---|---|\n| Janvier | 14557 | 1354 | 9,3 % |\n| Février | 13719 | 1276 | 9,3 % |\n| Mars | 13195 | 1227 | 9,3 % |\n| Avril | 11729 | 1091 | 9,3 % |\n| Mai | 10891 | 1013 | 9,3 % |\n| Juin | 10577 | 984 | 9,3 % |\n| Juillet | 9006 | 838 | 9,3 % |",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait se trouve dans l'onglet « Compte de résultats » et présente les prévisions mensuelles de chiffre d'affaires et d'EBITDA pour la première moitié de l'année 2026.",
+  "seconds": 2.3
+}

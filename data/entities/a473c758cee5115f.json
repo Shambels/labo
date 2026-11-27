@@ -1,0 +1,19 @@
+{
+  "document": "05_Commercial/Offres/DV-2026-0297 Énergies.pdf",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Énergies du Condroz SRL",
+      "type": "client",
+      "alias": [],
+      "description": "Client destinataire de l'offre de prix"
+    },
+    {
+      "nom": "Aéris Pro 16",
+      "type": "produit",
+      "alias": [],
+      "description": "Pompe à chaleur de la gamme Aéris Pro"
+    }
+  ],
+  "seconds": 3.0
+}

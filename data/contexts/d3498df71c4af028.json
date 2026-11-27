@@ -1,0 +1,7 @@
+{
+  "document": "05_Commercial/Fiches_produits/Aéris_Pro_22_FR.pdf",
+  "body": "Aéris Pro 22 · Fiche technique\nPompe à chaleur air-eau haute température au propane (R290), idéale en rénovation avec radiateurs existants.\n| Caractéristique | Valeur |\n| - | - |\n| Puissance calorifique nominale | 22 kW |\n| SCOP (climat moyen, 35 °C) | 4,7 |\n| Puissance acoustique | 53 dB(A) |\n| Fluide frigorigène | R290 (1,8 kg) |\n| Poids | 165 kg |\n| Dimensions (H x L x P) | 1520 x 1180 x 520 mm |\n| Classe énergétique | A+++ |\n| Température d'eau maximale | 75 °C |\nGarantie : 5 ans sur le compresseur, 2 ans sur les autres pièces.",
+  "model": "qwen3.8-27b",
+  "context": "Cette section présente les caractéristiques techniques et la garantie de la pompe à chaleur Aéris Pro 22.",
+  "seconds": 1.7
+}

@@ -1,0 +1,43 @@
+{
+  "document": "06_Achats/Appel_offres_ERP/Synthese demonstrations ERP.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Projet Atlas",
+      "type": "projet",
+      "alias": [],
+      "description": "projet de sélection d'un ERP"
+    },
+    {
+      "nom": "Praxio",
+      "type": "produit",
+      "alias": [],
+      "description": "solution ERP avec module de gestion d'entrepôt natif"
+    },
+    {
+      "nom": "LogiPath",
+      "type": "produit",
+      "alias": [],
+      "description": "connecteur existant pour la gestion d'entrepôt"
+    },
+    {
+      "nom": "Intégra Conseil",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "intégrateur unique de Praxio en Belgique"
+    },
+    {
+      "nom": "Kerneo",
+      "type": "produit",
+      "alias": [],
+      "description": "solution ERP avec tableaux de bord financiers"
+    },
+    {
+      "nom": "Sylvan Suite",
+      "type": "produit",
+      "alias": [],
+      "description": "solution ERP à coût d'abonnement bas"
+    }
+  ],
+  "seconds": 5.4
+}

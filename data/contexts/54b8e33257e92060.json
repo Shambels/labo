@@ -1,0 +1,7 @@
+{
+  "document": "04_Qualite/Non_conformites/NC-2026-013.docx",
+  "body": "Fiche de non-conformité NC-2026-013\n| Date d'ouverture | 24/03/2026 |\n| - | - |\n| Site | Seneffe |\n| Produit | Aéris 9 |\n| Description | Mauvais câblage de la sonde extérieure (inversion des fils). |\n| Quantité concernée | 11 unités |\n| Mode de détection | Banc d'essai |\n| Cause | Opérateur intérimaire non formé |\n| Action corrective | Formation et détrompeur sur le connecteur |\n| Responsable | Romain Dethier |\n| Statut | Clôturée |\n| Coût de non-qualité | 690 € |",
+  "model": "qwen3.8-27b",
+  "context": "La fiche de non-conformité NC-2026-013 concerne le produit Aéris 9 au site de Seneffe. Elle détaille un défaut de câblage de la sonde extérieure détecté sur le banc d'essai.",
+  "seconds": 2.8
+}

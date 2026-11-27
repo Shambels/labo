@@ -1,0 +1,10 @@
+{
+  "path": "05_Commercial/Tableaux_de_bord/Tableau de bord commercial 2026-01.png",
+  "kind": "image",
+  "page": null,
+  "index": null,
+  "model": "qwen3.5-9b",
+  "prompt": "Tu transcris des documents d'entreprise pour un moteur de recherche.\n1. Recopie tout le texte visible, exactement comme il est écrit : nombres, codes, dates, unités et\n   annotations manuscrites compris. Rends les tableaux en Markdown.\n2. Puis, sous le titre « Description », décris en trois phrases au plus le type d'image (organigramme,\n   plan, graphique, photo, facture...) et ce qu'elle montre qui n'est pas écrit : les rattachements\n   d'un organigramme, la valeur la plus haute d'un graphique, la position des éléments d'un plan.\nN'invente rien : si un élément est illisible, écris [illisible].",
+  "seconds": 4.3,
+  "text": "Tableau de bord commercial • janvier 2026\n\n| Chiffre d'affaires du mois | Écart au budget | Prises de commandes |\n|----------------------------|-----------------|---------------------|\n| 14 300 k€                  | -2,3 %          | 14 230 k€           |\n\n| Région       | Chiffre d'affaires (k€) |\n|--------------|--------------------------|\n| Wallonie     | 4 739                    |\n| Bruxelles    | 1 363                    |\n| Flandre      | 4 603                    |\n| France       | 2 857                    |\n| Autres pays  | 738                      |\n\nDescription  \nIl s’agit d’un tableau de bord commercial pour janvier 2026, présentant trois indicateurs clés en haut et un graphique en barres montrant le chiffre d’affaires par région. Le graphique indique que la Wallonie et la Flandre sont les régions les plus performantes, avec respectivement 4 739 k€ et 4 603 k€, tandis que Bruxelles et les autres pays affichent des valeurs nettement inférieures. L’écart au budget est négatif (-2,3 %), ce qui signifie que le chiffre d’affaires mensuel est inférieur au budget prévu."
+}

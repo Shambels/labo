@@ -1,0 +1,7 @@
+{
+  "document": "02_RH/Formation/Plan de formation 2026.xlsx",
+  "body": "onglet « Plan 2026 » · Plan de formation 2026 · lignes 11 à 12\n| Domaine | Formation | Public | Site | Heures | Budget (€) | Trimestre |\n|---|---|---|---|---|---|---|\n| Langues | Néerlandais professionnel | Personnel wallon en contact avec la Flandre | Namur | 110 | 9900 | T4 |\n| Total |  |  |  | 1840 | 76600 |  |",
+  "model": "qwen3.8-27b",
+  "context": "Cette section présente la formation en néerlandais professionnel destinée au personnel wallon du site de Namur. Elle conclut le tableau avec le total des heures et du budget alloué au plan.",
+  "seconds": 2.0
+}

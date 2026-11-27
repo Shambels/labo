@@ -1,0 +1,19 @@
+{
+  "document": "03_Production/Maintenance/Fiches_intervention/2026-04-14 INT-2026-246 Presse plieuse.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Presse plieuse",
+      "type": "équipement",
+      "alias": [],
+      "description": "machine de production avec fuite d'huile"
+    },
+    {
+      "nom": "Brevik Service",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "prestataire d'intervention sur la presse plieuse"
+    }
+  ],
+  "seconds": 2.2
+}

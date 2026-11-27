@@ -1,0 +1,25 @@
+{
+  "document": "09_Communication/Intranet/Plans d_acces et parkings.html",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Namur (siège)",
+      "type": "site",
+      "alias": [],
+      "description": "siège social avec parking de 80 places"
+    },
+    {
+      "nom": "Seneffe (usine)",
+      "type": "site",
+      "alias": [],
+      "description": "usine avec parkings P1 et P2"
+    },
+    {
+      "nom": "Gand",
+      "type": "site",
+      "alias": [],
+      "description": "site avec accès camions et personnel"
+    }
+  ],
+  "seconds": 2.9
+}

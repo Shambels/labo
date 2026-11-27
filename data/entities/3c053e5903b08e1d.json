@@ -1,0 +1,25 @@
+{
+  "document": "02_RH/Notes_de_service/2026-03-20 NS-2026-04 Port des gants anti-coupure en tôlerie.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Thomas Lambert",
+      "type": "personne",
+      "alias": [],
+      "description": "émetteur de la note de service"
+    },
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "site de production en tôlerie"
+    },
+    {
+      "nom": "Gants anti-coupure de niveau F",
+      "type": "équipement",
+      "alias": [],
+      "description": "équipement de protection obligatoire"
+    }
+  ],
+  "seconds": 2.7
+}

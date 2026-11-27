@@ -1,0 +1,7 @@
+{
+  "document": "05_Commercial/Tarifs/Tarif 2026.xlsx",
+  "body": "onglet « Tarif » · Tarif 2026 (prix catalogue HT, en euros) · en vigueur au 01/01/2026 · lignes 6 à 8\n| Code | Produit | Gamme | Prix 2025 | Prix 2026 | Hausse |\n|---|---|---|---|---|---|\n| VD30 | Ventis D300 | standard | 3290 | 3410 | 3,6 % |\n| VD45 | Ventis D450 | standard | 4180 | 4330 | 3,6 % |\n| VP45 | Ventis D450 Pro | premium | 5640 | 5920 | 5,0 % |",
+  "model": "qwen3.8-27b",
+  "context": "Cette section du tableau tarifaire présente les prix catalogue des modèles de ventilation Ventis. Elle détaille les références des gammes standard et premium ainsi que l'évolution de leurs coûts.",
+  "seconds": 1.8
+}

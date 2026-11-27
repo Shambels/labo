@@ -1,0 +1,13 @@
+{
+  "document": "06_Achats/Appel_offres_ERP/Presentation Sylvan Suite.pptx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Sylvan Suite",
+      "type": "produit",
+      "alias": [],
+      "description": "ERP en mode SaaS"
+    }
+  ],
+  "seconds": 1.4
+}

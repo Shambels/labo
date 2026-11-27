@@ -1,0 +1,21 @@
+{
+  "document": "03_Production/Gent/Fotos_installaties/IMG_20251124_Batterijlader.jpg",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Voltis",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "fabricant du chargeur de batterie"
+    },
+    {
+      "nom": "CB-48/150",
+      "type": "produit",
+      "alias": [
+        "Batterijlader heftrucks"
+      ],
+      "description": "chargeur de batterie pour chariot élévateur"
+    }
+  ],
+  "seconds": 2.2
+}

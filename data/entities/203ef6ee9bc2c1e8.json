@@ -1,0 +1,37 @@
+{
+  "document": "09_Communication/Newsletter/Calorvia Info 2025-09.html",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Lotte Janssens",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable des ventes en Flandre"
+    },
+    {
+      "nom": "Bart Goossens",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable du magasin de Gand"
+    },
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "lieu de la fête du personnel"
+    },
+    {
+      "nom": "Namur",
+      "type": "site",
+      "alias": [],
+      "description": "point de départ des navettes"
+    },
+    {
+      "nom": "Gand",
+      "type": "site",
+      "alias": [],
+      "description": "point de départ des navettes"
+    }
+  ],
+  "seconds": 3.8
+}

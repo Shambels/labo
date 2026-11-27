@@ -1,0 +1,7 @@
+{
+  "document": "07_IT/Projet_Atlas_ERP/Planning/Planning Atlas v1.png",
+  "body": "Image\n**Projet Atlas • planning directeur • version 1 du 10/12/2025**\n\n| Tâche                          | Période         |\n|--------------------------------|-----------------|\n| Conception (ateliers)          | 15/12 – 30/01   |\n| Paramétrage                    | 05/01 – 27/02   |\n| Reprise des données            | 12/01 – 13/03   |\n| Recette utilisateurs           | 02/03 – 20/03   |\n| Formation des utilisateurs     | 09/03 – 27/03   |\n| Bascule                        | 28/03 – 31/03   |\n| Hypercare                      | 01/04 – 30/04   |\n\n**Go-live 01/04**\n\n---\n\n**Description**  \nIl s’agit d’un diagramme de Gantt montrant le planning directeur du projet Atlas, avec des barres colorées représentant les périodes de chaque phase du projet. Une ligne verticale rouge pointillée indique la date de mise en production (Go-live) le 01/04/2026. Les axes horizontaux et verticaux sont clairement étiquetés avec des dates et des noms de tâches.",
+  "model": "qwen3.8-27b",
+  "context": "Le document présente le planning directeur du projet Atlas. Il détaille les différentes phases du déploiement, de la conception à l'hypercare, ainsi que la date de mise en production.",
+  "seconds": 2.4
+}

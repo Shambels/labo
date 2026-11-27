@@ -1,0 +1,27 @@
+{
+  "document": "01_Finance/Comptabilite/Factures_fournisseurs/2025-12-05 LiftService LS-2025-7781.jpg",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "LiftService Benelux NV",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "Fournisseur de lampes de sécurité LED"
+    },
+    {
+      "nom": "Blue spot LED-veiligheidslamp",
+      "type": "produit",
+      "alias": [
+        "BS-LED"
+      ],
+      "description": "Lampe de sécurité LED bleue"
+    },
+    {
+      "nom": "Heftrucks nr. 1 tot 14",
+      "type": "équipement",
+      "alias": [],
+      "description": "Chariots élévateurs numérotés de 1 à 14"
+    }
+  ],
+  "seconds": 5.0
+}

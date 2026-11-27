@@ -1,0 +1,161 @@
+{
+  "document": "00_Direction/CODIR/2025/PV_CODIR_2025-10-13.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Hélène Marchal",
+      "type": "personne",
+      "alias": [
+        "CEO"
+      ],
+      "description": "administratrice déléguée et présidente du comité"
+    },
+    {
+      "nom": "Laurent Dewit",
+      "type": "personne",
+      "alias": [
+        "CFO"
+      ],
+      "description": "directeur financier"
+    },
+    {
+      "nom": "Thomas Lambert",
+      "type": "personne",
+      "alias": [
+        "COO"
+      ],
+      "description": "directeur des opérations"
+    },
+    {
+      "nom": "Nadia Benali",
+      "type": "personne",
+      "alias": [],
+      "description": "directrice des ressources humaines"
+    },
+    {
+      "nom": "Pierre-Yves Collard",
+      "type": "personne",
+      "alias": [],
+      "description": "directeur commercial"
+    },
+    {
+      "nom": "Anne Vercammen",
+      "type": "personne",
+      "alias": [],
+      "description": "directrice qualité"
+    },
+    {
+      "nom": "Pieter De Smet",
+      "type": "personne",
+      "alias": [
+        "PDS"
+      ],
+      "description": "directeur du site de Gand"
+    },
+    {
+      "nom": "Kevin Mertens",
+      "type": "personne",
+      "alias": [],
+      "description": "directeur des systèmes d'information"
+    },
+    {
+      "nom": "Julie Renard",
+      "type": "personne",
+      "alias": [],
+      "description": "secrétaire du comité de direction"
+    },
+    {
+      "nom": "Namur",
+      "type": "site",
+      "alias": [],
+      "description": "siège social et lieu de réunion"
+    },
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "site de production de pompes à chaleur"
+    },
+    {
+      "nom": "Gand",
+      "type": "site",
+      "alias": [],
+      "description": "site de production de groupes de ventilation"
+    },
+    {
+      "nom": "Pompes à chaleur",
+      "type": "produit",
+      "alias": [],
+      "description": "produit fabriqué à Seneffe"
+    },
+    {
+      "nom": "Groupes de ventilation",
+      "type": "produit",
+      "alias": [],
+      "description": "produit fabriqué à Gand"
+    },
+    {
+      "nom": "Ligne L4",
+      "type": "équipement",
+      "alias": [],
+      "description": "ligne de production faisant l'objet d'offres"
+    },
+    {
+      "nom": "Ligne L2",
+      "type": "équipement",
+      "alias": [],
+      "description": "ligne de production ayant subi une panne"
+    },
+    {
+      "nom": "Banc d'essai",
+      "type": "équipement",
+      "alias": [],
+      "description": "équipement en panne ayant arrêté la ligne L2"
+    },
+    {
+      "nom": "Projet Atlas",
+      "type": "projet",
+      "alias": [],
+      "description": "projet de sélection d'éditeur ERP"
+    },
+    {
+      "nom": "Orbis ERP",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "éditeur ayant décliné la consultation"
+    },
+    {
+      "nom": "NovaGest",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "éditeur écarté pour manque de fonctionnalités"
+    },
+    {
+      "nom": "Praxio",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "éditeur présélectionné pour le projet Atlas"
+    },
+    {
+      "nom": "Kerneo",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "éditeur présélectionné pour le projet Atlas"
+    },
+    {
+      "nom": "Sylvan Suite",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "éditeur présélectionné pour le projet Atlas"
+    },
+    {
+      "nom": "Comité de direction",
+      "type": "instance",
+      "alias": [
+        "CODIR"
+      ],
+      "description": "instance dirigeante de l'entreprise"
+    }
+  ],
+  "seconds": 17.7
+}

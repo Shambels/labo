@@ -1,0 +1,7 @@
+{
+  "document": "04_Qualite/Rappel_Aeris12/Rapport 8D Aeris 12 vanne 4 voies.pdf",
+  "body": "D4. Cause racine\nBrasage incomplet du raccord de la vanne chez Valtek : un four de brasage du fournisseur a fonctionné 6 jours avec une température trop basse. Le défaut n'est pas visible au test d'étanchéité à 42 bar ; il apparaît après plusieurs cycles thermiques.",
+  "model": "qwen3.8-27b",
+  "context": "La rubrique « Cause racine » du rapport 8D identifie l'origine du défaut de la vanne quatre voies de l'Aéris 12. Elle explique que le problème provient d'un brasage incomplet effectué par le fournisseur Valtek en raison d'un dysfonctionnement de son four.",
+  "seconds": 2.8
+}

@@ -1,0 +1,10 @@
+{
+  "path": "06_Achats/Bons_de_livraison/2025-11-19 BL Valtek.jpg",
+  "kind": "image",
+  "page": null,
+  "index": null,
+  "model": "qwen3.5-9b",
+  "prompt": "Tu transcris des documents d'entreprise pour un moteur de recherche.\n1. Recopie tout le texte visible, exactement comme il est écrit : nombres, codes, dates, unités et\n   annotations manuscrites compris. Rends les tableaux en Markdown.\n2. Puis, sous le titre « Description », décris en trois phrases au plus le type d'image (organigramme,\n   plan, graphique, photo, facture...) et ce qu'elle montre qui n'est pas écrit : les rattachements\n   d'un organigramme, la valeur la plus haute d'un graphique, la position des éléments d'un plan.\nN'invente rien : si un élément est illisible, écris [illisible].",
+  "seconds": 5.0,
+  "text": "Valtek Components Ltd  \nUnit 4, Riverside Park, Coventry  \nDelivery note  \n\nDelivery note  \nDN-25-77412  \nDate  \n19/11/2025  \nShip to  \nCalorvia SA - Seneffe plant  \nPO  \nPO-2025-10988  \n\n| Item   | Description                          | Qty  |\n|--------|--------------------------------------|------|\n| V4W-12 | Four-way valve 12 kW - batch V-2544  | 600  |\n| SV-38  | Service valve 3/8                    | 1200 |\n\nRÉCEPTION  \nSENEFFE  \n\nReçu le 19/11 - lot V-2544  \n600 pcs OK - F. Collin  \n\nMerci de vérifier la marchandise à la réception.\n\n---\n\n**Description**  \nIl s’agit d’une facture de livraison (delivery note) de Valtek Components Ltd destinée à Calorvia SA à Seneffe. Le document liste deux articles : des vannes à quatre voies et des vannes de service, avec leurs quantités respectives. En bas, une annotation manuscrite confirme la réception partielle de 600 pièces du lot V-2544 par F. Collin."
+}

@@ -1,0 +1,7 @@
+{
+  "document": "02_RH/Formation/Plan de formation 2026.xlsx",
+  "body": "onglet « Plan 2026 » · Plan de formation 2026 · lignes 7 à 10\n| Domaine | Formation | Public | Site | Heures | Budget (€) | Trimestre |\n|---|---|---|---|---|---|---|\n| Technique | Fluides frigorigènes (certification) | Techniciens | Seneffe | 120 | 9400 | T3 |\n| Informatique | Utilisation de l'ERP Praxio | Utilisateurs de l'ERP | Tous | 480 | 0 | T2 |\n| Informatique | Sensibilisation à l'hameçonnage | Personnel administratif | Tous | 186 | 5200 | T1 |\n| Management | Manager à distance | Managers | Namur | 84 | 8700 | T2 |",
+  "model": "qwen3.8-27b",
+  "context": "Cette section du plan de formation détaille les actions prévues pour les domaines technique, informatique et management. Elle concerne notamment la certification sur les fluides frigorigènes à Seneffe, l'utilisation de l'ERP Praxio et la formation des managers à Namur.",
+  "seconds": 2.5
+}

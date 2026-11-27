@@ -1,0 +1,7 @@
+{
+  "document": "05_Commercial/Fiches_produits/Aéris_Pro_16_NL.pdf",
+  "body": "Aéris Pro 16 · Technische fiche\nHogetemperatuur warmtepomp met propaan (R290), ideaal voor renovatie met bestaande radiatoren.\n| Kenmerk | Waarde |\n| - | - |\n| Nominaal verwarmingsvermogen | 16 kW |\n| SCOP (gemiddeld klimaat, 35 °C) | 4,8 |\n| Geluidsvermogen | 51 dB(A) |\n| Koelmiddel | R290 (1,3 kg) |\n| Gewicht | 128 kg |\n| Afmetingen (H x B x D) | 1380 x 1020 x 480 mm |\n| Energieklasse | A+++ |\n| Maximale watertemperatuur | 75 °C |\nGarantie: 5 jaar op de compressor, 2 jaar op de andere onderdelen.",
+  "model": "qwen3.8-27b",
+  "context": "Cette fiche technique présente les caractéristiques de la pompe à chaleur Aéris Pro 16, destinée aux rénovations avec radiateurs existants. Elle détaille les performances énergétiques, les dimensions et les conditions de garantie du produit.",
+  "seconds": 2.6
+}

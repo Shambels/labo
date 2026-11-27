@@ -1,0 +1,7 @@
+{
+  "document": "07_IT/Support/Export tickets hypercare 2026-06.csv",
+  "body": "| ticket | date_ouverture | site | module | priorite | statut |\n| - | - | - | - | - | - |\n| ATL-1061 | 2026-06-26 | Namur | Production | normale | ouvert |",
+  "model": "qwen3.8-27b",
+  "context": "Dernière ligne du registre des tickets de support, concernant le site de Namur et le module Production.",
+  "seconds": 1.3
+}

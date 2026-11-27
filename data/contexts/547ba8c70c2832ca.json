@@ -1,0 +1,7 @@
+{
+  "document": "01_Finance/Investissements/Suivi capex 2026.xlsx",
+  "body": "onglet « Suivi 2026 » · Suivi des investissements 2026 (k€) · situation au 30/06/2026 · lignes 1 à 5\n| Projet | Budget | Engagé | Réalisé | Statut |\n|---|---|---|---|---|\n| Ligne d'assemblage L4 (Seneffe) | 1250 | 1170 | 702 | Mise en service le 06/07/2026 |\n| Remplacement de l'ERP (projet Atlas) | 725 | 725 | 712 | En production depuis le 01/06/2026 |\n| Infrastructure informatique | 120 | 96 | 96 | Terminé |\n| Sécurité entrepôt de Gand | 85 | 85 | 85 | Terminé |\n| Maintenance lourde et outillages | 280 | 164 | 131 | En cours |",
+  "model": "qwen3.8-27b",
+  "context": "Cette section présente les cinq premiers projets d'investissement de l'année, incluant la ligne d'assemblage de Seneffe et le remplacement de l'ERP. Elle détaille l'état d'avancement budgétaire et opérationnel de ces chantiers au premier semestre.",
+  "seconds": 3.9
+}

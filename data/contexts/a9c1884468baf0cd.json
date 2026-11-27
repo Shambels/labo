@@ -1,0 +1,7 @@
+{
+  "document": "03_Production/Seneffe/Ligne_L4/Offre Automa AS-2025-318.pdf",
+  "body": "Exclusions\n- Génie civil et raccordements électriques en amont de l'armoire générale.\n- Adaptation du système de convoyage existant de la ligne L3.",
+  "model": "qwen3.8-27b",
+  "context": "Cette rubrique détaille les exclusions de l'offre pour la ligne d'assemblage L4 du site de Seneffe. Elle précise que le génie civil, les raccordements électriques amont et l'adaptation du convoyage de la ligne L3 ne sont pas inclus.",
+  "seconds": 2.5
+}

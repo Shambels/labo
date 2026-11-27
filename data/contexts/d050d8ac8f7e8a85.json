@@ -1,0 +1,7 @@
+{
+  "document": "07_IT/Securite/Rapport trimestriel cybersecurite 2026-07-03.docx",
+  "body": "Rapport trimestriel de cybersécurité · deuxième trimestre 2026\nRapport présenté au conseil d'administration, à sa demande du 20 janvier 2026.\n| Simulation d'hameçonnage (mai) | Taux de clic : 4 % (9 personnes sur 228). |\n| - | - |\n| Incidents | Aucun incident majeur. 3 courriels frauduleux signalés par les utilisateurs et bloqués. |\n| ERP Praxio | Revue des droits d'accès réalisée le 22 juin : 17 comptes inutiles supprimés. |\n| Correctifs de sécurité | 98 % des postes à jour à 30 jours. |",
+  "model": "qwen3.8-27b",
+  "context": "Il s'agit de la section principale du rapport trimestriel de cybersécurité du deuxième trimestre 2026. Elle détaille les résultats de la simulation d'hameçonnage, les incidents de sécurité, la revue des droits d'accès sur l'ERP Praxio et l'état des correctifs.",
+  "seconds": 3.1
+}

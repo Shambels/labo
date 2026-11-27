@@ -1,0 +1,43 @@
+{
+  "document": "00_Direction/Strategie/Feuille de route 2026-2028.png",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "ERP Atlas",
+      "type": "projet",
+      "alias": [],
+      "description": "déploiement du système de gestion d'entreprise"
+    },
+    {
+      "nom": "Ligne L4",
+      "type": "équipement",
+      "alias": [],
+      "description": "ligne de production en deux phases"
+    },
+    {
+      "nom": "Photovoltaïque Seneffe",
+      "type": "projet",
+      "alias": [],
+      "description": "installation photovoltaïque sur le site de Seneffe"
+    },
+    {
+      "nom": "Gamme Aéris R290",
+      "type": "produit",
+      "alias": [],
+      "description": "gamme de pompes à chaleur de 6 à 12 kW"
+    },
+    {
+      "nom": "Ouverture du marché néerlandais",
+      "type": "projet",
+      "alias": [],
+      "description": "expansion commerciale vers les Pays-Bas"
+    },
+    {
+      "nom": "Extension du site de Gand",
+      "type": "projet",
+      "alias": [],
+      "description": "étude d'agrandissement du site de Gand"
+    }
+  ],
+  "seconds": 5.6
+}

@@ -1,0 +1,25 @@
+{
+  "document": "01_Finance/Comptabilite/Factures_fournisseurs/2026-03-02 Integra Conseil F-2026-031.jpg",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Intégra Conseil SRL",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "société de conseil émettrice de la facture"
+    },
+    {
+      "nom": "Calorvia SA",
+      "type": "client",
+      "alias": [],
+      "description": "client de la facture fournisseur"
+    },
+    {
+      "nom": "Atlas",
+      "type": "projet",
+      "alias": [],
+      "description": "projet réalisé en février 2026"
+    }
+  ],
+  "seconds": 2.8
+}

@@ -1,0 +1,67 @@
+{
+  "document": "09_Communication/Communiques_presse/2026-05-18 PB Magazijn Herstal.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "PB Magazijn Herstal",
+      "type": "site",
+      "alias": [],
+      "description": "Magazijn de 4.200 m² dans le parc industriel Hauts-Sarts"
+    },
+    {
+      "nom": "Hauts-Sarts",
+      "type": "site",
+      "alias": [],
+      "description": "Parc industriel à Herstal"
+    },
+    {
+      "nom": "Herstal",
+      "type": "site",
+      "alias": [],
+      "description": "Ville abritant le nouveau magasin"
+    },
+    {
+      "nom": "Namen",
+      "type": "site",
+      "alias": [],
+      "description": "Ville de publication du communiqué"
+    },
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "Site de Calorvia"
+    },
+    {
+      "nom": "Gent",
+      "type": "site",
+      "alias": [],
+      "description": "Site de Calorvia"
+    },
+    {
+      "nom": "Rijsel",
+      "type": "site",
+      "alias": [],
+      "description": "Site de Calorvia"
+    },
+    {
+      "nom": "Lucie Bastin",
+      "type": "personne",
+      "alias": [],
+      "description": "Contact presse"
+    },
+    {
+      "nom": "warmtepompen",
+      "type": "produit",
+      "alias": [],
+      "description": "Pompe à chaleur fabriquée par Calorvia"
+    },
+    {
+      "nom": "ventilatie-units",
+      "type": "produit",
+      "alias": [],
+      "description": "Unité de ventilation fabriquée par Calorvia"
+    }
+  ],
+  "seconds": 7.5
+}

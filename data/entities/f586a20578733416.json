@@ -1,0 +1,43 @@
+{
+  "document": "09_Communication/Newsletter/Calorvia Info 2026-02.html",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Projet Atlas",
+      "type": "projet",
+      "alias": [],
+      "description": "projet de fiabilisation des données articles et interface WMS"
+    },
+    {
+      "nom": "WMS de Gand",
+      "type": "équipement",
+      "alias": [],
+      "description": "système de gestion d'entrepôt du site de Gand"
+    },
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "site de production et qualité de Calorvia"
+    },
+    {
+      "nom": "Gand",
+      "type": "site",
+      "alias": [],
+      "description": "site de production et qualité de Calorvia"
+    },
+    {
+      "nom": "Yasmine Collignon",
+      "type": "personne",
+      "alias": [],
+      "description": "nouvelle collaboratrice en ressources humaines"
+    },
+    {
+      "nom": "Hugo Renson",
+      "type": "personne",
+      "alias": [],
+      "description": "nouveau collaborateur en production à Seneffe"
+    }
+  ],
+  "seconds": 5.5
+}

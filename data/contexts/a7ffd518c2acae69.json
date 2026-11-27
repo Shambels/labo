@@ -1,0 +1,7 @@
+{
+  "document": "01_Finance/Reporting_mensuel/Reporting 2025-11.xlsx",
+  "body": "onglet « Commentaires »\nCommentaires du contrôle de gestion\nHuit samedis de production supplémentaires en novembre (quatre samedis, deux équipes).\nTaux d'EBITDA du mois pénalisé par les heures supplémentaires et le prix de l'acier.",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait se trouve dans l'onglet « Commentaires » du reporting mensuel. Il détaille les facteurs ayant impacté le taux d'EBITDA, notamment les heures supplémentaires et le prix de l'acier.",
+  "seconds": 2.1
+}

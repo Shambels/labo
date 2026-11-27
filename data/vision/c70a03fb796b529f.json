@@ -1,0 +1,10 @@
+{
+  "path": "06_Achats/Bons_de_livraison/2026-03-03 BL Kompra.jpg",
+  "kind": "image",
+  "page": null,
+  "index": null,
+  "model": "qwen3.5-9b",
+  "prompt": "Tu transcris des documents d'entreprise pour un moteur de recherche.\n1. Recopie tout le texte visible, exactement comme il est écrit : nombres, codes, dates, unités et\n   annotations manuscrites compris. Rends les tableaux en Markdown.\n2. Puis, sous le titre « Description », décris en trois phrases au plus le type d'image (organigramme,\n   plan, graphique, photo, facture...) et ce qu'elle montre qui n'est pas écrit : les rattachements\n   d'un organigramme, la valeur la plus haute d'un graphique, la position des éléments d'un plan.\nN'invente rien : si un élément est illisible, écris [illisible].",
+  "seconds": 5.0,
+  "text": "**Texte transcrit :**\n\nKompra GmbH  \nIndustriestraße 77, 52070 Aachen  \nDelivery note  \n\nDelivery note  \nKG-DN-26-0388  \nDate  \n03/03/2026  \nShip to  \nCalorvia SA - Seneffe plant  \n\n| Item   | Description                     | Qty |\n|--------|----------------------------------|-----|\n| KX-16S | Scroll compressor R32, 16 kW     | 160 |\n| PAL    | Pallets                          | 8   |\n\nRÉCEPTION  \nSENEFFE  \n\nReçu 7 palettes sur 8 !  \n1 palette manquante -> NC-2026-011  \n\nMerci de vérifier la marchandise à la réception.\n\n---\n\n**Description :**  \nIl s’agit d’une facture de livraison (delivery note) de Kompra GmbH destinée à Calorvia SA à Seneffe. Le document liste deux articles : 160 compresseurs scroll R32 de 16 kW et 8 palettes, avec une annotation manuscrite indiquant que seule une palette a été reçue sur les huit prévues. Un code de non-conformité (NC-2026-011) est associé à la palette manquante."
+}

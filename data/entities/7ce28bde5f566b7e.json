@@ -1,0 +1,19 @@
+{
+  "document": "02_RH/Recrutement/Offres/REC-2026-014 Magasinier.html",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Herstal",
+      "type": "site",
+      "alias": [],
+      "description": "nouveau site d'entrepôt pour réception et expédition"
+    },
+    {
+      "nom": "pompes à chaleur",
+      "type": "produit",
+      "alias": [],
+      "description": "produits gérés par le magasinier"
+    }
+  ],
+  "seconds": 2.4
+}

@@ -1,0 +1,39 @@
+{
+  "document": "99_Archives/2024/PV_CODIR_2024-12-16.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Comité de direction",
+      "type": "instance",
+      "alias": [
+        "CODIR"
+      ],
+      "description": "instance dirigeante de Calorvia"
+    },
+    {
+      "nom": "Namur",
+      "type": "site",
+      "alias": [],
+      "description": "lieu de la séance du CODIR"
+    },
+    {
+      "nom": "salle Meuse",
+      "type": "site",
+      "alias": [],
+      "description": "salle de réunion à Namur"
+    },
+    {
+      "nom": "Gand",
+      "type": "site",
+      "alias": [],
+      "description": "localisation de l'entrepôt"
+    },
+    {
+      "nom": "entrepôt de Gand",
+      "type": "site",
+      "alias": [],
+      "description": "entrepôt situé à Gand"
+    }
+  ],
+  "seconds": 4.8
+}

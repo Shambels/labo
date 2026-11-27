@@ -1,0 +1,187 @@
+{
+  "document": "00_Direction/CODIR/2025/PV_CODIR_2025-11-17_v2.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Hélène Marchal",
+      "type": "personne",
+      "alias": [
+        "CEO"
+      ],
+      "description": "administratrice déléguée et présidente du comité de direction"
+    },
+    {
+      "nom": "Laurent Dewit",
+      "type": "personne",
+      "alias": [
+        "CFO"
+      ],
+      "description": "directeur financier de l'entreprise"
+    },
+    {
+      "nom": "Thomas Lambert",
+      "type": "personne",
+      "alias": [
+        "COO"
+      ],
+      "description": "directeur des opérations de l'entreprise"
+    },
+    {
+      "nom": "Nadia Benali",
+      "type": "personne",
+      "alias": [],
+      "description": "directrice des ressources humaines"
+    },
+    {
+      "nom": "Pierre-Yves Collard",
+      "type": "personne",
+      "alias": [],
+      "description": "directeur commercial de l'entreprise"
+    },
+    {
+      "nom": "Kevin Mertens",
+      "type": "personne",
+      "alias": [],
+      "description": "directeur des systèmes d'information"
+    },
+    {
+      "nom": "Anne Vercammen",
+      "type": "personne",
+      "alias": [],
+      "description": "directrice qualité de l'entreprise"
+    },
+    {
+      "nom": "Pieter De Smet",
+      "type": "personne",
+      "alias": [
+        "PDS"
+      ],
+      "description": "directeur du site de Gand"
+    },
+    {
+      "nom": "Olivier Hardy",
+      "type": "personne",
+      "alias": [],
+      "description": "conseiller en prévention"
+    },
+    {
+      "nom": "Marc Delhaye",
+      "type": "personne",
+      "alias": [],
+      "description": "directeur du site de Seneffe"
+    },
+    {
+      "nom": "Julie Renard",
+      "type": "personne",
+      "alias": [],
+      "description": "secrétaire du comité de direction"
+    },
+    {
+      "nom": "Gand",
+      "type": "site",
+      "alias": [],
+      "description": "site de production des groupes de ventilation"
+    },
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "site de production des pompes à chaleur"
+    },
+    {
+      "nom": "Pompes à chaleur",
+      "type": "produit",
+      "alias": [],
+      "description": "produits fabriqués sur le site de Seneffe"
+    },
+    {
+      "nom": "Groupes de ventilation",
+      "type": "produit",
+      "alias": [],
+      "description": "produits fabriqués sur le site de Gand"
+    },
+    {
+      "nom": "Praxio",
+      "type": "produit",
+      "alias": [],
+      "description": "solution logicielle recommandée pour le projet Atlas"
+    },
+    {
+      "nom": "Kerneo",
+      "type": "produit",
+      "alias": [],
+      "description": "solution logicielle évaluée pour le projet Atlas"
+    },
+    {
+      "nom": "Sylvan Suite",
+      "type": "produit",
+      "alias": [],
+      "description": "solution logicielle évaluée pour le projet Atlas"
+    },
+    {
+      "nom": "Intégra Conseil",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "intégrateur de la solution Praxio"
+    },
+    {
+      "nom": "Linetech",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "fournisseur de la ligne de production L4"
+    },
+    {
+      "nom": "Région wallonne",
+      "type": "partenaire",
+      "alias": [],
+      "description": "organisme subventionnant l'investissement de la ligne L4"
+    },
+    {
+      "nom": "Projet Atlas",
+      "type": "projet",
+      "alias": [],
+      "description": "projet de sélection d'une solution logicielle"
+    },
+    {
+      "nom": "Ligne L4",
+      "type": "projet",
+      "alias": [],
+      "description": "projet de ligne de production phasée"
+    },
+    {
+      "nom": "CODIR",
+      "type": "instance",
+      "alias": [
+        "Comité de direction"
+      ],
+      "description": "instance de direction de l'entreprise"
+    },
+    {
+      "nom": "Conseil d'administration",
+      "type": "instance",
+      "alias": [
+        "CA"
+      ],
+      "description": "instance de gouvernance de l'entreprise"
+    },
+    {
+      "nom": "Entrepôt de Gand",
+      "type": "équipement",
+      "alias": [],
+      "description": "lieu de stockage et de préparation des commandes"
+    },
+    {
+      "nom": "Chariots élévateurs",
+      "type": "équipement",
+      "alias": [],
+      "description": "véhicules utilisés dans l'entrepôt de Gand"
+    },
+    {
+      "nom": "Ligne de production L4",
+      "type": "équipement",
+      "alias": [],
+      "description": "ligne d'assemblage, tests et emballage"
+    }
+  ],
+  "seconds": 22.9
+}

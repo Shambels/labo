@@ -1,0 +1,7 @@
+{
+  "document": "07_IT/Securite/Rapport incident securite 2026-01-13.pdf",
+  "body": "Causes\n- Absence d'authentification multifacteur sur les comptes de messagerie.\n- Absence de procédure formelle de vérification des changements de coordonnées bancaires.",
+  "model": "qwen3.8-27b",
+  "context": "Cette section détaille les causes identifiées de l'incident de sécurité. Elle met en lumière les failles de sécurité informatique et les lacunes dans les procédures de vérification bancaire.",
+  "seconds": 1.8
+}

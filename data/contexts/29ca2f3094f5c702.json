@@ -1,0 +1,7 @@
+{
+  "document": "04_Qualite/Non_conformites/NC-2026-021.docx",
+  "body": "Fiche de non-conformité NC-2026-021\n| Date d'ouverture | 03/06/2026 |\n| - | - |\n| Site | Seneffe |\n| Produit | Aéris Pro 16 |\n| Description | Retard d'expédition : étiquettes de transport non éditées après la bascule de l'ERP. |\n| Quantité concernée | 46 commandes |\n| Mode de détection | Service client |\n| Cause | Imprimante d'étiquettes non paramétrée dans Praxio |\n| Action corrective | Paramétrage le 03/06 |\n| Responsable | Sophie Lejeune |\n| Statut | Clôturée |\n| Coût de non-qualité | 0 € |",
+  "model": "qwen3.8-27b",
+  "context": "Cette fiche de non-conformité concerne le site de Seneffe et le produit Aéris Pro 16. Elle détaille un retard d'expédition lié à un défaut de paramétrage de l'imprimante d'étiquettes dans le système Praxio.",
+  "seconds": 2.7
+}

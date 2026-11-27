@@ -1,0 +1,19 @@
+{
+  "document": "03_Production/Maintenance/Fiches_intervention/2026-01-20 INT-2026-641 Compresseur dair.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Compresseur d'air",
+      "type": "équipement",
+      "alias": [],
+      "description": "Équipement faisant l'objet d'un entretien de 4 000 heures"
+    },
+    {
+      "nom": "Airvex Service",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "Prestataire d'intervention pour l'entretien du compresseur"
+    }
+  ],
+  "seconds": 2.3
+}

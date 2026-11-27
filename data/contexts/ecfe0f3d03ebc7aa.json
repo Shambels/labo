@@ -1,0 +1,7 @@
+{
+  "document": "05_Commercial/Tarifs/Conditions generales de vente 2026.pdf",
+  "body": "1. Commandes\nToute commande doit être confirmée par écrit. Le minimum de commande est de 1 500 € HT ; en dessous, des frais administratifs de 45 € sont facturés.",
+  "model": "qwen3.8-27b",
+  "context": "Cette rubrique détaille les modalités de validation des commandes et les seuils de facturation applicables. Elle précise les conditions de confirmation écrite ainsi que les frais administratifs liés aux montants inférieurs au minimum de commande.",
+  "seconds": 2.3
+}

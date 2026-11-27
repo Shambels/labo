@@ -1,0 +1,10 @@
+{
+  "path": "01_Finance/Comptabilite/Factures_fournisseurs/2026-01-08 Tolerie Mosane TM-2026-0042.jpg",
+  "kind": "image",
+  "page": null,
+  "index": null,
+  "model": "qwen3.5-9b",
+  "prompt": "Tu transcris des documents d'entreprise pour un moteur de recherche.\n1. Recopie tout le texte visible, exactement comme il est écrit : nombres, codes, dates, unités et\n   annotations manuscrites compris. Rends les tableaux en Markdown.\n2. Puis, sous le titre « Description », décris en trois phrases au plus le type d'image (organigramme,\n   plan, graphique, photo, facture...) et ce qu'elle montre qui n'est pas écrit : les rattachements\n   d'un organigramme, la valeur la plus haute d'un graphique, la position des éléments d'un plan.\nN'invente rien : si un élément est illisible, écris [illisible].",
+  "seconds": 7.4,
+  "text": "**Tôlerie Mosane SRL**  \nZoning de Sclaigneaux 14, 5300 Andenne  \nTVA BE 0478.215.903  \n\nFacture n°  \nTM-2026-0042  \nDate  \n08/01/2026  \nÉchéance  \n07/02/2026  \nClient  \nCalorvia SA, Rue des Artisans 42, 5100 Namur  \nBon de commande  \nPO-2025-11872  \n\n| Réf.   | Désignation                     | Qté | Prix unit. | Total HT     |\n|--------|----------------------------------|-----|------------|--------------|\n| TG15   | Tôle galvanisée 1,5 mm (tonne)   | 12  | 2 850,00   | 34 200,00    |\n| TG20   | Tôle galvanisée 2,0 mm (tonne)   | 2   | 2 790,00   | 5 580,00     |\n| DEC    | Découpe laser et pliage (forfait)| 1   | 387,60     | 387,60       |\n\nTotal HT  \n40 167,60 €  \nTVA 21 %  \n8 435,20 €  \nTotal TTC  \n48 602,80 €  \n\nBon à payer - BH 12/01  \n\nPaiement par virement sur le compte IBAN BE47 0689 4412 7380 (BIC GKCCBEBB).  \nTout retard de paiement entraîne un intérêt de 8 % l'an.  \n\n---\n\n**Description**  \nIl s’agit d’une facture commerciale émise par la Tôlerie Mosane SRL pour un client, Calorvia SA. Elle détaille trois articles vendus : deux types de tôles galvanisées en tonnes et un forfait de découpe laser et pliage. Le document inclut les montants HT, TVA et TTC, ainsi qu’un bon à payer manuscrit et les coordonnées bancaires pour le paiement."
+}

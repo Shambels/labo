@@ -1,0 +1,33 @@
+{
+  "document": "05_Commercial/Comptes_cles/Plan de compte Thermo Services Lille 2026.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Thermo Services Lille SARL",
+      "type": "client",
+      "alias": [
+        "Thermo Services Lille"
+      ],
+      "description": "Installateur agréé Hauts-de-France"
+    },
+    {
+      "nom": "Mathilde Roux",
+      "type": "personne",
+      "alias": [],
+      "description": "Responsable du client Thermo Services Lille"
+    },
+    {
+      "nom": "Aéris Pro",
+      "type": "produit",
+      "alias": [],
+      "description": "Pompe à chaleur"
+    },
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "Lieu de formation des techniciens"
+    }
+  ],
+  "seconds": 3.9
+}

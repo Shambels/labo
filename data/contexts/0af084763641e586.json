@@ -1,0 +1,7 @@
+{
+  "document": "06_Achats/Appel_offres_ERP/Grille evaluation ERP v3.xlsx",
+  "body": "onglet « Démonstrations »\n| Éditeur | Dates des démonstrations | Note moyenne des utilisateurs clés (sur 5) |\n|---|---|---|\n| Praxio | 3 et 4 novembre 2025 | 4.3 |\n| Kerneo | 5 novembre 2025 | 3.9 |\n| Sylvan Suite | 6 et 7 novembre 2025 | 3.4 |",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait se trouve dans l'onglet « Démonstrations » du document. Il détaille les dates des démonstrations et les notes moyennes attribuées par les utilisateurs clés aux éditeurs Praxio, Kerneo et Sylvan Suite.",
+  "seconds": 2.4
+}

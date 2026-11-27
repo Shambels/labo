@@ -1,0 +1,7 @@
+{
+  "document": "00_Direction/CODIR/2025/PV_CODIR_2025-09-08.docx",
+  "body": "Procès-verbal du Comité de direction\n3. Suivi des actions\n| **N°** | **Action** | **Responsable** | **Échéance** | **Statut / commentaire** |\n| - | - | - | - | - |\n| A-25-001 | Envoyer les canevas budgétaires 2026 aux responsables de département | LD | 12/09/2025 | En cours |\n| A-25-002 | Organiser les navettes Namur et Gand pour la fête du personnel | NB | 26/09/2025 | En cours |",
+  "model": "qwen3.8-27b",
+  "context": "La rubrique « Suivi des actions » du procès-verbal détaille l'avancement des tâches en cours. Elle concerne l'envoi des canevas budgétaires 2026 et l'organisation des navettes pour la fête du personnel.",
+  "seconds": 2.3
+}

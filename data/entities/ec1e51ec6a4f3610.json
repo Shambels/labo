@@ -1,0 +1,37 @@
+{
+  "document": "05_Commercial/Tableaux_de_bord/Tableau de bord commercial 2026-02.png",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Wallonie",
+      "type": "site",
+      "alias": [],
+      "description": "région avec le plus élevé chiffre d'affaires"
+    },
+    {
+      "nom": "Bruxelles",
+      "type": "site",
+      "alias": [],
+      "description": "région avec un chiffre d'affaires intermédiaire"
+    },
+    {
+      "nom": "Flandre",
+      "type": "site",
+      "alias": [],
+      "description": "région avec le deuxième plus élevé chiffre d'affaires"
+    },
+    {
+      "nom": "France",
+      "type": "site",
+      "alias": [],
+      "description": "région avec un chiffre d'affaires significatif"
+    },
+    {
+      "nom": "Autres pays",
+      "type": "site",
+      "alias": [],
+      "description": "région avec la valeur la plus faible"
+    }
+  ],
+  "seconds": 4.6
+}

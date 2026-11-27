@@ -1,0 +1,7 @@
+{
+  "document": "06_Achats/Appel_offres_ERP/Grille evaluation ERP v3.xlsx",
+  "body": "onglet « Grille » · Projet Atlas · grille d'évaluation des éditeurs ERP (notes sur 10) · lignes 1 à 7\n| Critère | Poids | Praxio | Kerneo | Sylvan Suite |\n|---|---|---|---|---|\n| Couverture fonctionnelle | 30 | 8.5 | 8 | 7 |\n| Logistique et intégration WMS | 15 | 9 | 7 | 6 |\n| Ergonomie | 10 | 8 | 8.5 | 7.5 |\n| Interface FR / NL / EN | 10 | 9 | 7 | 6 |\n| Coût total sur 5 ans | 15 | 7 | 8 | 8 |\n| Solidité de l'éditeur | 10 | 8 | 7.5 | 7 |\n| Planning de mise en œuvre | 10 | 7.5 | 6.5 | 6.5 |",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait se trouve dans l'onglet « Grille » du projet Atlas. Il détaille les notes attribuées aux éditeurs Praxio, Kerneo et Sylvan Suite sur les sept critères d'évaluation.",
+  "seconds": 3.7
+}

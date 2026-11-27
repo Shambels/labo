@@ -1,0 +1,7 @@
+{
+  "document": "03_Production/Gent/Maandrapporten/Productierapport Gent 2025-11.xlsx",
+  "body": "onglet « Productie »\nOpmerkingen\n12/11: arbeidsongeval in gang 7 (heftruck nr. 9). Snelheid beperkt tot 8 km/u sinds 21/11.",
+  "model": "qwen3.8-27b",
+  "context": "Cette section des remarques du rapport de production du site de Gent signale un accident du travail survenu le 12 novembre. Elle précise la limitation de vitesse des chariots élévateurs appliquée depuis le 21 novembre.",
+  "seconds": 2.2
+}

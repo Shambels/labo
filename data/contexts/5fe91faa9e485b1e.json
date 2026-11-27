@@ -1,0 +1,7 @@
+{
+  "document": "04_Qualite/Non_conformites/NC-2026-019.docx",
+  "body": "Fiche de non-conformité NC-2026-019\n| Date d'ouverture | 20/05/2026 |\n| - | - |\n| Site | Herstal |\n| Produit | Aéris 9 |\n| Description | Deux unités endommagées par un chariot lors du rangement. |\n| Quantité concernée | 2 unités |\n| Mode de détection | Inventaire |\n| Cause | Allée D trop étroite pour le gabarit du chariot |\n| Action corrective | Formation et marquage des allées |\n| Responsable | Damien Lecomte |\n| Statut | En cours |\n| Coût de non-qualité | 3 900 € |",
+  "model": "qwen3.8-27b",
+  "context": "La fiche de non-conformité NC-2026-019 concerne le produit Aéris 9 au site de Herstal. Elle détaille les dommages causés par un chariot et les actions correctives associées.",
+  "seconds": 2.5
+}

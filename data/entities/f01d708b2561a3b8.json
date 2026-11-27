@@ -1,0 +1,13 @@
+{
+  "document": "01_Finance/Tresorerie/Prevision tresorerie 2026.xlsx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Banque Mosane",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "banque fournissant une ligne de crédit"
+    }
+  ],
+  "seconds": 3.0
+}

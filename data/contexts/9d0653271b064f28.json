@@ -1,0 +1,7 @@
+{
+  "document": "03_Production/Seneffe/Rapports_mensuels/Rapport production Seneffe 2026-04.xlsx",
+  "body": "onglet « Production » · Rapport de production · usine de Seneffe · avril 2026 · Ligne : Total ; Unités produites : 2078 ; Arrêts (h) : 43.4",
+  "model": "qwen3.8-27b",
+  "context": "Cette ligne de synthèse se trouve dans le tableau de l'onglet « Production » du rapport mensuel de l'usine de Seneffe. Elle récapitule les volumes totaux de fabrication et la durée cumulée des arrêts pour l'ensemble des lignes.",
+  "seconds": 2.4
+}

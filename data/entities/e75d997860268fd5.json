@@ -1,0 +1,19 @@
+{
+  "document": "02_RH/Recrutement/Offres/REC-2026-002 Heftruckchauffeur.html",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Gent",
+      "type": "site",
+      "alias": [],
+      "description": "site de production de Calorvia"
+    },
+    {
+      "nom": "productielijnen",
+      "type": "équipement",
+      "alias": [],
+      "description": "lignes de production approvisionnées par le chauffeur"
+    }
+  ],
+  "seconds": 1.8
+}

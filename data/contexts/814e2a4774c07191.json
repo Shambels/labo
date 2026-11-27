@@ -1,0 +1,7 @@
+{
+  "document": "02_RH/Enquetes/Enquete teletravail - reponses brutes.xlsx",
+  "body": "onglet « Réponses » · lignes 83 à 84\n| N° | Service | Site | Satisfaction (1-10) | Souhaite continuer | Commentaire |\n|---|---|---|---|---|---|\n| 83 | Communication | Namur | 8 | oui | Meilleure concentration pour les tâches de fond |\n| 84 | Commercial | Namur | 10 | oui | Écran supplémentaire nécessaire à domicile |",
+  "model": "qwen3.8-27b",
+  "context": "Dernières lignes du tableau des réponses individuelles, concernant les collaborateurs des services Communication et Commercial du site de Namur.",
+  "seconds": 1.4
+}

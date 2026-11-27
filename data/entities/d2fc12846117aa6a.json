@@ -1,0 +1,71 @@
+{
+  "document": "05_Commercial/Tarifs/Tarif 2026 - projet v1.xlsx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Aéris 6",
+      "type": "produit",
+      "alias": [
+        "AE06"
+      ],
+      "description": "pompe à chaleur de la gamme standard"
+    },
+    {
+      "nom": "Aéris 9",
+      "type": "produit",
+      "alias": [
+        "AE09"
+      ],
+      "description": "pompe à chaleur de la gamme standard"
+    },
+    {
+      "nom": "Aéris 12",
+      "type": "produit",
+      "alias": [
+        "AE12"
+      ],
+      "description": "pompe à chaleur de la gamme standard"
+    },
+    {
+      "nom": "Aéris Pro 16",
+      "type": "produit",
+      "alias": [
+        "AP16"
+      ],
+      "description": "pompe à chaleur de la gamme premium"
+    },
+    {
+      "nom": "Aéris Pro 22",
+      "type": "produit",
+      "alias": [
+        "AP22"
+      ],
+      "description": "pompe à chaleur de la gamme premium"
+    },
+    {
+      "nom": "Ventis D300",
+      "type": "produit",
+      "alias": [
+        "VD30"
+      ],
+      "description": "équipement de ventilation de la gamme standard"
+    },
+    {
+      "nom": "Ventis D450",
+      "type": "produit",
+      "alias": [
+        "VD45"
+      ],
+      "description": "équipement de ventilation de la gamme standard"
+    },
+    {
+      "nom": "Ventis D450 Pro",
+      "type": "produit",
+      "alias": [
+        "VP45"
+      ],
+      "description": "équipement de ventilation de la gamme premium"
+    }
+  ],
+  "seconds": 9.7
+}

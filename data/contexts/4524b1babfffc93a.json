@@ -1,0 +1,7 @@
+{
+  "document": "02_RH/Enquetes/Enquete teletravail - reponses brutes.xlsx",
+  "body": "onglet « Réponses » · lignes 55 à 60\n| N° | Service | Site | Satisfaction (1-10) | Souhaite continuer | Commentaire |\n|---|---|---|---|---|---|\n| 55 | Informatique | Namur | 7 | oui | Souhaite un jour commun de présence |\n| 56 | Direction | Namur | 9 | non | Meilleure concentration pour les tâches de fond |\n| 57 | Informatique | Namur | 9 | oui |  |\n| 58 | Direction | Namur | 9 | oui | Écran supplémentaire nécessaire à domicile |\n| 59 | Communication | Namur | 9 | oui |  |\n| 60 | Achats | Namur | 8 | oui | Meilleure concentration pour les tâches de fond |",
+  "model": "qwen3.8-27b",
+  "context": "Ces lignes 55 à 60 de l'onglet « Réponses » concernent les retours des employés des services Informatique, Direction, Communication et Achats basés à Namur.",
+  "seconds": 2.1
+}

@@ -1,0 +1,7 @@
+{
+  "document": "01_Finance/Reporting_mensuel/Reporting 2026-03.xlsx",
+  "body": "onglet « Ventes par région » · Chiffre d&apos;affaires par région (k€)\n| Région | CA du mois | Part |\n|---|---|---|\n| Wallonie | 4410 |  |\n| Bruxelles | 1207 |  |\n| Flandre | 4358 |  |\n| France | 2913 |  |\n| Autres pays | 712 |  |\nTotal",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait se trouve dans l'onglet « Ventes par région » du reporting mensuel. Il détaille le chiffre d'affaires réalisé par zone géographique, incluant la Wallonie, Bruxelles, la Flandre, la France et les autres pays.",
+  "seconds": 2.4
+}

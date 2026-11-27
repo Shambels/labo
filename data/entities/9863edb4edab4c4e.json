@@ -1,0 +1,69 @@
+{
+  "document": "01_Finance/Investissements/Demande capex CAPEX-2025-014 - Ligne d_assemblage L4.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Thomas Lambert",
+      "type": "personne",
+      "alias": [],
+      "description": "demandeur de l'investissement CAPEX-2025-014"
+    },
+    {
+      "nom": "Ligne d'assemblage L4",
+      "type": "projet",
+      "alias": [
+        "L4"
+      ],
+      "description": "quatrième ligne d'assemblage à Seneffe"
+    },
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "site de la ligne d'assemblage L4"
+    },
+    {
+      "nom": "Aéris Pro",
+      "type": "produit",
+      "alias": [],
+      "description": "gamme dédiée à la ligne L4"
+    },
+    {
+      "nom": "Linetech Automation BV",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "fournisseur pressenti pour la phase 1"
+    },
+    {
+      "nom": "Région wallonne",
+      "type": "autre",
+      "alias": [],
+      "description": "organisme sollicité pour l'aide régionale"
+    },
+    {
+      "nom": "Sarah Vandamme",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable du contrôle de gestion"
+    },
+    {
+      "nom": "CODIR",
+      "type": "instance",
+      "alias": [],
+      "description": "comité de direction validant l'investissement"
+    },
+    {
+      "nom": "Hélène Marchal",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable de la validation CODIR"
+    },
+    {
+      "nom": "Conseil d'administration",
+      "type": "instance",
+      "alias": [],
+      "description": "instance d'approbation finale"
+    }
+  ],
+  "seconds": 8.9
+}

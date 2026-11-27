@@ -1,0 +1,7 @@
+{
+  "document": "04_Qualite/Rappel_Aeris12/Liste numeros de serie concernes.xlsx",
+  "body": "onglet « Unités concernées » · lignes 185 à 188\n| Numéro de série | Date de production | Installateur | Région | Statut | Date d'intervention |\n|---|---|---|---|---|---|\n| AE12-25-4685 | 18/11/2025 | Klimaat Partners NV | Flandre | Réparée | 01/02/2026 |\n| AE12-25-4686 | 18/11/2025 | Thermo Services Lille SARL | Hauts-de-France | Réparée | 22/01/2026 |\n| AE12-25-4687 | 18/11/2025 | Énergies du Condroz SRL | Namur | Réparée | 09/02/2026 |\n| AE12-25-4688 | 18/11/2025 | Chauffage Lambert & Fils | Luxembourg | Introuvable (installateur en cessation d'activité) |  |",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait se situe dans l'onglet « Unités concernées » du classeur de rappel, à la page des lignes 185 à 188. Il détaille le statut des unités produites le 18/11/2025, incluant une unité introuvable chez Chauffage Lambert & Fils.",
+  "seconds": 3.3
+}

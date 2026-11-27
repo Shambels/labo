@@ -1,0 +1,13 @@
+{
+  "document": "08_Juridique/Assurances/Attestation assurance RC 2026.pdf",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Assurances Mosanes SA",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "assureur de la responsabilité civile de Calorvia"
+    }
+  ],
+  "seconds": 2.3
+}

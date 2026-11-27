@@ -1,0 +1,7 @@
+{
+  "document": "03_Production/Seneffe/Rapports_mensuels/Rapport production Seneffe 2026-01.xlsx",
+  "body": "onglet « Production » · Rapport de production · usine de Seneffe · janvier 2026 · Ligne : L1 ; Produits : Aéris 6 / 9 ; Unités produites : 928 ; Arrêts (h) : 10.5 ; Rebut (%) : 1.7 ; TRS (%) : 81.5",
+  "model": "qwen3.8-27b",
+  "context": "Cette ligne de données se trouve dans le tableau de synthèse de l'onglet « Production » du rapport mensuel de l'usine de Seneffe. Elle détaille les indicateurs de performance de la ligne L1 pour les modèles Aéris 6 et 9.",
+  "seconds": 2.5
+}

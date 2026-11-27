@@ -1,0 +1,7 @@
+{
+  "document": "03_Production/Procedures/Consignes EPI usine Seneffe.pdf",
+  "body": "Zone des presses\nProtection auditive obligatoire : le niveau sonore dépasse 85 dB(A).",
+  "model": "qwen3.8-27b",
+  "context": "Cette rubrique détaille les équipements de protection individuelle requis spécifiquement pour la zone des presses. Elle impose le port de protections auditives en raison du niveau sonore élevé constaté dans cette section de l'usine.",
+  "seconds": 1.8
+}

@@ -1,0 +1,7 @@
+{
+  "document": "03_Production/Procedures/WI-GNT-03 Inpakken Ventis.pdf",
+  "body": "Stappen\n- Controleer het typeplaatje en het serienummer.\n- Plaats de hoekbeschermers.\n- Wikkel de unit drie keer met stretchfolie op de wikkelmachine PW-2000.\n- Kleef het verzendetiket op de voorzijde.\n- Maximaal 4 units per pallet stapelen.",
+  "model": "qwen3.8-27b",
+  "context": "Cette rubrique détaille les étapes de l'emballage des unités Ventis D300, D450 et D450 Pro. Elle décrit les opérations de contrôle, de protection et de palettisation avant expédition.",
+  "seconds": 2.1
+}

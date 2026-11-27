@@ -1,0 +1,7 @@
+{
+  "document": "05_Commercial/Tarifs/Conditions generales de vente 2026.pdf",
+  "body": "3. Paiement\nLes factures sont payables à 30 jours fin de mois. Tout retard entraîne un intérêt de 8 % l'an et une indemnité forfaitaire de 10 % du montant impayé, avec un minimum de 75 €.",
+  "model": "qwen3.8-27b",
+  "context": "La rubrique « Paiement » des conditions générales de vente détaille les modalités de règlement des factures. Elle précise les délais de paiement ainsi que les pénalités financières applicables en cas de retard.",
+  "seconds": 1.8
+}

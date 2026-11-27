@@ -1,0 +1,192 @@
+{
+  "schema_name": "DoclingDocument",
+  "version": "1.11.0",
+  "name": "Commentaires de gestion T1 2026",
+  "origin": {
+    "mimetype": "application/pdf",
+    "binary_hash": 5213184525371992201,
+    "filename": "Commentaires de gestion T1 2026.pdf"
+  },
+  "furniture": {
+    "self_ref": "#/furniture",
+    "children": [],
+    "content_layer": "furniture",
+    "name": "_root_",
+    "label": "unspecified"
+  },
+  "body": {
+    "self_ref": "#/body",
+    "children": [
+      {
+        "$ref": "#/texts/0"
+      },
+      {
+        "$ref": "#/texts/1"
+      },
+      {
+        "$ref": "#/texts/2"
+      },
+      {
+        "$ref": "#/texts/3"
+      },
+      {
+        "$ref": "#/texts/4"
+      }
+    ],
+    "content_layer": "body",
+    "name": "_root_",
+    "label": "unspecified"
+  },
+  "groups": [],
+  "texts": [
+    {
+      "self_ref": "#/texts/0",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "furniture",
+      "label": "page_header",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 62.3622,
+            "t": 813.0068128,
+            "r": 168.13954400000006,
+            "b": 806.1630624000001,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            33
+          ]
+        }
+      ],
+      "orig": "Calorvia SA \u00b7 Contr\u00f4le de gestion",
+      "text": "Calorvia SA \u00b7 Contr\u00f4le de gestion"
+    },
+    {
+      "self_ref": "#/texts/1",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 773.5719,
+            "r": 301.7684528,
+            "b": 759.7385666666667,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            33
+          ]
+        }
+      ],
+      "orig": "Commentaires de gestion \u00b7 T1 2026",
+      "text": "Commentaires de gestion \u00b7 T1 2026",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/2",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 747.4337168000001,
+            "r": 526.1478401999998,
+            "b": 672.4512944,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            486
+          ]
+        }
+      ],
+      "orig": "Chiffre d'affaires du trimestre : 41 400 k\u20ac. EBITDA : 3 764 k\u20ac soit 9 1 % du chiffre d'affaires. Le chiffre d'affaires est inf\u00e9rieur au budget, principalement en Wallonie (report de chantiers de r\u00e9novation) et chez Distrinergie, dont la hausse tarifaire est limit\u00e9e \u00e0 2 %. La marge progresse gr\u00e2ce \u00e0 la hausse tarifaire et \u00e0 la reprise partielle de la provision du rappel (Valtek). Le gel des recrutements des fonctions support a permis d'\u00e9conomiser environ 190 k\u20ac de frais de personnel",
+      "text": "Chiffre d'affaires du trimestre : 41 400 k\u20ac. EBITDA : 3 764 k\u20ac soit 9 1 % du chiffre d'affaires. Le chiffre d'affaires est inf\u00e9rieur au budget, principalement en Wallonie (report de chantiers de r\u00e9novation) et chez Distrinergie, dont la hausse tarifaire est limit\u00e9e \u00e0 2 %. La marge progresse gr\u00e2ce \u00e0 la hausse tarifaire et \u00e0 la reprise partielle de la provision du rappel (Valtek). Le gel des recrutements des fonctions support a permis d'\u00e9conomiser environ 190 k\u20ac de frais de personnel"
+    },
+    {
+      "self_ref": "#/texts/3",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 667.4337168000001,
+            "r": 136.38661274999998,
+            "b": 658.4512944,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            17
+          ]
+        }
+      ],
+      "orig": "sur le trimestre.",
+      "text": "sur le trimestre."
+    },
+    {
+      "self_ref": "#/texts/4",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "furniture",
+      "label": "page_footer",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 204.7511,
+            "t": 33.47927279999999,
+            "r": 390.52453760000003,
+            "b": 26.635522400000013,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            61
+          ]
+        }
+      ],
+      "orig": "Calorvia SA (entreprise fictive) \u00b7 Diffusion interne \u00b7 page 1",
+      "text": "Calorvia SA (entreprise fictive) \u00b7 Diffusion interne \u00b7 page 1"
+    }
+  ],
+  "pictures": [],
+  "tables": [],
+  "key_value_items": [],
+  "form_items": [],
+  "pages": {
+    "1": {
+      "size": {
+        "width": 595.2756,
+        "height": 841.8898
+      },
+      "page_no": 1
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "path": "05_Commercial/Tableaux_de_bord/Tableau de bord commercial 2026-04.png",
+  "kind": "image",
+  "page": null,
+  "index": null,
+  "model": "qwen3.5-9b",
+  "prompt": "Tu transcris des documents d'entreprise pour un moteur de recherche.\n1. Recopie tout le texte visible, exactement comme il est écrit : nombres, codes, dates, unités et\n   annotations manuscrites compris. Rends les tableaux en Markdown.\n2. Puis, sous le titre « Description », décris en trois phrases au plus le type d'image (organigramme,\n   plan, graphique, photo, facture...) et ce qu'elle montre qui n'est pas écrit : les rattachements\n   d'un organigramme, la valeur la plus haute d'un graphique, la position des éléments d'un plan.\nN'invente rien : si un élément est illisible, écris [illisible].",
+  "seconds": 4.1,
+  "text": "Tableau de bord commercial • avril 2026\n\n| Chiffre d'affaires du mois | Écart au budget | Prises de commandes |\n|----------------------------|-----------------|---------------------|\n| 12 100 k€                  | +2,6 %          | 13 480 k€           |\n\nChiffre d'affaires par région\n\n| Région       | Montant     |\n|--------------|-------------|\n| Wallonie     | 4 098 k€    |\n| Bruxelles    | 1 052 k€    |\n| Flandre      | 3 702 k€    |\n| France       | 2 677 k€    |\n| Autres pays  | 571 k€      |\n\nDescription  \nIl s’agit d’un tableau de bord commercial pour avril 2026, composé de trois indicateurs clés en haut et d’un graphique à barres en bas. Le graphique montre le chiffre d’affaires par région, avec la Wallonie comme région la plus performante (4 098 k€) et les Autres pays comme la moins performante (571 k€). L’écart au budget est positif (+2,6 %), indiquant une performance supérieure au plan financier."
+}

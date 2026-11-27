@@ -1,0 +1,259 @@
+{
+ "1": {
+  "answer": {
+   "response": "Le chiffre d'affaires net facturé HT de mars 2026 s'élève à 13 627 406,23. Il s'agit de la somme des montants nets hors taxes (fac_mt_ht) de toutes les factures clientes émises en mars 2026 (fac_dt entre le 01/03/2026 et le 31/03/2026), selon la table dbo.vte_fact, factures (F) et avoirs (A) inclus.",
+   "sql_code": "SELECT SUM(fac_mt_ht) AS ca_net_ht\nFROM dbo.vte_fact\nWHERE fac_dt >= '2026-03-01' AND fac_dt < '2026-04-01'",
+   "sql_columns": [],
+   "custom_analyses_used": [],
+   "sql_response_from_db": [
+    "[{\"ca_net_ht\":13627406.2300000004}]"
+   ],
+   "thoughts": "- Searching the data and writing SQL: Looking up the catalog: chiffre d'affaires net facturé HT facturation\n- Searching the data and writing SQL: Searching for: invoice billed amount net tax excluded\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Submitting the final query."
+  },
+  "error": null,
+  "steps": [
+   "react_sql_agent",
+   "format_and_respond"
+  ],
+  "seconds": 21.7,
+  "missing": [
+   "13599646.63"
+  ],
+  "ok": false
+ },
+ "2": {
+  "answer": {
+   "response": "I couldn't write a query that answers this question from the data I could find. Try rephrasing it, or name the table or measure you mean.",
+   "sql_code": "",
+   "sql_columns": [],
+   "custom_analyses_used": [],
+   "sql_response_from_db": null,
+   "thoughts": "- Searching the data and writing SQL: Searching for: achats produits finis Distrinergie unités achetées\n- Searching the data and writing SQL: Searching for: lignes réception achat quantité unités reçues produit fini\n- Searching the data and writing SQL: Searching for: catégorie produit fini famille article\n- Searching the data and writing SQL: Searching for: dbo.ach_recep_lig\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Searching for: ach_recep_lig quantité reçue ligne réception\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Looking up the catalog: Distrinergie société\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Searching for: réception marchandises quantités reçues achats\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Searching for: ach_recep_lig rl_qte_recue\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Submitting the final query.\n- Searching the data and writing SQL: Searching for: achats produit fini quantité reçue\n- Searching the data and writing SQL: Submitting the final query.\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Searching for: lignes de réception de marchandises\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Searching for: article\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Searching for: quantité reçue ligne réception fournisseur\n- Searching the data and writing SQL: Submitting the final query."
+  },
+  "error": null,
+  "steps": [
+   "react_sql_agent",
+   "unconstructable_sql_response"
+  ],
+  "seconds": 145.8,
+  "missing": [
+   "1230"
+  ],
+  "ok": false
+ },
+ "3": {
+  "answer": {
+   "response": "I couldn't write a query that answers this question from the data I could find. Try rephrasing it, or name the table or measure you mean.",
+   "sql_code": "",
+   "sql_columns": [],
+   "custom_analyses_used": [],
+   "sql_response_from_db": null,
+   "thoughts": "- Searching the data and writing SQL: Searching for: vannes lot reçu retourné fournisseur\n- Searching the data and writing SQL: Searching for: retour fournisseur article retourné lot\n- Searching the data and writing SQL: Searching for: article vanne\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Searching for: lot V-2544 reçu refusé retourné\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Searching for: quantité reçue refusée retour fournisseur lot réception\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Searching for: ach_recep_lig rl_lot\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Searching for: reception lot vanne quantité reçue refusée\n- Searching the data and writing SQL: Searching for: lot reçu refusé réception\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Searching for: rl_qte_recue rl_qte_refusee\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Searching for: ach_recep_lig rl_lot rl_qte_recue rl_qte_refusee lot\n- Searching the data and writing SQL: Searching for: ach_recep_lig\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Submitting the final query.\n- Searching the data and writing SQL: Searching for: vannes lot reçu retourné fournisseur\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Submitting the final query."
+  },
+  "error": null,
+  "steps": [
+   "react_sql_agent",
+   "unconstructable_sql_response"
+  ],
+  "seconds": 107.4,
+  "missing": [
+   "600",
+   "2025-11-19",
+   "386",
+   "2025-12-03"
+  ],
+  "ok": false
+ },
+ "4": {
+  "answer": {
+   "response": "I couldn't write a query that answers this question from the data I could find. Try rephrasing it, or name the table or measure you mean.",
+   "sql_code": "",
+   "sql_columns": [],
+   "custom_analyses_used": [],
+   "sql_response_from_db": null,
+   "thoughts": "- Searching the data and writing SQL: Searching for: livraisons Kompra compressors delivery missing\n- Searching the data and writing SQL: Searching for: ach_recep_lig receipt line items quantities received ordered compressors\n- Searching the data and writing SQL: Searching for: ach_recep purchase receipt delivery\n- Searching the data and writing SQL: Searching for: ach_recep_lig receipt line quantities received\n- Searching the data and writing SQL: Searching for: art_article compressor Compresseurs\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Searching for: ach_recep goods receipt Kompra delivery date\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Searching for: compressor receipt March 2026 Kompra receipt lines\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Searching for: art_article compressors family CPR products\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Searching for: goods receipt delivery receipt\n- Searching the data and writing SQL: Searching for: reception marchandise livraison fournisseur quantité reçue commandée\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Searching for: purchase order lines quantity received acl_qte_recue\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Searching for: compressor Kompra March 2026 shortage\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Searching for: art_article\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Searching for: art_article product article label compressor\n- Searching the data and writing SQL: Submitting the final query."
+  },
+  "error": null,
+  "steps": [
+   "react_sql_agent",
+   "unconstructable_sql_response"
+  ],
+  "seconds": 182.8,
+  "missing": [
+   "20",
+   "2026-03-10"
+  ],
+  "ok": false
+ },
+ "5": {
+  "answer": {
+   "response": "I couldn't write a query that answers this question from the data I could find. Try rephrasing it, or name the table or measure you mean.",
+   "sql_code": "",
+   "sql_columns": [],
+   "custom_analyses_used": [],
+   "sql_response_from_db": null,
+   "thoughts": "- Searching the data and writing SQL: Searching for: résultat net exercice comptabilité\n- Searching the data and writing SQL: Searching for: exercice période plan comptable écriture ligne écriture montant\n- Searching the data and writing SQL: Searching for: plan_comptable numero_compte libelle classe compte résultat\n- Searching the data and writing SQL: Searching for: ecriture date code_periode code_journal montant\n- Searching the data and writing SQL: Searching for: ecriture table\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Searching for: public.ecriture columns date statut\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Searching for: ecriture general ledger entry table all columns\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Searching for: compte résultat 650000 750000 résultat net exercice 697700\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Searching for: comptes de classe 6 charges 600000 601000 604000 606000\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Looking up the catalog: amortissement immobilisation journal AN OD\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Searching for: lignes écritures journalier ligne_ecriture debit credit\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Searching for: ecriture ligne_ecriture\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Searching for: ecriture\n- Searching the data and writing SQL: Submitting the final query."
+  },
+  "error": null,
+  "steps": [
+   "react_sql_agent",
+   "unconstructable_sql_response"
+  ],
+  "seconds": 155.5,
+  "missing": [
+   "5412000.00"
+  ],
+  "ok": false
+ },
+ "6": {
+  "answer": {
+   "response": "I couldn't write a query that answers this question from the data I could find. Try rephrasing it, or name the table or measure you mean.",
+   "sql_code": "",
+   "sql_columns": [],
+   "custom_analyses_used": [],
+   "sql_response_from_db": null,
+   "thoughts": "- Searching the data and writing SQL: Searching for: EBITDA marge EBITDA\n- Searching the data and writing SQL: Searching for: EBITDA definition calcul marge\n- Searching the data and writing SQL: Searching for: compte resultat produits charges résultat opérationnel\n- Searching the data and writing SQL: Searching for: ecriture\n- Searching the data and writing SQL: Searching for: charges externes produits d'exploitation amortissements\n- Searching the data and writing SQL: Searching for: public.ecriture\n- Searching the data and writing SQL: Searching for: comptes 7 produits 6 charges libelle\n- Searching the data and writing SQL: Searching for: \"ecriture\" journal date_periode\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Searching for: table ecriture colonnes id_ecriture code_periode code_journal\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Searching for: plan_comptable comptes classe 6 7\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Looking up the catalog: valeur ajoutée EBITDA résultat avant impôt\n- Searching the data and writing SQL: Searching for: charges externes achats services 60 61 62\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Searching for: comptes de charges 601000 604000 623200\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Searching for: plan comptable\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Searching for: ligne_ecriture ecriture\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Submitting the final query."
+  },
+  "error": null,
+  "steps": [
+   "react_sql_agent",
+   "unconstructable_sql_response"
+  ],
+  "seconds": 132.2,
+  "missing": [
+   "1278366.78",
+   "9.4"
+  ],
+  "ok": false
+ },
+ "7": {
+  "answer": {
+   "response": "I couldn't write a query that answers this question from the data I could find. Try rephrasing it, or name the table or measure you mean.",
+   "sql_code": "",
+   "sql_columns": [],
+   "custom_analyses_used": [],
+   "sql_response_from_db": null,
+   "thoughts": "- Searching the data and writing SQL: Searching for: amortissements comptabilisés\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Submitting the final query.\n- Searching the data and writing SQL: Searching for: periode code_periode\n- Searching the data and writing SQL: Submitting the final query.\n- Searching the data and writing SQL: Searching for: amortissement\n- Searching the data and writing SQL: Searching for: public.amortissement depreciation entries period\n- Searching the data and writing SQL: Searching for: amortissement id_amortissement montant immobilisation\n- Searching the data and writing SQL: Submitting the final query.\n- Searching the data and writing SQL: Searching for: amortissement\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Searching for: amortissement montant id_immo code_periode\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Searching for: depreciation amortization assets fixed assets\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Looking up the catalog: amortissement\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Searching for: amortissement depreciation\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Searching for: amortissement\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Submitting the final query."
+  },
+  "error": null,
+  "steps": [
+   "react_sql_agent",
+   "unconstructable_sql_response"
+  ],
+  "seconds": 111.2,
+  "missing": [
+   "3310589.37"
+  ],
+  "ok": false
+ },
+ "8": {
+  "answer": {
+   "response": "I couldn't write a query that answers this question from the data I could find. Try rephrasing it, or name the table or measure you mean.",
+   "sql_code": "",
+   "sql_columns": [],
+   "custom_analyses_used": [],
+   "sql_response_from_db": null,
+   "thoughts": "- Searching the data and writing SQL: Searching for: contrat personnel site employé\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Searching for: departments department site_code\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Searching for: contracts start_date end_date employee_id department_code\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Searching for: public.contracts\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Searching for: contrat employé durée début fin type\n- Searching the data and writing SQL: Searching for: public.contracts contract_id start_date end_date\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Searching for: public.work_sites\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Searching for: public.departments site_code department_code\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Searching for: employment contract CDI CDD start end date\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Submitting the final query."
+  },
+  "error": null,
+  "steps": [
+   "react_sql_agent",
+   "unconstructable_sql_response"
+  ],
+  "seconds": 158.5,
+  "missing": [
+   "190",
+   "6",
+   "126",
+   "287"
+  ],
+  "ok": false
+ },
+ "9": {
+  "answer": {
+   "response": "I couldn't write a query that answers this question from the data I could find. Try rephrasing it, or name the table or measure you mean.",
+   "sql_code": "",
+   "sql_columns": [],
+   "custom_analyses_used": [],
+   "sql_response_from_db": null,
+   "thoughts": "- Searching the data and writing SQL: Searching for: absence accident du travail durée jours\n- Searching the data and writing SQL: Answering an information question.\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Searching for: affectation employé site de travail work site assignment\n- Searching the data and writing SQL: Searching for: cost center site_code employé rattachement centre de coût\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Searching for: timesheets absence_code work_date\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Searching for: public.timesheets public.absence_types\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Searching for: accident du travail absence timesheets pointage\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Submitting the final query.\n- Searching the data and writing SQL: Searching for: public.timesheets\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Searching for: accident du travail absence code ACC\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Searching for: timesheet pointage salarié jour absence\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Searching for: absence types accident\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Submitting the final query."
+  },
+  "error": null,
+  "steps": [
+   "react_sql_agent",
+   "unconstructable_sql_response"
+  ],
+  "seconds": 147.7,
+  "missing": [
+   "12",
+   "13",
+   "28"
+  ],
+  "ok": false
+ },
+ "10": {
+  "answer": {
+   "response": "I couldn't write a query that answers this question from the data I could find. Try rephrasing it, or name the table or measure you mean.",
+   "sql_code": "",
+   "sql_columns": [],
+   "custom_analyses_used": [],
+   "sql_response_from_db": null,
+   "thoughts": "- Searching the data and writing SQL: Searching for: jours de télétravail prestés\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Searching for: timesheets telework days\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Searching for: timesheets\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Searching for: timesheets employee work location telework\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Looking up the catalog: table timesheets\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Searching for: timesheet\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Submitting the final query.\n- Searching the data and writing SQL: Searching for: telework TELE days worked\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Submitting the final query.\n- Searching the data and writing SQL: Searching for: count of teleworking days april may 2026\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Submitting the final query.\n- Searching the data and writing SQL: Searching for: public.timesheets\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Submitting the final query.\n- Searching the data and writing SQL: Searching for: temps de travail télétravail jours\n- Searching the data and writing SQL: Submitting the final query."
+  },
+  "error": null,
+  "steps": [
+   "react_sql_agent",
+   "unconstructable_sql_response"
+  ],
+  "seconds": 117.7,
+  "missing": [
+   "292",
+   "531"
+  ],
+  "ok": false
+ },
+ "11": {
+  "answer": {
+   "response": "I couldn't write a query that answers this question from the data I could find. Try rephrasing it, or name the table or measure you mean.",
+   "sql_code": "",
+   "sql_columns": [],
+   "custom_analyses_used": [],
+   "sql_response_from_db": null,
+   "thoughts": "- Searching the data and writing SQL: Searching for: chiffre d'affaires mai 2026 ERP comptabilité ventes\n- Searching the data and writing SQL: Searching for: vte_fact factures client ventes chiffre d'affaires\n- Searching the data and writing SQL: Searching for: ecriture comptable comptes produits chiffre affaires\n- Searching the data and writing SQL: Looking up the catalog: ligne_ecriture debit credit montant\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Searching for: comptes de classe 7 produits plan comptable\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Searching for: plan_comptable compte 707000\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Looking up the catalog: vte_fact\n- Searching the data and writing SQL: Looking up the catalog: ecriture ligne_ecriture\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Searching for: facture client vte_fact\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Searching for: chiffre d'affaires\n- Searching the data and writing SQL: Searching for: revenue sales definition\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Searching for: vte_fact\n- Searching the data and writing SQL: Submitting the final query."
+  },
+  "error": null,
+  "steps": [
+   "react_sql_agent",
+   "unconstructable_sql_response"
+  ],
+  "seconds": 124.7,
+  "missing": [
+   "11299581.08",
+   "10947075.29"
+  ],
+  "ok": false
+ },
+ "12": {
+  "answer": {
+   "response": "I couldn't write a query that answers this question from the data I could find. Try rephrasing it, or name the table or measure you mean.",
+   "sql_code": "",
+   "sql_columns": [],
+   "custom_analyses_used": [],
+   "sql_response_from_db": null,
+   "thoughts": "- Searching the data and writing SQL: Searching for: commission paye bulletin salaire\n- Searching the data and writing SQL: Searching for: payslip_lines commission pay_elements\n- Searching the data and writing SQL: Searching for: employees Joris Claes\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Searching for: commission pay element label\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Searching for: pay_elements element_code label commission\n- Searching the data and writing SQL: Searching for: pay_elements\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Searching for: employees payroll_runs payslips payslip_lines pay_elements\n- Searching the data and writing SQL: Searching for: employees\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Looking up the catalog: list of all tables\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Searching for: Joris Claes employee payslip commission line March 2026\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Searching for: payroll_runs period_month payslips pay_elements payslip_lines employees first_name last_name\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Searching for: payroll runs payroll_runs period month payslips\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Running a query to check the data.\n- Searching the data and writing SQL: Searching for: payroll_runs run_id period_month\n- Searching the data and writing SQL: Submitting the final query."
+  },
+  "error": null,
+  "steps": [
+   "react_sql_agent",
+   "unconstructable_sql_response"
+  ],
+  "seconds": 139.2,
+  "missing": [
+   "731.38",
+   "0.1",
+   "2026",
+   "731384.61"
+  ],
+  "ok": false
+ }
+}

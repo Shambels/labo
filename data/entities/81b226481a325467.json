@@ -1,0 +1,31 @@
+{
+  "document": "06_Achats/Fournisseurs/Supply agreement Kompra GmbH 2024-2026.pdf",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Kompra GmbH",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "Fournisseur de compresseurs rotatifs et à vis"
+    },
+    {
+      "nom": "Compresseurs rotatifs et à vis",
+      "type": "produit",
+      "alias": [],
+      "description": "Pour pompes à chaleur R32 et R290"
+    },
+    {
+      "nom": "R32",
+      "type": "produit",
+      "alias": [],
+      "description": "Gaz réfrigérant pour pompes à chaleur"
+    },
+    {
+      "nom": "R290",
+      "type": "produit",
+      "alias": [],
+      "description": "Gaz réfrigérant pour pompes à chaleur"
+    }
+  ],
+  "seconds": 4.6
+}

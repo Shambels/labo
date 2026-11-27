@@ -1,0 +1,7 @@
+{
+  "document": "00_Direction/CODIR/Annexes/2026-04-13 Annexe - Resultats enquete teletravail.pdf",
+  "body": "Graphique de la page 1\n**Recopie du texte visible :**\n\nPilote télétravail : satisfaction (nombre de réponses par note)\n\n32  \n24  \n10  \n10  \n4  \n2  \n2  \n\n0  \n5  \n10  \n15  \n20  \n25  \n30  \n\n4  \n5  \n6  \n7  \n8  \n9  \n10  \n\nEnquête du 16 au 27 mars 2026 • 84 réponses\n\n---\n\n**Tableau en Markdown :**\n\n| Note | Nombre de réponses |\n|------|---------------------|\n| 4    | 2                   |\n| 5    | 2                   |\n| 6    | 4                   |\n| 7    | 10                  |\n| 8    | 32                  |\n| 9    | 24                  |\n| 10   | 10                  |\n\n---\n\n**Description :**\n\nIl s’agit d’un histogramme montrant la distribution des réponses à une enquête sur la satisfaction liée au télétravail, avec les notes allant de 4 à 10. La valeur la plus élevée est 32 réponses pour la note 8, suivie de 24 pour la note 9. L’enquête a été menée entre le 16 et le 27 mars 2026 et compte 84 réponses au total.",
+  "model": "qwen3.8-27b",
+  "context": "Cet extrait se trouve dans la section des résultats de l'enquête sur le télétravail, plus précisément dans la description de l'histogramme de la page 1. Il détaille la répartition des notes de satisfaction attribuées par les participants au pilote de télétravail.",
+  "seconds": 2.7
+}

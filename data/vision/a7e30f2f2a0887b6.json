@@ -1,0 +1,10 @@
+{
+  "path": "10_RSE/Emissions par scope 2025.png",
+  "kind": "image",
+  "page": null,
+  "index": null,
+  "model": "qwen3.5-9b",
+  "prompt": "Tu transcris des documents d'entreprise pour un moteur de recherche.\n1. Recopie tout le texte visible, exactement comme il est écrit : nombres, codes, dates, unités et\n   annotations manuscrites compris. Rends les tableaux en Markdown.\n2. Dans un schéma, un plan ou un organigramme, recopie aussi chaque texte posé sur un lien, une flèche ou un\n   trait (débit, distance, type de connexion, rattachement), sur une ligne qui commence par le nom des deux\n   éléments reliés, tels qu'ils sont écrits sur l'image, séparés par un tiret, puis deux-points et le texte.\n   Un tel texte n'a de sens qu'avec les deux éléments qu'il relie.\n3. Puis, sous le titre « Description », décris en trois phrases au plus le type d'image (organigramme,\n   plan, graphique, photo, facture...) et ce qu'elle montre qui n'est pas écrit : les rattachements\n   d'un organigramme, la valeur la plus haute d'un graphique, la position des éléments d'un plan.\nN'invente rien : si un élément est illisible, écris [illisible].",
+  "seconds": 3.3,
+  "text": "**Émissions 2025 par scope (t CO2e)**\n\n| Scope | Émissions (t CO2e) |\n|-------|---------------------|\n| Scope 1 | 1 180 t |\n| Scope 2 | 2 240 t |\n| Scope 3 | 38 600 t |\n\n**Description**  \nIl s’agit d’un graphique en barres horizontales montrant les émissions de gaz à effet de serre en tonnes de CO2 équivalent (t CO2e) pour l’année 2025, classées par scope. La valeur la plus élevée est celle du Scope 3 (38 600 t), suivie du Scope 2 (2 240 t) et du Scope 1 (1 180 t). Le graphique illustre clairement la domination des émissions indirectes (Scope 3) par rapport aux émissions directes (Scopes 1 et 2)."
+}

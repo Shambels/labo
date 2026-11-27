@@ -1,0 +1,7 @@
+{
+  "document": "03_Production/Procedures/Procedure consignation des energies LOTO.pdf",
+  "body": "Déconsignation\nSeul l'intervenant qui a posé le cadenas peut le retirer.",
+  "model": "qwen3.8-27b",
+  "context": "Cette rubrique détaille la règle de retrait du cadenas dans la procédure de consignation des énergies. Elle précise que seul l'intervenant ayant posé le cadenas est autorisé à le retirer.",
+  "seconds": 1.8
+}

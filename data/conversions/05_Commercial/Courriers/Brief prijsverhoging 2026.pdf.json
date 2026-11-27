@@ -1,0 +1,131 @@
+{
+  "schema_name": "DoclingDocument",
+  "version": "1.11.0",
+  "name": "Brief prijsverhoging 2026",
+  "origin": {
+    "mimetype": "application/pdf",
+    "binary_hash": 5832336607291682551,
+    "filename": "Brief prijsverhoging 2026.pdf"
+  },
+  "furniture": {
+    "self_ref": "#/furniture",
+    "children": [],
+    "content_layer": "furniture",
+    "name": "_root_",
+    "label": "unspecified"
+  },
+  "body": {
+    "self_ref": "#/body",
+    "children": [
+      {
+        "$ref": "#/texts/0"
+      },
+      {
+        "$ref": "#/texts/1"
+      },
+      {
+        "$ref": "#/texts/2"
+      }
+    ],
+    "content_layer": "body",
+    "name": "_root_",
+    "label": "unspecified"
+  },
+  "groups": [],
+  "texts": [
+    {
+      "self_ref": "#/texts/0",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "furniture",
+      "label": "page_header",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 62.3622,
+            "t": 813.0068128,
+            "r": 173.88173200000003,
+            "b": 806.1630624000001,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            34
+          ]
+        }
+      ],
+      "orig": "Calorvia SA \u00b7 Commerci\u00eble directie",
+      "text": "Calorvia SA \u00b7 Commerci\u00eble directie"
+    },
+    {
+      "self_ref": "#/texts/1",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 775.4337168000001,
+            "r": 522.02063775,
+            "b": 629.4512944,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            563
+          ]
+        }
+      ],
+      "orig": "Namen, 24 oktober 2025 Betreft: aanpassing van onze prijzen op 1 januari 2026 Geachte klant, De stijging van de staalprijs, de loonindexering en de duurdere elektronische componenten dwingen ons om onze catalogusprijzen op 1 januari 2026 aan te passen: +3,5 % voor het standaardgamma (A\u00e9ris 6, 9 en 12, Ventis D300 en D450) en +5 % voor het premiumgamma (A\u00e9ris Pro en Ventis D450 Pro). Bestellingen die v\u00f3\u00f3r 15 december 2025 bevestigd en v\u00f3\u00f3r 31 januari 2026 geleverd worden, worden aan de prijzen van 2025 gefactureerd. Pierre-Yves Collard, commercieel directeur",
+      "text": "Namen, 24 oktober 2025 Betreft: aanpassing van onze prijzen op 1 januari 2026 Geachte klant, De stijging van de staalprijs, de loonindexering en de duurdere elektronische componenten dwingen ons om onze catalogusprijzen op 1 januari 2026 aan te passen: +3,5 % voor het standaardgamma (A\u00e9ris 6, 9 en 12, Ventis D300 en D450) en +5 % voor het premiumgamma (A\u00e9ris Pro en Ventis D450 Pro). Bestellingen die v\u00f3\u00f3r 15 december 2025 bevestigd en v\u00f3\u00f3r 31 januari 2026 geleverd worden, worden aan de prijzen van 2025 gefactureerd. Pierre-Yves Collard, commercieel directeur"
+    },
+    {
+      "self_ref": "#/texts/2",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "furniture",
+      "label": "page_footer",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 204.7511,
+            "t": 33.47927279999999,
+            "r": 390.52453760000003,
+            "b": 26.635522400000013,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            61
+          ]
+        }
+      ],
+      "orig": "Calorvia SA (entreprise fictive) \u00b7 Diffusion interne \u00b7 page 1",
+      "text": "Calorvia SA (entreprise fictive) \u00b7 Diffusion interne \u00b7 page 1"
+    }
+  ],
+  "pictures": [],
+  "tables": [],
+  "key_value_items": [],
+  "form_items": [],
+  "pages": {
+    "1": {
+      "size": {
+        "width": 595.2756,
+        "height": 841.8898
+      },
+      "page_no": 1
+    }
+  }
+}

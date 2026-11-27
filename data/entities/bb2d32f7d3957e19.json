@@ -1,0 +1,25 @@
+{
+  "document": "02_RH/Recrutement/Offres/REC-2025-031 Technicien de maintenance.html",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "site de production de Calorvia"
+    },
+    {
+      "nom": "lignes d'assemblage",
+      "type": "équipement",
+      "alias": [],
+      "description": "lignes d'assemblage à maintenir"
+    },
+    {
+      "nom": "four de brasage",
+      "type": "équipement",
+      "alias": [],
+      "description": "four de brasage à maintenir"
+    }
+  ],
+  "seconds": 2.7
+}

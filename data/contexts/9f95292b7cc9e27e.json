@@ -1,0 +1,7 @@
+{
+  "document": "07_IT/Projet_Atlas_ERP/Documentation/Resultats recette 2.xlsx",
+  "body": "onglet « Recette 2 » · Projet Atlas · résultats de la recette 2 (du 8 au 17 avril 2026) · Domaine : Logistique et WMS ; Cas de test : 44 ; Conformes : 41 ; Non conformes : 3 ; Taux de conformité : 93,2 %",
+  "model": "qwen3.8-27b",
+  "context": "Cette ligne se trouve dans le tableau récapitulatif des résultats de la recette 2 du projet Atlas. Elle détaille les indicateurs de conformité spécifiques au domaine Logistique et WMS.",
+  "seconds": 1.8
+}

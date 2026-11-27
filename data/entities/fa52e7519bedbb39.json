@@ -1,0 +1,43 @@
+{
+  "document": "06_Achats/Bons_de_livraison/2026-01-20 BL Tolerie Mosane.jpg",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Tôlerie Mosane SRL",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "Fournisseur de tôles galvanisées"
+    },
+    {
+      "nom": "Calorvia SA - Seneffe",
+      "type": "site",
+      "alias": [
+        "Seneffe"
+      ],
+      "description": "Site de réception des marchandises"
+    },
+    {
+      "nom": "R. Dethier",
+      "type": "personne",
+      "alias": [],
+      "description": "Réceptionnaire des marchandises"
+    },
+    {
+      "nom": "Tôle galvanisée 1,5 mm",
+      "type": "produit",
+      "alias": [
+        "TG15"
+      ],
+      "description": "Matière première livrée"
+    },
+    {
+      "nom": "Tôle galvanisée 2,0 mm",
+      "type": "produit",
+      "alias": [
+        "TG20"
+      ],
+      "description": "Matière première livrée"
+    }
+  ],
+  "seconds": 5.3
+}

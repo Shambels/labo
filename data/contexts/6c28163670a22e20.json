@@ -1,0 +1,7 @@
+{
+  "document": "00_Direction/CODIR/2025/PV_CODIR_2025-11-24.docx",
+  "body": "Procès-verbal du Comité de direction\n1. Approbation du procès-verbal précédent\nLe procès-verbal de la séance du 17 novembre 2025 est approuvé après correction de la date de l'accident de Gand (mercredi 12 novembre et non jeudi 13 novembre). Une version 2 a été diffusée le 19 novembre.",
+  "model": "qwen3.8-27b",
+  "context": "Cette rubrique, située en ouverture du procès-verbal, concerne l'approbation du compte rendu de la séance précédente. Elle mentionne la correction de la date de l'accident survenu à Gand et la diffusion d'une version révisée du document.",
+  "seconds": 2.4
+}

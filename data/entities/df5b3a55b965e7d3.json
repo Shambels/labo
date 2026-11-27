@@ -1,0 +1,73 @@
+{
+  "document": "09_Communication/Communiques_presse/2026-05-20 PR New CFO.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Isabelle Gérard",
+      "type": "personne",
+      "alias": [],
+      "description": "nouvelle directrice financière de Calorvia"
+    },
+    {
+      "nom": "Laurent Dewit",
+      "type": "personne",
+      "alias": [],
+      "description": "ancien directeur financier de Calorvia"
+    },
+    {
+      "nom": "Lucie Bastin",
+      "type": "personne",
+      "alias": [],
+      "description": "contact presse de Calorvia"
+    },
+    {
+      "nom": "Namur",
+      "type": "site",
+      "alias": [],
+      "description": "site de production de Calorvia"
+    },
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "site de production de Calorvia"
+    },
+    {
+      "nom": "Ghent",
+      "type": "site",
+      "alias": [],
+      "description": "site de production de Calorvia"
+    },
+    {
+      "nom": "Herstal",
+      "type": "site",
+      "alias": [],
+      "description": "site de production de Calorvia"
+    },
+    {
+      "nom": "Lille",
+      "type": "site",
+      "alias": [],
+      "description": "site de production de Calorvia"
+    },
+    {
+      "nom": "Heat pumps",
+      "type": "produit",
+      "alias": [],
+      "description": "produits fabriqués par Calorvia"
+    },
+    {
+      "nom": "Ventilation units",
+      "type": "produit",
+      "alias": [],
+      "description": "produits fabriqués par Calorvia"
+    },
+    {
+      "nom": "Board of Directors",
+      "type": "instance",
+      "alias": [],
+      "description": "organe ayant nommé la nouvelle CFO"
+    }
+  ],
+  "seconds": 7.9
+}

@@ -1,0 +1,7 @@
+{
+  "document": "03_Production/Gent/Maandrapporten/Productierapport Gent 2025-10.xlsx",
+  "body": "onglet « Productie » · Productierapport · site Gent · oktober 2025 · Lijn : V1 ; Producten : Ventis D300 ; Geproduceerde eenheden : 1483 ; Stilstand (u) : 12.8 ; Uitval (%) : 1 ; OEE (%) : 77.5",
+  "model": "qwen3.8-27b",
+  "context": "Cette ligne du tableau de production du site de Gent détaille les performances de la ligne V1. Elle concerne spécifiquement le produit Ventis D300 pour le mois d'octobre 2025.",
+  "seconds": 2.1
+}

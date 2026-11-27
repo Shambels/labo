@@ -1,0 +1,10 @@
+{
+  "path": "03_Production/Seneffe/Photos_equipements/IMG_20260315_Robot_de_soudure.jpg",
+  "kind": "image",
+  "page": null,
+  "index": null,
+  "model": "qwen3.5-9b",
+  "prompt": "Tu transcris des documents d'entreprise pour un moteur de recherche.\n1. Recopie tout le texte visible, exactement comme il est écrit : nombres, codes, dates, unités et\n   annotations manuscrites compris. Rends les tableaux en Markdown.\n2. Puis, sous le titre « Description », décris en trois phrases au plus le type d'image (organigramme,\n   plan, graphique, photo, facture...) et ce qu'elle montre qui n'est pas écrit : les rattachements\n   d'un organigramme, la valeur la plus haute d'un graphique, la position des éléments d'un plan.\nN'invente rien : si un élément est illisible, écris [illisible].",
+  "seconds": 3.5,
+  "text": "**Weldon Robotics**  \nRobot de soudage à l'arc  \n\n| Type              | WR-6 Arc        |\n|-------------------|-----------------|\n| N° de série       | WR6-2020-1153   |\n| Année             | 2020            |\n| Charge utile      | 6 kg            |\n| Portée            | 1440 mm         |\n| Axes              | 6               |\n\nCE\n\n---\n\n**Description**  \nIl s’agit d’une plaque signalétique métallique fixée sur un robot industriel, probablement par quatre vis aux coins. Elle affiche les spécifications techniques du robot de soudage à l’arc Weldon Robotics, incluant son type, numéro de série, année de fabrication, charge utile, portée et nombre d’axes. Le marquage « CE » en bas à droite indique la conformité aux normes européennes de sécurité."
+}

@@ -1,0 +1,7 @@
+{
+  "document": "06_Achats/Bons_de_livraison/2026-03-03 BL Kompra.jpg",
+  "body": "Image\n**Texte transcrit :**\n\nKompra GmbH  \nIndustriestraße 77, 52070 Aachen  \nDelivery note  \n\nDelivery note  \nKG-DN-26-0388  \nDate  \n03/03/2026  \nShip to  \nCalorvia SA - Seneffe plant  \n\n| Item   | Description                     | Qty |\n|--------|----------------------------------|-----|\n| KX-16S | Scroll compressor R32, 16 kW     | 160 |\n| PAL    | Pallets                          | 8   |\n\nRÉCEPTION  \nSENEFFE  \n\nReçu 7 palettes sur 8 !  \n1 palette manquante -> NC-2026-011  \n\nMerci de vérifier la marchandise à la réception.\n\n---\n\n**Description :**  \nIl s’agit d’une facture de livraison (delivery note) de Kompra GmbH adressée à Calorvia SA à Seneffe. Le document liste deux articles : des compresseurs scroll et des palettes, avec une quantité totale de 8 palettes, dont 7 ont été réceptionnées selon une note manuscrite indiquant une palette manquante. La mention « RÉCEPTION SENEFFE » confirme le lieu de livraison, et une référence NC-2026-011 est associée à la palette manquante.",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait correspond à l'intégralité du bon de livraison émis par Kompra GmbH pour l'usine de Seneffe. Il détaille la réception de compresseurs scroll et de palettes, en signalant une non-conformité liée à une palette manquante.",
+  "seconds": 3.1
+}

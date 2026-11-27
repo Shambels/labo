@@ -1,0 +1,31 @@
+{
+  "document": "03_Production/Procedures/WI-GNT-03 Inpakken Ventis.pdf",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Ventis D300",
+      "type": "produit",
+      "alias": [],
+      "description": "unité de ventilation à emballer"
+    },
+    {
+      "nom": "Ventis D450",
+      "type": "produit",
+      "alias": [],
+      "description": "unité de ventilation à emballer"
+    },
+    {
+      "nom": "Ventis D450 Pro",
+      "type": "produit",
+      "alias": [],
+      "description": "unité de ventilation à emballer"
+    },
+    {
+      "nom": "PW-2000",
+      "type": "équipement",
+      "alias": [],
+      "description": "machine à étiqueter pour emballage"
+    }
+  ],
+  "seconds": 4.4
+}

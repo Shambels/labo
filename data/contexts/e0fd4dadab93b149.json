@@ -1,0 +1,7 @@
+{
+  "document": "04_Qualite/Non_conformites/NC-2026-022.docx",
+  "body": "Fiche de non-conformité NC-2026-022\n| Date d'ouverture | 09/06/2026 |\n| - | - |\n| Site | Seneffe |\n| Produit | Toutes |\n| Description | Bons de livraison édités sans numéro de lot après le démarrage de l'ERP. |\n| Quantité concernée | 143 bons |\n| Mode de détection | Réclamation client |\n| Cause | Paramétrage de l'édition dans Praxio |\n| Action corrective | Correction du modèle d'édition le 10/06 |\n| Responsable | Sophie Lejeune |\n| Statut | Clôturée |\n| Coût de non-qualité | 0 € |",
+  "model": "qwen3.8-27b",
+  "context": "La fiche de non-conformité NC-2026-022 du site de Seneffe concerne l'édition de bons de livraison sans numéro de lot après le démarrage de l'ERP.",
+  "seconds": 2.3
+}

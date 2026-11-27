@@ -1,0 +1,7 @@
+{
+  "document": "04_Qualite/Non_conformites/NC-2025-043.docx",
+  "body": "Fiche de non-conformité NC-2025-043\n| Date d'ouverture | 21/10/2025 |\n| - | - |\n| Site | Seneffe |\n| Produit | Aéris Pro 16 |\n| Description | Bruit anormal du compresseur au démarrage. |\n| Quantité concernée | 6 unités |\n| Mode de détection | Banc d'essai |\n| Cause | Compresseurs Kompra KX-16S mal fixés (silentblocs manquants) |\n| Action corrective | Réclamation Kompra et contrôle des silentblocs |\n| Responsable | Romain Dethier |\n| Statut | Clôturée |\n| Coût de non-qualité | 3 450 € |",
+  "model": "qwen3.8-27b",
+  "context": "La fiche de non-conformité NC-2025-043 concerne le produit Aéris Pro 16 sur le site de Seneffe. Elle détaille un bruit anormal du compresseur au démarrage, attribué à des silentblocs manquants sur les compresseurs Kompra KX-16S.",
+  "seconds": 3.3
+}

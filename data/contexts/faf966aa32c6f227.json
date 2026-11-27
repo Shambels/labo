@@ -1,0 +1,7 @@
+{
+  "document": "08_Juridique/RGPD/Registre des traitements.xlsx",
+  "body": "onglet « Registre » · Registre des activités de traitement (article 30 du RGPD) · Traitement : Vidéosurveillance ; Finalité : Sécurité des biens ; Catégories de données : Images ; Base légale : Intérêt légitime ; Durée de conservation : 30 jours ; Responsable : Olivier Hardy",
+  "model": "qwen3.8-27b",
+  "context": "Cette entrée du registre des traitements concerne la vidéosurveillance mise en place pour la sécurité des biens. Le responsable désigné pour cette activité est Olivier Hardy.",
+  "seconds": 1.6
+}

@@ -1,0 +1,109 @@
+{
+  "document": "01_Finance/Budget_2026/Budget 2026 - version approuvee CA 16-12-2025.xlsx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Conseil d'administration",
+      "type": "instance",
+      "alias": [
+        "CA"
+      ],
+      "description": "instance approuvant le budget 2026"
+    },
+    {
+      "nom": "Gamme standard",
+      "type": "produit",
+      "alias": [],
+      "description": "gamme de produits Calorvia"
+    },
+    {
+      "nom": "Gamme premium",
+      "type": "produit",
+      "alias": [],
+      "description": "gamme de produits Calorvia"
+    },
+    {
+      "nom": "Pompes à chaleur",
+      "type": "produit",
+      "alias": [],
+      "description": "produit principal de Calorvia"
+    },
+    {
+      "nom": "Ventilation",
+      "type": "produit",
+      "alias": [],
+      "description": "produit de Calorvia"
+    },
+    {
+      "nom": "Acier",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "matière première utilisée par Calorvia"
+    },
+    {
+      "nom": "Nouvelle ligne d'assemblage L4",
+      "type": "projet",
+      "alias": [
+        "L4"
+      ],
+      "description": "projet d'investissement à Seneffe"
+    },
+    {
+      "nom": "Remplacement de l'ERP",
+      "type": "projet",
+      "alias": [
+        "projet Atlas"
+      ],
+      "description": "projet de remplacement du système ERP"
+    },
+    {
+      "nom": "Infrastructure informatique",
+      "type": "projet",
+      "alias": [],
+      "description": "projet de mise à niveau des serveurs et réseau"
+    },
+    {
+      "nom": "Sécurité entrepôt de Gand",
+      "type": "projet",
+      "alias": [],
+      "description": "projet d'amélioration de la sécurité de l'entrepôt"
+    },
+    {
+      "nom": "Maintenance lourde et renouvellement d'outillages",
+      "type": "projet",
+      "alias": [],
+      "description": "projet de maintenance et renouvellement des outils"
+    },
+    {
+      "nom": "Installation photovoltaïque",
+      "type": "projet",
+      "alias": [],
+      "description": "projet d'installation solaire à Seneffe"
+    },
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "site de production et d'installation photovoltaïque"
+    },
+    {
+      "nom": "Gand",
+      "type": "site",
+      "alias": [],
+      "description": "site de production, logistique et entrepôt"
+    },
+    {
+      "nom": "Namur",
+      "type": "site",
+      "alias": [],
+      "description": "site des fonctions support"
+    },
+    {
+      "nom": "Lille",
+      "type": "site",
+      "alias": [],
+      "description": "site du bureau commercial"
+    }
+  ],
+  "seconds": 14.9
+}

@@ -1,0 +1,37 @@
+{
+  "document": "04_Qualite/Non_conformites/NC-2026-015.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "site de production de Calorvia"
+    },
+    {
+      "nom": "Aéris 12",
+      "type": "produit",
+      "alias": [],
+      "description": "produit concerné par la non-conformité"
+    },
+    {
+      "nom": "Romain Dethier",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable de la non-conformité"
+    },
+    {
+      "nom": "Ligne L2",
+      "type": "équipement",
+      "alias": [],
+      "description": "ligne de production concernée"
+    },
+    {
+      "nom": "Poste 3",
+      "type": "équipement",
+      "alias": [],
+      "description": "poste de la ligne L2"
+    }
+  ],
+  "seconds": 4.0
+}

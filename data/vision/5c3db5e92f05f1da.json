@@ -1,0 +1,10 @@
+{
+  "path": "01_Finance/Comptabilite/Factures_fournisseurs/2026-03-12 Heliosol acompte FAC-HS-2026-012.jpg",
+  "kind": "image",
+  "page": null,
+  "index": null,
+  "model": "qwen3.8-27b",
+  "prompt": "Tu transcris des documents d'entreprise pour un moteur de recherche.\n1. Recopie tout le texte visible, exactement comme il est écrit : nombres, codes, dates, unités et\n   annotations manuscrites compris. Rends les tableaux en Markdown.\n2. Dans un schéma, un plan ou un organigramme, recopie aussi chaque texte posé sur un lien, une flèche ou un\n   trait (débit, distance, type de connexion, rattachement), sur une ligne qui commence par le nom des deux\n   éléments reliés, tels qu'ils sont écrits sur l'image, séparés par un tiret, puis deux-points et le texte.\n   Un tel texte n'a de sens qu'avec les deux éléments qu'il relie.\n3. Puis, sous le titre « Description », décris en trois phrases au plus le type d'image (organigramme,\n   plan, graphique, photo, facture...) et ce qu'elle montre qui n'est pas écrit : les rattachements\n   d'un organigramme, la valeur la plus haute d'un graphique, la position des éléments d'un plan.\nN'invente rien : si un élément est illisible, écris [illisible].",
+  "seconds": 15.2,
+  "text": "Héliosol SRL\nRue du Soleil Levant 3, 1400 Nivelles\nTVA BE 0712.448.035\n\nFacture n° FAC-HS-2026-012\nDate 12/03/2026\nÉchéance 11/04/2026\nClient Calorvia SA - usine de Seneffe\n\n| Réf. | Désignation | Qté | Prix unit. | Total HT |\n| :--- | :--- | :--- | :--- | :--- |\n| ACO | Acompte 30 % - photovoltaïque 520 kWc | 1 | 123 000,00 | 123 000,00 |\n\nTotal HT 123 000,00 €\nTVA 21 % 25 830,00 €\nTotal TTC 148 830,00 €\n\nSolde à la réception de l'installation (prévue en juillet 2026).\n\nDescription\nIl s'agit d'une facture commerciale émise par Héliosol SRL à destination de Calorvia SA. Le document détaille un acompte de 30 % pour une installation photovoltaïque de 520 kWc, avec un total TTC de 148 830,00 €. Une note en bas de page précise que le solde restant sera dû à la réception de l'installation, prévue pour juillet 2026."
+}

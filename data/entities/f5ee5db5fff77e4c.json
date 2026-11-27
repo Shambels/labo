@@ -1,0 +1,75 @@
+{
+  "document": "01_Finance/Reporting_mensuel/Reporting 2025-12.xlsx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Aéris",
+      "type": "produit",
+      "alias": [
+        "Aéris (standard)"
+      ],
+      "description": "gamme standard de pompes à chaleur"
+    },
+    {
+      "nom": "Aéris Pro",
+      "type": "produit",
+      "alias": [
+        "Aéris Pro (premium)"
+      ],
+      "description": "gamme premium de pompes à chaleur"
+    },
+    {
+      "nom": "Ventis",
+      "type": "produit",
+      "alias": [
+        "Ventis (standard)"
+      ],
+      "description": "gamme standard de ventilation"
+    },
+    {
+      "nom": "Ventis Pro",
+      "type": "produit",
+      "alias": [
+        "Ventis Pro (premium)"
+      ],
+      "description": "gamme premium de ventilation"
+    },
+    {
+      "nom": "Pièces et services",
+      "type": "produit",
+      "alias": [],
+      "description": "gamme de pièces détachées et services"
+    },
+    {
+      "nom": "Namur",
+      "type": "site",
+      "alias": [],
+      "description": "site de production ou administratif"
+    },
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "site de production ou administratif"
+    },
+    {
+      "nom": "Gand",
+      "type": "site",
+      "alias": [],
+      "description": "site de production ou administratif"
+    },
+    {
+      "nom": "Lille",
+      "type": "site",
+      "alias": [],
+      "description": "site de production ou administratif"
+    },
+    {
+      "nom": "Aéris 12",
+      "type": "produit",
+      "alias": [],
+      "description": "modèle de pompe à chaleur rappelé"
+    }
+  ],
+  "seconds": 12.3
+}

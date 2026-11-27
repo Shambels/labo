@@ -1,0 +1,7 @@
+{
+  "document": "04_Qualite/Non_conformites/NC-2026-011.docx",
+  "body": "Fiche de non-conformité NC-2026-011\n| Date d'ouverture | 03/03/2026 |\n| - | - |\n| Site | Seneffe |\n| Produit | Aéris Pro 16 |\n| Description | Une palette de compresseurs manquante à la livraison Kompra. |\n| Quantité concernée | 1 palette (20 compresseurs) |\n| Mode de détection | Contrôle de réception |\n| Cause | Erreur de chargement chez Kompra |\n| Action corrective | Livraison complémentaire le 06/03 |\n| Responsable | Céline Moreau |\n| Statut | Clôturée |\n| Coût de non-qualité | 0 € |",
+  "model": "qwen3.8-27b",
+  "context": "La fiche de non-conformité NC-2026-011 concerne le site de Seneffe et le produit Aéris Pro 16. Elle détaille la gestion d'une palette de compresseurs manquante lors d'une livraison Kompra.",
+  "seconds": 2.7
+}

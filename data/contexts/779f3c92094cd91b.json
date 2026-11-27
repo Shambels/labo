@@ -1,0 +1,7 @@
+{
+  "document": "04_Qualite/Reclamations/Registre reclamations clients 2025-2026.xlsx",
+  "body": "onglet « Registre » · lignes 5 à 8\n| Date | Client | Produit | Motif | Statut |\n|---|---|---|---|---|\n| 24/11/2025 | Clim'Expert Hainaut | Aéris 12 | Fuite de fluide | Rappel NC-2025-047 |\n| 27/11/2025 | Distrinergie | Aéris 12 | Fuite de fluide (3 unités) | Rappel NC-2025-047 |\n| 14/01/2026 | Klimaat Partners NV | Ventis D450 Pro | Filtre manquant | Clôturée |\n| 09/06/2026 | Thermo Services Lille SARL | Aéris Pro 16 | Bon de livraison sans numéro de lot | Clôturée |",
+  "model": "qwen3.8-27b",
+  "context": "Cette section du registre des réclamations détaille les incidents survenus entre novembre 2025 et juin 2026. Elle couvre notamment les fuites de fluide sur les modèles Aéris 12, un filtre manquant sur un Ventis D450 Pro et un problème de bon de livraison pour un Aéris Pro 16.",
+  "seconds": 3.2
+}

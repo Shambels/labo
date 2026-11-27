@@ -1,0 +1,13 @@
+{
+  "document": "03_Production/Procedures/Procedure consignation des energies LOTO.pdf",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "LOTO",
+      "type": "autre",
+      "alias": [],
+      "description": "procédure de consignation des énergies"
+    }
+  ],
+  "seconds": 1.2
+}

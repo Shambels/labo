@@ -1,0 +1,7 @@
+{
+  "document": "06_Achats/Appel_offres_ERP/Cahier des charges ERP Atlas.docx",
+  "body": "Projet Atlas : cahier des charges pour le remplacement de l'ERP\n3. Exigences\n- Interface disponible en français, en néerlandais et en anglais.\n- Hébergement en mode SaaS dans l'Union européenne.\n- Traçabilité des numéros de série des pompes à chaleur jusqu'au client final (exigence issue des rappels).\n- Authentification unique et authentification multifacteur.\n- Mise en production souhaitée au printemps 2026.",
+  "model": "qwen3.8-27b",
+  "context": "La rubrique « Exigences » du cahier des charges détaille les contraintes techniques et fonctionnelles du futur ERP, notamment la traçabilité des pompes à chaleur et le mode d'hébergement.",
+  "seconds": 2.0
+}

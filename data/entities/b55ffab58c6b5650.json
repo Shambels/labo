@@ -1,0 +1,25 @@
+{
+  "document": "03_Production/Plans/Plan entrepot Herstal - rayonnages.png",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Entrepôt de Herstal",
+      "type": "site",
+      "alias": [],
+      "description": "entrepôt logistique de 4 200 m²"
+    },
+    {
+      "nom": "Rackwell Systems",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "fournisseur des rayonnages de l'entrepôt"
+    },
+    {
+      "nom": "Rayonnages Rackwell Systems",
+      "type": "équipement",
+      "alias": [],
+      "description": "rayonnages de 8 allées et 5 niveaux"
+    }
+  ],
+  "seconds": 3.8
+}

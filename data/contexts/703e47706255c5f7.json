@@ -1,0 +1,7 @@
+{
+  "document": "05_Commercial/Reunions_commerciales/CR reunion commerciale 2026-01-14.docx",
+  "body": "Réunion commerciale mensuelle du 14 janvier 2026\n1. Ventes de décembre 2025\nChiffre d'affaires du mois : 16 800 k€. Prises de commandes : 18 020 k€.\n| **Région** | **Chiffre d'affaires (k€)** |\n| - | - |\n| Wallonie | 5 810 |\n| Bruxelles | 1 496 |\n| Flandre | 5 181 |\n| France | 3 487 |\n| Autres pays | 826 |",
+  "model": "qwen3.8-27b",
+  "context": "Cette section présente les résultats des ventes de décembre 2025, avec un détail du chiffre d'affaires par région.",
+  "seconds": 1.5
+}

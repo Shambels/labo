@@ -1,0 +1,528 @@
+{
+  "schema_name": "DoclingDocument",
+  "version": "1.11.0",
+  "name": "Contrat integration ERP Integra Conseil",
+  "origin": {
+    "mimetype": "application/pdf",
+    "binary_hash": 14362942102097227400,
+    "filename": "Contrat integration ERP Integra Conseil.pdf"
+  },
+  "furniture": {
+    "self_ref": "#/furniture",
+    "children": [],
+    "content_layer": "furniture",
+    "name": "_root_",
+    "label": "unspecified"
+  },
+  "body": {
+    "self_ref": "#/body",
+    "children": [
+      {
+        "$ref": "#/texts/0"
+      },
+      {
+        "$ref": "#/texts/1"
+      },
+      {
+        "$ref": "#/texts/2"
+      },
+      {
+        "$ref": "#/texts/3"
+      },
+      {
+        "$ref": "#/texts/4"
+      },
+      {
+        "$ref": "#/texts/5"
+      },
+      {
+        "$ref": "#/texts/6"
+      },
+      {
+        "$ref": "#/texts/7"
+      },
+      {
+        "$ref": "#/texts/8"
+      },
+      {
+        "$ref": "#/texts/9"
+      },
+      {
+        "$ref": "#/texts/10"
+      },
+      {
+        "$ref": "#/texts/11"
+      },
+      {
+        "$ref": "#/texts/12"
+      },
+      {
+        "$ref": "#/texts/13"
+      },
+      {
+        "$ref": "#/texts/14"
+      },
+      {
+        "$ref": "#/texts/15"
+      }
+    ],
+    "content_layer": "body",
+    "name": "_root_",
+    "label": "unspecified"
+  },
+  "groups": [],
+  "texts": [
+    {
+      "self_ref": "#/texts/0",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "furniture",
+      "label": "page_header",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 62.3622,
+            "t": 813.0068128,
+            "r": 216.1395416,
+            "b": 806.1630624000001,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            50
+          ]
+        }
+      ],
+      "orig": "Calorvia SA \u00b7 Contrat d'int\u00e9gration \u00b7 projet Atlas",
+      "text": "Calorvia SA \u00b7 Contrat d'int\u00e9gration \u00b7 projet Atlas"
+    },
+    {
+      "self_ref": "#/texts/1",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 773.5719,
+            "r": 347.67470879999996,
+            "b": 759.7385666666667,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            43
+          ]
+        }
+      ],
+      "orig": "Contrat d'int\u00e9gration de la solution Praxio",
+      "text": "Contrat d'int\u00e9gration de la solution Praxio",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/2",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 746.80236875,
+            "r": 147.88490625,
+            "b": 735.9950770833334,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            17
+          ]
+        }
+      ],
+      "orig": "Article 1 : objet",
+      "text": "Article 1 : objet",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/3",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 727.4337168000001,
+            "r": 493.0431052499998,
+            "b": 704.4512944,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            176
+          ]
+        }
+      ],
+      "orig": "Int\u00e9gra Conseil SRL r\u00e9alise le param\u00e9trage, la reprise des donn\u00e9es, les interfaces et la formation des utilisateurs cl\u00e9s pour la mise en \u0153uvre de l'ERP Praxio chez Calorvia SA.",
+      "text": "Int\u00e9gra Conseil SRL r\u00e9alise le param\u00e9trage, la reprise des donn\u00e9es, les interfaces et la formation des utilisateurs cl\u00e9s pour la mise en \u0153uvre de l'ERP Praxio chez Calorvia SA."
+    },
+    {
+      "self_ref": "#/texts/4",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 690.80236875,
+            "r": 140.6034125,
+            "b": 679.9950770833334,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            16
+          ]
+        }
+      ],
+      "orig": "Article 2 : prix",
+      "text": "Article 2 : prix",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/5",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 671.4337168000001,
+            "r": 522.1949587499997,
+            "b": 648.4512944,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            138
+          ]
+        }
+      ],
+      "orig": "Le prix est forfaitaire : 410 000 \u20ac HT, conform\u00e9ment \u00e0 la condition pos\u00e9e par le conseil d'administration de Calorvia du 18 novembre 2025.",
+      "text": "Le prix est forfaitaire : 410 000 \u20ac HT, conform\u00e9ment \u00e0 la condition pos\u00e9e par le conseil d'administration de Calorvia du 18 novembre 2025."
+    },
+    {
+      "self_ref": "#/texts/6",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 634.80236875,
+            "r": 177.07802125,
+            "b": 623.9950770833334,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            22
+          ]
+        }
+      ],
+      "orig": "Article 3 : \u00e9ch\u00e9ancier",
+      "text": "Article 3 : \u00e9ch\u00e9ancier",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/7",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 615.4337168000001,
+            "r": 490.27967324999975,
+            "b": 592.4512944,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            118
+          ]
+        }
+      ],
+      "orig": "20 % \u00e0 la signature, 30 % \u00e0 la validation de la conception, 30 % \u00e0 la fin de la recette, 20 % \u00e0 la fin de l'hypercare.",
+      "text": "20 % \u00e0 la signature, 30 % \u00e0 la validation de la conception, 30 % \u00e0 la fin de la recette, 20 % \u00e0 la fin de l'hypercare."
+    },
+    {
+      "self_ref": "#/texts/8",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 578.80236875,
+            "r": 168.27064875,
+            "b": 567.9950770833334,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            21
+          ]
+        }
+      ],
+      "orig": "Article 4 : p\u00e9nalit\u00e9s",
+      "text": "Article 4 : p\u00e9nalit\u00e9s",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/9",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 559.4337168000001,
+            "r": 508.12146434999977,
+            "b": 536.4512944,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            130
+          ]
+        }
+      ],
+      "orig": "En cas de retard imputable \u00e0 l'int\u00e9grateur, une p\u00e9nalit\u00e9 de 0,5 % du prix par semaine de retard est due, plafonn\u00e9e \u00e0 10 % du prix.",
+      "text": "En cas de retard imputable \u00e0 l'int\u00e9grateur, une p\u00e9nalit\u00e9 de 0,5 % du prix par semaine de retard est due, plafonn\u00e9e \u00e0 10 % du prix."
+    },
+    {
+      "self_ref": "#/texts/10",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 522.80236875,
+            "r": 272.8727037499999,
+            "b": 511.99507708333334,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            39
+          ]
+        }
+      ],
+      "orig": "Article 5 : prestations compl\u00e9mentaires",
+      "text": "Article 5 : prestations compl\u00e9mentaires",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/11",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 503.4337168,
+            "r": 514.4173682999999,
+            "b": 494.45129440000005,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            109
+          ]
+        }
+      ],
+      "orig": "Toute prestation hors p\u00e9rim\u00e8tre fait l'objet d'un avenant chiffr\u00e9, factur\u00e9 au tarif journalier de l'annexe 2.",
+      "text": "Toute prestation hors p\u00e9rim\u00e8tre fait l'objet d'un avenant chiffr\u00e9, factur\u00e9 au tarif journalier de l'annexe 2."
+    },
+    {
+      "self_ref": "#/texts/12",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 480.80236875,
+            "r": 188.49159500000002,
+            "b": 469.99507708333334,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            23
+          ]
+        }
+      ],
+      "orig": "Article 6 : maintenance",
+      "text": "Article 6 : maintenance",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/13",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 68.3622,
+            "t": 461.4337168,
+            "r": 447.01331444999994,
+            "b": 452.45129440000005,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            89
+          ]
+        }
+      ],
+      "orig": "Apr\u00e8s l'hypercare, Int\u00e9gra Conseil assure le support de niveau 3 pour 38 000 \u20ac HT par an.",
+      "text": "Apr\u00e8s l'hypercare, Int\u00e9gra Conseil assure le support de niveau 3 pour 38 000 \u20ac HT par an."
+    },
+    {
+      "self_ref": "#/texts/14",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 76.86614,
+            "t": 427.9712444,
+            "r": 363.8121577,
+            "b": 420.2720252,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            41
+          ]
+        }
+      ],
+      "orig": "Pour Int\u00e9gra Conseil SRL Pour Calorvia SA",
+      "text": "Pour Int\u00e9gra Conseil SRL Pour Calorvia SA"
+    },
+    {
+      "self_ref": "#/texts/15",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "furniture",
+      "label": "page_footer",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 204.7511,
+            "t": 33.47927279999999,
+            "r": 390.52453760000003,
+            "b": 26.635522400000013,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            61
+          ]
+        }
+      ],
+      "orig": "Calorvia SA (entreprise fictive) \u00b7 Diffusion interne \u00b7 page 1",
+      "text": "Calorvia SA (entreprise fictive) \u00b7 Diffusion interne \u00b7 page 1"
+    }
+  ],
+  "pictures": [],
+  "tables": [],
+  "key_value_items": [],
+  "form_items": [],
+  "pages": {
+    "1": {
+      "size": {
+        "width": 595.2756,
+        "height": 841.8898
+      },
+      "page_no": 1
+    }
+  }
+}

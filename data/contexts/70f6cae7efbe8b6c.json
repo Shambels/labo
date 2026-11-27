@@ -1,0 +1,7 @@
+{
+  "document": "01_Finance/Reporting_mensuel/Reporting 2025-11.xlsx",
+  "body": "onglet « Ventes par région » · Chiffre d'affaires par région (k€) · Région : Wallonie ; CA du mois : 5876 ; Part : 37,2 %",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait se trouve dans l'onglet « Ventes par région » du reporting mensuel. Il détaille le chiffre d'affaires généré en Wallonie pour le mois de novembre 2025.",
+  "seconds": 2.0
+}

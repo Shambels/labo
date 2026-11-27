@@ -1,0 +1,7 @@
+{
+  "document": "02_RH/Politiques/Reglement de travail - extrait horaires.pdf",
+  "body": "Règlement de travail : annexe 2, horaires de travail\nLa durée hebdomadaire de travail est de 38 heures pour tous les sites.\n| Site et équipe | Horaire | Pause |\n| - | - | - |\n| Namur, personnel administratif | Plages fixes 9 h 00 - 12 h 00 et 13 h 30 - 16 h 00, horaire flexible de 7 h 30 à 18 h 30 | 30 minutes |\n| Seneffe, équipe du matin | 6 h 00 - 14 h 00 | 30 minutes |\n| Seneffe, équipe de l'après-midi | 14 h 00 - 22 h 00 | 30 minutes |\n| Gand, équipe du matin | 6 h 00 - 14 h 00 | 30 minutes |\n| Gand, équipe de nuit | 22 h 00 - 6 h 00 (du lundi au jeudi) | 45 minutes |\n| Lille, bureau commercial | 8 h 30 - 17 h 00 | 1 heure |",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait se trouve dans l'annexe 2 du règlement de travail, qui détaille les horaires de travail. Il présente les plages horaires et les pauses applicables aux différents sites et équipes de l'entreprise.",
+  "seconds": 2.6
+}

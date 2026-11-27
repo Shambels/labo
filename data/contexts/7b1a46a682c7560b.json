@@ -1,0 +1,7 @@
+{
+  "document": "01_Finance/Reporting_mensuel/Reporting 2026-04.xlsx",
+  "body": "onglet « Synthèse » · Reporting mensuel · avril 2026 · Montants en k€ · contrôle de gestion\n| Indicateur | Mois | Cumul annuel | Budget cumul | Écart au budget |\n|---|---|---|---|---|\n| Chiffre d'affaires | 12100 | 53500 | 53473 | 0,1 % |\n| Marge brute | 3827 | 16560 |  |  |\n| EBITDA | 1174 | 4938 |  |  |\n| Taux d'EBITDA | 9,7 % | 9,2 % |  |  |\n| Effectif fin de mois (ETP) | 621 |  |  |  |",
+  "model": "qwen3.8-27b",
+  "context": "La rubrique « Synthèse » du reporting mensuel présente les indicateurs financiers clés de l'entreprise. Elle détaille le chiffre d'affaires, la marge brute, l'EBITDA et l'effectif pour le mois et le cumul annuel.",
+  "seconds": 4.0
+}

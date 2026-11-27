@@ -1,0 +1,7 @@
+{
+  "document": "09_Communication/Communiques_presse/2026-03-19 PR 2025 results.docx",
+  "body": "Calorvia reports 2025 revenue of EUR 148.2 million\nNamur, March 19, 2026\nCalorvia SA today reported revenue of EUR 148.2 million for 2025, slightly above 2024. EBITDA reached EUR 12.1 million, or 8.1% of revenue, affected by a product recall and higher steel prices.\nIn 2026, the company is investing in a new assembly line in Seneffe, a new ERP system and a warehouse in Herstal.\nPress contact: Lucie Bastin, presse@calorvia.example\n*About Calorvia: Belgian manufacturer of heat pumps and ventilation units, 620 employees, sites in Namur, Seneffe, Ghent, Herstal and Lille.*",
+  "model": "qwen3.8-27b",
+  "context": "Il s'agit de l'intégralité du communiqué de presse annonçant les résultats financiers de l'exercice 2025. Le texte détaille le chiffre d'affaires, l'EBITDA ainsi que les investissements prévus pour 2026 dans les sites de Seneffe et Herstal.",
+  "seconds": 3.2
+}

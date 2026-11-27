@@ -1,0 +1,31 @@
+{
+  "document": "09_Communication/Newsletter/Calorvia Info 2026-01.html",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Elise Dufour",
+      "type": "personne",
+      "alias": [],
+      "description": "nouvelle collègue en charge des ventes France"
+    },
+    {
+      "nom": "Amandine Lejoly",
+      "type": "personne",
+      "alias": [],
+      "description": "nouvelle collègue en charge de la comptabilité"
+    },
+    {
+      "nom": "Namur",
+      "type": "site",
+      "alias": [],
+      "description": "site testant le télétravail"
+    },
+    {
+      "nom": "Lille",
+      "type": "site",
+      "alias": [],
+      "description": "site testant le télétravail"
+    }
+  ],
+  "seconds": 4.0
+}

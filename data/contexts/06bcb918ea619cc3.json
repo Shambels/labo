@@ -1,0 +1,7 @@
+{
+  "document": "03_Production/Gent/Veiligheid/Rapport audit circulation SafeWork Consult 2026-01.pdf",
+  "body": "Recommandations\n- 1 Limiter la vitesse à 6 km/h dans les allées de stockage.\n- 2 Autoriser 10 km/h sur les voies de circulation principales, séparées physiquement des piétons.\n- 3 Installer des miroirs aux angles des rayonnages.\n- 4 Former l'ensemble du personnel de l'entrepôt à la circulation mixte.",
+  "model": "qwen3.8-27b",
+  "context": "Cette section présente les mesures correctives proposées pour l'entrepôt de Gand. Elle détaille les actions à mener concernant la gestion des vitesses, l'aménagement des espaces et la formation du personnel.",
+  "seconds": 2.0
+}

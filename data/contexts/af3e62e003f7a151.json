@@ -1,0 +1,7 @@
+{
+  "document": "01_Finance/Budget_2026/Note de presentation budget 2026.pdf",
+  "body": "2. Chiffre d'affaires\nLa croissance repose sur la hausse tarifaire du 1er janvier 2026 (3,5 % sur la gamme standard, 5 % sur la gamme premium) et sur une hausse des volumes de pompes à chaleur de 2,5 %. Le volume de la gamme Aéris Pro est limité par la capacité de Seneffe tant que la ligne L4 n'est pas en service (mi-2026).",
+  "model": "qwen3.8-27b",
+  "context": "La rubrique « Chiffre d'affaires » détaille les moteurs de croissance du budget 2026, notamment les hausses tarifaires et l'évolution des volumes de pompes à chaleur. Elle précise également la contrainte de capacité du site de Seneffe sur la gamme Aéris Pro en attendant la mise en service de la ligne L4.",
+  "seconds": 3.1
+}

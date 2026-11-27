@@ -1,0 +1,7 @@
+{
+  "document": "01_Finance/Reporting_mensuel/Reporting 2026-03.xlsx",
+  "body": "onglet « Commentaires »\nCommentaires du contrôle de gestion\nReprise partielle de provision : Valtek prend en charge 65 % du coût du rappel (117 000 €).",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait se trouve dans l'onglet « Commentaires » du reporting mensuel. Il détaille la prise en charge partielle du coût d'un rappel par Valtek.",
+  "seconds": 1.8
+}

@@ -1,0 +1,10 @@
+{
+  "path": "04_Qualite/Indicateurs/Pareto causes non-conformites 2025.png",
+  "kind": "image",
+  "page": null,
+  "index": null,
+  "model": "qwen3.5-9b",
+  "prompt": "Tu transcris des documents d'entreprise pour un moteur de recherche.\n1. Recopie tout le texte visible, exactement comme il est écrit : nombres, codes, dates, unités et\n   annotations manuscrites compris. Rends les tableaux en Markdown.\n2. Puis, sous le titre « Description », décris en trois phrases au plus le type d'image (organigramme,\n   plan, graphique, photo, facture...) et ce qu'elle montre qui n'est pas écrit : les rattachements\n   d'un organigramme, la valeur la plus haute d'un graphique, la position des éléments d'un plan.\nN'invente rien : si un élément est illisible, écris [illisible].",
+  "seconds": 3.1,
+  "text": "Non-conformités 2025 par cause (nombre de fiches)\n\n| Cause       | Nombre de fiches |\n|-------------|------------------|\n| Fournisseur | 19               |\n| Brasage     | 11               |\n| Emballage   | 8                |\n| Étiquetage  | 5                |\n| Montage     | 4                |\n| Logiciel    | 2                |\n\nDirection qualité · 49 fiches en 2025\n\nDescription  \nIl s’agit d’un graphique à barres montrant le nombre de non-conformités en 2025, classées par cause. La cause « Fournisseur » présente la valeur la plus élevée avec 19 fiches, suivie de « Brasage » avec 11. Le graphique est décroissant de gauche à droite, indiquant une diminution progressive du nombre de non-conformités selon les causes listées."
+}

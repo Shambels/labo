@@ -1,0 +1,43 @@
+{
+  "document": "04_Qualite/Non_conformites/NC-2025-043.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "site de production concerné par la non-conformité"
+    },
+    {
+      "nom": "Aéris Pro 16",
+      "type": "produit",
+      "alias": [],
+      "description": "produit présentant un bruit anormal au démarrage"
+    },
+    {
+      "nom": "Kompra",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "fournisseur des compresseurs défectueux"
+    },
+    {
+      "nom": "KX-16S",
+      "type": "produit",
+      "alias": [],
+      "description": "modèle de compresseur mal fixé"
+    },
+    {
+      "nom": "Romain Dethier",
+      "type": "personne",
+      "alias": [],
+      "description": "responsable de la non-conformité"
+    },
+    {
+      "nom": "Banc d'essai",
+      "type": "équipement",
+      "alias": [],
+      "description": "mode de détection de la non-conformité"
+    }
+  ],
+  "seconds": 5.7
+}

@@ -1,0 +1,27 @@
+{
+  "document": "01_Finance/Comptabilite/Factures_fournisseurs/2026-03-12 Heliosol acompte FAC-HS-2026-012.jpg",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Héliosol SRL",
+      "type": "fournisseur",
+      "alias": [
+        "Heliosol"
+      ],
+      "description": "fournisseur d'installation photovoltaïque"
+    },
+    {
+      "nom": "usine de Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "site de Calorvia recevant l'installation photovoltaïque"
+    },
+    {
+      "nom": "installation photovoltaïque 520 kWc",
+      "type": "projet",
+      "alias": [],
+      "description": "installation photovoltaïque destinée à l'usine de Seneffe"
+    }
+  ],
+  "seconds": 5.4
+}

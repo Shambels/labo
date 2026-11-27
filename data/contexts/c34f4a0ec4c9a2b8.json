@@ -1,0 +1,7 @@
+{
+  "document": "04_Qualite/Non_conformites/NC-2025-038.docx",
+  "body": "Fiche de non-conformité NC-2025-038\n| Date d'ouverture | 11/09/2025 |\n| - | - |\n| Site | Seneffe |\n| Produit | Aéris 9 |\n| Description | Rayures sur les capots en tôle à la réception (lot TM-0911). |\n| Quantité concernée | 36 capots |\n| Mode de détection | Contrôle de réception |\n| Cause | Emballage insuffisant chez Tôlerie Mosane |\n| Action corrective | Intercalaires en carton exigés |\n| Responsable | Céline Moreau |\n| Statut | Clôturée |\n| Coût de non-qualité | 1 120 € |",
+  "model": "qwen3.8-27b",
+  "context": "Cette fiche de non-conformité concerne le site de Seneffe et le produit Aéris 9. Elle détaille les rayures constatées sur les capots en tôle lors du contrôle de réception.",
+  "seconds": 2.4
+}

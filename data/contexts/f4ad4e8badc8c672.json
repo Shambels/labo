@@ -1,0 +1,7 @@
+{
+  "document": "03_Production/Seneffe/Rapports_mensuels/Rapport production Seneffe 2026-02.xlsx",
+  "body": "onglet « Production » · Rapport de production · usine de Seneffe · février 2026 · Ligne : L3 ; Produits : Aéris Pro 16 / 22 ; Unités produites : 552 ; Arrêts (h) : 15.5 ; Rebut (%) : 1.4 ; TRS (%) : 81.4",
+  "model": "qwen3.8-27b",
+  "context": "Cette ligne de données se trouve dans le tableau de production du rapport mensuel de l'usine de Seneffe. Elle détaille les indicateurs de performance de la ligne L3 pour les modèles Aéris Pro 16 et 22.",
+  "seconds": 2.3
+}

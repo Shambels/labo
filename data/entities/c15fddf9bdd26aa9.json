@@ -1,0 +1,31 @@
+{
+  "document": "07_IT/Securite/Procedure MFA v2.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Yannick Dupuis",
+      "type": "personne",
+      "alias": [],
+      "description": "propriétaire de la procédure IT-12"
+    },
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "atelier avec terminaux partagés"
+    },
+    {
+      "nom": "Gand",
+      "type": "site",
+      "alias": [],
+      "description": "atelier avec terminaux partagés"
+    },
+    {
+      "nom": "CODIR",
+      "type": "instance",
+      "alias": [],
+      "description": "comité ayant décidé le report d'échéance"
+    }
+  ],
+  "seconds": 4.8
+}

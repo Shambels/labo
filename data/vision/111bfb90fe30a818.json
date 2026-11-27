@@ -1,0 +1,10 @@
+{
+  "path": "10_RSE/Consommation energie par site 2025.png",
+  "kind": "image",
+  "page": null,
+  "index": null,
+  "model": "qwen3.5-9b",
+  "prompt": "Tu transcris des documents d'entreprise pour un moteur de recherche.\n1. Recopie tout le texte visible, exactement comme il est écrit : nombres, codes, dates, unités et\n   annotations manuscrites compris. Rends les tableaux en Markdown.\n2. Dans un schéma, un plan ou un organigramme, recopie aussi chaque texte posé sur un lien, une flèche ou un\n   trait (débit, distance, type de connexion, rattachement), sur une ligne qui commence par le nom des deux\n   éléments reliés, tels qu'ils sont écrits sur l'image, séparés par un tiret, puis deux-points et le texte.\n   Un tel texte n'a de sens qu'avec les deux éléments qu'il relie.\n3. Puis, sous le titre « Description », décris en trois phrases au plus le type d'image (organigramme,\n   plan, graphique, photo, facture...) et ce qu'elle montre qui n'est pas écrit : les rattachements\n   d'un organigramme, la valeur la plus haute d'un graphique, la position des éléments d'un plan.\nN'invente rien : si un élément est illisible, écris [illisible].",
+  "seconds": 3.4,
+  "text": "Consommation d'énergie par site en 2025 (MWh)\n\n| Site     | Consommation (MWh) |\n|----------|---------------------|\n| Namur    | 410                 |\n| Seneffe  | 6 820               |\n| Gand     | 3 950               |\n| Lille    | 60                  |\n\nChargée de mission RSE · factures d'énergie 2025\n\nDescription  \nGraphique en barres montrant la consommation d’énergie en mégawattheures (MWh) par site en 2025. La valeur la plus élevée est celle de Seneffe (6 820 MWh), suivie de Gand (3 950 MWh), Namur (410 MWh) et Lille (60 MWh). Les sites sont alignés horizontalement sous l’axe des abscisses, avec des barres verticales bleues dont la hauteur correspond à la consommation."
+}

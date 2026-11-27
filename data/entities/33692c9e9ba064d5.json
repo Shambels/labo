@@ -1,0 +1,31 @@
+{
+  "document": "04_Qualite/Reclamations/Courrier Énergies 2025-11-18.pdf",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Énergies du Condroz SRL",
+      "type": "client",
+      "alias": [],
+      "description": "entreprise cliente de Calorvia SA"
+    },
+    {
+      "nom": "Sandrine Collard",
+      "type": "personne",
+      "alias": [],
+      "description": "administratrice d'Énergies du Condroz SRL"
+    },
+    {
+      "nom": "Aérïs 6",
+      "type": "produit",
+      "alias": [],
+      "description": "modèle de pompe à chaleur"
+    },
+    {
+      "nom": "CMD-25-4471",
+      "type": "projet",
+      "alias": [],
+      "description": "commande de douze Aérïs 6"
+    }
+  ],
+  "seconds": 4.3
+}

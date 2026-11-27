@@ -1,0 +1,37 @@
+{
+  "document": "04_Qualite/Reclamations/Courrier Habitat 2025-09-12.pdf",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Habitat Confort SA",
+      "type": "client",
+      "alias": [],
+      "description": "entreprise installatrice de pompes à chaleur"
+    },
+    {
+      "nom": "Aérïs 9",
+      "type": "produit",
+      "alias": [],
+      "description": "unité extérieure d'aération"
+    },
+    {
+      "nom": "M. et Mme Dubois",
+      "type": "client",
+      "alias": [],
+      "description": "propriétaires du logement à Wavre"
+    },
+    {
+      "nom": "Wavre",
+      "type": "site",
+      "alias": [],
+      "description": "ville de localisation de l'installation"
+    },
+    {
+      "nom": "Christophe Lemaire",
+      "type": "personne",
+      "alias": [],
+      "description": "gérant d'Habitat Confort SA"
+    }
+  ],
+  "seconds": 4.8
+}

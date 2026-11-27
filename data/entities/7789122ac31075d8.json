@@ -1,0 +1,31 @@
+{
+  "document": "02_RH/Notes_de_service/2026-02-18 NS-2026-03 Direction financière.docx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Hélène Marchal",
+      "type": "personne",
+      "alias": [],
+      "description": "émettrice de la note de service"
+    },
+    {
+      "nom": "Laurent Dewit",
+      "type": "personne",
+      "alias": [],
+      "description": "directeur financier quittant l'entreprise"
+    },
+    {
+      "nom": "Sarah Vandamme",
+      "type": "personne",
+      "alias": [],
+      "description": "directrice financière ad interim"
+    },
+    {
+      "nom": "Conseil d'administration",
+      "type": "instance",
+      "alias": [],
+      "description": "organe nommant la directrice financière"
+    }
+  ],
+  "seconds": 3.3
+}

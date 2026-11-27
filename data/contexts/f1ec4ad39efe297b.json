@@ -1,0 +1,7 @@
+{
+  "document": "01_Finance/Budget_2026/Budget 2026 v1.xlsx",
+  "body": "onglet « Effectifs » · Effectif budgété à fin 2026 (ETP) · Département : Production Seneffe ; ETP : 292",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait se trouve dans l'onglet « Effectifs » du budget. Il détaille le nombre d'ETP budgétés pour le département de production de Seneffe à fin 2026.",
+  "seconds": 2.0
+}

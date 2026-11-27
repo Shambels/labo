@@ -1,0 +1,25 @@
+{
+  "document": "01_Finance/Procedures/Procedure modification coordonnees bancaires fournisseurs.pdf",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Direction financière",
+      "type": "instance",
+      "alias": [],
+      "description": "propriétaire de la procédure FIN-07"
+    },
+    {
+      "nom": "Comité de direction",
+      "type": "instance",
+      "alias": [],
+      "description": "a pris la décision d'origine le 14/01/2026"
+    },
+    {
+      "nom": "Sécurité informatique",
+      "type": "instance",
+      "alias": [],
+      "description": "reçoit les signalements de demandes suspectes"
+    }
+  ],
+  "seconds": 3.2
+}

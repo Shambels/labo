@@ -1,0 +1,7 @@
+{
+  "document": "00_Direction/CODIR/2026/2026-01-14 CODIR extraordinaire PV.docx",
+  "body": "Procès-verbal du Comité de direction (séance extraordinaire)\n1. Incident de sécurité informatique du 13 janvier\n*Présenté par Kevin Mertens.*\nLe mardi 13 janvier, un courriel d'hameçonnage a permis de compromettre la boîte aux lettres d'une collaboratrice de la comptabilité. Depuis cette boîte, une demande frauduleuse de modification des coordonnées bancaires du fournisseur Tôlerie Mosane SRL a été envoyée, pour la facture TM-2026-0042 de 48 602,80 €.\nLa comptabilité a détecté une incohérence et bloqué le paiement : aucun montant n'a été versé. Le mot de passe a été réinitialisé, les règles de transfert malveillantes supprimées et les journaux de connexion analysés par Yannick Dupuis.",
+  "model": "qwen3.8-27b",
+  "context": "Ce passage constitue le premier point de l'ordre du jour, consacré à l'incident de sécurité informatique survenu le 13 janvier. Il détaille la compromission d'une boîte mail de la comptabilité et la tentative de fraude visant le fournisseur Tôlerie Mosane SRL.",
+  "seconds": 2.6
+}

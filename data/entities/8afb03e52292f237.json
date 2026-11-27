@@ -1,0 +1,25 @@
+{
+  "document": "07_IT/Securite/Rapport incident securite 2026-01-13.pdf",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Yannick Dupuis",
+      "type": "personne",
+      "alias": [],
+      "description": "rédacteur du rapport d'incident sécurité"
+    },
+    {
+      "nom": "Tôlerie Mosane",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "fournisseur de Calorvia SA"
+    },
+    {
+      "nom": "TM-2026-0042",
+      "type": "autre",
+      "alias": [],
+      "description": "facture de Tôlerie Mosane"
+    }
+  ],
+  "seconds": 4.0
+}

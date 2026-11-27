@@ -1,0 +1,7 @@
+{
+  "document": "03_Production/Seneffe/Rapports_mensuels/Rapport production Seneffe 2025-10.xlsx",
+  "body": "onglet « Production » · Rapport de production · usine de Seneffe · octobre 2025 · Ligne : L2 ; Produits : Aéris 12 ; Unités produites : 720 ; Arrêts (h) : 13.9 ; Rebut (%) : 1.3 ; TRS (%) : 74.9",
+  "model": "qwen3.8-27b",
+  "context": "Cette ligne de données se trouve dans le tableau de synthèse de l'onglet « Production » du rapport mensuel de l'usine de Seneffe. Elle détaille les indicateurs de performance de la ligne L2, dédiée à la fabrication des modèles Aéris 12.",
+  "seconds": 2.5
+}

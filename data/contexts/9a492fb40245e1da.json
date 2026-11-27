@@ -1,0 +1,7 @@
+{
+  "document": "03_Production/Maintenance/Plan maintenance preventive 2026.xlsx",
+  "body": "onglet « Plan 2026 » · Plan de maintenance préventive 2026 · Seneffe · lignes 6 à 7\n| Équipement | Repère | Fréquence | Prochaine intervention | Prestataire |\n|---|---|---|---|---|\n| Pont roulant | SEN-MAN-03 | Annuelle (inspection légale) | 03/2027 | Organisme agréé |\n| Ligne L4 | SEN-L4 | À définir après la mise en service |  | Linetech |",
+  "model": "qwen3.8-27b",
+  "context": "Cette section du plan de maintenance préventive pour le site de Seneffe détaille les interventions prévues pour le pont roulant et la ligne L4.",
+  "seconds": 1.6
+}

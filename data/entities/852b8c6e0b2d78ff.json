@@ -1,0 +1,37 @@
+{
+  "document": "06_Achats/Appel_offres_ERP/Presentation Praxio.pptx",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Praxio",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "Éditeur français de logiciel ERP"
+    },
+    {
+      "nom": "Francfort",
+      "type": "site",
+      "alias": [],
+      "description": "Site d'hébergement des données"
+    },
+    {
+      "nom": "Paris",
+      "type": "site",
+      "alias": [],
+      "description": "Site d'hébergement des données"
+    },
+    {
+      "nom": "WMS",
+      "type": "produit",
+      "alias": [],
+      "description": "Module natif de gestion d'entrepôt"
+    },
+    {
+      "nom": "LogiPath",
+      "type": "produit",
+      "alias": [],
+      "description": "Connecteur certifié pour le module WMS"
+    }
+  ],
+  "seconds": 4.2
+}

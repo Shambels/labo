@@ -1,0 +1,7 @@
+{
+  "document": "00_Direction/Conseil_administration/PV_signes/PV CA 2026-06-16.pdf",
+  "body": "3. Démarrage de l'ERP\nL'ERP Praxio est en production depuis le 1er juin 2026 (Namur, Seneffe, Lille) et depuis le 15 juin 2026 à Gand. Le taux de service est tombé à 84,2 % la première semaine avant de remonter progressivement.",
+  "model": "qwen3.8-27b",
+  "context": "Point de l'ordre du jour consacré au déploiement de l'ERP Praxio. Il détaille les dates de mise en production dans les sites de Namur, Seneffe, Lille et Gand ainsi que l'évolution du taux de service.",
+  "seconds": 2.4
+}

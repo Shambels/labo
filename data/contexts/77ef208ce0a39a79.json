@@ -1,0 +1,7 @@
+{
+  "document": "02_RH/Enquetes/Enquete teletravail - reponses brutes.xlsx",
+  "body": "onglet « Réponses » · lignes 1 à 6\n| N° | Service | Site | Satisfaction (1-10) | Souhaite continuer | Commentaire |\n|---|---|---|---|---|---|\n| 1 | Qualité | Namur | 7 | oui |  |\n| 2 | Achats | Namur | 8 | oui |  |\n| 3 | RH | Namur | 10 | oui |  |\n| 4 | Commercial | Namur | 6 | oui | Difficile de joindre certains collègues le vendredi |\n| 5 | Direction | Namur | 8 | oui | Souhaite un jour commun de présence |\n| 6 | RH | Namur | 7 | oui | Écran supplémentaire nécessaire à domicile |",
+  "model": "qwen3.8-27b",
+  "context": "Il s'agit des six premières réponses individuelles de l'enquête sur le télétravail, collectées auprès des collaborateurs des sites de Namur et Lille.",
+  "seconds": 1.7
+}

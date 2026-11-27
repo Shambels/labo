@@ -1,0 +1,7 @@
+{
+  "document": "07_IT/Projet_Atlas_ERP/COPIL/COPIL_Atlas_03_20260122.docx",
+  "body": "Projet Atlas : compte rendu du comité de pilotage n° 3\n3. Points marquants\n- La conception est validée pour la finance et les achats.\n- Après extraction complète, 15 % des fiches articles sont incomplètes.\n- Le prestataire du WMS de Gand n'a pas encore livré l'environnement de test de l'interface.",
+  "model": "qwen3.8-27b",
+  "context": "La rubrique « Points marquants » du compte rendu du comité de pilotage n° 3 du projet Atlas. Elle détaille l'avancement de la conception, l'état des fiches articles et le retard du prestataire WMS de Gand.",
+  "seconds": 2.4
+}

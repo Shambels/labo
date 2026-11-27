@@ -1,0 +1,85 @@
+{
+  "document": "04_Qualite/Rappel_Aeris12/Rapport 8D Aeris 12 vanne 4 voies.pdf",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Anne Vercammen",
+      "type": "personne",
+      "alias": [],
+      "description": "pilote de l'équipe du rapport 8D"
+    },
+    {
+      "nom": "Romain Dethier",
+      "type": "personne",
+      "alias": [],
+      "description": "membre de l'équipe du rapport 8D"
+    },
+    {
+      "nom": "Céline Moreau",
+      "type": "personne",
+      "alias": [],
+      "description": "membre de l'équipe du rapport 8D"
+    },
+    {
+      "nom": "Fabrice Collin",
+      "type": "personne",
+      "alias": [],
+      "description": "membre de l'équipe du rapport 8D"
+    },
+    {
+      "nom": "Valtek",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "fournisseur de la vanne quatre voies"
+    },
+    {
+      "nom": "Aéris 12",
+      "type": "produit",
+      "alias": [],
+      "description": "unité de pompe à chaleur concernée par le rappel"
+    },
+    {
+      "nom": "vanne quatre voies",
+      "type": "produit",
+      "alias": [],
+      "description": "composant présentant une fuite de R32"
+    },
+    {
+      "nom": "lot V-2544",
+      "type": "produit",
+      "alias": [],
+      "description": "lot de vannes bloqué et rappelé"
+    },
+    {
+      "nom": "Seneffe",
+      "type": "site",
+      "alias": [],
+      "description": "site de contrôle et de production"
+    },
+    {
+      "nom": "Gand",
+      "type": "site",
+      "alias": [],
+      "description": "site de contrôle des stocks"
+    },
+    {
+      "nom": "R32",
+      "type": "produit",
+      "alias": [],
+      "description": "fluide frigorigène fuyant"
+    },
+    {
+      "nom": "four de brasage",
+      "type": "équipement",
+      "alias": [],
+      "description": "équipement du fournisseur ayant fonctionné à basse température"
+    },
+    {
+      "nom": "MO-SEN-07",
+      "type": "autre",
+      "alias": [],
+      "description": "mode opératoire révisé pour la prévention"
+    }
+  ],
+  "seconds": 12.2
+}

@@ -1,0 +1,7 @@
+{
+  "document": "04_Qualite/Indicateurs/Pareto causes non-conformites 2025.png",
+  "body": "Image\nNon-conformités 2025 par cause (nombre de fiches)\n\n| Cause       | Nombre de fiches |\n|-------------|------------------|\n| Fournisseur | 19               |\n| Brasage     | 11               |\n| Emballage   | 8                |\n| Étiquetage  | 5                |\n| Montage     | 4                |\n| Logiciel    | 2                |\n\nDescription  \nGraphique en barres montrant le nombre de non-conformités en 2025, classées par cause. La cause « Fournisseur » présente la valeur la plus élevée (19), suivie de « Brasage » (11). L’axe vertical indique les nombres de fiches, allant de 0,0 à 17,5, avec des barres bleues pour chaque catégorie. En bas à gauche, une mention indique « Direction qualité - 49 fiches en 2025 ».",
+  "model": "qwen3.8-27b",
+  "context": "Cette section du tableau de bord présente l'analyse de Pareto des causes de non-conformités pour l'année 2025. Elle détaille la répartition des fiches qualité par origine, mettant en évidence les principaux facteurs de défauts.",
+  "seconds": 2.7
+}

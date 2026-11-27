@@ -1,0 +1,7 @@
+{
+  "document": "07_IT/Projet_Atlas_ERP/Documentation/Strategie de reprise des donnees.docx",
+  "body": "Projet Atlas : stratégie de reprise des données\n1. Données reprises\n| **Objet** | **Volume** | **Méthode** | **Responsable** |\n| - | - | - | - |\n| Fiches articles | 14 600 | Extraction, nettoyage, chargement par fichier | Marc Delhaye |\n| Nomenclatures | 1 240 | Chargement par fichier | Marc Delhaye |\n| Clients | 3 870 | Extraction automatique | Pierre-Yves Collard |\n| Fournisseurs | 1 150 | Extraction et vérification des IBAN | Sarah Vandamme |\n| Stocks | Inventaire à la bascule | Saisie après inventaire | Els Van den Broeck |\n| Écritures comptables | Soldes au 31/05/2026 | Reprise des soldes uniquement | Sarah Vandamme |",
+  "model": "qwen3.8-27b",
+  "context": "Cette section détaille les objets de données à migrer, leurs volumes, les méthodes d'extraction et les responsables assignés. Elle se trouve dans la rubrique consacrée aux données reprises du projet Atlas.",
+  "seconds": 2.6
+}

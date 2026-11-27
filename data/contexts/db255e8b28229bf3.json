@@ -1,0 +1,7 @@
+{
+  "document": "07_IT/Projet_Atlas_ERP/Documentation/Plan de bascule Atlas.pdf",
+  "body": "Projet Atlas : plan de bascule (Namur, Seneffe, Lille)\nEn cas de no-go final, les utilisateurs reprennent GesPro 7 le lundi 1er juin et la bascule est reportée d'une semaine.",
+  "model": "qwen3.8-27b",
+  "context": "Cette section détaille la procédure à suivre en cas de no-go final lors de la bascule du projet Atlas. Elle précise que les utilisateurs reprendront GesPro 7 et que la migration sera reportée d'une semaine.",
+  "seconds": 2.0
+}

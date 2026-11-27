@@ -1,0 +1,7 @@
+{
+  "document": "01_Finance/Investissements/Suivi capex 2026.xlsx",
+  "body": "onglet « Suivi 2026 » · Suivi des investissements 2026 (k€) · situation au 30/06/2026 · lignes 6 à 8\n| Projet | Budget | Engagé | Réalisé | Statut |\n|---|---|---|---|---|\n| Installation photovoltaïque (Seneffe) | 410 | 410 | 123 | Travaux en juillet 2026 |\n| Rayonnages Herstal (hors budget) | 140 | 140 | 140 | Terminé |\n| Total | 3010 | 2790 | 1989 |  |",
+  "model": "qwen3.8-27b",
+  "context": "Cette section présente la fin du tableau de suivi des investissements, incluant les projets d'installation photovoltaïque à Seneffe et de rayonnages à Herstal. Elle conclut le suivi par le total général des budgets, engagements et réalisations.",
+  "seconds": 2.4
+}

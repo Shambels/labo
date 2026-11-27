@@ -1,0 +1,7 @@
+{
+  "document": "05_Commercial/Tarifs/Conditions generales de vente 2026.pdf",
+  "body": "2. Prix\nLes prix s'entendent hors TVA, départ usine. La livraison est gratuite en Belgique à partir de 5 000 € HT.",
+  "model": "qwen3.8-27b",
+  "context": "La rubrique « Prix » des conditions générales de vente précise que les tarifs sont hors TVA et départ usine. Elle indique également que la livraison est gratuite en Belgique pour les commandes dépassant un certain seuil.",
+  "seconds": 1.9
+}

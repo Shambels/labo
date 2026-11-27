@@ -1,0 +1,7 @@
+{
+  "document": "04_Qualite/Rappel_Aeris12/Liste numeros de serie concernes.xlsx",
+  "body": "onglet « Unités concernées » · lignes 21 à 24\n| Numéro de série | Date de production | Installateur | Région | Statut | Date d'intervention |\n|---|---|---|---|---|---|\n| AE12-25-4521 | 04/11/2025 | Clim'Expert Hainaut | Hainaut | Réparée | 29/01/2026 |\n| AE12-25-4522 | 04/11/2025 | Installatiebedrijf Wouters | Flandre | Réparée | 22/02/2026 |\n| AE12-25-4523 | 04/11/2025 | Habitat Confort SA | Brabant wallon | Réparée | 09/02/2026 |\n| AE12-25-4524 | 04/11/2025 | Thermo Services Lille SARL | Hauts-de-France | Réparée | 23/02/2026 |",
+  "model": "qwen3.8-27b",
+  "context": "Ces lignes figurent dans l'onglet « Unités concernées » du classeur de rappel. Elles listent les unités produites le 4 novembre 2025, installées par Clim'Expert Hainaut, Installatiebedrijf Wouters, Habitat Confort SA et Thermo Services Lille SARL.",
+  "seconds": 3.1
+}

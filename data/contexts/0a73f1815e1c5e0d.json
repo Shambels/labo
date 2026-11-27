@@ -1,0 +1,7 @@
+{
+  "document": "01_Finance/Budget_2026/Note de presentation budget 2026.pdf",
+  "body": "1. Synthèse\nLe budget 2026 prévoit un chiffre d'affaires de 156,0 M€ (+5,3 % par rapport à la prévision de clôture 2025), un EBITDA de 14,8 M€ (9,5 % du chiffre d'affaires) et des investissements de 2 825 k€.",
+  "model": "qwen3.8-27b",
+  "context": "La rubrique « Synthèse » de la note de présentation du budget 2026 résume les objectifs financiers annuels. Elle détaille les prévisions de chiffre d'affaires, d'EBITDA et d'investissements pour l'exercice 2026.",
+  "seconds": 2.6
+}

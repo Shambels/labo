@@ -1,0 +1,7 @@
+{
+  "document": "07_IT/Projet_Atlas_ERP/Documentation/Strategie de reprise des donnees.docx",
+  "body": "Projet Atlas : stratégie de reprise des données\n2. Données non reprises\nL'historique des commandes et des factures antérieures au 1er janvier 2024 n'est pas repris : GesPro 7 reste consultable en lecture seule jusqu'au 31 décembre 2026.",
+  "model": "qwen3.8-27b",
+  "context": "La rubrique « Données non reprises » de la stratégie de reprise des données précise que l'historique des commandes et factures antérieures au 1er janvier 2024 n'est pas migré. Elle indique que l'ancien système GesPro 7 restera accessible en lecture seule jusqu'à la fin de l'année 2026.",
+  "seconds": 3.0
+}

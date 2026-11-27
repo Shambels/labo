@@ -1,0 +1,7 @@
+{
+  "document": "04_Qualite/Rappel_Aeris12/Liste numeros de serie concernes.xlsx",
+  "body": "onglet « Unités concernées » : tableau de 214 lignes. Colonnes : Numéro de série, Date de production, Installateur, Région, Statut, Date d'intervention. Installateur : Habitat Confort SA (35), Klimaat Partners NV (30), Installatiebedrijf Wouters (28), Thermo Services Lille SARL (27), Clim'Expert Hainaut (25), Énergies du Condroz SRL (25), Distrinergie (23), Chauffage Lambert & Fils (21). Région : Flandre (58), Brabant wallon (35), Hauts-de-France (27), Hainaut (25), Namur (25), Liège (23), Luxembourg (21). Statut : Réparée (211), Introuvable (installateur en cessation d'activité) (3).",
+  "model": "qwen3.8-27b",
+  "context": "L'extrait se situe dans l'onglet « Unités concernées » du classeur de rappel. Il présente la synthèse des unités concernées, répertoriées par installateur, région et statut d'intervention.",
+  "seconds": 13.3
+}

@@ -1,0 +1,7 @@
+{
+  "document": "04_Qualite/Non_conformites/NC-2026-007.docx",
+  "body": "Fiche de non-conformité NC-2026-007\n| Date d'ouverture | 04/02/2026 |\n| - | - |\n| Site | Gand |\n| Produit | Système qualité |\n| Description | Audit ISO 9001 : suivi des formations des caristes incomplet. |\n| Quantité concernée | 11 dossiers |\n| Mode de détection | Audit de certification |\n| Cause | Attestations non centralisées |\n| Action corrective | Registre des formations numérisé |\n| Responsable | Ann Wouters |\n| Statut | Clôturée le 17/04/2026 |\n| Coût de non-qualité | 0 € |",
+  "model": "qwen3.8-27b",
+  "context": "La fiche de non-conformité NC-2026-007 concerne le site de Gand et le système qualité. Elle détaille les actions correctives liées au suivi des formations des caristes, sous la responsabilité d'Ann Wouters.",
+  "seconds": 2.6
+}

@@ -1,0 +1,35 @@
+{
+  "document": "06_Achats/Bons_de_livraison/2026-04-07 Leveringsbon Pakmatic.jpg",
+  "model": "qwen3.8-27b",
+  "entities": [
+    {
+      "nom": "Pakmatic NV",
+      "type": "fournisseur",
+      "alias": [],
+      "description": "fournisseur de fournitures d'emballage"
+    },
+    {
+      "nom": "site Gent",
+      "type": "site",
+      "alias": [],
+      "description": "site de Calorvia destinataire de la livraison"
+    },
+    {
+      "nom": "Stretchfolie 23 micron (rol)",
+      "type": "produit",
+      "alias": [
+        "SF-23"
+      ],
+      "description": "rouleau de film étirable de 23 microns"
+    },
+    {
+      "nom": "Hoekbeschermers (doos van 50)",
+      "type": "produit",
+      "alias": [
+        "HB-50"
+      ],
+      "description": "boîte de 50 protecteurs d'angle"
+    }
+  ],
+  "seconds": 5.2
+}
